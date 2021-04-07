@@ -1,1 +1,7 @@
-# Trello-clone
+# Trello Clone
+
+## 📦 Установка
+
+```bash
+npm install
+```
