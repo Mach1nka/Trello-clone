@@ -5,8 +5,9 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js,.ts,.tsx . --fix",
+    "husky": "husky install",
     "build:server": "tsc --build ./server/tsconfig.json",
-    "dev:server": "nodemon --exec ts-node ./server/server.ts"
+    "dev:server": "nodemon --exec ts-node --project ./server/tsconfig.json ./server/server.ts"
   },
   "repository": {
     "type": "git",

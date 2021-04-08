@@ -1,6 +1,6 @@
-import express = require('express');
-import mongoose = require('mongoose');
-import KEYS = require('../config/keys');
+import mongoose from 'mongoose';
+import express from 'express';
+import KEYS from '../config/keys';
 
 const app = express();
 
@@ -13,4 +13,4 @@ mongoose
   .then(() => console.log('db connected'))
   .catch((err) => console.log(err));
 
-export = app;
+export default app;
