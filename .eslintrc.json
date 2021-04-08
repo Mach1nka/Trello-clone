@@ -1,8 +1,22 @@
 {
     "env": {
         "browser": true,
-        "node": true
+        "es6": true,
+        "commonjs": true
     },
+    "settings": {
+        "import/resolver": {
+          "node": {
+            "extensions": [
+              ".js",
+              ".jsx",
+              ".ts",
+              ".d.ts",
+              ".tsx"
+            ]
+          }
+        }
+      },
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
@@ -15,12 +29,27 @@
     },
     "plugins": [
         "@typescript-eslint",
+        "import",
         "prettier"
     ],
     "rules": {
+        "comma-dangle": ["error", "never"],
         "semi": ["error", "always"],
         "quotes": ["warn", "single"],
         "prettier/prettier": "error",
-        "@typescript-eslint/no-var-requires": 0
+        "@typescript-eslint/no-var-requires": 0,
+
+        "import/prefer-default-export": "off",
+        "import/extensions": [
+          "error",
+          "ignorePackages",
+          {
+            "js": "never",
+            "jsx": "never",
+            "ts": "never",
+            "tsx": "never",
+            "svg": "never"
+          }
+        ]
     }
 }

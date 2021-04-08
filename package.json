@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js,.ts,.tsx . --fix",
-    "start:server": "tsc --build ./server/tsconfig.json",
+    "build:server": "tsc --build ./server/tsconfig.json",
     "dev:server": "nodemon --exec ts-node ./server/server.ts"
   },
   "repository": {
@@ -24,6 +24,8 @@
     "passport": "^0.4.1"
   },
   "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/node": "^14.14.37",
     "@typescript-eslint/eslint-plugin": "^4.21.0",
     "@typescript-eslint/parser": "^4.21.0",
     "body-parser": "^1.19.0",
@@ -47,8 +49,8 @@
     }
   },
   "lint-staged": {
-    "*.(js|jsx|ts|tsx)": [
-      "node_modules/.bin/eslint --max-error=0",
+    "*.{js,jsx,ts,tsx,json}": [
+      "npm run lint",
       "prettier --write",
       "git add"
     ]
