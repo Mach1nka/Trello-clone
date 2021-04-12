@@ -1,22 +1,32 @@
 # Trello Clone
 
-## 📦 Установка
+## 📦 Installing
 
 ```bash
 npm install
 ```
 
-## 🔨 Использование
-### Запуск в режиме разработки:
+## 🔨 Deployment
+### Start develop mode:
 ```bash
 npm run dev:server
 ```
-после выполнения команды проект доступен локально по адресу ```http://localhost:3003/```
+Project have worked by the address ```http://localhost:3003/``` after execution the command.
+
+```bash
+npm run dev:client
+```
+Project have worked by the address ```http://localhost:8080/``` after execution the command.
 
 <br>
 
-### Запуск сборки production версии:
+### Start production mode:
 ```bash
 npm run build:server
 ```
-после запуска команды создаётся папка ```dist``` с собранной версией проекта
+Folder ```dist``` has been created in server after execution the command.
+
+```bash
+npm run build:client
+```
+Folder ```dist``` has been created in client after execution the command.

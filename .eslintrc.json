@@ -2,6 +2,7 @@
     "env": {
         "browser": true,
         "es6": true,
+        "node": true,
         "commonjs": true
     },
     "settings": {
@@ -25,10 +26,15 @@
     ],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
-        "ecmaVersion": 12
+        "ecmaVersion": 12,
+        "ecmaFeatures": {
+          "jsx": true
+        }
     },
     "plugins": [
         "@typescript-eslint",
+        "react",
+        "react-hooks",
         "import",
         "prettier"
     ],
@@ -37,8 +43,9 @@
         "semi": ["error", "always"],
         "quotes": ["warn", "single"],
         "prettier/prettier": "error",
-        "@typescript-eslint/no-var-requires": 0,
-
+        "no-use-before-define": [0],
+        "@typescript-eslint/no-use-before-define": [1],
+        "react/jsx-filename-extension": [0],
         "import/prefer-default-export": "off",
         "import/extensions": [
           "error",
@@ -51,5 +58,13 @@
             "svg": "never"
           }
         ]
-    }
+    },
+    "overrides": [
+      {
+          "files": ["*.tsx", "*.ts"],
+          "rules": {
+              "no-undef": "off"
+          }
+      }
+  ]
 }
