@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint . --ext .js,.ts,.tsx . --fix",
     "build:server": "tsc --build ./server/tsconfig.json",
-    "dev:server": "nodemon --exec ts-node --project ./server/tsconfig.json ./server/server.ts",
+    "dev:server": "nodemon --config ./server/nodemon.json",
     "build:client": "webpack-cli --config ./client/webpack.config.js --mode production",
     "dev:client": "webpack serve --config ./client/webpack.config.js --mode development"
   },
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/Mach1nka/Trello-clone#readme",
   "dependencies": {
+    "body-parser": "^1.19.0",
     "express": "^4.17.1",
     "mongoose": "^5.12.3",
     "passport": "^0.4.1",
@@ -50,11 +51,11 @@
     "@typescript-eslint/parser": "^4.21.0",
     "autoprefixer": "^10.2.5",
     "babel-loader": "^8.2.2",
-    "body-parser": "^1.19.0",
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-loader": "^5.2.1",
     "eslint": "^7.2.0",
     "eslint-config-airbnb": "^18.2.1",
+    "eslint-plugin-import": "^2.22.1",
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-prettier": "^3.3.1",
     "eslint-plugin-react": "^7.21.5",
