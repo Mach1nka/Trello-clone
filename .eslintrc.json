@@ -63,7 +63,8 @@
       {
           "files": ["*.tsx", "*.ts"],
           "rules": {
-              "no-undef": "off"
+              "no-undef": "off",
+              "no-underscore-dangle": "off"
           }
       }
   ]
