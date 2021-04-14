@@ -1,6 +1,8 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import passport from 'passport';
 import bodyParser from 'body-parser';
+import passportMiddleware from './middleware/passport';
 import KEYS from '../config/keys';
 import { router as authRouter } from './routes/auth';
 
@@ -14,6 +16,9 @@ mongoose
   })
   .then(() => console.log('db connected'))
   .catch((err) => console.log(err));
+
+app.use(passport.initialize());
+passportMiddleware();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
