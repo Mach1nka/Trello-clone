@@ -1,9 +1,8 @@
 import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
 import User from '../models/user';
-import KEYS from '../../config/keys';
+import jwtCreator from '../../utils/jwt-creator';
 
 interface BodyData {
   login: string;
@@ -21,14 +20,7 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
   if (candidate) {
     const isPasswordEqual: boolean = bcrypt.compareSync(password, candidate.password);
     if (isPasswordEqual) {
-      const token = jwt.sign(
-        {
-          login,
-          userId: candidate._id
-        },
-        KEYS.JWT_SECRET_KEY,
-        { expiresIn: '1h' }
-      );
+      const token = jwtCreator(login, candidate._id);
       res.status(200).json({ token: `Bearer ${token}` });
     } else {
       res.status(409).json({ message: 'invalid password' });
@@ -48,8 +40,14 @@ const register = async (req: Request, res: Response): Promise<void> => {
       password: bcrypt.hashSync(password, salt)
     });
     try {
-      await user.save();
-      res.status(201).end();
+      await user.save((err: TypeError, model: Candidate) => {
+        if (err) {
+          console.log(err);
+          res.status(500).end();
+        }
+        const token = jwtCreator(login, model._id);
+        res.status(201).json({ token });
+      });
     } catch (error) {
       console.log(error);
       res.status(500).end();
