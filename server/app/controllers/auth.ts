@@ -21,7 +21,7 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
     const isPasswordEqual: boolean = bcrypt.compareSync(password, candidate.password);
     if (isPasswordEqual) {
       const token = jwtCreator(login, candidate._id);
-      res.status(200).json({ token: `Bearer ${token}` });
+      res.status(200).json({ token });
     } else {
       res.status(409).json({ message: 'invalid password' });
     }
