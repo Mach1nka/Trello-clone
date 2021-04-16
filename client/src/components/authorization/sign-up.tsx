@@ -1,5 +1,7 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
+import * as yup from 'yup';
+import { useFormik } from 'formik';
 
 const formStyles: React.CSSProperties = {
   height: '100%',
@@ -10,43 +12,83 @@ const formStyles: React.CSSProperties = {
   justifyContent: 'space-between'
 };
 
-const SignUp = (): JSX.Element => (
-  <form style={formStyles} autoComplete="off">
-    <div>
-      <TextField
-        size="medium"
-        margin="normal"
-        variant="outlined"
-        id="standard-basic"
-        fullWidth
-        required
-        label="Login"
-      />
-      <TextField
-        size="medium"
-        margin="normal"
-        variant="outlined"
-        id="standard-password-input"
-        required
-        fullWidth
-        label="Password"
-        type="password"
-      />
-      <TextField
-        size="medium"
-        id="standard-confirm-password-input"
-        required
-        variant="outlined"
-        fullWidth
-        margin="normal"
-        label="Confirm password"
-        type="password"
-      />
-    </div>
-    <Button size="large" fullWidth color="secondary" variant="contained">
-      submit
-    </Button>
-  </form>
-);
+const textFieldOptions = [
+  {
+    id: 'login',
+    type: 'text',
+    label: 'Login',
+    autoFocus: true
+  },
+  {
+    id: 'password',
+    type: 'password',
+    label: 'Password'
+  },
+  {
+    id: 'confirmPassword',
+    type: 'password',
+    label: 'Confirm password'
+  }
+];
+
+const SignUp = (): JSX.Element => {
+  const validationSchema = yup.object({
+    login: yup
+      .string()
+      .strict()
+      .trim('Login cannot include leading and trailing spaces')
+      .min(5, 'Login must be more than 5 symbols')
+      .required('Login is required')
+      .matches(/^[a-zA-Z0-9]+$/, 'Login must have numbers and letters'),
+    password: yup
+      .string()
+      .strict()
+      .trim('Login cannot include leading and trailing spaces')
+      .required('Password is required')
+      .min(6, 'Login must be more than 6 symbols')
+      .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters'),
+    confirmPassword: yup
+      .string()
+      .required('Password is required')
+      .oneOf([yup.ref('password')], 'Passwords does not match')
+  });
+  const formik = useFormik({
+    initialValues: {
+      login: '',
+      password: '',
+      confirmPassword: ''
+    },
+    validationSchema,
+    onSubmit: (values) => {
+      console.log(values);
+    }
+  });
+  return (
+    <form style={formStyles} onSubmit={formik.handleSubmit} autoComplete="off">
+      <div>
+        {textFieldOptions.map((el) => (
+          <TextField
+            key={`${el.id}`}
+            size="medium"
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            id={el.id}
+            name={el.id}
+            label={el.label}
+            type={el.type}
+            autoFocus={el.autoFocus}
+            onChange={formik.handleChange}
+            error={formik.touched[el.id] && Boolean(formik.errors[el.id])}
+            helperText={formik.touched[el.id] && formik.errors[el.id]}
+          />
+        ))}
+      </div>
+      <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
+        submit
+      </Button>
+    </form>
+  );
+};
 
 export default SignUp;
