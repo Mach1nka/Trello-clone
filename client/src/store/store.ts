@@ -9,10 +9,6 @@ declare global {
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const store = createStore(
-  rootReducer,
-  // eslint-disable-next-line no-underscore-dangle
-  compose(composeEnhancers())
-);
+const store = createStore(rootReducer, compose(composeEnhancers()));
 
 export default store;
