@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import express from 'express';
+import cors from 'cors';
 import passport from 'passport';
 import bodyParser from 'body-parser';
 import passportMiddleware from './middleware/passport';
@@ -17,6 +18,7 @@ mongoose
   .then(() => console.log('db connected'))
   .catch((err) => console.log(err));
 
+app.use(cors());
 app.use(passport.initialize());
 passportMiddleware();
 

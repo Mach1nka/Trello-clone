@@ -21,7 +21,7 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
     const isPasswordEqual: boolean = bcrypt.compareSync(password, candidate.password);
     if (isPasswordEqual) {
       const token = jwtCreator(login, candidate._id);
-      res.status(200).json({ token });
+      res.status(200).json({ token, login });
     } else {
       res.status(409).json({ message: 'invalid password' });
     }
@@ -46,7 +46,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
           res.status(500).end();
         }
         const token = jwtCreator(login, model._id);
-        res.status(201).json({ token });
+        res.status(201).json({ token, login });
       });
     } catch (error) {
       console.log(error);

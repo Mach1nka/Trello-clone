@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core';
 import Authorization from '../authorization/authorization';
 
@@ -23,7 +23,11 @@ const theme = createMuiTheme({
 const App = (): JSX.Element => (
   <Router>
     <MuiThemeProvider theme={theme}>
-      <Authorization />
+      <Switch>
+        <Route path="/auth">
+          <Authorization />
+        </Route>
+      </Switch>
     </MuiThemeProvider>
   </Router>
 );

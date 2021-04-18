@@ -2,6 +2,8 @@ import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
+import { useDispatch } from 'react-redux';
+import { authUser } from '../../store/actions/auth-action';
 
 const formStyles: React.CSSProperties = {
   height: '100%',
@@ -32,6 +34,7 @@ const textFieldOptions = [
 ];
 
 const SignUp = (): JSX.Element => {
+  const dispatch = useDispatch();
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -60,7 +63,7 @@ const SignUp = (): JSX.Element => {
     },
     validationSchema,
     onSubmit: (values) => {
-      console.log(values);
+      dispatch(authUser({ login: values.login, password: values.password }));
     }
   });
   return (
@@ -68,7 +71,7 @@ const SignUp = (): JSX.Element => {
       <div>
         {textFieldOptions.map((el) => (
           <TextField
-            key={`${el.id}`}
+            key={el.id}
             size="medium"
             margin="normal"
             variant="outlined"
