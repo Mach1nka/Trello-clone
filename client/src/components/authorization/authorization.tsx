@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper, Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
+import { useAppSelector } from '../../store/hooks';
 import SignUp from './sign-up';
+import ErrorModal from './error-modal';
 
 const Authorization = (): JSX.Element => {
   const [tabIndex, setTabIndex] = useState('1');
+  const [isOpenModal, setModalView] = useState(false);
+  const { message } = useAppSelector((state) => state.authData);
+
+  useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
+
   return (
     <Container maxWidth="xs">
+      <ErrorModal isOpen={isOpenModal} setModalView={setModalView} errorText={message} />
       <Paper elevation={6} style={{ width: 'inherit', height: '500px' }}>
         <TabContext value={tabIndex}>
           <TabList

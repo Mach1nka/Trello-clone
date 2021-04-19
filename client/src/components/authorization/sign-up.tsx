@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { authUser } from '../../store/actions/auth-action';
+import { registerUser } from '../../store/actions/auth-action';
 
 type FormikProps = {
   [key: string]: string;
@@ -68,7 +68,7 @@ const SignUp = (): JSX.Element => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(authUser({ login: values.login, password: values.password }));
+      dispatch(registerUser({ login: values.login, password: values.password }));
     }
   });
   return (
