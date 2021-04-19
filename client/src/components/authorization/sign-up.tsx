@@ -1,9 +1,13 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
-import { useFormik, FormikErrors, FormikTouched } from 'formik';
+import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/actions/auth-action';
+
+type FormikProps = {
+  [key: string]: string;
+};
 
 const formStyles: React.CSSProperties = {
   height: '100%',
@@ -55,12 +59,13 @@ const SignUp = (): JSX.Element => {
       .required('Password is required')
       .oneOf([yup.ref('password')], 'Passwords does not match')
   });
+  const initialValues: FormikProps = {
+    login: '',
+    password: '',
+    confirmPassword: ''
+  };
   const formik = useFormik({
-    initialValues: {
-      login: '',
-      password: '',
-      confirmPassword: ''
-    },
+    initialValues,
     validationSchema,
     onSubmit: (values) => {
       dispatch(authUser({ login: values.login, password: values.password }));
