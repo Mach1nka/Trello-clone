@@ -10,7 +10,7 @@ const Authorization = (): JSX.Element => {
       <Paper elevation={6} style={{ width: 'inherit', height: '500px' }}>
         <TabContext value={tabIndex}>
           <TabList
-            onChange={(evt, index: number) => setTabIndex(`${index}`)}
+            onChange={(_evt, index: number) => setTabIndex(`${index}`)}
             indicatorColor="primary"
             textColor="primary"
             centered

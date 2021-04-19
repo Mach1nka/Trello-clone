@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
-import { useFormik } from 'formik';
+import { useFormik, FormikErrors, FormikTouched } from 'formik';
 import { useDispatch } from 'react-redux';
 import { authUser } from '../../store/actions/auth-action';
 
@@ -82,7 +82,7 @@ const SignUp = (): JSX.Element => {
             type={el.type}
             autoFocus={el.autoFocus}
             onChange={formik.handleChange}
-            error={formik.touched[el.id] && Boolean(formik.errors[el.id])}
+            error={formik.touched[el.id] && !!formik.errors[el.id]}
             helperText={formik.touched[el.id] && formik.errors[el.id]}
           />
         ))}

@@ -1,4 +1,5 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
+import { SagaIterator } from 'redux-saga';
 import { registerUser } from '../../api/auth-requests';
 import { AUTH_USER, putAuthData } from '../actions/auth-action';
 
@@ -21,7 +22,7 @@ function* workerAuth(userData: UserData) {
   yield put(putAuthData(data));
 }
 
-function* watchAuth() {
+function* watchAuth(): SagaIterator {
   yield takeEvery(AUTH_USER, workerAuth);
 }
 
