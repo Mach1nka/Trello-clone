@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogTitle, DialogActions, Button, Typography } from '@material-ui/core';
-import { cleanErrorMessage } from '../../store/actions/auth-action';
+import { putErrorMessage } from '../../store/actions/auth-action';
 
 interface Props {
   errorText: string;
@@ -15,7 +15,7 @@ const ErrorModal = ({ errorText, isOpen, setModalView }: Props): JSX.Element => 
 
   const handleClose = () => {
     setModalView(false);
-    dispatch(cleanErrorMessage());
+    dispatch(putErrorMessage(''));
   };
 
   return (

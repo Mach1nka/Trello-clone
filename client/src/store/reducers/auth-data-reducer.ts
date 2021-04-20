@@ -1,4 +1,4 @@
-import { PUT_USER_DATA, CLEAN_MESSAGE_ERROR } from '../actions/auth-action';
+import { PUT_USER_DATA, PUT_MESSAGE_ERROR } from '../actions/auth-action';
 
 interface AccountData {
   login: string;
@@ -22,7 +22,7 @@ const authData = (
         ...state,
         ...payload
       };
-    case CLEAN_MESSAGE_ERROR:
+    case PUT_MESSAGE_ERROR:
       return {
         ...state,
         message: ''

@@ -3,6 +3,7 @@ import { Paper, Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { useAppSelector } from '../../store/hooks';
 import SignUp from './sign-up';
+import LogIn from './log-in';
 import ErrorModal from './error-modal';
 
 const Authorization = (): JSX.Element => {
@@ -29,7 +30,9 @@ const Authorization = (): JSX.Element => {
           <TabPanel style={{ height: '65%' }} value="1">
             <SignUp />
           </TabPanel>
-          <TabPanel value="2" />
+          <TabPanel style={{ height: '65%' }} value="2">
+            <LogIn />
+          </TabPanel>
         </TabContext>
       </Paper>
     </Container>

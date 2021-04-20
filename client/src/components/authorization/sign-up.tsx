@@ -4,18 +4,10 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/actions/auth-action';
+import { SIGN_UP_FORM as FORM } from './sc';
 
 type FormikProps = {
   [key: string]: string;
-};
-
-const formStyles: React.CSSProperties = {
-  height: '100%',
-  marginTop: '7%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between'
 };
 
 const textFieldOptions = [
@@ -72,7 +64,7 @@ const SignUp = (): JSX.Element => {
     }
   });
   return (
-    <form style={formStyles} onSubmit={formik.handleSubmit} autoComplete="off">
+    <FORM onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
         {textFieldOptions.map((el) => (
           <TextField
@@ -95,7 +87,7 @@ const SignUp = (): JSX.Element => {
       <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
         submit
       </Button>
-    </form>
+    </FORM>
   );
 };
 
