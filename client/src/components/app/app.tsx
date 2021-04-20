@@ -27,13 +27,12 @@ const App = (): JSX.Element => {
     <Router>
       <MuiThemeProvider theme={theme}>
         <Switch>
-          <Route exact path="/">
-            <div>Hello</div>
-          </Route>
-          <Route path="/auth">
-            <Authorization />
-          </Route>
-          {!token && <Redirect to="/auth" />}
+          <Route
+            exact
+            path="/"
+            render={() => (token ? <div>Hello</div> : <Redirect to="/auth" />)}
+          />
+          <Route path="/auth" render={() => (!token ? <Authorization /> : <Redirect to="/" />)} />
         </Switch>
       </MuiThemeProvider>
     </Router>

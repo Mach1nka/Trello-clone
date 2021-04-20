@@ -11,6 +11,19 @@ const Authorization = (): JSX.Element => {
   const [isOpenModal, setModalView] = useState(false);
   const { message } = useAppSelector((state) => state.authData);
 
+  const authForms = [
+    {
+      value: '1',
+      label: 'Log In',
+      component: <SignUp />
+    },
+    {
+      value: '2',
+      label: 'Sign Up',
+      component: <LogIn />
+    }
+  ];
+
   useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
 
   return (
@@ -24,15 +37,15 @@ const Authorization = (): JSX.Element => {
             textColor="primary"
             centered
           >
-            <Tab label="Sign Up" value="1" />
-            <Tab label="Log In" value="2" />
+            {authForms.map((el) => (
+              <Tab key={el.value} label={el.label} value={el.value} />
+            ))}
           </TabList>
-          <TabPanel style={{ height: '65%' }} value="1">
-            <SignUp />
-          </TabPanel>
-          <TabPanel style={{ height: '65%' }} value="2">
-            <LogIn />
-          </TabPanel>
+          {authForms.map((el) => (
+            <TabPanel key={el.value} style={{ height: '65%' }} value={el.value}>
+              {el.component}
+            </TabPanel>
+          ))}
         </TabContext>
       </Paper>
     </Container>
