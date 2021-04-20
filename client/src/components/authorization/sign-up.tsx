@@ -29,7 +29,7 @@ const textFieldOptions = [
   }
 ];
 
-const SignUp = (): JSX.Element => {
+const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const validationSchema = yup.object({
     login: yup

@@ -21,7 +21,7 @@ const theme = createMuiTheme({
   }
 });
 
-const App = (): JSX.Element => {
+const App: React.FC = () => {
   const { token } = useAppSelector((state) => state.authData);
   return (
     <Router>

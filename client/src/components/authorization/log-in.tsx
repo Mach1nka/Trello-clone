@@ -24,7 +24,7 @@ const textFieldOptions = [
   }
 ];
 
-const LogIn = (): JSX.Element => {
+const LogIn: React.FC = () => {
   const dispatch = useDispatch();
   const validationSchema = yup.object({
     login: yup

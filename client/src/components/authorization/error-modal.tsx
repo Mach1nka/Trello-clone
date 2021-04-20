@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogTitle, DialogActions, Button, Typography } from '@material-ui/core';
 import { putErrorMessage } from '../../store/actions/auth-action';
@@ -6,10 +6,10 @@ import { putErrorMessage } from '../../store/actions/auth-action';
 interface Props {
   errorText: string;
   isOpen: boolean;
-  setModalView: any;
+  setModalView: Dispatch<SetStateAction<boolean>>;
 }
 
-const ErrorModal = ({ errorText, isOpen, setModalView }: Props): JSX.Element => {
+const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView }) => {
   const dispatch = useDispatch();
   const upperErrorText = errorText.toUpperCase();
 

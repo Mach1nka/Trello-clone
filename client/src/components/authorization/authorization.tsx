@@ -6,7 +6,7 @@ import SignUp from './sign-up';
 import LogIn from './log-in';
 import ErrorModal from './error-modal';
 
-const Authorization = (): JSX.Element => {
+const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
   const [isOpenModal, setModalView] = useState(false);
   const { message } = useAppSelector((state) => state.authData);
