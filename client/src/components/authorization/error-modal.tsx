@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogTitle, DialogActions, Button, Typography } from '@material-ui/core';
-import { putErrorMessage } from '../../store/actions/auth';
+import { putErrorMessage } from '../../store/auth/actions';
 
 interface Props {
   errorText: string;

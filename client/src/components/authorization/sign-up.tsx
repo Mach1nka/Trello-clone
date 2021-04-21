@@ -3,7 +3,7 @@ import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../store/actions/auth';
+import { registerUser } from '../../store/auth/actions';
 import { SIGN_UP_FORM as FORM } from './sc';
 
 type FormikProps = {

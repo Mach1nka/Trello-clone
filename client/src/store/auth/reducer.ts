@@ -1,4 +1,4 @@
-import { PUT_USER_DATA, PUT_MESSAGE_ERROR } from '../actions/auth';
+import { PUT_USER_DATA, PUT_MESSAGE_ERROR } from './actions';
 
 interface AccountData {
   login: string;

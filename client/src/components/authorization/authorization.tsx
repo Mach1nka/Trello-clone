@@ -6,23 +6,23 @@ import SignUp from './sign-up';
 import LogIn from './log-in';
 import ErrorModal from './error-modal';
 
+const authForms = [
+  {
+    value: '1',
+    label: 'Log In',
+    component: <SignUp />
+  },
+  {
+    value: '2',
+    label: 'Sign Up',
+    component: <LogIn />
+  }
+];
+
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
   const [isOpenModal, setModalView] = useState(false);
   const { message } = useAppSelector((state) => state.authData);
-
-  const authForms = [
-    {
-      value: '1',
-      label: 'Log In',
-      component: <SignUp />
-    },
-    {
-      value: '2',
-      label: 'Sign Up',
-      component: <LogIn />
-    }
-  ];
 
   useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
 
