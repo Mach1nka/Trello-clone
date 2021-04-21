@@ -5,29 +5,11 @@ import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/auth/actions';
 import { SIGN_UP_FORM as FORM } from './sc';
+import { registrationFields } from './constants';
 
 type FormikProps = {
   [key: string]: string;
 };
-
-const textFieldOptions = [
-  {
-    id: 'login',
-    type: 'text',
-    label: 'Login',
-    autoFocus: true
-  },
-  {
-    id: 'password',
-    type: 'password',
-    label: 'Password'
-  },
-  {
-    id: 'confirmPassword',
-    type: 'password',
-    label: 'Confirm password'
-  }
-];
 
 const SignUp: React.FC = () => {
   const dispatch = useDispatch();
@@ -66,7 +48,7 @@ const SignUp: React.FC = () => {
   return (
     <FORM onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
-        {textFieldOptions.map((el) => (
+        {registrationFields.map((el) => (
           <TextField
             key={el.id}
             size="medium"

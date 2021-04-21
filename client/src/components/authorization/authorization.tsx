@@ -2,22 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { useAppSelector } from '../../store/hooks';
-import SignUp from './sign-up';
-import LogIn from './log-in';
 import ErrorModal from './error-modal';
-
-const authForms = [
-  {
-    value: '1',
-    label: 'Log In',
-    component: <SignUp />
-  },
-  {
-    value: '2',
-    label: 'Sign Up',
-    component: <LogIn />
-  }
-];
+import { authForms } from './constants';
 
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');

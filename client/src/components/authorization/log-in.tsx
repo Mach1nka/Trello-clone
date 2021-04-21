@@ -5,24 +5,11 @@ import { useFormik } from 'formik';
 import { TextField, Button } from '@material-ui/core';
 import { loginUser } from '../../store/auth/actions';
 import { LOG_IN_FORM as FORM } from './sc';
+import { loginFields } from './constants';
 
 type FormikProps = {
   [key: string]: string;
 };
-
-const textFieldOptions = [
-  {
-    id: 'login',
-    type: 'text',
-    label: 'Login',
-    autoFocus: true
-  },
-  {
-    id: 'password',
-    type: 'password',
-    label: 'Password'
-  }
-];
 
 const LogIn: React.FC = () => {
   const dispatch = useDispatch();
@@ -56,7 +43,7 @@ const LogIn: React.FC = () => {
   return (
     <FORM onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
-        {textFieldOptions.map((el) => (
+        {loginFields.map((el) => (
           <TextField
             key={el.id}
             size="medium"
