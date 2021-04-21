@@ -6,7 +6,8 @@ module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+    filename: 'bundle.js',
+    publicPath: '/'
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.svg']
@@ -47,6 +48,7 @@ module.exports = {
     overlay: true,
     contentBase: path.join(__dirname, 'dist'),
     port: 8080,
-    hot: true
+    hot: true,
+    historyApiFallback: true
   }
 };

@@ -9,5 +9,5 @@ ReactDOM.render(
   <Provider store={store}>
     <App />
   </Provider>,
-  document.querySelector('#app')
+  document.querySelector('#root')
 );
