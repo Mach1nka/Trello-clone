@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "eslint . --ext .js,.ts,.tsx . --fix",
-    "build:server": "tsc --build ./server/tsconfig.json",
+    "start": "tsc --build ./server/tsconfig.json",
     "dev:server": "nodemon --config ./server/nodemon.json",
     "build:client": "webpack-cli --config ./client/webpack.config.js --mode production",
     "dev:client": "webpack serve --config ./client/webpack.config.js --mode development"
