@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/auth/actions';
-import { SIGN_UP_FORM as FORM } from './sc';
+import { SignUpForm as Form } from './sc';
 import { registrationFields } from './constants';
 
 type FormikProps = {
@@ -46,7 +46,7 @@ const SignUp: React.FC = () => {
     }
   });
   return (
-    <FORM onSubmit={formik.handleSubmit} autoComplete="off">
+    <Form onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
         {registrationFields.map((el) => (
           <TextField
@@ -69,7 +69,7 @@ const SignUp: React.FC = () => {
       <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
         submit
       </Button>
-    </FORM>
+    </Form>
   );
 };
 

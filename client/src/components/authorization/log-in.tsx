@@ -4,7 +4,7 @@ import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { TextField, Button } from '@material-ui/core';
 import { loginUser } from '../../store/auth/actions';
-import { LOG_IN_FORM as FORM } from './sc';
+import { LogInForm as Form } from './sc';
 import { loginFields } from './constants';
 
 type FormikProps = {
@@ -41,7 +41,7 @@ const LogIn: React.FC = () => {
     }
   });
   return (
-    <FORM onSubmit={formik.handleSubmit} autoComplete="off">
+    <Form onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
         {loginFields.map((el) => (
           <TextField
@@ -64,7 +64,7 @@ const LogIn: React.FC = () => {
       <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
         submit
       </Button>
-    </FORM>
+    </Form>
   );
 };
 
