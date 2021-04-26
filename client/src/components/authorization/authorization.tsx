@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Paper, Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
-import SignUp from './sign-up';
+import { useAppSelector } from '../../store/hooks';
+import ErrorModal from './error-modal';
+import { authForms } from './constants';
 
-const Authorization = (): JSX.Element => {
+const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
+  const [isOpenModal, setModalView] = useState(false);
+  const { message } = useAppSelector((state) => state.authData);
+
+  useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
+
   return (
     <Container maxWidth="xs">
+      <ErrorModal isOpen={isOpenModal} setModalView={setModalView} errorText={message} />
       <Paper elevation={6} style={{ width: 'inherit', height: '500px' }}>
         <TabContext value={tabIndex}>
           <TabList
@@ -15,13 +23,15 @@ const Authorization = (): JSX.Element => {
             textColor="primary"
             centered
           >
-            <Tab label="Sign Up" value="1" />
-            <Tab label="Log In" value="2" />
+            {authForms.map((el) => (
+              <Tab key={el.value} label={el.label} value={el.value} />
+            ))}
           </TabList>
-          <TabPanel style={{ height: '65%' }} value="1">
-            <SignUp />
-          </TabPanel>
-          <TabPanel value="2" />
+          {authForms.map((el) => (
+            <TabPanel key={el.value} style={{ height: '65%' }} value={el.value}>
+              {el.component}
+            </TabPanel>
+          ))}
         </TabContext>
       </Paper>
     </Container>

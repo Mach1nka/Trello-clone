@@ -1,4 +1,4 @@
-import { PUT_USER_DATA } from '../actions/auth-action';
+import { PUT_USER_DATA, PUT_MESSAGE_ERROR } from './actions';
 
 interface AccountData {
   login: string;
@@ -21,6 +21,11 @@ const authData = (
       return {
         ...state,
         ...payload
+      };
+    case PUT_MESSAGE_ERROR:
+      return {
+        ...state,
+        message: ''
       };
     default:
       return state;

@@ -3,41 +3,15 @@ import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { authUser } from '../../store/actions/auth-action';
+import { registerUser } from '../../store/auth/actions';
+import { SignUpForm as Form } from './sc';
+import { registrationFields } from './constants';
 
 type FormikProps = {
   [key: string]: string;
 };
 
-const formStyles: React.CSSProperties = {
-  height: '100%',
-  marginTop: '7%',
-  display: 'flex',
-  flexDirection: 'column',
-  alignItems: 'center',
-  justifyContent: 'space-between'
-};
-
-const textFieldOptions = [
-  {
-    id: 'login',
-    type: 'text',
-    label: 'Login',
-    autoFocus: true
-  },
-  {
-    id: 'password',
-    type: 'password',
-    label: 'Password'
-  },
-  {
-    id: 'confirmPassword',
-    type: 'password',
-    label: 'Confirm password'
-  }
-];
-
-const SignUp = (): JSX.Element => {
+const SignUp: React.FC = () => {
   const dispatch = useDispatch();
   const validationSchema = yup.object({
     login: yup
@@ -68,13 +42,13 @@ const SignUp = (): JSX.Element => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(authUser({ login: values.login, password: values.password }));
+      dispatch(registerUser({ login: values.login, password: values.password }));
     }
   });
   return (
-    <form style={formStyles} onSubmit={formik.handleSubmit} autoComplete="off">
+    <Form onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
-        {textFieldOptions.map((el) => (
+        {registrationFields.map((el) => (
           <TextField
             key={el.id}
             size="medium"
@@ -95,7 +69,7 @@ const SignUp = (): JSX.Element => {
       <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
         submit
       </Button>
-    </form>
+    </Form>
   );
 };
 

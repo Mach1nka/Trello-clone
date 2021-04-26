@@ -1,7 +1,7 @@
 import { all, call } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
-import watchAuth from './authorization-saga';
+import { watchUserRegistration, watchUserLogin } from './auth/saga';
 
 export default function* rootSaga(): SagaIterator {
-  yield all([call(watchAuth)]);
+  yield all([call(watchUserRegistration), call(watchUserLogin)]);
 }
