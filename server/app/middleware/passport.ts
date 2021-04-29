@@ -12,7 +12,7 @@ const passportMiddleware = (): void => {
   passport.use(
     new JwtStrategy(options, async (payload, done) => {
       try {
-        const user = await User.findById(payload.userId).select('login');
+        const user = await User.findById(payload.userId).select('login id');
         if (user) {
           done(null, user);
         } else {
