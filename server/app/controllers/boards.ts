@@ -40,6 +40,17 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const updateBoardName = async (req: Request, res: Response): Promise<void> => {
+  const { boardId, newName } = req.body;
+  try {
+    await Board.findOneAndUpdate({ _id: boardId }, { name: newName });
+    res.status(204).end();
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+};
+
 const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   const { boardId, userId } = req.body;
   try {
@@ -51,4 +62,4 @@ const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getAllBoards, createNewBoard, deleteBoard };
+export { getAllBoards, createNewBoard, updateBoardName, deleteBoard };
