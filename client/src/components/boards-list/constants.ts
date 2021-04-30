@@ -9,9 +9,17 @@ const useStyles = makeStyles((theme) => ({
     boxSizing: 'border-box'
   },
   boardName: {
-    maxHeight: '100%',
+    maxHeight: '80%',
     overflow: 'hidden',
     textOverflow: 'ellipsis'
+  },
+  editBoardNameButton: {
+    position: 'absolute',
+    bottom: '10px',
+    right: '5px',
+    width: '20px',
+    height: '20px',
+    minHeight: 'unset'
   }
 }));
 

@@ -3,7 +3,7 @@ import { Container, Card, Typography } from '@material-ui/core';
 import BoardItem from './board-item';
 import { useStyles } from './constants';
 import { CardContainer } from './sc';
-// max length 50 symbols
+
 const BoardsList: React.FC = () => {
   const classes = useStyles();
   return (
@@ -14,7 +14,7 @@ const BoardsList: React.FC = () => {
         </Typography>
         <CardContainer>
           <BoardItem isDefaultCard boardName="create new board" />
-          <BoardItem boardName="create new boardCreate new boardCreate" />
+          <BoardItem boardName="My new board" />
         </CardContainer>
       </Card>
     </Container>

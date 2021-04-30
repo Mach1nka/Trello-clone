@@ -12,12 +12,14 @@ const CardContainer = styled.div`
 `;
 
 const Card = styled.div<SCProps>`
+  position: relative;
   display: ${(props) => (!props.isDefaultCard ? 'block' : 'flex')};
   color: ${(props) => (!props.isDefaultCard ? '#fff' : '')};
   align-items: center;
   overflow: hidden;
   justify-content: center;
   margin-right: 15px;
+  text-align: end;
   margin-bottom: 12px;
   width: 200px;
   height: 100px;
@@ -32,4 +34,13 @@ const Card = styled.div<SCProps>`
   }
 `;
 
-export { CardContainer, Card };
+const RenameBoardForm = styled.form`
+  height: 100px;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+`;
+
+export { CardContainer, Card, RenameBoardForm };
