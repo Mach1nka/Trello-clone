@@ -15,7 +15,7 @@ const Authorization: React.FC = () => {
   return (
     <Container maxWidth="xs">
       <ErrorModal isOpen={isOpenModal} setModalView={setModalView} errorText={message} />
-      <Paper elevation={6} style={{ width: 'inherit', height: '500px' }}>
+      <Paper elevation={6} style={{ width: 'inherit', height: '500px', marginTop: '30%' }}>
         <TabContext value={tabIndex}>
           <TabList
             onChange={(_evt, index: number) => setTabIndex(`${index}`)}
