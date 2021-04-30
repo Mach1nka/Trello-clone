@@ -14,12 +14,9 @@ const useStyles = makeStyles((theme) => ({
     textOverflow: 'ellipsis'
   },
   editBoardNameButton: {
-    position: 'absolute',
-    bottom: '10px',
-    right: '5px',
-    width: '20px',
-    height: '20px',
-    minHeight: 'unset'
+    width: '22px !important',
+    height: '22px !important',
+    minHeight: 'unset !important'
   }
 }));
 

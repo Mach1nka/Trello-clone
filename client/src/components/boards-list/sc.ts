@@ -12,14 +12,13 @@ const CardContainer = styled.div`
 `;
 
 const Card = styled.div<SCProps>`
-  position: relative;
-  display: ${(props) => (!props.isDefaultCard ? 'block' : 'flex')};
+  display: flex;
+  flex-direction: ${(props) => (props.isDefaultCard ? 'row' : 'column')};
+  align-items: ${(props) => (props.isDefaultCard ? 'center' : '')};
   color: ${(props) => (!props.isDefaultCard ? '#fff' : '')};
-  align-items: center;
   overflow: hidden;
-  justify-content: center;
+  justify-content: ${(props) => (props.isDefaultCard ? 'center' : 'space-between')};
   margin-right: 15px;
-  text-align: end;
   margin-bottom: 12px;
   width: 200px;
   height: 100px;
@@ -43,4 +42,10 @@ const RenameBoardForm = styled.form`
   justify-content: center;
 `;
 
-export { CardContainer, Card, RenameBoardForm };
+const BoardOptions = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+`;
+
+export { CardContainer, Card, RenameBoardForm, BoardOptions };

@@ -14,7 +14,7 @@ const BoardsList: React.FC = () => {
         </Typography>
         <CardContainer>
           <BoardItem isDefaultCard boardName="create new board" />
-          <BoardItem boardName="My new board" />
+          <BoardItem boardName="my new board" />
         </CardContainer>
       </Card>
     </Container>
