@@ -5,7 +5,8 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import passportMiddleware from './middleware/passport';
 import KEYS from '../config/keys';
-import { router as authRouter } from './routes/auth';
+import { router as authRoutes } from './routes/auth';
+import { router as boardsRoutes } from './routes/boards';
 
 const app = express();
 
@@ -24,6 +25,7 @@ passportMiddleware();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api', authRouter);
+app.use('/api', authRoutes);
+app.use('/api', boardsRoutes);
 
 export default app;

@@ -21,7 +21,7 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
     const isPasswordEqual: boolean = bcrypt.compareSync(password, candidate.password);
     if (isPasswordEqual) {
       const token = jwtCreator(login, candidate._id);
-      res.status(200).json({ token, login });
+      res.status(200).json({ token, login, id: candidate._id });
     } else {
       res.status(409).json({ message: 'invalid password' });
     }
@@ -40,13 +40,9 @@ const register = async (req: Request, res: Response): Promise<void> => {
       password: bcrypt.hashSync(password, salt)
     });
     try {
-      await user.save((err: TypeError, model: Candidate) => {
-        if (err) {
-          console.log(err);
-          res.status(500).end();
-        }
+      await user.save((_err: TypeError, model: Candidate) => {
         const token = jwtCreator(login, model._id);
-        res.status(201).json({ token, login });
+        res.status(201).json({ token, login, id: model._id });
       });
     } catch (error) {
       console.log(error);
