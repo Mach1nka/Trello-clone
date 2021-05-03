@@ -16,8 +16,14 @@ interface PassportUser {
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;
   try {
-    const boards = await Board.find({ user: _id });
-    res.status(200).json(boards);
+    const userBoards: NewBoard[] = await Board.find({ user: _id });
+    const filteredBoardObj = userBoards.length
+      ? userBoards.map((el: NewBoard) => ({
+          id: el._id,
+          name: el.name
+        }))
+      : userBoards;
+    res.status(200).json({ boards: filteredBoardObj });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -43,8 +49,8 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
   const { boardId, newName } = req.body;
   try {
-    await Board.findOneAndUpdate({ _id: boardId }, { name: newName });
-    res.status(204).end();
+    const { id, name } = await Board.findOneAndUpdate({ _id: boardId }, { name: newName });
+    res.status(200).json({ id, name });
   } catch (error) {
     console.log(error);
     res.status(500).end();

@@ -4,18 +4,19 @@ const LOGIN_USER = 'LOGIN_USER';
 const PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR';
 const SIGN_OUT_USER = 'SIGN_OUT_USER';
 
-interface ServerResponse {
+export interface AccountData {
   login: string;
   token: string;
+  id: string;
   message?: string;
 }
 
-interface UserData {
+export interface UserData {
   login: string;
   password: string;
 }
 
-interface UserAction {
+export interface UserAction {
   type: string;
   payload: UserData;
 }
@@ -25,7 +26,7 @@ const putErrorMessage = (message: string): { type: string; payload: string } => 
   payload: message
 });
 
-const putAuthData = (userData: ServerResponse): { type: string; payload: ServerResponse } => ({
+const putAuthData = (userData: AccountData): { type: string; payload: AccountData } => ({
   type: PUT_USER_DATA,
   payload: userData
 });
