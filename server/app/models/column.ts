@@ -2,16 +2,20 @@ import mongoose from 'mongoose';
 
 const { Schema } = mongoose;
 
-const BoardSchema = new Schema({
+const ColumnSchema = new Schema({
   name: {
     type: String,
     required: true
   },
-  user: {
-    ref: 'users',
+  board: {
+    ref: 'boards',
     type: Schema.Types.ObjectId,
+    required: true
+  },
+  position: {
+    type: Number,
     required: true
   }
 });
 
-export default mongoose.model('boards', BoardSchema);
+export default mongoose.model('columns', ColumnSchema);
