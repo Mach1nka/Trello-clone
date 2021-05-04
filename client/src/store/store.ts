@@ -17,9 +17,9 @@ const store = createStore(
   rootReducer,
   compose(applyMiddleware(sagaMiddleware), composeEnhancers())
 );
+
 sagaMiddleware.run(rootSaga);
+export default store;
 
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppDispatch = typeof store.dispatch;
-
-export default store;

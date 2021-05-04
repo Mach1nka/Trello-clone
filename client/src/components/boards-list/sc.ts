@@ -33,7 +33,7 @@ const Card = styled.div<SCProps>`
   }
 `;
 
-const RenameBoardForm = styled.form`
+const ModalBoardForm = styled.form`
   height: 100px;
   width: 100%;
   background-color: #fff;
@@ -48,4 +48,4 @@ const BoardOptions = styled.div`
   justify-content: space-between;
 `;
 
-export { CardContainer, Card, RenameBoardForm, BoardOptions };
+export { CardContainer, Card, ModalBoardForm, BoardOptions };

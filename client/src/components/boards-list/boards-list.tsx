@@ -1,11 +1,21 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { Container, Card, Typography } from '@material-ui/core';
+import { useAppSelector } from '../../store/hooks';
 import BoardItem from './board-item';
 import { useStyles } from './constants';
+import { getBoards } from '../../store/board/actions';
 import { CardContainer } from './sc';
 
 const BoardsList: React.FC = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const { boards } = useAppSelector((state) => state.userBoards);
+
+  useEffect(() => {
+    dispatch(getBoards());
+  }, []);
+
   return (
     <Container>
       <Card className={classes.cardContainer}>
@@ -14,7 +24,9 @@ const BoardsList: React.FC = () => {
         </Typography>
         <CardContainer>
           <BoardItem isDefaultCard boardName="create new board" />
-          <BoardItem boardName="my new board" />
+          {boards.map((el) => (
+            <BoardItem key={el.id} boardName={el.name} boardId={el.id} />
+          ))}
         </CardContainer>
       </Card>
     </Container>

@@ -1,25 +1,28 @@
 import React, { Dispatch, SetStateAction } from 'react';
+import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { Dialog, DialogActions, DialogTitle, TextField, Button } from '@material-ui/core';
-import { RenameBoardForm as Form } from './sc';
+import { Dialog, DialogActions, TextField, Button } from '@material-ui/core';
+import { ModalBoardForm as Form } from './sc';
+import { renameBoard } from '../../store/board/actions';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
-  currentBoardName: string;
+  boardId: string;
 }
 
-const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, currentBoardName }) => {
+const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
+  const dispatch = useDispatch();
   const validationSchema = yup.object({
     newName: yup
       .string()
       .strict()
       .trim('New name cannot include leading and trailing spaces')
       .min(5, 'New name must be more than 5 symbols')
-      .max(50, 'Max length is 50 symbols')
+      .max(30, 'Max length is 30 symbols')
       .required('New name is required')
-      .matches(/^[a-zA-Z0-9]+$/, 'New name must have numbers and letters')
+      .matches(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/, 'New name must have numbers and letters')
   });
   const initialValues = {
     newName: ''
@@ -28,13 +31,12 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, currentBoardN
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      console.log({ newName: values.newName });
+      dispatch(renameBoard({ newName: values.newName, boardId }));
       setModalView(false);
     }
   });
   return (
-    <Dialog open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle>Current name: {currentBoardName}</DialogTitle>
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"

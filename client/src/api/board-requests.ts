@@ -1,11 +1,9 @@
 import { serverURL } from './api-data';
-import store from '../store/store';
-import { DataForRenamingBoard, DataForCreatingBoard } from '../store/board/saga';
-
-const state = store.getState();
-const authToken = state.authData.token;
+import { DataForRenamingBoard, DataForCreatingBoard } from '../store/board/actions';
+import getToken from '../../utils/get-token';
 
 function getBoards(): Promise<Response> {
+  const authToken = getToken();
   return fetch(`${serverURL}/boards`, {
     method: 'GET',
     headers: {
@@ -18,6 +16,7 @@ function getBoards(): Promise<Response> {
 }
 
 function createBoard(data: DataForCreatingBoard): Promise<Response> {
+  const authToken = getToken();
   return fetch(`${serverURL}/board`, {
     method: 'POST',
     headers: {
@@ -31,8 +30,9 @@ function createBoard(data: DataForCreatingBoard): Promise<Response> {
 }
 
 function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
+  const authToken = getToken();
   return fetch(`${serverURL}/board`, {
-    method: 'POST',
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
       Authorization: authToken
@@ -44,6 +44,7 @@ function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
 }
 
 function deleteBoard(data: { userId: string; boardId: string }): Promise<Response> {
+  const authToken = getToken();
   return fetch(`${serverURL}/board`, {
     method: 'DELETE',
     headers: {

@@ -12,7 +12,11 @@ const App: React.FC = () => {
     <Router>
       <MuiThemeProvider theme={defaultColorsMU}>
         <Switch>
-          <Route exact path={['/', '/boards']} render={() => <Main />} />
+          <Route
+            exact
+            path={['/', '/boards']}
+            render={() => (token ? <Main /> : <Redirect to="/auth" />)}
+          />
           <Route path="/auth" render={() => (!token ? <Authorization /> : <Redirect to="/" />)} />
         </Switch>
       </MuiThemeProvider>

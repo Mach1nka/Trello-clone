@@ -8,7 +8,7 @@ export interface AccountData {
   login: string;
   token: string;
   id: string;
-  message?: string;
+  message: string;
 }
 
 export interface UserData {

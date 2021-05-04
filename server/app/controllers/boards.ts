@@ -49,7 +49,11 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
   const { boardId, newName } = req.body;
   try {
-    const { id, name } = await Board.findOneAndUpdate({ _id: boardId }, { name: newName });
+    const { id, name } = await Board.findOneAndUpdate(
+      { _id: boardId },
+      { name: newName },
+      { new: true }
+    );
     res.status(200).json({ id, name });
   } catch (error) {
     console.log(error);
@@ -60,7 +64,7 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
 const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   const { boardId, userId } = req.body;
   try {
-    await Board.remove({ _id: boardId, user: userId });
+    await Board.findOneAndDelete({ _id: boardId, user: userId });
     res.status(204).end();
   } catch (error) {
     console.log(error);
