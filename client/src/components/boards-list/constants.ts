@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import * as yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
   cardContainer: {
@@ -20,4 +21,16 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-export { useStyles };
+const configValidationSchema = (fieldName: string) =>
+  yup.object({
+    [fieldName]: yup
+      .string()
+      .strict()
+      .trim('New name cannot include leading and trailing spaces')
+      .min(5, 'New name must be more than 5 symbols')
+      .max(30, 'Max length is 30 symbols')
+      .required('New name is required')
+      .matches(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/, 'New name must have numbers and letters')
+  });
+
+export { useStyles, configValidationSchema };

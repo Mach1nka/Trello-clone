@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Typography, Box } from '@material-ui/core';
+import { Typography } from '@material-ui/core';
 import { Card } from './sc';
 import { useStyles } from './constants';
 import BoardOptions from './board-options';

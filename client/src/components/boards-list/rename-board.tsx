@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
-import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { Dialog, DialogActions, TextField, Button } from '@material-ui/core';
 import { ModalBoardForm as Form } from './sc';
 import { renameBoard } from '../../store/board/actions';
+import { configValidationSchema } from './constants';
 
 interface Props {
   isOpen: boolean;
@@ -14,16 +14,7 @@ interface Props {
 
 const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
   const dispatch = useDispatch();
-  const validationSchema = yup.object({
-    newName: yup
-      .string()
-      .strict()
-      .trim('New name cannot include leading and trailing spaces')
-      .min(5, 'New name must be more than 5 symbols')
-      .max(30, 'Max length is 30 symbols')
-      .required('New name is required')
-      .matches(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/, 'New name must have numbers and letters')
-  });
+  const validationSchema = configValidationSchema('newName');
   const initialValues = {
     newName: ''
   };

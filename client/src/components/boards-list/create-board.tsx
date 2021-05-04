@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 import { Dialog, TextField, DialogActions, Button } from '@material-ui/core';
 import { ModalBoardForm as Form } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import { createBoard } from '../../store/board/actions';
+import { configValidationSchema } from './constants';
 
 interface Props {
   isOpen: boolean;
@@ -15,16 +15,7 @@ interface Props {
 const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
-  const validationSchema = yup.object({
-    boardName: yup
-      .string()
-      .strict()
-      .trim('New name cannot include leading and trailing spaces')
-      .min(5, 'New name must be more than 5 symbols')
-      .max(30, 'Max length is 30 symbols')
-      .required('New name is required')
-      .matches(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/, 'New name must have numbers and letters')
-  });
+  const validationSchema = configValidationSchema('boardName');
   const initialValues = {
     boardName: ''
   };

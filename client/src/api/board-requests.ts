@@ -11,7 +11,7 @@ function getBoards(): Promise<Response> {
       Authorization: authToken
     }
   })
-    .then((resp) => resp.json())
+    .then((resp) => (resp.status === 401 ? resp.status : resp.json()))
     .catch((error) => error);
 }
 
@@ -25,7 +25,7 @@ function createBoard(data: DataForCreatingBoard): Promise<Response> {
     },
     body: JSON.stringify(data)
   })
-    .then((resp) => resp.json())
+    .then((resp) => (resp.status === 401 ? resp.status : resp.json()))
     .catch((error) => error);
 }
 
@@ -39,7 +39,7 @@ function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
     },
     body: JSON.stringify(data)
   })
-    .then((resp) => resp.json())
+    .then((resp) => (resp.status === 401 ? resp.status : resp.json()))
     .catch((error) => error);
 }
 
@@ -53,7 +53,7 @@ function deleteBoard(data: { userId: string; boardId: string }): Promise<Respons
     },
     body: JSON.stringify(data)
   })
-    .then((resp) => resp.json())
+    .then((resp) => (resp.status === 401 ? resp.status : resp.json()))
     .catch((error) => error);
 }
 

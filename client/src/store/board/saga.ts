@@ -14,11 +14,16 @@ import {
   DataForRenamingBoard,
   DataForDeletingBoard
 } from './actions';
+import { signOutUser } from '../auth/actions';
 import { getBoards, createBoard, updateBoardName, deleteBoard } from '../../api/board-requests';
 
 function* workerGetBoards(): SagaIterator {
-  const data: BoardList = yield call(getBoards);
-  yield put(putUserBoards(data));
+  const data: BoardList | number = yield call(getBoards);
+  if (data === 401) {
+    yield put(signOutUser());
+  } else {
+    yield put(putUserBoards(data as BoardList));
+  }
 }
 
 function* watchGetBoards(): SagaIterator {
@@ -26,8 +31,12 @@ function* watchGetBoards(): SagaIterator {
 }
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const data: Board = yield call(createBoard, boardData.payload);
-  yield put(putCreatedBoard(data));
+  const data: Board | number = yield call(createBoard, boardData.payload);
+  if (data === 401) {
+    yield put(signOutUser());
+  } else {
+    yield put(putCreatedBoard(data as Board));
+  }
 }
 
 function* watchCreateBoard(): SagaIterator {
@@ -35,8 +44,12 @@ function* watchCreateBoard(): SagaIterator {
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const data: Board = yield call(updateBoardName, board.payload);
-  yield put(putRenamedBoard(data));
+  const data: Board | number = yield call(updateBoardName, board.payload);
+  if (data === 401) {
+    yield put(signOutUser());
+  } else {
+    yield put(putRenamedBoard(data as Board));
+  }
 }
 
 function* watchRenameBoard(): SagaIterator {
@@ -45,8 +58,12 @@ function* watchRenameBoard(): SagaIterator {
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
-  const data: BoardList = yield call(getBoards);
-  yield put(putUserBoards(data));
+  const data: BoardList | number = yield call(getBoards);
+  if (data === 401) {
+    yield put(signOutUser());
+  } else {
+    yield put(putUserBoards(data as BoardList));
+  }
 }
 
 function* watchDeleteBoard(): SagaIterator {
