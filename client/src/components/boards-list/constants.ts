@@ -1,4 +1,5 @@
 import { makeStyles } from '@material-ui/core';
+import { SchemaOf } from 'yup';
 import * as yup from 'yup';
 
 const useStyles = makeStyles((theme) => ({
@@ -21,7 +22,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
-const configValidationSchema = (fieldName: string) =>
+type Validation = {
+  [x: string]: string;
+};
+
+const configValidationSchema = (fieldName: string): SchemaOf<Validation> =>
   yup.object({
     [fieldName]: yup
       .string()

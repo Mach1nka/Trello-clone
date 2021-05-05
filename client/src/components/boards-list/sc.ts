@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
-interface SCProps {
-  isDefaultCard: boolean;
+interface Props {
+  readonly isDefaultCard: boolean | undefined;
 }
 
 const CardContainer = styled.div`
@@ -11,7 +11,7 @@ const CardContainer = styled.div`
   flex-wrap: wrap;
 `;
 
-const Card = styled.div<SCProps>`
+const Card = styled.div<Props>`
   display: flex;
   flex-direction: ${(props) => (props.isDefaultCard ? 'row' : 'column')};
   align-items: ${(props) => (props.isDefaultCard ? 'center' : '')};
