@@ -12,6 +12,7 @@ const Header: React.FC = () => {
 
   const handleSignOut = () => {
     dispatch(signOutUser());
+    history.push('/auth');
   };
 
   const handleButton = () => {
