@@ -3,7 +3,6 @@ import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-d
 import { MuiThemeProvider } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import Authorization from '../authorization/authorization';
-import Header from '../header/header';
 import Main from '../main/main';
 import { defaultColorsMU } from './constants';
 
@@ -13,16 +12,7 @@ const App: React.FC = () => {
     <Router>
       <MuiThemeProvider theme={defaultColorsMU}>
         <Switch>
-          <Route
-            exact
-            path="/boards"
-            render={() => (
-              <>
-                <Header />
-                <Main />
-              </>
-            )}
-          />
+          <Route path="/boards" render={() => <Main />} />
           <Route
             path="/auth"
             render={() => (!token ? <Authorization /> : <Redirect to="/boards" />)}
