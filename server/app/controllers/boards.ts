@@ -1,16 +1,12 @@
 import { Request, Response } from 'express';
 import Board from '../models/board';
+import { PassportUser } from '../types/types';
 
 interface NewBoard {
   _id: string;
   name: string;
   user: string;
   __v: number;
-}
-
-interface PassportUser {
-  _id: string;
-  login: string;
 }
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
