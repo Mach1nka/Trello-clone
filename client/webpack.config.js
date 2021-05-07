@@ -20,6 +20,9 @@ module.exports = {
         removeComments: true
       },
       template: path.join(__dirname, 'src', 'index.html')
+    }),
+    new webpack.DefinePlugin({
+      SERVER_URL: JSON.stringify(process.env.SERVER_URL || "http://localhost:3003"),
     })
   ],
   module: {
