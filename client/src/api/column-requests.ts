@@ -1,14 +1,15 @@
 import { serverURL } from './api-data';
 import {
-  DataForRenamingBoard,
-  DataForCreatingBoard,
-  DataForDeletingBoard
-} from '../store/board/actions';
+  DataForCreatingColumn,
+  DataForRenamingColumn,
+  DataForUpdatingColumnPos,
+  DataForDeletingColumn
+} from '../store/column/actions';
 import getToken from '../../utils/get-token';
 
-function getBoards(): Promise<Response> {
+function getColumns(): Promise<Response> {
   const authToken = getToken();
-  return fetch(`${serverURL}/boards`, {
+  return fetch(`${serverURL}/columns`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -19,9 +20,9 @@ function getBoards(): Promise<Response> {
     .catch((error) => error);
 }
 
-function createBoard(data: DataForCreatingBoard): Promise<Response> {
+function createColumn(data: DataForCreatingColumn): Promise<Response> {
   const authToken = getToken();
-  return fetch(`${serverURL}/board`, {
+  return fetch(`${serverURL}/column`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -33,9 +34,9 @@ function createBoard(data: DataForCreatingBoard): Promise<Response> {
     .catch((error) => error);
 }
 
-function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
+function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
   const authToken = getToken();
-  return fetch(`${serverURL}/board`, {
+  return fetch(`${serverURL}/column/name`, {
     method: 'PATCH',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -47,9 +48,23 @@ function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
     .catch((error) => error);
 }
 
-function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
+function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
   const authToken = getToken();
-  return fetch(`${serverURL}/board`, {
+  return fetch(`${serverURL}/column/position`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json;charset=utf-8',
+      Authorization: authToken
+    },
+    body: JSON.stringify(data)
+  })
+    .then((resp) => (resp.status === 401 ? resp.status : resp.json()))
+    .catch((error) => error);
+}
+
+function deleteColumn(data: DataForDeletingColumn): Promise<Response> {
+  const authToken = getToken();
+  return fetch(`${serverURL}/column`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
@@ -61,4 +76,4 @@ function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
     .catch((error) => error);
 }
 
-export { getBoards, createBoard, updateBoardName, deleteBoard };
+export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };

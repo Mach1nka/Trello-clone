@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import Board from '../models/board';
 import { PassportUser } from '../types/types';
 
-interface NewBoard {
+interface BoardInDB {
   _id: string;
   name: string;
   user: string;
@@ -12,9 +12,9 @@ interface NewBoard {
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;
   try {
-    const userBoards: NewBoard[] = await Board.find({ user: _id });
+    const userBoards: BoardInDB[] = await Board.find({ user: _id });
     const filteredBoardObj = userBoards.length
-      ? userBoards.map((el: NewBoard) => ({
+      ? userBoards.map((el: BoardInDB) => ({
           id: el._id,
           name: el.name
         }))
@@ -33,7 +33,7 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
       name,
       user: userId
     });
-    await board.save((_err: TypeError, model: NewBoard) => {
+    await board.save((_err: TypeError, model: BoardInDB) => {
       res.status(201).json({ name, id: model._id });
     });
   } catch (error) {

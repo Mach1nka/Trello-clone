@@ -14,7 +14,7 @@ const BoardsList: React.FC = () => {
 
   useEffect(() => {
     dispatch(getBoards());
-  }, [dispatch]);
+  }, []);
 
   return (
     <Container>
