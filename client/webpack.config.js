@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
@@ -20,6 +21,9 @@ module.exports = {
         removeComments: true
       },
       template: path.join(__dirname, 'src', 'index.html')
+    }),
+    new webpack.DefinePlugin({
+      SERVER_URL: JSON.stringify(process.env.SERVER_URL || "http://localhost:3003"),
     })
   ],
   module: {

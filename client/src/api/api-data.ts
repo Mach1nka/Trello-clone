@@ -1,1 +1,1 @@
-export const serverURL = 'http://localhost:3003/api';
+export const serverURL = `${SERVER_URL}/api`;
