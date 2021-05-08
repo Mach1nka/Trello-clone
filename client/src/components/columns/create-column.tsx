@@ -1,26 +1,27 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, DialogActions, TextField, Button } from '@material-ui/core';
-import { ModalForm as Form } from './sc';
-import { renameBoard } from '../../store/board/actions';
-import { configValidationSchema } from './constants';
+import { Dialog, TextField, DialogActions, Button } from '@material-ui/core';
+import { ModalForm as Form } from '../boards-page/sc';
+import { createColumn } from '../../store/column/actions';
+import { configValidationSchema } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   boardId: string;
+  newPosition: number;
 }
 
-const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
+const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, newPosition }) => {
   const dispatch = useDispatch();
-  const validationSchema = configValidationSchema('newName');
-  const initialValues = { newName: '' };
+  const validationSchema = configValidationSchema('name');
+  const initialValues = { name: '' };
   const formik = useFormik({
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameBoard({ newName: values.newName, boardId }));
+      dispatch(createColumn({ name: values.name, boardId, position: newPosition }));
       setModalView(false);
     }
   });
@@ -30,18 +31,18 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
         <TextField
           size="medium"
           margin="normal"
-          id="newName"
-          name="newName"
-          label="New board name"
+          id="name"
+          name="name"
+          label="Column name"
           type="string"
           autoFocus
           onChange={formik.handleChange}
-          error={formik.touched.newName && !!formik.errors.newName}
-          helperText={formik.touched.newName && formik.errors.newName}
+          error={formik.touched.name && !!formik.errors.name}
+          helperText={formik.touched.name && formik.errors.name}
         />
         <DialogActions>
           <Button size="small" type="submit" color="secondary" variant="contained">
-            Save
+            Create
           </Button>
         </DialogActions>
       </Form>
@@ -49,4 +50,4 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
   );
 };
 
-export default RenameBoardModal;
+export default CreateColumnModal;

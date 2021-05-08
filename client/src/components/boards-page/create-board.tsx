@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, Button } from '@material-ui/core';
-import { ModalBoardForm as Form } from './sc';
+import { ModalForm as Form } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import { createBoard } from '../../store/board/actions';
 import { configValidationSchema } from './constants';
@@ -16,9 +16,7 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
   const validationSchema = configValidationSchema('boardName');
-  const initialValues = {
-    boardName: ''
-  };
+  const initialValues = { boardName: '' };
   const formik = useFormik({
     initialValues,
     validationSchema,

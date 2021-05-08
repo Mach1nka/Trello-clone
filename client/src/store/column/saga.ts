@@ -27,8 +27,8 @@ import {
 } from '../../api/column-requests';
 import { signOutUser } from '../auth/actions';
 
-function* workerGetColumns(): SagaIterator {
-  const data: ColumnList | number = yield call(getColumns);
+function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
+  const data: ColumnList | number = yield call(getColumns, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
   } else {
@@ -81,7 +81,7 @@ function* watchChangeColumnPos(): SagaIterator {
 
 function* workerDeleteBoard(columnData: { type: string; payload: DataForDeletingColumn }) {
   yield call(deleteColumn, columnData.payload);
-  const data: ColumnList | number = yield call(getColumns);
+  const data: ColumnList | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
     yield put(signOutUser());
   } else {

@@ -1,18 +1,18 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, DialogActions, TextField, Button } from '@material-ui/core';
-import { ModalForm as Form } from './sc';
-import { renameBoard } from '../../store/board/actions';
-import { configValidationSchema } from './constants';
+import { Dialog, TextField, DialogActions, Button } from '@material-ui/core';
+import { ModalForm as Form } from '../boards-page/sc';
+import { renameColumn } from '../../store/column/actions';
+import { configValidationSchema } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
-  boardId: string;
+  columnId: string;
 }
 
-const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
+const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) => {
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
   const initialValues = { newName: '' };
@@ -20,7 +20,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameBoard({ newName: values.newName, boardId }));
+      dispatch(renameColumn({ newName: values.newName, columnId }));
       setModalView(false);
     }
   });
@@ -32,7 +32,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
           margin="normal"
           id="newName"
           name="newName"
-          label="New board name"
+          label="New column name"
           type="string"
           autoFocus
           onChange={formik.handleChange}
@@ -41,7 +41,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
         />
         <DialogActions>
           <Button size="small" type="submit" color="secondary" variant="contained">
-            Save
+            Rename
           </Button>
         </DialogActions>
       </Form>
@@ -49,4 +49,4 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
   );
 };
 
-export default RenameBoardModal;
+export default RenameColumnModal;

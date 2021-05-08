@@ -8,6 +8,7 @@ import {
   UpdatedColumn
 } from './actions';
 import replaceColumnName from '../../../utils/replace-column-name';
+import sortColumnPos from '../../../utils/sort-columns-position';
 
 const boardColumnsIS: ColumnList = {
   columns: []
@@ -21,7 +22,7 @@ const boardColumns = (
     case PUT_BOARD_COLUMNS:
       return {
         ...state,
-        ...payload
+        columns: sortColumnPos(payload as ColumnList)
       };
     case PUT_CREATED_COLUMN:
       return {

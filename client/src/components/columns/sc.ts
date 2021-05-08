@@ -44,6 +44,7 @@ const CardContainer = styled.div`
 
 const CreateColumnContainer = styled.div`
   width: 270px;
+  flex-shrink: 0;
   height: fit-content;
   background-color: rgba(241, 245, 237, 0.7);
   border-radius: 5px;

@@ -10,7 +10,7 @@ import {
 
 const router = express.Router();
 
-router.get('/columns', passport.authenticate('jwt', { session: false }), getColumns);
+router.get('/columns/:boardId', passport.authenticate('jwt', { session: false }), getColumns);
 router.post('/column', passport.authenticate('jwt', { session: false }), createNewColumn);
 router.patch('/column/name', passport.authenticate('jwt', { session: false }), updateColumnName);
 router.patch(

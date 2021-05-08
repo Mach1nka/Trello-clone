@@ -46,8 +46,9 @@ export interface DataForDeletingColumn {
   boardId: string;
 }
 
-const getColumns = (): { type: string } => ({
-  type: GET_COLUMNS
+const getColumns = (boardId: string): { type: string; payload: string } => ({
+  type: GET_COLUMNS,
+  payload: boardId
 });
 
 const createColumn = (
@@ -91,7 +92,7 @@ const putCreatedColumn = (newColumn: Column): { type: string; payload: Column } 
 const putRenamedColumn = (
   renamedColumn: UpdatedColumn
 ): { type: string; payload: UpdatedColumn } => ({
-  type: PUT_CREATED_COLUMN,
+  type: PUT_RENAMED_COLUMN,
   payload: renamedColumn
 });
 

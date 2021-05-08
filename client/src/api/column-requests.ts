@@ -7,9 +7,9 @@ import {
 } from '../store/column/actions';
 import getToken from '../../utils/get-token';
 
-function getColumns(): Promise<Response> {
+function getColumns(boardId: string): Promise<Response> {
   const authToken = getToken();
-  return fetch(`${serverURL}/columns`, {
+  return fetch(`${serverURL}/columns/${boardId}`, {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json;charset=utf-8',
