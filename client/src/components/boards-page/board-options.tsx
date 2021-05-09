@@ -22,12 +22,21 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
     <>
       <Container>
         <Fab
-          onClick={() => dispatch(deleteBoard({ userId: id, boardId }))}
+          onClick={(evt) => {
+            evt.preventDefault();
+            dispatch(deleteBoard({ userId: id, boardId }));
+          }}
           className={classes.editBoardNameButton}
         >
           <DeleteIcon fontSize="inherit" />
         </Fab>
-        <Fab className={classes.editBoardNameButton} onClick={() => setModalView(true)}>
+        <Fab
+          className={classes.editBoardNameButton}
+          onClick={(evt) => {
+            evt.preventDefault();
+            setModalView(true);
+          }}
+        >
           <EditIcon fontSize="inherit" />
         </Fab>
       </Container>

@@ -25,7 +25,13 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
     }
   });
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={isOpen}
+      onClick={(evt) => evt.preventDefault()}
+      onClose={() => setModalView(false)}
+    >
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
