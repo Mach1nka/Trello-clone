@@ -1,6 +1,5 @@
 import { Request, Response } from 'express';
 import Column from '../models/column';
-// import { PassportUser } from '../types/types';
 
 interface NewColumn {
   _id: string;
