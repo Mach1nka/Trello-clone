@@ -19,6 +19,14 @@ const useStyles = makeStyles((theme) => ({
     width: '22px !important',
     height: '22px !important',
     minHeight: 'unset !important'
+  },
+  dialogTitle: {
+    textAlign: 'center'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)'
   }
 }));
 
@@ -32,7 +40,7 @@ const configValidationSchema = (fieldName: string): SchemaOf<Validation> =>
       .string()
       .strict()
       .trim('New name cannot include leading and trailing spaces')
-      .min(5, 'New name must be more than 5 symbols')
+      .min(2, 'New name must be more than 2 symbols')
       .max(30, 'Max length is 30 symbols')
       .required('New name is required')
       .matches(/^(?:[A-Za-z]+)(?:[A-Za-z0-9 _]*)$/, 'New name must have numbers and letters')

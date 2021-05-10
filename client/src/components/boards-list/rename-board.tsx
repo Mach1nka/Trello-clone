@@ -1,10 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, DialogActions, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
+import { useAppSelector } from '../../store/hooks';
 import { ModalBoardForm as Form } from './sc';
 import { renameBoard } from '../../store/board/actions';
-import { configValidationSchema } from './constants';
+import { configValidationSchema, useStyles } from './constants';
+import capitalizeName from '../../../utils/name-capitalized';
 
 interface Props {
   isOpen: boolean;
@@ -14,10 +16,18 @@ interface Props {
 
 const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
+  const currentBoardObj = useAppSelector((state) =>
+    state.userBoards.boards.filter((el) => el.id === boardId).pop()
+  );
+  const currentBoardName = currentBoardObj?.name || '';
+  const nameCapitalized = capitalizeName(currentBoardName);
+
   const validationSchema = configValidationSchema('newName');
   const initialValues = {
-    newName: ''
+    newName: nameCapitalized
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -26,17 +36,20 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
       setModalView(false);
     }
   });
+
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+      <DialogTitle className={classes.dialogTitle}>Change board name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
-          margin="normal"
+          margin="none"
           id="newName"
           name="newName"
           label="New board name"
           type="string"
           autoFocus
+          defaultValue={formik.initialValues.newName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}

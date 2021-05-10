@@ -34,7 +34,7 @@ const Card = styled.div<Props>`
 `;
 
 const ModalBoardForm = styled.form`
-  height: 100px;
+  height: 70px;
   width: 100%;
   background-color: #fff;
   display: flex;

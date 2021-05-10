@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, TextField, DialogActions, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, TextField, DialogActions, Button } from '@material-ui/core';
 import { ModalBoardForm as Form } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import { createBoard } from '../../store/board/actions';
-import { configValidationSchema } from './constants';
+import { configValidationSchema, useStyles } from './constants';
 
 interface Props {
   isOpen: boolean;
@@ -14,11 +14,14 @@ interface Props {
 
 const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const { id } = useAppSelector((state) => state.authData);
+
   const validationSchema = configValidationSchema('boardName');
   const initialValues = {
     boardName: ''
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -27,12 +30,14 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
       setModalView(false);
     }
   });
+
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+      <DialogTitle className={classes.dialogTitle}>Create new board</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
-          margin="normal"
+          margin="none"
           id="boardName"
           name="boardName"
           label="Board name"

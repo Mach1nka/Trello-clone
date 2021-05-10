@@ -4,6 +4,7 @@ import { Card } from './sc';
 import { useStyles } from './constants';
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
+import capitalizeName from '../../../utils/name-capitalized';
 
 interface Props {
   isDefaultCard?: boolean;
@@ -14,7 +15,7 @@ interface Props {
 const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
   const [isOpenModal, setModalView] = useState(false);
   const classes = useStyles();
-  const nameCapitalized = boardName.charAt(0).toUpperCase() + boardName.slice(1);
+  const nameCapitalized = capitalizeName(boardName);
 
   if (!isDefaultCard && boardId) {
     return (
