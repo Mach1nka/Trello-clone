@@ -1,20 +1,13 @@
 import { Request, Response } from 'express';
-import Board from '../models/board';
+import Board, { BoardInDB } from '../models/board';
 import { PassportUser } from '../types/types';
-
-interface BoardInDB {
-  _id: string;
-  name: string;
-  user: string;
-  __v: number;
-}
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;
   try {
-    const userBoards: BoardInDB[] = await Board.find({ user: _id });
+    const userBoards = await Board.find({ user: _id });
     const filteredBoardObj = userBoards.length
-      ? userBoards.map((el: BoardInDB) => ({
+      ? userBoards.map((el) => ({
           id: el._id,
           name: el.name
         }))
@@ -33,7 +26,7 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
       name,
       user: userId
     });
-    await board.save((_err: TypeError, model: BoardInDB) => {
+    await board.save((_err, model) => {
       res.status(201).json({ name, id: model._id });
     });
   } catch (error) {
@@ -45,11 +38,11 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
   const { boardId, newName } = req.body;
   try {
-    const { id, name } = await Board.findOneAndUpdate(
+    const { id, name } = (await Board.findOneAndUpdate(
       { _id: boardId },
       { name: newName },
       { new: true }
-    );
+    )) as BoardInDB;
     res.status(200).json({ id, name });
   } catch (error) {
     console.log(error);

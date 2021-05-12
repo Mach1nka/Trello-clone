@@ -15,7 +15,6 @@ interface Props {
 const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
   const [isOpenModal, setModalView] = useState(false);
   const classes = useStyles();
-  const nameCapitalized = boardName.charAt(0).toUpperCase() + boardName.slice(1);
 
   if (!isDefaultCard && boardId) {
     const locParams = { pathname: `/boards/board/${boardId}`, state: { boardName } };
@@ -28,7 +27,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
             variant="subtitle2"
             align="left"
           >
-            {nameCapitalized}
+            {boardName}
           </Typography>
           <BoardOptions boardId={boardId} />
         </Card>
@@ -39,7 +38,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
     <>
       <Card onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
         <Typography color="inherit" className={classes.boardName} variant="subtitle2" align="left">
-          {nameCapitalized}
+          {boardName}
         </Typography>
       </Card>
       <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} />

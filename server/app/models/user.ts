@@ -1,6 +1,9 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-const { Schema } = mongoose;
+interface UserInDB extends mongoose.Document {
+  login: string;
+  password: string;
+}
 
 const UserSchema = new Schema({
   login: {
@@ -14,4 +17,4 @@ const UserSchema = new Schema({
   }
 });
 
-export default mongoose.model('users', UserSchema);
+export default mongoose.model<UserInDB>('users', UserSchema);
