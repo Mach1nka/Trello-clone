@@ -5,8 +5,8 @@ import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material
 import { useAppSelector } from '../../store/hooks';
 import { ModalBoardForm as Form } from './sc';
 import { renameBoard } from '../../store/board/actions';
-import { configValidationSchema, useStyles } from './constants';
-import capitalizeName from '../../../utils/name-capitalized';
+import { useStyles } from './constants';
+import { configValidationSchema } from './utils';
 
 interface Props {
   isOpen: boolean;
@@ -21,11 +21,10 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
     state.userBoards.boards.filter((el) => el.id === boardId).pop()
   );
   const currentBoardName = currentBoardObj?.name || '';
-  const nameCapitalized = capitalizeName(currentBoardName);
 
   const validationSchema = configValidationSchema('newName');
   const initialValues = {
-    newName: nameCapitalized
+    newName: currentBoardName
   };
 
   const formik = useFormik({

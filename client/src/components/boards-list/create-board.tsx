@@ -5,7 +5,8 @@ import { Dialog, DialogTitle, TextField, DialogActions, Button } from '@material
 import { ModalBoardForm as Form } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import { createBoard } from '../../store/board/actions';
-import { configValidationSchema, useStyles } from './constants';
+import { useStyles } from './constants';
+import { configValidationSchema } from './utils';
 
 interface Props {
   isOpen: boolean;

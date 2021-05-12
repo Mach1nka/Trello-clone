@@ -4,7 +4,6 @@ import { Card } from './sc';
 import { useStyles } from './constants';
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
-import capitalizeName from '../../../utils/name-capitalized';
 
 interface Props {
   isDefaultCard?: boolean;
@@ -15,13 +14,12 @@ interface Props {
 const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
   const [isOpenModal, setModalView] = useState(false);
   const classes = useStyles();
-  const nameCapitalized = capitalizeName(boardName);
 
   if (!isDefaultCard && boardId) {
     return (
       <Card isDefaultCard={isDefaultCard}>
         <Typography color="inherit" className={classes.boardName} variant="subtitle2" align="left">
-          {nameCapitalized}
+          {boardName}
         </Typography>
         <BoardOptions boardId={boardId} />
       </Card>
@@ -31,7 +29,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
     <>
       <Card onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
         <Typography color="inherit" className={classes.boardName} variant="subtitle2" align="left">
-          {nameCapitalized}
+          {boardName}
         </Typography>
       </Card>
       <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} />
