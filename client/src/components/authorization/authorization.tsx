@@ -3,10 +3,11 @@ import { Paper, Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { useAppSelector } from '../../store/hooks';
 import ErrorModal from './error-modal';
-import { authForms } from './constants';
+import { authForms, useStyles } from './constants';
 
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
+  const classes = useStyles();
   const [isOpenModal, setModalView] = useState(false);
   const { message } = useAppSelector((state) => state.authData);
 
@@ -15,7 +16,7 @@ const Authorization: React.FC = () => {
   return (
     <Container maxWidth="xs">
       <ErrorModal isOpen={isOpenModal} setModalView={setModalView} errorText={message} />
-      <Paper elevation={6} style={{ width: 'inherit', height: '500px' }}>
+      <Paper elevation={6} className={classes.paper}>
         <TabContext value={tabIndex}>
           <TabList
             onChange={(_evt, index: number) => setTabIndex(`${index}`)}

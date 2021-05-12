@@ -2,19 +2,21 @@ const PUT_USER_DATA = 'PUT_USER_DATA';
 const REGISTRATION_USER = 'REGISTRATION_USER';
 const LOGIN_USER = 'LOGIN_USER';
 const PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR';
+const SIGN_OUT_USER = 'SIGN_OUT_USER';
 
-interface ServerResponse {
+export interface AccountData {
   login: string;
   token: string;
-  message?: string;
+  id: string;
+  message: string;
 }
 
-interface UserData {
+export interface UserData {
   login: string;
   password: string;
 }
 
-interface UserAction {
+export interface UserAction {
   type: string;
   payload: UserData;
 }
@@ -24,7 +26,7 @@ const putErrorMessage = (message: string): { type: string; payload: string } => 
   payload: message
 });
 
-const putAuthData = (userData: ServerResponse): { type: string; payload: ServerResponse } => ({
+const putAuthData = (userData: AccountData): { type: string; payload: AccountData } => ({
   type: PUT_USER_DATA,
   payload: userData
 });
@@ -39,13 +41,19 @@ const loginUser = (userData: UserData): UserAction => ({
   payload: userData
 });
 
+const signOutUser = (): { type: string } => ({
+  type: SIGN_OUT_USER
+});
+
 export {
   REGISTRATION_USER,
   LOGIN_USER,
   PUT_USER_DATA,
   PUT_MESSAGE_ERROR,
+  SIGN_OUT_USER,
   putAuthData,
   registerUser,
   loginUser,
-  putErrorMessage
+  putErrorMessage,
+  signOutUser
 };

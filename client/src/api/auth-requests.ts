@@ -1,9 +1,5 @@
 import { serverURL } from './api-data';
-
-interface UserData {
-  login: string;
-  password: string;
-}
+import { UserData } from '../store/auth/actions';
 
 function registerUser(userData: UserData): Promise<Response> {
   return fetch(`${serverURL}/auth/sign-up`, {
