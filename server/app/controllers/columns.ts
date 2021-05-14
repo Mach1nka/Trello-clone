@@ -1,11 +1,15 @@
 import { Request, Response } from 'express';
-import Column, { ColumnInDB } from '../models/column';
+import Column, { ColumnInDB, ColumnData } from '../models/column';
 
 const getColumns = async (req: Request, res: Response): Promise<void> => {
   const { boardId } = req.params;
   try {
-    const columns = await Column.findOne({ board: boardId });
-    res.status(200).json({ columns });
+    const columnsContainer = await Column.findOne({ boardId });
+    if (columnsContainer) {
+      res.status(200).json({ id: columnsContainer._id, columns: columnsContainer.columns });
+    } else {
+      res.status(404).json({ message: 'columns have not been found' });
+    }
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -23,8 +27,7 @@ const createNewColumn = async (req: Request, res: Response): Promise<void> => {
         { $addToSet: { columns: newColumn } },
         { new: true, lean: true },
         (_err, model) => {
-          const sortedColumns = model?.columns.sort((a, b) => a.position - b.position);
-          res.status(201).json({ id: model?._id, columns: sortedColumns });
+          res.status(201).json({ id: model?._id, columns: model?.columns });
         }
       );
     } else {
@@ -43,14 +46,21 @@ const createNewColumn = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateColumnName = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, boardId, newName } = req.body;
+  const { columnsContainerId, columnId, newName } = req.body;
   try {
-    const { id, columns } = (await Column.findOneAndUpdate(
-      { boardId, _id: columnId },
-      { name: newName },
-      { new: true }
-    )) as ColumnInDB;
-    res.status(200).json({ id, columns });
+    await Column.findById(columnsContainerId).exec(async (_err, data) => {
+      if (data) {
+        const updatedColumns = data.columns.map((el) =>
+          el._id.toString() === columnId
+            ? { _id: el._id, name: newName, position: el.position }
+            : el
+        );
+        await Column.findByIdAndUpdate(columnsContainerId, { columns: updatedColumns });
+        res.status(200).json({ id: data._id, columns: updatedColumns });
+      } else {
+        res.status(404).json({ message: 'the column has not been found' });
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -58,14 +68,32 @@ const updateColumnName = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateColumnPosition = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, newPosition } = req.body;
+  const { columnId, columnsContainerId, newPosition } = req.body;
   try {
-    const { id, columns } = (await Column.findOneAndUpdate(
-      { _id: columnId },
-      { position: newPosition },
-      { new: true }
-    )) as ColumnInDB;
-    res.status(200).json({ id, columns });
+    await Column.findById(columnsContainerId).exec(async (_err, data) => {
+      if (data) {
+        const columnsArr = data.columns;
+        const indexOldEl = columnsArr.findIndex((el) => el._id.toString() === columnId) as number;
+        const editableEl = columnsArr.find((el) => el._id.toString() === columnId) as ColumnData;
+        editableEl.position = newPosition;
+        columnsArr.splice(newPosition, 0, editableEl);
+        columnsArr.splice(indexOldEl + 1, 1);
+
+        const updatedColumns = columnsArr.map((el, idx) => ({
+          _id: el._id,
+          name: el.name,
+          position: idx
+        }));
+        const { id, columns } = (await Column.findByIdAndUpdate(
+          columnsContainerId,
+          { columns: updatedColumns },
+          { new: true }
+        )) as ColumnInDB;
+        res.status(200).json({ id, columns });
+      } else {
+        res.status(404).json({ message: 'the column has not been found' });
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -73,10 +101,17 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
 };
 
 const deleteColumn = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, boardId } = req.body;
+  const { columnId, columnsContainerId } = req.body;
   try {
-    await Column.findOneAndDelete({ _id: columnId, board: boardId });
-    res.status(204).end();
+    await Column.findById(columnsContainerId).exec(async (_err, data) => {
+      if (data) {
+        const sortedColumns = data.columns.filter((el) => el._id !== columnId.toString());
+        await Column.findByIdAndUpdate(columnsContainerId, { columns: sortedColumns });
+        res.status(204).end();
+      } else {
+        res.status(204).end();
+      }
+    });
   } catch (error) {
     console.log(error);
     res.status(500).end();

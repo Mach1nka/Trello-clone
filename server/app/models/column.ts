@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-interface ColumnData extends mongoose.Document {
+export interface ColumnData extends mongoose.Document {
   name: string;
   position: number;
 }
