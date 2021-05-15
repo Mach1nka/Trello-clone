@@ -14,15 +14,22 @@ interface ParamTypes {
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
   const { boardId } = useParams<ParamTypes>();
-  const { columns } = useAppSelector((state) => state.boardColumns);
+  const { columns, id: columnsContainerId } = useAppSelector((state) => state.boardColumns);
   useEffect(() => {
+    console.log(boardId);
     dispatch(getColumns(boardId));
   }, []);
 
   return (
     <Container>
       {columns.map((el) => (
-        <Column key={el.id} columnName={el.name} boardId={el.board} id={el.id} />
+        <Column
+          key={el._id}
+          columnName={el.name}
+          columnsContainerId={columnsContainerId}
+          columnId={el._id}
+          boardId={boardId}
+        />
       ))}
       <CreateColumn boardId={boardId} newPosition={columns.length} />
     </Container>

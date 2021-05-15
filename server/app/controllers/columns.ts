@@ -18,16 +18,17 @@ const getColumns = async (req: Request, res: Response): Promise<void> => {
 
 const createNewColumn = async (req: Request, res: Response): Promise<void> => {
   const { boardId, name, position } = req.body;
-  const newColumn = { name, position };
+  const newColumn: { name: string; position: number } = { name, position: Number(position) };
   try {
-    const createdColumn = await Column.exists({ boardId });
-    if (createdColumn) {
+    const isColumnCreated = await Column.exists({ boardId });
+    if (isColumnCreated) {
       await Column.findOneAndUpdate(
         { boardId },
         { $addToSet: { columns: newColumn } },
         { new: true, lean: true },
         (_err, model) => {
-          res.status(201).json({ id: model?._id, columns: model?.columns });
+          const createdColumn = model?.columns.pop() as ColumnData;
+          res.status(201).json({ _id: createdColumn._id, ...newColumn });
         }
       );
     } else {
@@ -56,7 +57,8 @@ const updateColumnName = async (req: Request, res: Response): Promise<void> => {
             : el
         );
         await Column.findByIdAndUpdate(columnsContainerId, { columns: updatedColumns });
-        res.status(200).json({ id: data._id, columns: updatedColumns });
+        const renamedColumn = updatedColumns.find((el) => el._id.toString() === columnId);
+        res.status(200).json(renamedColumn);
       } else {
         res.status(404).json({ message: 'the column has not been found' });
       }
@@ -105,7 +107,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
   try {
     await Column.findById(columnsContainerId).exec(async (_err, data) => {
       if (data) {
-        const sortedColumns = data.columns.filter((el) => el._id !== columnId.toString());
+        const sortedColumns = data.columns.filter((el) => el._id.toString() !== columnId);
         await Column.findByIdAndUpdate(columnsContainerId, { columns: sortedColumns });
         res.status(204).end();
       } else {

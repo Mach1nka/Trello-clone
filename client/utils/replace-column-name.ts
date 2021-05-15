@@ -1,10 +1,8 @@
-import { Column, UpdatedColumn, ColumnList } from '../src/store/column/actions';
+import { Column, ColumnData } from '../src/store/column/actions';
 
-function replaceColumnName(state: ColumnList, payload: UpdatedColumn): Column[] {
+function replaceColumnName(state: ColumnData, payload: Column): Column[] {
   return state.columns.map((el) =>
-    el.id === payload.id
-      ? { id: payload.id, name: payload.name, board: el.board, position: el.position }
-      : el
+    el._id === payload._id ? { _id: payload._id, name: payload.name, position: el.position } : el
   );
 }
 

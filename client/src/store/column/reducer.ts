@@ -3,39 +3,41 @@ import {
   PUT_CREATED_COLUMN,
   PUT_COLUMN_WITH_NEW_POSITION,
   PUT_RENAMED_COLUMN,
-  ColumnList,
-  Column,
-  UpdatedColumn
+  ColumnData,
+  Column
 } from './actions';
 import replaceColumnName from '../../../utils/replace-column-name';
-import sortColumnPos from '../../../utils/sort-columns-position';
 
-const boardColumnsIS: ColumnList = {
+const boardColumnsIS: ColumnData = {
+  id: '',
   columns: []
 };
 
 const boardColumns = (
   state = boardColumnsIS,
-  { type, payload }: { type: string; payload: Column | ColumnList | UpdatedColumn }
-): ColumnList => {
+  { type, payload }: { type: string; payload: ColumnData | Column }
+): ColumnData => {
   switch (type) {
     case PUT_BOARD_COLUMNS:
-      return {
-        ...state,
-        columns: sortColumnPos(payload as ColumnList)
-      };
+      return { ...state, ...payload };
     case PUT_CREATED_COLUMN:
+      if (payload.hasOwnProperty('columns')) {
+        return {
+          ...state,
+          ...(payload as ColumnData)
+        };
+      }
       return {
         ...state,
-        columns: state.columns.concat(payload as Column)
+        columns: [...state.columns, ...[payload as Column]]
       };
     case PUT_RENAMED_COLUMN:
       return {
         ...state,
-        columns: replaceColumnName(state, payload as UpdatedColumn)
+        columns: replaceColumnName(state, payload as Column)
       };
     case PUT_COLUMN_WITH_NEW_POSITION:
-      return state;
+      return { ...state, ...(payload as ColumnData) };
     default:
       return state;
   }

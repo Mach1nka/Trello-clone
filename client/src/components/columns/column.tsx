@@ -15,11 +15,12 @@ import RenameColumnModal from './rename-column';
 
 interface Props {
   columnName: string;
+  columnsContainerId: string;
+  columnId: string;
   boardId: string;
-  id: string;
 }
 
-const Column: React.FC<Props> = ({ columnName, boardId, id }) => {
+const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boardId }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenModal, setModalView] = useState(false);
@@ -30,7 +31,7 @@ const Column: React.FC<Props> = ({ columnName, boardId, id }) => {
   };
 
   const handleDelete = () => {
-    dispatch(deleteColumn({ boardId, columnId: id }));
+    dispatch(deleteColumn({ columnsContainerId, columnId, boardId }));
     setAnchorEl(null);
   };
 
@@ -68,7 +69,12 @@ const Column: React.FC<Props> = ({ columnName, boardId, id }) => {
           </ColumnFooter>
         </Content>
       </Container>
-      <RenameColumnModal isOpen={isOpenModal} columnId={id} setModalView={setModalView} />
+      <RenameColumnModal
+        columnsContainerId={columnsContainerId}
+        isOpen={isOpenModal}
+        columnId={columnId}
+        setModalView={setModalView}
+      />
     </>
   );
 };

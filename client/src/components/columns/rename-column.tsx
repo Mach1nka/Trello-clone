@@ -10,9 +10,15 @@ interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
+  columnsContainerId: string;
 }
 
-const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) => {
+const RenameColumnModal: React.FC<Props> = ({
+  isOpen,
+  setModalView,
+  columnId,
+  columnsContainerId
+}) => {
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
   const initialValues = { newName: '' };
@@ -20,7 +26,7 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) 
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameColumn({ newName: values.newName, columnId }));
+      dispatch(renameColumn({ columnsContainerId, newName: values.newName, columnId }));
       setModalView(false);
     }
   });

@@ -10,9 +10,8 @@ import {
   putCreatedColumn,
   putRenamedColumn,
   putUpdatedPos,
-  ColumnList,
+  ColumnData,
   Column,
-  UpdatedColumn,
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
@@ -28,11 +27,11 @@ import {
 import { signOutUser } from '../auth/actions';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
-  const data: ColumnList | number = yield call(getColumns, columnData.payload);
+  const data: ColumnData | number = yield call(getColumns, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
   } else {
-    yield put(putColumns(data as ColumnList));
+    yield put(putColumns(data as ColumnData));
   }
 }
 
@@ -41,11 +40,11 @@ function* watchGetColumns(): SagaIterator {
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const data: Column | number = yield call(createColumn, columnData.payload);
+  const data: ColumnData | Column | number = yield call(createColumn, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
   } else {
-    yield put(putCreatedColumn(data as Column));
+    yield put(putCreatedColumn(data));
   }
 }
 
@@ -54,11 +53,11 @@ function* watchCreateColumn(): SagaIterator {
 }
 
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
-  const data: UpdatedColumn | number = yield call(updateColumnName, columnData.payload);
+  const data: Column | number = yield call(updateColumnName, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
   } else {
-    yield put(putRenamedColumn(data as UpdatedColumn));
+    yield put(putRenamedColumn(data as Column));
   }
 }
 
@@ -67,11 +66,11 @@ function* watchRenameColumn(): SagaIterator {
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const data: UpdatedColumn | number = yield call(updateColumnPosition, columnData.payload);
+  const data: ColumnData | number = yield call(updateColumnPosition, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
   } else {
-    yield put(putUpdatedPos(data as UpdatedColumn));
+    yield put(putUpdatedPos(data as ColumnData));
   }
 }
 
@@ -81,11 +80,11 @@ function* watchChangeColumnPos(): SagaIterator {
 
 function* workerDeleteBoard(columnData: { type: string; payload: DataForDeletingColumn }) {
   yield call(deleteColumn, columnData.payload);
-  const data: ColumnList | number = yield call(getColumns, columnData.payload.boardId);
+  const data: ColumnData | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
     yield put(signOutUser());
   } else {
-    yield put(putColumns(data as ColumnList));
+    yield put(putColumns(data as ColumnData));
   }
 }
 
