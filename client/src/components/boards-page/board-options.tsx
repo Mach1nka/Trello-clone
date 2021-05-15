@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { Fab } from '@material-ui/core';
+import { Fab, Backdrop, CircularProgress } from '@material-ui/core';
 import { useStyles } from './constants';
 import { useAppSelector } from '../../store/hooks';
 import { BoardOptions as Container } from './sc';
@@ -15,6 +15,7 @@ interface Props {
 
 const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const [isOpenModal, setModalView] = useState(false);
+  const [isOpenBackdrop, setBackdropView] = useState(false);
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
   const classes = useStyles();
@@ -24,6 +25,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
         <Fab
           onClick={(evt) => {
             evt.preventDefault();
+            setBackdropView(true);
             dispatch(deleteBoard({ userId: id, boardId }));
           }}
           className={classes.editBoardNameButton}
@@ -41,6 +43,9 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
         </Fab>
       </Container>
       <RenameBoardModal isOpen={isOpenModal} setModalView={setModalView} boardId={boardId} />
+      <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

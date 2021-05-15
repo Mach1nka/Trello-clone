@@ -74,6 +74,7 @@ const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boa
         isOpen={isOpenModal}
         columnId={columnId}
         setModalView={setModalView}
+        columnName={columnName}
       />
     </>
   );

@@ -15,8 +15,8 @@ const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
   const { boardId } = useParams<ParamTypes>();
   const { columns, id: columnsContainerId } = useAppSelector((state) => state.boardColumns);
+
   useEffect(() => {
-    console.log(boardId);
     dispatch(getColumns(boardId));
   }, []);
 

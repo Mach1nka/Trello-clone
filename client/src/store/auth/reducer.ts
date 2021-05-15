@@ -13,15 +13,9 @@ const authData = (
 ): AccountData => {
   switch (type) {
     case PUT_USER_DATA:
-      return {
-        ...state,
-        ...payload
-      };
+      return { ...state, ...payload };
     case SIGN_OUT_USER:
-      return {
-        ...state,
-        ...authDataIS
-      };
+      return { ...state, ...authDataIS };
     case PUT_MESSAGE_ERROR:
       return {
         ...state,

@@ -10,6 +10,7 @@ import {
   putCreatedColumn,
   putRenamedColumn,
   putUpdatedPos,
+  deleteAllColumns,
   ColumnData,
   Column,
   DataForCreatingColumn,
@@ -25,11 +26,14 @@ import {
   deleteColumn
 } from '../../api/column-requests';
 import { signOutUser } from '../auth/actions';
+import { deleteAllBoards } from '../board/actions';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
   const data: ColumnData | number = yield call(getColumns, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
+    yield put(deleteAllBoards());
+    yield put(deleteAllColumns());
   } else {
     yield put(putColumns(data as ColumnData));
   }
@@ -43,6 +47,8 @@ function* workerCreateColumn(columnData: { type: string; payload: DataForCreatin
   const data: ColumnData | Column | number = yield call(createColumn, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
+    yield put(deleteAllBoards());
+    yield put(deleteAllColumns());
   } else {
     yield put(putCreatedColumn(data));
   }
@@ -56,6 +62,8 @@ function* workerRenameColumn(columnData: { type: string; payload: DataForRenamin
   const data: Column | number = yield call(updateColumnName, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
+    yield put(deleteAllBoards());
+    yield put(deleteAllColumns());
   } else {
     yield put(putRenamedColumn(data as Column));
   }
@@ -69,6 +77,8 @@ function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpda
   const data: ColumnData | number = yield call(updateColumnPosition, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
+    yield put(deleteAllBoards());
+    yield put(deleteAllColumns());
   } else {
     yield put(putUpdatedPos(data as ColumnData));
   }
@@ -83,6 +93,8 @@ function* workerDeleteBoard(columnData: { type: string; payload: DataForDeleting
   const data: ColumnData | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
     yield put(signOutUser());
+    yield put(deleteAllBoards());
+    yield put(deleteAllColumns());
   } else {
     yield put(putColumns(data as ColumnData));
   }

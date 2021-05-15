@@ -7,6 +7,7 @@ const GET_COLUMNS = 'GET_COLUMNS';
 const CREATE_COLUMN = 'CREATE_COLUMN';
 const RENAME_COLUMN = 'RENAME_COLUMN';
 const CHANGE_COLUMN_POSITION = 'CHANGE_COLUMN_POSITION';
+const DELETE_ALL_COLUMNS = 'DELETE_ALL_COLUMNS';
 
 export interface Column {
   name: string;
@@ -96,6 +97,8 @@ const putUpdatedPos = (columnWithNewPos: ColumnData): { type: string; payload: C
   payload: columnWithNewPos
 });
 
+const deleteAllColumns = (): { type: string } => ({ type: DELETE_ALL_COLUMNS });
+
 export {
   PUT_BOARD_COLUMNS,
   PUT_CREATED_COLUMN,
@@ -106,6 +109,7 @@ export {
   RENAME_COLUMN,
   CHANGE_COLUMN_POSITION,
   DELETE_COLUMN,
+  DELETE_ALL_COLUMNS,
   getColumns,
   createColumn,
   renameColumn,
@@ -114,5 +118,6 @@ export {
   putColumns,
   putCreatedColumn,
   putRenamedColumn,
-  putUpdatedPos
+  putUpdatedPos,
+  deleteAllColumns
 };

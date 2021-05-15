@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import Board, { BoardInDB } from '../models/board';
+import Column from '../models/column';
 import { PassportUser } from '../types/types';
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
@@ -53,6 +54,7 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
 const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   const { boardId, userId } = req.body;
   try {
+    await Column.findOneAndDelete({ boardId });
     await Board.findOneAndDelete({ _id: boardId, user: userId });
     res.status(204).end();
   } catch (error) {
