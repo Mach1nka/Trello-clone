@@ -19,6 +19,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
   const classes = useStyles();
+
   return (
     <>
       <Container>

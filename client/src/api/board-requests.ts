@@ -1,5 +1,9 @@
 import { serverURL } from './api-data';
-import { DataForRenamingBoard, DataForCreatingBoard, DataForDeletingBoard } from '../store/board/actions';
+import {
+  DataForRenamingBoard,
+  DataForCreatingBoard,
+  DataForDeletingBoard
+} from '../store/board/actions';
 import { requestHeader, responseHandler } from './constants';
 
 function getBoards(): Promise<Response> {
@@ -31,7 +35,7 @@ function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
     .catch((error) => error);
 }
 
-function deleteBoard(data: { userId: string; boardId: string }): Promise<Response> {
+function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
   return fetch(`${serverURL}/board`, {
     method: 'DELETE',
     headers: requestHeader(),

@@ -12,18 +12,27 @@ import {
 } from './sc';
 import { deleteColumn } from '../../store/column/actions';
 import RenameColumnModal from './rename-column';
+import ChangeColumnPosition from './change-column-position';
 
 interface Props {
   columnName: string;
   columnsContainerId: string;
   columnId: string;
+  position: number;
   boardId: string;
 }
 
-const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boardId }) => {
+const Column: React.FC<Props> = ({
+  columnName,
+  columnsContainerId,
+  columnId,
+  boardId,
+  position
+}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isOpenModal, setModalView] = useState(false);
+  const [isOpenRenameModal, setRenameModalView] = useState(false);
+  const [isOpenPositionModal, setPositionModalView] = useState(false);
   const isOpenMenu = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -36,7 +45,12 @@ const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boa
   };
 
   const handleRename = () => {
-    setModalView(true);
+    setRenameModalView(true);
+    setAnchorEl(null);
+  };
+
+  const handleChangePosition = () => {
+    setPositionModalView(true);
     setAnchorEl(null);
   };
 
@@ -59,6 +73,7 @@ const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boa
             >
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
               <MenuItem onClick={handleRename}>Rename</MenuItem>
+              <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
           </ColumnHeader>
           <CardContainer />
@@ -71,10 +86,17 @@ const Column: React.FC<Props> = ({ columnName, columnsContainerId, columnId, boa
       </Container>
       <RenameColumnModal
         columnsContainerId={columnsContainerId}
-        isOpen={isOpenModal}
+        isOpen={isOpenRenameModal}
         columnId={columnId}
-        setModalView={setModalView}
+        setModalView={setRenameModalView}
         columnName={columnName}
+      />
+      <ChangeColumnPosition
+        columnsContainerId={columnsContainerId}
+        position={position}
+        isOpen={isOpenPositionModal}
+        columnId={columnId}
+        setModalView={setPositionModalView}
       />
     </>
   );

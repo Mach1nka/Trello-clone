@@ -6,7 +6,8 @@ import {
   watchGetColumns,
   watchCreateColumn,
   watchRenameColumn,
-  watchDeleteColumn
+  watchDeleteColumn,
+  watchChangeColumnPos
 } from './column/saga';
 
 export default function* rootSaga(): SagaIterator {
@@ -20,6 +21,7 @@ export default function* rootSaga(): SagaIterator {
     call(watchGetColumns),
     call(watchCreateColumn),
     call(watchRenameColumn),
+    call(watchChangeColumnPos),
     call(watchDeleteColumn)
   ]);
 }

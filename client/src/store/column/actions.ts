@@ -64,8 +64,8 @@ const renameColumn = (
 });
 
 const changeColumnPosition = (
-  data: DataForRenamingColumn
-): { type: string; payload: DataForRenamingColumn } => ({
+  data: DataForUpdatingColumnPos
+): { type: string; payload: DataForUpdatingColumnPos } => ({
   type: CHANGE_COLUMN_POSITION,
   payload: data
 });

@@ -77,9 +77,15 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
         const columnsArr = data.columns;
         const indexOldEl = columnsArr.findIndex((el) => el._id.toString() === columnId) as number;
         const editableEl = columnsArr.find((el) => el._id.toString() === columnId) as ColumnData;
-        editableEl.position = newPosition;
-        columnsArr.splice(newPosition, 0, editableEl);
-        columnsArr.splice(indexOldEl + 1, 1);
+        if (editableEl.position < newPosition) {
+          editableEl.position = newPosition;
+          columnsArr.splice(newPosition + 1, 0, editableEl);
+          columnsArr.splice(indexOldEl, 1);
+        } else {
+          editableEl.position = newPosition;
+          columnsArr.splice(newPosition, 0, editableEl);
+          columnsArr.splice(indexOldEl + 1, 1);
+        }
 
         const updatedColumns = columnsArr.map((el, idx) => ({
           _id: el._id,

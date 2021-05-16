@@ -29,6 +29,7 @@ const ColumnsContainer: React.FC = () => {
           columnsContainerId={columnsContainerId}
           columnId={el._id}
           boardId={boardId}
+          position={el.position}
         />
       ))}
       <CreateColumn boardId={boardId} newPosition={columns.length} />
