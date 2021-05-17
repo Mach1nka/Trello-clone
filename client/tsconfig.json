@@ -6,7 +6,7 @@
         "jsx": "react",
         "esModuleInterop": true,
         "outDir": "./dist",
-        "rootDir": "./src",
+        "rootDir": "./",
     },
     "exclude": ["dist", "webpack", "webpack.config.*"]
 }

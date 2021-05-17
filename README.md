@@ -22,7 +22,7 @@ Project have worked by the address ```http://localhost:8080/``` after execution 
 
 ### Start production mode:
 ```bash
-npm run build:server
+npm run postinstall
 ```
 Folder ```dist``` has been created in server after execution the command.
 

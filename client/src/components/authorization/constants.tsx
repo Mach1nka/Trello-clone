@@ -1,6 +1,15 @@
+import { makeStyles } from '@material-ui/core';
 import React from 'react';
 import SignUp from './sign-up';
 import LogIn from './log-in';
+
+const useStyles = makeStyles(() => ({
+  paper: {
+    width: 'inherit',
+    height: '500px',
+    marginTop: '30%'
+  }
+}));
 
 const registrationFields = [
   {
@@ -48,4 +57,4 @@ const authForms = [
   }
 ];
 
-export { registrationFields, loginFields, authForms };
+export { registrationFields, loginFields, authForms, useStyles };

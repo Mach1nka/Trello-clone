@@ -1,4 +1,3 @@
-import mongoose from 'mongoose';
 import { Request, Response } from 'express';
 import bcrypt from 'bcryptjs';
 import User from '../models/user';
@@ -9,14 +8,9 @@ interface BodyData {
   password: string;
 }
 
-interface Candidate extends BodyData {
-  _id: mongoose.Types.ObjectId;
-  __v: number;
-}
-
 const logIn = async (req: Request, res: Response): Promise<void> => {
   const { login, password }: BodyData = req.body;
-  const candidate: Candidate | null = await User.findOne({ login });
+  const candidate = await User.findOne({ login });
   if (candidate) {
     const isPasswordEqual: boolean = bcrypt.compareSync(password, candidate.password);
     if (isPasswordEqual) {
@@ -32,7 +26,7 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
 
 const register = async (req: Request, res: Response): Promise<void> => {
   const { login, password }: BodyData = req.body;
-  const candidate: Candidate | null = await User.findOne({ login });
+  const candidate = await User.findOne({ login });
   if (!candidate) {
     const salt = bcrypt.genSaltSync(10);
     const user = new User({
@@ -40,7 +34,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
       password: bcrypt.hashSync(password, salt)
     });
     try {
-      await user.save((_err: TypeError, model: Candidate) => {
+      await user.save((_err, model) => {
         const token = jwtCreator(login, model._id);
         res.status(201).json({ token, login, id: model._id });
       });
