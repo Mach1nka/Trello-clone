@@ -5,6 +5,7 @@ import {
   createNewCard,
   updateCardDescription,
   updateCardPosition,
+  changeCardStatus,
   deleteCard
 } from '../controllers/cards';
 
@@ -22,6 +23,7 @@ router.patch(
   passport.authenticate('jwt', { session: false }),
   updateCardPosition
 );
+router.put('/card/status', passport.authenticate('jwt', { session: false }), changeCardStatus);
 router.delete('/card', passport.authenticate('jwt', { session: false }), deleteCard);
 
 export { router };

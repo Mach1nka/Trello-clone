@@ -23,8 +23,8 @@ const createNewCard = async (req: Request, res: Response): Promise<void> => {
     position: Number(position)
   };
   try {
-    const isCardCreated = await Card.exists({ columnId });
-    if (isCardCreated) {
+    const isCardContainerCreated = await Card.exists({ columnId });
+    if (isCardContainerCreated) {
       await Card.findOneAndUpdate(
         { columnId },
         { $addToSet: { cards: newCard } },
@@ -110,6 +110,51 @@ const updateCardPosition = async (req: Request, res: Response): Promise<void> =>
   }
 };
 
+const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
+  const { cardsContainerId, idNewColumn, cardId } = req.body;
+  try {
+    const cardContainer = await Card.findById(cardsContainerId);
+    const cardArr = cardContainer?.cards;
+    const changingEl = cardArr?.find((el) => el._id.toString() === cardId);
+    const sortedCards = cardArr?.filter((el) => el._id.toString() !== cardId);
+    await Card.findByIdAndUpdate(cardsContainerId, { cards: sortedCards });
+
+    const isNewCardContainerCreated = await Card.exists({ columnId: idNewColumn });
+    if (changingEl) {
+      if (isNewCardContainerCreated) {
+        await Card.findOne({ columnId: idNewColumn }).exec(async (_err, data) => {
+          if (data) {
+            data.cards.push(changingEl);
+            const updatedCards = data?.cards.map((el, idx) => ({
+              _id: el._id,
+              description: el.description,
+              position: idx
+            }));
+            await Card.findOneAndUpdate({ columnId: idNewColumn }, { cards: updatedCards });
+            res.status(201).json({ cards: updatedCards });
+          } else {
+            res.status(404).end();
+          }
+        });
+      } else {
+        const card = new Card({
+          columnId: idNewColumn,
+          cards: [{ description: changingEl.description, position: changingEl.position }]
+        });
+        await card.save((_err, model) => {
+          console.log(_err);
+          res.status(201).json({ id: model._id, cards: model.cards });
+        });
+      }
+    } else {
+      res.status(404).end();
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+};
+
 const deleteCard = async (req: Request, res: Response): Promise<void> => {
   const { cardsContainerId, cardId } = req.body;
   try {
@@ -117,10 +162,8 @@ const deleteCard = async (req: Request, res: Response): Promise<void> => {
       if (data) {
         const sortedCards = data.cards.filter((el) => el._id.toString() !== cardId);
         await Card.findByIdAndUpdate(cardsContainerId, { cards: sortedCards });
-        res.status(204).end();
-      } else {
-        res.status(204).end();
       }
+      res.status(204).end();
     });
   } catch (error) {
     console.log(error);
@@ -128,4 +171,11 @@ const deleteCard = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getCards, createNewCard, updateCardDescription, updateCardPosition, deleteCard };
+export {
+  getCards,
+  createNewCard,
+  updateCardDescription,
+  updateCardPosition,
+  changeCardStatus,
+  deleteCard
+};
