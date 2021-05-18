@@ -22,6 +22,7 @@ const RenameColumnModal: React.FC<Props> = ({
   columnsContainerId,
   columnName
 }) => {
+  console.log(columnName);
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
   const classes = useStyles();
@@ -47,7 +48,7 @@ const RenameColumnModal: React.FC<Props> = ({
           label="New column name"
           type="string"
           autoFocus
-          defaultValue={formik.initialValues.newName}
+          defaultValue={columnName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}
