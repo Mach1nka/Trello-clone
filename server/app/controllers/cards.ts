@@ -73,7 +73,7 @@ const updateCardDescription = async (req: Request, res: Response): Promise<void>
 };
 
 const updateCardPosition = async (req: Request, res: Response): Promise<void> => {
-  const { cardId, cardsContainerId, newPosition } = req.body;
+  const { cardsContainerId, newPosition, cardId } = req.body;
   try {
     await Card.findById(cardsContainerId).exec(async (_err, data) => {
       if (data) {
@@ -161,7 +161,12 @@ const deleteCard = async (req: Request, res: Response): Promise<void> => {
     await Card.findById(cardsContainerId).exec(async (_err, data) => {
       if (data) {
         const sortedCards = data.cards.filter((el) => el._id.toString() !== cardId);
-        await Card.findByIdAndUpdate(cardsContainerId, { cards: sortedCards });
+        const elementsWithUpdatedPos = sortedCards.map((el, idx) => ({
+          _id: el._id,
+          description: el.description,
+          position: idx
+        }));
+        await Card.findByIdAndUpdate(cardsContainerId, { cards: elementsWithUpdatedPos });
       }
       res.status(204).end();
     });

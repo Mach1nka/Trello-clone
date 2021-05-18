@@ -113,11 +113,14 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
     await Column.findById(columnsContainerId).exec(async (_err, data) => {
       if (data) {
         const sortedColumns = data.columns.filter((el) => el._id.toString() !== columnId);
-        await Column.findByIdAndUpdate(columnsContainerId, { columns: sortedColumns });
-        res.status(204).end();
-      } else {
-        res.status(204).end();
+        const elementsWithUpdatedPos = sortedColumns.map((el, idx) => ({
+          _id: el._id,
+          name: el.name,
+          position: idx
+        }));
+        await Column.findByIdAndUpdate(columnsContainerId, { columns: elementsWithUpdatedPos });
       }
+      res.status(204).end();
     });
   } catch (error) {
     console.log(error);
