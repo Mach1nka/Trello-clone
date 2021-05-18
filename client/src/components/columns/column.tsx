@@ -10,6 +10,7 @@ import {
   ColumnFooter,
   CardContainer
 } from './sc';
+import { useStyles } from './constants';
 import { deleteColumn } from '../../store/column/actions';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
@@ -33,6 +34,7 @@ const Column: React.FC<Props> = ({
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
+  const classes = useStyles();
   const isOpenMenu = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -59,7 +61,7 @@ const Column: React.FC<Props> = ({
       <Container>
         <Content>
           <ColumnHeader>
-            <Typography display="block" variant="button">
+            <Typography className={classes.columnName} display="block" variant="h6">
               {columnName}
             </Typography>
             <IconButton size="small" onClick={handleMenu}>
