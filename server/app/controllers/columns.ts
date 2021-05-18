@@ -20,7 +20,7 @@ const createNewColumn = async (req: Request, res: Response): Promise<void> => {
   const { boardId, name, position } = req.body;
   const newColumn: { name: string; position: number } = { name, position: Number(position) };
   try {
-    const isColumnCreated = await Column.exists({ boardId });
+    const isColumnCreated = await Column.findOne({ boardId });
     if (isColumnCreated) {
       await Column.findOneAndUpdate(
         { boardId },
@@ -114,7 +114,12 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
     await Column.findById(columnsContainerId).exec(async (_err, data) => {
       if (data) {
         const sortedColumns = data.columns.filter((el) => el._id.toString() !== columnId);
-        await Column.findByIdAndUpdate(columnsContainerId, { columns: sortedColumns });
+        const elementsWithUpdatedPos = sortedColumns.map((el, idx) => ({
+          _id: el._id,
+          name: el.name,
+          position: idx
+        }));
+        await Column.findByIdAndUpdate(columnsContainerId, { columns: elementsWithUpdatedPos });
         res.status(204).end();
       } else {
         res.status(204).end();

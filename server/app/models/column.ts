@@ -24,8 +24,7 @@ const ColumnSchema = new Schema({
       },
       position: {
         type: Number,
-        required: true,
-        unique: true
+        required: true
       }
     }
   ]

@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { Card } from './sc';
 import { useStyles } from './constants';
+import { deleteAllColumns } from '../../store/column/actions';
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
 
@@ -14,12 +16,19 @@ interface Props {
 
 const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
   const [isOpenModal, setModalView] = useState(false);
+  const dispatch = useDispatch();
   const classes = useStyles();
 
   if (!isDefaultCard && boardId) {
     const locParams = { pathname: `/boards/board/${boardId}`, state: { boardName } };
     return (
-      <Link style={{ textDecoration: 'none' }} to={locParams}>
+      <Link
+        style={{ textDecoration: 'none' }}
+        to={locParams}
+        onClick={() => {
+          dispatch(deleteAllColumns());
+        }}
+      >
         <Card isDefaultCard={isDefaultCard}>
           <Typography
             color="inherit"

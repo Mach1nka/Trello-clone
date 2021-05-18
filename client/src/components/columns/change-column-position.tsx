@@ -55,7 +55,7 @@ const ChangeColumnPosition: React.FC<Props> = ({
             >
               {positionArr.map((el) => (
                 <MenuItem key={el} value={el}>
-                  {el}
+                  {el + 1}
                 </MenuItem>
               ))}
             </TextField>
