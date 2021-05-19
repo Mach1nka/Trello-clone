@@ -20,11 +20,11 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
   const classes = useStyles();
 
   if (!isDefaultCard && boardId) {
-    const locParams = { pathname: `/boards/board/${boardId}`, state: { boardName } };
+    const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName } };
     return (
       <Link
         style={{ textDecoration: 'none' }}
-        to={locParams}
+        to={locationParams}
         onClick={() => {
           dispatch(deleteAllColumns());
         }}

@@ -22,7 +22,6 @@ const RenameColumnModal: React.FC<Props> = ({
   columnsContainerId,
   columnName
 }) => {
-  console.log(columnName);
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
   const classes = useStyles();

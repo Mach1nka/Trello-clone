@@ -3,7 +3,7 @@ import {
   PUT_CREATED_COLUMN,
   PUT_COLUMN_WITH_NEW_POSITION,
   PUT_RENAMED_COLUMN,
-  DELETE_ALL_COLUMNS,
+  DELETE_COLUMNS_DATA,
   ColumnData,
   Column
 } from './actions';
@@ -39,7 +39,7 @@ const boardColumns = (
       };
     case PUT_COLUMN_WITH_NEW_POSITION:
       return { ...state, ...(payload as ColumnData) };
-    case DELETE_ALL_COLUMNS:
+    case DELETE_COLUMNS_DATA:
       return { ...state, ...boardColumnsIS };
     default:
       return state;
