@@ -20,7 +20,16 @@ mongoose
   .then(() => console.log('db connected'))
   .catch((err) => console.log(err));
 
-app.use(cors());
+app.use(
+  cors({
+    origin: '*',
+    methods: 'GET,POST,HEAD,PATCH,DELETE,PUT',
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: 'Authorization'
+  })
+);
 app.use(passport.initialize());
 passportMiddleware();
 

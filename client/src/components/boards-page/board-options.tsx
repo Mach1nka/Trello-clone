@@ -19,11 +19,13 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
   const classes = useStyles();
+
   return (
     <>
       <Container>
         <Fab
-          onClick={() => {
+          onClick={(evt) => {
+            evt.preventDefault();
             setBackdropView(true);
             dispatch(deleteBoard({ userId: id, boardId }));
           }}
@@ -31,7 +33,13 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
         >
           <DeleteIcon fontSize="inherit" />
         </Fab>
-        <Fab className={classes.editBoardNameButton} onClick={() => setModalView(true)}>
+        <Fab
+          className={classes.editBoardNameButton}
+          onClick={(evt) => {
+            evt.preventDefault();
+            setModalView(true);
+          }}
+        >
           <EditIcon fontSize="inherit" />
         </Fab>
       </Container>

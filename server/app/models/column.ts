@@ -1,21 +1,33 @@
-import mongoose from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-const { Schema } = mongoose;
+export interface ColumnData extends mongoose.Document {
+  name: string;
+  position: number;
+}
+
+export interface ColumnInDB extends mongoose.Document {
+  boardId: string;
+  columns: ColumnData[];
+}
 
 const ColumnSchema = new Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  board: {
+  boardId: {
     ref: 'boards',
     type: Schema.Types.ObjectId,
     required: true
   },
-  position: {
-    type: Number,
-    required: true
-  }
+  columns: [
+    {
+      name: {
+        type: String,
+        required: true
+      },
+      position: {
+        type: Number,
+        required: true
+      }
+    }
+  ]
 });
 
-export default mongoose.model('columns', ColumnSchema);
+export default mongoose.model<ColumnInDB>('columns', ColumnSchema);

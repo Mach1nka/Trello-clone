@@ -1,16 +1,17 @@
 import React from 'react';
 import { Switch, Route } from 'react-router-dom';
+import BoardsList from '../boards-page/boards-list';
+import ColumnsContainer from '../columns/columns-container';
 import Header from '../header/header';
-import BoardsList from '../boards-list/boards-list';
 
 const Main: React.FC = () => (
-  <div>
+  <>
     <Header />
     <Switch>
-      <Route path={['/', '/boards']} component={BoardsList} />
-      <Route path="/boards/board" render={() => <div>span</div>} />
+      <Route exact path="/boards" component={BoardsList} />
+      <Route path="/boards/board/:boardId" component={ColumnsContainer} />
     </Switch>
-  </div>
+  </>
 );
 
 export default Main;

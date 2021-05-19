@@ -33,7 +33,7 @@ const Card = styled.div<Props>`
   }
 `;
 
-const ModalBoardForm = styled.form`
+const ModalForm = styled.form`
   height: 70px;
   width: 100%;
   background-color: #fff;
@@ -48,4 +48,4 @@ const BoardOptions = styled.div`
   justify-content: space-between;
 `;
 
-export { CardContainer, Card, ModalBoardForm, BoardOptions };
+export { CardContainer, Card, ModalForm, BoardOptions };

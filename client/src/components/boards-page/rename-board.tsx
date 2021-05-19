@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
-import { ModalBoardForm as Form } from './sc';
+import { ModalForm as Form } from './sc';
 import { renameBoard } from '../../store/board/actions';
 import { useStyles } from './constants';
 import { configValidationSchema } from './utils';
@@ -37,7 +37,13 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
   });
 
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={isOpen}
+      onClick={(evt) => evt.stopPropagation()}
+      onClose={() => setModalView(false)}
+    >
       <DialogTitle className={classes.dialogTitle}>Change board name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
@@ -48,7 +54,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
           label="New board name"
           type="string"
           autoFocus
-          defaultValue={formik.initialValues.newName}
+          defaultValue={currentBoardName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}
