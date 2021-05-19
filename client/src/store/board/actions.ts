@@ -5,7 +5,7 @@ const PUT_RENAMED_BOARD = 'PUT_RENAMED_BOARD';
 const GET_BOARDS = 'GET_BOARDS';
 const CREATE_BOARD = 'CREATE_BOARD';
 const RENAME_BOARD = 'RENAME_BOARD';
-const DELETE_ALL_BOARDS = 'DELETE_ALL_BOARDS';
+const DELETE_BOARDS_DATA = 'DELETE_BOARDS_DATA';
 
 export interface Board {
   name: string;
@@ -71,7 +71,7 @@ const putRenamedBoard = (renamedBoard: Board): { type: string; payload: Board } 
   payload: renamedBoard
 });
 
-const deleteAllBoards = (): { type: string } => ({ type: DELETE_ALL_BOARDS });
+const deleteAllBoards = (): { type: string } => ({ type: DELETE_BOARDS_DATA });
 
 export {
   GET_BOARDS,
@@ -81,7 +81,7 @@ export {
   PUT_USER_BOARDS,
   PUT_CREATED_BOARD,
   PUT_RENAMED_BOARD,
-  DELETE_ALL_BOARDS,
+  DELETE_BOARDS_DATA,
   putUserBoards,
   putCreatedBoard,
   putRenamedBoard,

@@ -54,7 +54,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
           label="New board name"
           type="string"
           autoFocus
-          defaultValue={formik.initialValues.newName}
+          defaultValue={currentBoardName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}

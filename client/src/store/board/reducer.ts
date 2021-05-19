@@ -2,7 +2,7 @@ import {
   PUT_USER_BOARDS,
   PUT_RENAMED_BOARD,
   PUT_CREATED_BOARD,
-  DELETE_ALL_BOARDS,
+  DELETE_BOARDS_DATA,
   BoardList,
   Board
 } from './actions';
@@ -29,7 +29,7 @@ const userBoards = (
         ...state,
         boards: state.boards.concat(payload as Board)
       };
-    case DELETE_ALL_BOARDS:
+    case DELETE_BOARDS_DATA:
       return { ...state, ...userBoardsIS };
     default:
       return state;

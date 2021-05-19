@@ -47,7 +47,7 @@ const RenameColumnModal: React.FC<Props> = ({
           label="New column name"
           type="string"
           autoFocus
-          defaultValue={formik.initialValues.newName}
+          defaultValue={columnName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}
