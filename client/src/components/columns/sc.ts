@@ -19,6 +19,8 @@ const ColumnContainer = styled.div`
 `;
 
 const ColumnContent = styled.div`
+  display: flex;
+  flex-direction: column;
   width: 270px;
   max-height: 100%;
   border-radius: 5px;
@@ -29,17 +31,14 @@ const ColumnContent = styled.div`
 
 const ColumnHeader = styled.div`
   display: flex;
+  flex-grow: 1;
   padding: 10px 8px;
   justify-content: space-between;
   align-items: center;
 `;
 
-const ColumnFooter = styled.div``;
-
-const CardContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  overflow-x: hidden;
+const ColumnFooter = styled.div`
+  flex-grow: 1;
 `;
 
 const CreateColumnContainer = styled.div`
@@ -56,6 +55,5 @@ export {
   ColumnHeader,
   ColumnContent,
   ColumnFooter,
-  CardContainer,
   CreateColumnContainer
 };

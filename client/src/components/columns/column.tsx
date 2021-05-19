@@ -7,11 +7,11 @@ import {
   ColumnContainer as Container,
   ColumnHeader,
   ColumnContent as Content,
-  ColumnFooter,
-  CardContainer
+  ColumnFooter
 } from './sc';
 import { useStyles } from './constants';
 import { deleteColumn } from '../../store/column/actions';
+import CardsContainer from '../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
 
@@ -78,7 +78,7 @@ const Column: React.FC<Props> = ({
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
           </ColumnHeader>
-          <CardContainer />
+          <CardsContainer />
           <ColumnFooter>
             <Button fullWidth size="small" startIcon={<AddIcon />}>
               Create new card
