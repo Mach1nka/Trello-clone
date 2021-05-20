@@ -8,7 +8,6 @@ import KEYS from '../config/keys';
 import { router as authRoutes } from './routes/auth';
 import { router as boardsRoutes } from './routes/boards';
 import { router as columnsRoutes } from './routes/columns';
-import { router as cardsRoutes } from './routes/cards';
 
 const app = express();
 
@@ -39,6 +38,5 @@ app.use(bodyParser.json());
 app.use('/api', authRoutes);
 app.use('/api', boardsRoutes);
 app.use('/api', columnsRoutes);
-app.use('/api', cardsRoutes);
 
 export default app;

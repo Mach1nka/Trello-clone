@@ -1,13 +1,10 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface CardData extends mongoose.Document {
-  description: string;
-  position: number;
-}
-
 export interface CardsInDB extends mongoose.Document {
   boardId: string;
-  cards: CardData[];
+  name: string;
+  description: string;
+  position: number;
 }
 
 const CardSchema = new Schema({
@@ -16,18 +13,18 @@ const CardSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
-  cards: [
-    {
-      description: {
-        type: String,
-        required: true
-      },
-      position: {
-        type: Number,
-        required: true
-      }
-    }
-  ]
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String,
+    required: true
+  },
+  position: {
+    type: Number,
+    required: true
+  }
 });
 
 export default mongoose.model<CardsInDB>('cards', CardSchema);

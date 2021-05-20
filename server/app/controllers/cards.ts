@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Card, { CardData, CardsInDB } from '../models/card';
+import Card, { CardsInDB } from '../models/card';
 
 const getCards = async (req: Request, res: Response): Promise<void> => {
   const { columnId } = req.params;
