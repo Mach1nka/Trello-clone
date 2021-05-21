@@ -17,19 +17,12 @@ import ChangeColumnPosition from './change-column-position';
 
 interface Props {
   columnName: string;
-  columnsContainerId: string;
   columnId: string;
   position: number;
   boardId: string;
 }
 
-const Column: React.FC<Props> = ({
-  columnName,
-  columnsContainerId,
-  columnId,
-  boardId,
-  position
-}) => {
+const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
@@ -42,7 +35,7 @@ const Column: React.FC<Props> = ({
   };
 
   const handleDelete = () => {
-    dispatch(deleteColumn({ columnsContainerId, columnId, boardId }));
+    dispatch(deleteColumn({ columnId, boardId }));
     setAnchorEl(null);
   };
 
@@ -87,15 +80,14 @@ const Column: React.FC<Props> = ({
         </Content>
       </Container>
       <RenameColumnModal
-        columnsContainerId={columnsContainerId}
         isOpen={isOpenRenameModal}
         columnId={columnId}
         setModalView={setRenameModalView}
         columnName={columnName}
       />
       <ChangeColumnPosition
-        columnsContainerId={columnsContainerId}
         position={position}
+        boardId={boardId}
         isOpen={isOpenPositionModal}
         columnId={columnId}
         setModalView={setPositionModalView}

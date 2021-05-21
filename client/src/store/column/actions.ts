@@ -10,14 +10,10 @@ const CHANGE_COLUMN_POSITION = 'CHANGE_COLUMN_POSITION';
 const DELETE_COLUMNS_DATA = 'DELETE_COLUMNS_DATA';
 
 export interface Column {
-  name: string;
-  position: number;
-  _id: string;
-}
-
-export interface ColumnData {
   id: string;
-  columns: Column[];
+  name: string;
+  boardId: string;
+  position: number;
 }
 
 export interface DataForCreatingColumn {
@@ -29,18 +25,16 @@ export interface DataForCreatingColumn {
 export interface DataForRenamingColumn {
   columnId: string;
   newName: string;
-  columnsContainerId: string;
 }
 
 export interface DataForUpdatingColumnPos {
   columnId: string;
-  columnsContainerId: string;
+  boardId: string;
   newPosition: number;
 }
 
 export interface DataForDeletingColumn {
   columnId: string;
-  columnsContainerId: string;
   boardId: string;
 }
 
@@ -77,7 +71,7 @@ const deleteColumn = (
   payload: data
 });
 
-const putColumns = (columns: ColumnData): { type: string; payload: ColumnData } => ({
+const putColumns = (columns: Column[]): { type: string; payload: Column[] } => ({
   type: PUT_BOARD_COLUMNS,
   payload: columns
 });
@@ -92,7 +86,7 @@ const putRenamedColumn = (renamedColumn: Column): { type: string; payload: Colum
   payload: renamedColumn
 });
 
-const putUpdatedPos = (columnWithNewPos: ColumnData): { type: string; payload: ColumnData } => ({
+const putUpdatedPos = (columnWithNewPos: Column[]): { type: string; payload: Column[] } => ({
   type: PUT_COLUMN_WITH_NEW_POSITION,
   payload: columnWithNewPos
 });

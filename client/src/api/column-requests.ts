@@ -38,7 +38,7 @@ function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
 
 function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
   return fetch(`${serverURL}/column/position`, {
-    method: 'PATCH',
+    method: 'PUT',
     headers: requestHeader(),
     body: JSON.stringify(data)
   })

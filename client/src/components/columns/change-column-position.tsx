@@ -11,7 +11,7 @@ interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
-  columnsContainerId: string;
+  boardId: string;
   position: number;
 }
 
@@ -19,7 +19,7 @@ const ChangeColumnPosition: React.FC<Props> = ({
   isOpen,
   setModalView,
   columnId,
-  columnsContainerId,
+  boardId,
   position
 }) => {
   const dispatch = useDispatch();
@@ -32,7 +32,7 @@ const ChangeColumnPosition: React.FC<Props> = ({
     if (values.newPosition !== position) {
       dispatch(
         changeColumnPosition({
-          columnsContainerId,
+          boardId,
           newPosition: values.newPosition,
           columnId
         })

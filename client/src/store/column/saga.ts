@@ -11,7 +11,6 @@ import {
   putRenamedColumn,
   putUpdatedPos,
   deleteAllColumns,
-  ColumnData,
   Column,
   DataForCreatingColumn,
   DataForRenamingColumn,
@@ -29,13 +28,13 @@ import { signOutUser } from '../auth/actions';
 import { deleteAllBoards } from '../board/actions';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
-  const data: ColumnData | number = yield call(getColumns, columnData.payload);
+  const data: Column[] | number = yield call(getColumns, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteAllBoards());
     yield put(deleteAllColumns());
   } else {
-    yield put(putColumns(data as ColumnData));
+    yield put(putColumns(data as Column[]));
   }
 }
 
@@ -44,13 +43,13 @@ function* watchGetColumns(): SagaIterator {
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const data: ColumnData | Column | number = yield call(createColumn, columnData.payload);
+  const data: Column | number = yield call(createColumn, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteAllBoards());
     yield put(deleteAllColumns());
   } else {
-    yield put(putCreatedColumn(data));
+    yield put(putCreatedColumn(data as Column));
   }
 }
 
@@ -74,13 +73,13 @@ function* watchRenameColumn(): SagaIterator {
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const data: ColumnData | number = yield call(updateColumnPosition, columnData.payload);
+  const data: Column[] | number = yield call(updateColumnPosition, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteAllBoards());
     yield put(deleteAllColumns());
   } else {
-    yield put(putUpdatedPos(data as ColumnData));
+    yield put(putUpdatedPos(data as Column[]));
   }
 }
 
@@ -90,13 +89,13 @@ function* watchChangeColumnPos(): SagaIterator {
 
 function* workerDeleteBoard(columnData: { type: string; payload: DataForDeletingColumn }) {
   yield call(deleteColumn, columnData.payload);
-  const data: ColumnData | number = yield call(getColumns, columnData.payload.boardId);
+  const data: Column[] | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteAllBoards());
     yield put(deleteAllColumns());
   } else {
-    yield put(putColumns(data as ColumnData));
+    yield put(putColumns(data as Column[]));
   }
 }
 
