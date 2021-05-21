@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import Board, { BoardInDB } from '../models/board';
+import Board, { BoardsInDB } from '../models/board';
 import Column from '../models/column';
 import { PassportUser } from '../types/types';
 
@@ -43,7 +43,7 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
       { _id: boardId },
       { name: newName },
       { new: true }
-    )) as BoardInDB;
+    )) as BoardsInDB;
     res.status(200).json({ id, name });
   } catch (error) {
     console.log(error);

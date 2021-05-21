@@ -20,7 +20,6 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const pathLength = 14;
-
   const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardName : '';
 
   const handleSignOut = () => {
