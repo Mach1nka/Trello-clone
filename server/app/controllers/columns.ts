@@ -1,18 +1,19 @@
 import { Request, Response } from 'express';
 import Column, { ColumnsInDB } from '../models/column';
+import Card from '../models/card';
 
 const getColumns = async (req: Request, res: Response): Promise<void> => {
   const { boardId } = req.params;
   try {
     const columnsArr = await Column.find({ boardId });
-    if (columnsArr) {
-      const configObj = columnsArr.map((el) => ({
+    if (columnsArr.length) {
+      const preparedArr = columnsArr.map((el) => ({
         id: el._id,
         name: el.name,
         position: el.position,
         boardId: el.boardId
       }));
-      res.status(200).json({ ...configObj });
+      res.status(200).json(preparedArr);
     } else {
       res.status(404).json({ message: 'columns have not been found' });
     }
@@ -31,11 +32,11 @@ const createNewColumn = async (req: Request, res: Response): Promise<void> => {
   });
 
   try {
-    const columns = await Column.find({ boardId });
-    if (columns) {
-      columns.sort((a, b) => a.position - b.position);
-      columns.push(newColumn);
-      const elementsWithUpdatedPos = columns.map((el, idx) => ({
+    const columnsData = await Column.find({ boardId });
+    if (columnsData) {
+      columnsData.sort((a, b) => a.position - b.position);
+      columnsData.push(newColumn);
+      const elementsWithUpdatedPos = columnsData.map((el, idx) => ({
         _id: el._id,
         name: el.name,
         position: idx,
@@ -103,20 +104,21 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
           data.splice(indexOldEl + 1, 1);
         }
 
-        const updatedColumns = data.map((el, idx) => ({
+        const elementsWithUpdatedPos = data.map((el, idx) => ({
           _id: el._id,
           boardId: el.boardId,
           name: el.name,
           position: idx
         }));
         await Column.deleteMany({ boardId });
-        await Column.insertMany(updatedColumns, { lean: true }, (err, model) => {
-          if (err) {
-            res.status(500).end();
-          } else {
-            res.status(200).json(model);
-          }
-        });
+        await Column.insertMany(elementsWithUpdatedPos);
+        const preparedArr = elementsWithUpdatedPos.map((el) => ({
+          id: el._id,
+          name: el.name,
+          position: el.position,
+          boardId: el.boardId
+        }));
+        res.status(200).json(preparedArr);
       } else {
         res.status(404).json({ message: 'the column has not been found' });
       }
@@ -140,6 +142,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
           position: idx
         }));
         await Column.deleteMany({ boardId });
+        await Card.deleteMany({ columnId });
         await Column.insertMany(elementsWithUpdatedPos);
       }
       res.status(204).end();

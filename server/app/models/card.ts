@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 
 export interface CardsInDB extends mongoose.Document {
-  boardId: string;
+  columnId: string;
   name: string;
   description: string;
   position: number;

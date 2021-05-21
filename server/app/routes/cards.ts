@@ -3,6 +3,7 @@ import passport from 'passport';
 import {
   getCards,
   createNewCard,
+  updateCardName,
   updateCardDescription,
   updateCardPosition,
   changeCardStatus,
@@ -18,11 +19,8 @@ router.patch(
   passport.authenticate('jwt', { session: false }),
   updateCardDescription
 );
-router.patch(
-  '/card/position',
-  passport.authenticate('jwt', { session: false }),
-  updateCardPosition
-);
+router.patch('/card/name', passport.authenticate('jwt', { session: false }), updateCardName);
+router.put('/card/position', passport.authenticate('jwt', { session: false }), updateCardPosition);
 router.put('/card/status', passport.authenticate('jwt', { session: false }), changeCardStatus);
 router.delete('/card', passport.authenticate('jwt', { session: false }), deleteCard);
 
