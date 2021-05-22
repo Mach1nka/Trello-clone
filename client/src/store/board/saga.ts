@@ -8,7 +8,7 @@ import {
   putUserBoards,
   putCreatedBoard,
   putRenamedBoard,
-  deleteAllBoards,
+  deleteBoardsData,
   BoardList,
   Board,
   DataForCreatingBoard,
@@ -16,15 +16,15 @@ import {
   DataForDeletingBoard
 } from './actions';
 import { signOutUser } from '../auth/actions';
-import { deleteAllColumns } from '../column/actions';
+import { deleteColumnsData } from '../column/actions';
 import { getBoards, createBoard, updateBoardName, deleteBoard } from '../../api/board-requests';
 
 function* workerGetBoards(): SagaIterator {
   const data: BoardList | number = yield call(getBoards);
   if (data === 401) {
     yield put(signOutUser());
-    yield put(deleteAllBoards());
-    yield put(deleteAllColumns());
+    yield put(deleteBoardsData());
+    yield put(deleteColumnsData());
   } else {
     yield put(putUserBoards(data as BoardList));
   }
@@ -38,8 +38,8 @@ function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingB
   const data: Board | number = yield call(createBoard, boardData.payload);
   if (data === 401) {
     yield put(signOutUser());
-    yield put(deleteAllBoards());
-    yield put(deleteAllColumns());
+    yield put(deleteBoardsData());
+    yield put(deleteColumnsData());
   } else {
     yield put(putCreatedBoard(data as Board));
   }
@@ -53,8 +53,8 @@ function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard
   const data: Board | number = yield call(updateBoardName, board.payload);
   if (data === 401) {
     yield put(signOutUser());
-    yield put(deleteAllBoards());
-    yield put(deleteAllColumns());
+    yield put(deleteBoardsData());
+    yield put(deleteColumnsData());
   } else {
     yield put(putRenamedBoard(data as Board));
   }
@@ -69,8 +69,8 @@ function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard
   const data: BoardList | number = yield call(getBoards);
   if (data === 401) {
     yield put(signOutUser());
-    yield put(deleteAllBoards());
-    yield put(deleteAllColumns());
+    yield put(deleteBoardsData());
+    yield put(deleteColumnsData());
   } else {
     yield put(putUserBoards(data as BoardList));
   }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, Menu, MenuItem, IconButton, Button } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -11,6 +11,7 @@ import {
 } from './sc';
 import { useStyles } from './constants';
 import { deleteColumn } from '../../store/column/actions';
+import { getCards } from '../../store/card/actions';
 import CardsContainer from '../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
@@ -48,6 +49,10 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
     setPositionModalView(true);
     setAnchorEl(null);
   };
+
+  useEffect(() => {
+    dispatch(getCards(columnId));
+  }, []);
 
   return (
     <>

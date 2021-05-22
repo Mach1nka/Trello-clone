@@ -91,7 +91,7 @@ const putUpdatedPos = (columnWithNewPos: Column[]): { type: string; payload: Col
   payload: columnWithNewPos
 });
 
-const deleteAllColumns = (): { type: string } => ({ type: DELETE_COLUMNS_DATA });
+const deleteColumnsData = (): { type: string } => ({ type: DELETE_COLUMNS_DATA });
 
 export {
   PUT_BOARD_COLUMNS,
@@ -113,5 +113,5 @@ export {
   putCreatedColumn,
   putRenamedColumn,
   putUpdatedPos,
-  deleteAllColumns
+  deleteColumnsData
 };

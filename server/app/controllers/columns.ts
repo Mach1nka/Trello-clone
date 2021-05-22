@@ -141,8 +141,8 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
           name: el.name,
           position: idx
         }));
-        await Column.deleteMany({ boardId });
         await Card.deleteMany({ columnId });
+        await Column.deleteMany({ boardId });
         await Column.insertMany(elementsWithUpdatedPos);
       }
       res.status(204).end();
