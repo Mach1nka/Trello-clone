@@ -1,10 +1,22 @@
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { CardContainer as Container } from './sc';
+import { deleteCard } from '../../store/card/actions';
 
-const Card: React.FC = () => {
+interface Props {
+  cardId: string;
+  description: string;
+  name: string;
+  position: number;
+  columnId: string;
+}
+
+const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }) => {
+  const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [isOpenRenameModal, setOpenRenameModalView] = useState(false);
   const [isOpenDescriptionModal, setDescriptionModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const [isOpenStatusModal, setStatusModalView] = useState(false);
@@ -14,11 +26,17 @@ const Card: React.FC = () => {
   };
 
   const handleDelete = () => {
+    dispatch(deleteCard({ columnId, cardId }));
     setAnchorEl(null);
   };
 
   const handleChangeDescription = () => {
     setDescriptionModalView(true);
+    setAnchorEl(null);
+  };
+
+  const handleChangeName = () => {
+    setOpenRenameModalView(true);
     setAnchorEl(null);
   };
 
@@ -35,14 +53,24 @@ const Card: React.FC = () => {
   return (
     <Container>
       <Typography style={{ width: '200px' }} variant="subtitle2">
-        [FE] Change order or columns by Drag&Drop
+        {name}
       </Typography>
-      <IconButton size="small" style={{ alignSelf: 'flex-start', fontSize: '15px' }}>
+      <IconButton
+        onClick={handleMenu}
+        size="small"
+        style={{ alignSelf: 'flex-start', fontSize: '15px' }}
+      >
         <EditIcon style={{ fontSize: 'inherit' }} />
       </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} keepMounted onClose={handleMenu}>
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        keepMounted
+        onClose={() => setAnchorEl(null)}
+      >
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
-        <MenuItem onClick={handleChangeDescription}>Rename</MenuItem>
+        <MenuItem onClick={handleChangeName}>Rename</MenuItem>
+        <MenuItem onClick={handleChangeDescription}>Change description</MenuItem>
         <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
         <MenuItem onClick={handleChangeStatus}>Change column</MenuItem>
       </Menu>

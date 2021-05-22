@@ -8,6 +8,11 @@ import {
 } from './actions';
 import replaceCardDescription from '../../../utils/replace-card-description';
 
+export interface DataFromServer {
+  columnId: string;
+  cards: Card[];
+}
+
 export interface CardData {
   cards: {
     [x: string]: Card[];
@@ -20,15 +25,16 @@ const cardDataIS: CardData = {
 
 const cardData = (
   state = cardDataIS,
-  { type, payload }: { type: string; payload: Card[] | Card }
+  { type, payload }: { type: string; payload: DataFromServer | Card }
 ): CardData => {
   switch (type) {
     case PUT_CARDS:
-      if (Array.isArray(payload)) {
+      if (payload.hasOwnProperty('columnId')) {
         return {
           ...state,
           cards: {
-            [payload[0].columnId]: payload as Card[]
+            ...state.cards,
+            [payload.columnId]: payload.cards as Card[]
           }
         };
       }
@@ -38,7 +44,10 @@ const cardData = (
         return {
           ...state,
           cards: {
-            [payload.columnId]: [...state.cards[payload.columnId], ...[payload as Card]]
+            ...state.cards,
+            [payload.columnId]: state.cards[payload.columnId]
+              ? state.cards[payload.columnId].concat(payload as Card)
+              : [payload]
           }
         };
       }
@@ -48,17 +57,19 @@ const cardData = (
         return {
           ...state,
           cards: {
+            ...state.cards,
             [payload.columnId]: replaceCardDescription(state, payload as Card)
           }
         };
       }
       return { ...state };
     case PUT_CARDS_WITH_NEW_POSITION:
-      if (Array.isArray(payload)) {
+      if (payload.hasOwnProperty('columnId')) {
         return {
           ...state,
           cards: {
-            [payload[0].columnId]: payload as Card[]
+            ...state.cards,
+            [payload.columnId]: payload.cards as Card[]
           }
         };
       }

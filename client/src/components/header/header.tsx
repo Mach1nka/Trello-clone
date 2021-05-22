@@ -6,6 +6,7 @@ import { useStyles } from './constants';
 import { signOutUser } from '../../store/auth/actions';
 import { deleteBoardsData } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
+import { deleteCardsData } from '../../store/card/actions';
 
 interface Location {
   state: {
@@ -26,6 +27,7 @@ const Header: React.FC = () => {
     dispatch(signOutUser());
     dispatch(deleteBoardsData());
     dispatch(deleteColumnsData());
+    dispatch(deleteCardsData());
     history.push('/auth');
   };
 

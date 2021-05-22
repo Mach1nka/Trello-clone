@@ -20,4 +20,10 @@ const CardContainer = styled.div`
   box-shadow: 0px 4px 6px -4px rgb(0 0 0 / 50%);
 `;
 
-export { CardsContainer, CardContainer };
+const ModalForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  padding: 0 20px 5px 20px;
+`;
+
+export { CardsContainer, CardContainer, ModalForm };

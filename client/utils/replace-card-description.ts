@@ -1,8 +1,8 @@
 import { Card } from '../src/store/card/actions';
 import { CardData } from '../src/store/card/reducer';
 
-function replaceCardDescription(state: CardData, payload: Card): Card[] {
-  return state.cards[payload.columnId]((el) =>
+const replaceCardDescription = (state: CardData, payload: Card): Card[] =>
+  state.cards[payload.columnId]((el: Card) =>
     el.id === payload.id
       ? {
           id: payload.id,
@@ -13,6 +13,5 @@ function replaceCardDescription(state: CardData, payload: Card): Card[] {
         }
       : el
   );
-}
 
 export default replaceCardDescription;

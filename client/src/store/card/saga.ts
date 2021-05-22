@@ -36,8 +36,6 @@ import { deleteColumnsData } from '../column/actions';
 
 function* workerGetCards(columnData: { type: string; payload: string }): SagaIterator {
   const data: Card[] | number = yield call(getCards, columnData.payload);
-  console.log(data);
-  
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());

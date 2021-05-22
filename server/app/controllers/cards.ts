@@ -6,6 +6,7 @@ const getCards = async (req: Request, res: Response): Promise<void> => {
   try {
     const cardsArr = await Card.find({ columnId });
     if (cardsArr.length) {
+      cardsArr.sort((a, b) => a.position - b.position);
       const preparedArr = cardsArr.map((el) => ({
         id: el._id,
         name: el.name,
@@ -13,9 +14,9 @@ const getCards = async (req: Request, res: Response): Promise<void> => {
         position: el.position,
         columnId: el.columnId
       }));
-      res.status(200).json(preparedArr);
+      res.status(200).json({ columnId, cards: preparedArr });
     } else {
-      res.status(404).json({ message: 'cards have not been found' });
+      res.status(404).json({ columnId, cards: [] });
     }
   } catch (error) {
     console.log(error);
@@ -151,7 +152,7 @@ const updateCardPosition = async (req: Request, res: Response): Promise<void> =>
           description: el.description,
           position: el.position
         }));
-        res.status(200).json(preparedArr);
+        res.status(200).json({ columnId, cards: preparedArr });
       } else {
         res.status(404).json({ message: 'the card has not been found' });
       }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, Menu, MenuItem, IconButton, Button } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -11,10 +11,10 @@ import {
 } from './sc';
 import { useStyles } from './constants';
 import { deleteColumn } from '../../store/column/actions';
-import { getCards } from '../../store/card/actions';
 import CardsContainer from '../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
+import CreateCardModal from '../cards/create-card-modal';
 
 interface Props {
   columnName: string;
@@ -27,6 +27,7 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
+  const [isOpenCreateCardModal, setCreateCardModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const classes = useStyles();
   const isOpenMenu = Boolean(anchorEl);
@@ -50,10 +51,6 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
     setAnchorEl(null);
   };
 
-  useEffect(() => {
-    dispatch(getCards(columnId));
-  }, []);
-
   return (
     <>
       <Container>
@@ -76,9 +73,14 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
           </ColumnHeader>
-          <CardsContainer />
+          <CardsContainer columnId={columnId} />
           <ColumnFooter>
-            <Button fullWidth size="small" startIcon={<AddIcon />}>
+            <Button
+              onClick={() => setCreateCardModalView(true)}
+              fullWidth
+              size="small"
+              startIcon={<AddIcon />}
+            >
               Create new card
             </Button>
           </ColumnFooter>
@@ -96,6 +98,11 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
         isOpen={isOpenPositionModal}
         columnId={columnId}
         setModalView={setPositionModalView}
+      />
+      <CreateCardModal
+        isOpen={isOpenCreateCardModal}
+        columnId={columnId}
+        setModalView={setCreateCardModalView}
       />
     </>
   );
