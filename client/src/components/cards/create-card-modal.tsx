@@ -48,7 +48,7 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
           variant="outlined"
           id="name"
           name="name"
-          label="Column name"
+          label="Card name"
           type="string"
           autoFocus
           onChange={formik.handleChange}
@@ -61,7 +61,7 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
           variant="outlined"
           id="description"
           name="description"
-          label="Column description"
+          label="Card description"
           type="string"
           onChange={formik.handleChange}
           error={formik.touched.description && !!formik.errors.description}

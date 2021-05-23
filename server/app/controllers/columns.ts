@@ -32,35 +32,35 @@ const createNewColumn = async (req: Request, res: Response): Promise<void> => {
   });
 
   try {
+    await newColumn.save();
     const columnsData = await Column.find({ boardId });
-    if (columnsData) {
+    if (columnsData.length) {
+      const bulkArr: any[] = [];
       columnsData.sort((a, b) => a.position - b.position);
-      columnsData.push(newColumn);
       const elementsWithUpdatedPos = columnsData.map((el, idx) => ({
         _id: el._id,
         name: el.name,
         position: idx,
         boardId: el.boardId
       }));
-      await Column.deleteMany({ boardId });
-      await Column.insertMany(elementsWithUpdatedPos);
-      const createdColumn = (await Column.findById(newColumn._id)) as ColumnsInDB;
-      res.status(201).json({
-        id: createdColumn._id,
-        boardId: createdColumn.boardId,
-        name: createdColumn.name,
-        position: createdColumn.position
-      });
-    } else {
-      await newColumn.save((_err, data) => {
-        res.status(201).json({
-          id: data._id,
-          boardId: data.boardId,
-          name: data.name,
-          position: data.position
+
+      elementsWithUpdatedPos.forEach((el) => {
+        bulkArr.push({
+          updateOne: {
+            filter: { _id: el._id },
+            update: { position: el.position }
+          }
         });
       });
+      await Column.bulkWrite(bulkArr);
     }
+    const createdColumn = (await Column.findById(newColumn._id)) as ColumnsInDB;
+    res.status(201).json({
+      id: createdColumn._id,
+      boardId: createdColumn.boardId,
+      name: createdColumn.name,
+      position: createdColumn.position
+    });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -93,6 +93,7 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
   try {
     await Column.find({ boardId }, async (_err, data) => {
       if (data) {
+        const bulkArr: any[] = [];
         const indexOldEl = data.findIndex((el) => el._id.toString() === columnId) as number;
         const editableEl = data.find((el) => el._id.toString() === columnId) as ColumnsInDB;
 
@@ -105,20 +106,23 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
         }
 
         const elementsWithUpdatedPos = data.map((el, idx) => ({
-          _id: el._id,
+          id: el._id,
           boardId: el.boardId,
           name: el.name,
           position: idx
         }));
-        await Column.deleteMany({ boardId });
-        await Column.insertMany(elementsWithUpdatedPos);
-        const preparedArr = elementsWithUpdatedPos.map((el) => ({
-          id: el._id,
-          name: el.name,
-          position: el.position,
-          boardId: el.boardId
-        }));
-        res.status(200).json(preparedArr);
+
+        elementsWithUpdatedPos.forEach((el) => {
+          bulkArr.push({
+            updateOne: {
+              filter: { _id: el.id },
+              update: { position: el.position }
+            }
+          });
+        });
+
+        await Column.bulkWrite(bulkArr);
+        res.status(200).json(elementsWithUpdatedPos);
       } else {
         res.status(404).json({ message: 'the column has not been found' });
       }
@@ -135,6 +139,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
     await Column.findByIdAndDelete(columnId);
     await Column.find({ boardId }, async (_err, data) => {
       if (data) {
+        const bulkArr: any[] = [];
         const elementsWithUpdatedPos = data.map((el, idx) => ({
           _id: el._id,
           boardId: el.boardId,
@@ -142,8 +147,16 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
           position: idx
         }));
         await Card.deleteMany({ columnId });
-        await Column.deleteMany({ boardId });
-        await Column.insertMany(elementsWithUpdatedPos);
+
+        elementsWithUpdatedPos.forEach((el) => {
+          bulkArr.push({
+            updateOne: {
+              filter: { _id: el._id },
+              update: { position: el.position }
+            }
+          });
+        });
+        await Column.bulkWrite(elementsWithUpdatedPos);
       }
       res.status(204).end();
     });
