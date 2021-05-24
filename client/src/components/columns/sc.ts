@@ -16,6 +16,7 @@ const ColumnContainer = styled.div`
   width: 270px;
   height: 100%;
   margin: 0 4px;
+  cursor: pointer;
 `;
 
 const ColumnContent = styled.div`
