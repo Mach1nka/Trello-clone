@@ -15,9 +15,12 @@ function getBoards(): Promise<Response> {
     .catch((error) => error);
 }
 
-function createBoard(data: DataForCreatingBoard): Promise<Response> {
+function updateBoardData(
+  data: DataForRenamingBoard | DataForCreatingBoard | DataForDeletingBoard,
+  reqMethod: string
+): Promise<Response> {
   return fetch(`${serverURL}/board`, {
-    method: 'POST',
+    method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
@@ -25,24 +28,4 @@ function createBoard(data: DataForCreatingBoard): Promise<Response> {
     .catch((error) => error);
 }
 
-function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
-    method: 'DELETE',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-export { getBoards, createBoard, updateBoardName, deleteBoard };
+export { getBoards, updateBoardData };

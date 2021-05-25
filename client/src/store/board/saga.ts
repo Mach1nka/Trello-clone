@@ -17,7 +17,7 @@ import {
 } from './actions';
 import { signOutUser } from '../auth/actions';
 import { deleteColumnsData } from '../column/actions';
-import { getBoards, createBoard, updateBoardName, deleteBoard } from '../../api/board-requests';
+import { getBoards, updateBoardData } from '../../api/board-requests';
 
 function* workerGetBoards(): SagaIterator {
   const data: BoardList | number = yield call(getBoards);
@@ -35,7 +35,7 @@ function* watchGetBoards(): SagaIterator {
 }
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const data: Board | number = yield call(createBoard, boardData.payload);
+  const data: Board | number = yield call(updateBoardData, boardData.payload, 'POST');
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -50,7 +50,7 @@ function* watchCreateBoard(): SagaIterator {
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const data: Board | number = yield call(updateBoardName, board.payload);
+  const data: Board | number = yield call(updateBoardData, board.payload, 'PATCH');
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -65,7 +65,7 @@ function* watchRenameBoard(): SagaIterator {
 }
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
-  yield call(deleteBoard, board.payload);
+  yield call(updateBoardData, board.payload, 'DELETE');
   const data: BoardList | number = yield call(getBoards);
   if (data === 401) {
     yield put(signOutUser());

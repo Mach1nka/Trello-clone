@@ -7,7 +7,6 @@ import { deleteCard } from '../../store/card/actions';
 import RenameCardModal from './rename-card';
 import ChangeCardPosition from './change-card-position';
 import ChangeCardStatus from './change-card-status';
-import ChangeCardDescriptionModal from './change-card-description';
 
 interface Props {
   cardId: string;
@@ -21,7 +20,6 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setOpenRenameModalView] = useState(false);
-  const [isOpenDescriptionModal, setDescriptionModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const [isOpenStatusModal, setStatusModalView] = useState(false);
 
@@ -31,11 +29,6 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
 
   const handleDelete = () => {
     dispatch(deleteCard({ columnId, cardId }));
-    setAnchorEl(null);
-  };
-
-  const handleChangeDescription = () => {
-    setDescriptionModalView(true);
     setAnchorEl(null);
   };
 
@@ -75,7 +68,6 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
         >
           <MenuItem onClick={handleDelete}>Delete</MenuItem>
           <MenuItem onClick={handleChangeName}>Rename</MenuItem>
-          <MenuItem onClick={handleChangeDescription}>Change description</MenuItem>
           <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
           <MenuItem onClick={handleChangeStatus}>Change column</MenuItem>
         </Menu>
@@ -98,12 +90,6 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
         setModalView={setStatusModalView}
         cardId={cardId}
         columnId={columnId}
-      />
-      <ChangeCardDescriptionModal
-        isOpen={isOpenDescriptionModal}
-        setModalView={setDescriptionModalView}
-        cardId={cardId}
-        cardDescription={description}
       />
     </>
   );

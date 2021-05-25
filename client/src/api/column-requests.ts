@@ -16,9 +16,17 @@ function getColumns(boardId: string): Promise<Response> {
     .catch((error) => error);
 }
 
-function createColumn(data: DataForCreatingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column`, {
-    method: 'POST',
+function updateColumnData(
+  data:
+    | DataForCreatingColumn
+    | DataForRenamingColumn
+    | DataForUpdatingColumnPos
+    | DataForDeletingColumn,
+  reqMethod: string,
+  path = ''
+): Promise<Response> {
+  return fetch(`${serverURL}/column${path}`, {
+    method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
@@ -26,34 +34,4 @@ function createColumn(data: DataForCreatingColumn): Promise<Response> {
     .catch((error) => error);
 }
 
-function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column/name`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
-  return fetch(`${serverURL}/column/position`, {
-    method: 'PUT',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function deleteColumn(data: DataForDeletingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column`, {
-    method: 'DELETE',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };
+export { getColumns, updateColumnData };

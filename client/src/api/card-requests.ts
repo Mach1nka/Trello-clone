@@ -18,9 +18,19 @@ function getCards(columnId: string): Promise<Response> {
     .catch((error) => error);
 }
 
-function createCard(data: DataForCreatingCard): Promise<Response> {
-  return fetch(`${serverURL}/card`, {
-    method: 'POST',
+function updateCardData(
+  data:
+    | DataForCreatingCard
+    | DataForRenamingCard
+    | DataForUpdatingCardDesc
+    | DataForUpdatingCardPos
+    | DataForUpdatingCardStatus
+    | DataForDeletingCard,
+  reqMethod: string,
+  path = ''
+): Promise<Response> {
+  return fetch(`${serverURL}/card${path}`, {
+    method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
@@ -28,62 +38,4 @@ function createCard(data: DataForCreatingCard): Promise<Response> {
     .catch((error) => error);
 }
 
-function updateCardName(data: DataForRenamingCard): Promise<Response> {
-  return fetch(`${serverURL}/card/name`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function updateCardDescription(data: DataForUpdatingCardDesc): Promise<Response> {
-  return fetch(`${serverURL}/card/description`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function updateCardPosition(data: DataForUpdatingCardPos): Promise<Response> {
-  return fetch(`${serverURL}/card/position`, {
-    method: 'PUT',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function updateCardStatus(data: DataForUpdatingCardStatus): Promise<Response> {
-  return fetch(`${serverURL}/card/status`, {
-    method: 'PUT',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-function deleteCard(data: DataForDeletingCard): Promise<Response> {
-  return fetch(`${serverURL}/card`, {
-    method: 'DELETE',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-export {
-  getCards,
-  createCard,
-  updateCardName,
-  updateCardDescription,
-  updateCardPosition,
-  updateCardStatus,
-  deleteCard
-};
+export { getCards, updateCardData };

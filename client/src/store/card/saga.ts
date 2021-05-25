@@ -21,15 +21,7 @@ import {
   DataForUpdatingCardStatus,
   DataForDeletingCard
 } from './actions';
-import {
-  getCards,
-  createCard,
-  updateCardName,
-  updateCardDescription,
-  updateCardPosition,
-  updateCardStatus,
-  deleteCard
-} from '../../api/card-requests';
+import { getCards, updateCardData } from '../../api/card-requests';
 import { signOutUser } from '../auth/actions';
 import { deleteBoardsData } from '../board/actions';
 import { deleteColumnsData } from '../column/actions';
@@ -51,7 +43,7 @@ function* watchGetCards(): SagaIterator {
 }
 
 function* workerCreateCard(columnData: { type: string; payload: DataForCreatingCard }) {
-  const data: Card | number = yield call(createCard, columnData.payload);
+  const data: Card | number = yield call(updateCardData, columnData.payload, 'POST');
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -67,7 +59,7 @@ function* watchCreateCard(): SagaIterator {
 }
 
 function* workerRenameCard(columnData: { type: string; payload: DataForRenamingCard }) {
-  const data: Card | number = yield call(updateCardName, columnData.payload);
+  const data: Card | number = yield call(updateCardData, columnData.payload, 'PATCH', '/name');
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -83,7 +75,12 @@ function* watchRenameCard(): SagaIterator {
 }
 
 function* workerChangeCardDesc(columnData: { type: string; payload: DataForUpdatingCardDesc }) {
-  const data: Card | number = yield call(updateCardDescription, columnData.payload);
+  const data: Card | number = yield call(
+    updateCardData,
+    columnData.payload,
+    'PATCH',
+    '/description'
+  );
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -99,7 +96,7 @@ function* watchChangeCardDesc(): SagaIterator {
 }
 
 function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpdatingCardStatus }) {
-  yield call(updateCardStatus, columnData.payload);
+  yield call(updateCardData, columnData.payload, 'PUT', '/status');
   const data: Card[] | number = yield call(getCards, columnData.payload.columnId);
   if (data === 401) {
     yield put(signOutUser());
@@ -116,7 +113,7 @@ function* watchChangeCardStatus(): SagaIterator {
 }
 
 function* workerChangeCardPos(columnData: { type: string; payload: DataForUpdatingCardPos }) {
-  const data: Card[] | number = yield call(updateCardPosition, columnData.payload);
+  const data: Card[] | number = yield call(updateCardData, columnData.payload, 'PUT', '/position');
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -132,7 +129,7 @@ function* watchChangeCardPos(): SagaIterator {
 }
 
 function* workerDeleteCard(columnData: { type: string; payload: DataForDeletingCard }) {
-  yield call(deleteCard, columnData.payload);
+  yield call(updateCardData, columnData.payload, 'DELETE');
   const data: Card[] | number = yield call(getCards, columnData.payload.columnId);
   if (data === 401) {
     yield put(signOutUser());

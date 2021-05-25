@@ -19,7 +19,7 @@ const CardSchema = new Schema({
   },
   description: {
     type: String,
-    required: true
+    default: ''
   },
   position: {
     type: Number,
