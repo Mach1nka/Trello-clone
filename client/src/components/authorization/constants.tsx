@@ -3,11 +3,16 @@ import React from 'react';
 import SignUp from './sign-up';
 import LogIn from './log-in';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   paper: {
     width: 'inherit',
     height: '500px',
     marginTop: '30%'
+  },
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
+    backgroundColor: 'rgba(0, 0, 0, 0.2)'
   }
 }));
 

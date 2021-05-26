@@ -1,18 +1,24 @@
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
-import { TextField, Button } from '@material-ui/core';
+import { TextField, Button, Backdrop, CircularProgress } from '@material-ui/core';
 import { loginUser } from '../../store/auth/actions';
 import { LogInForm as Form } from './sc';
-import { loginFields } from './constants';
+import { loginFields, useStyles } from './constants';
 
 type FormikProps = {
   [key: string]: string;
 };
 
-const LogIn: React.FC = () => {
+interface Props {
+  isOpenBackdrop: boolean;
+  setBackdropView: Dispatch<SetStateAction<boolean>>;
+}
+
+const LogIn: React.FC<Props> = ({ isOpenBackdrop, setBackdropView }) => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -37,34 +43,40 @@ const LogIn: React.FC = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
+      setBackdropView(true);
       dispatch(loginUser({ login: values.login, password: values.password }));
     }
   });
   return (
-    <Form onSubmit={formik.handleSubmit} autoComplete="off">
-      <div>
-        {loginFields.map((el) => (
-          <TextField
-            key={el.id}
-            size="medium"
-            margin="normal"
-            variant="outlined"
-            fullWidth
-            id={el.id}
-            name={el.id}
-            label={el.label}
-            type={el.type}
-            autoFocus={el.autoFocus}
-            onChange={formik.handleChange}
-            error={formik.touched[el.id] && !!formik.errors[el.id]}
-            helperText={formik.touched[el.id] && formik.errors[el.id]}
-          />
-        ))}
-      </div>
-      <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
-        submit
-      </Button>
-    </Form>
+    <>
+      <Form onSubmit={formik.handleSubmit} autoComplete="off">
+        <div>
+          {loginFields.map((el) => (
+            <TextField
+              key={el.id}
+              size="medium"
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              id={el.id}
+              name={el.id}
+              label={el.label}
+              type={el.type}
+              autoFocus={el.autoFocus}
+              onChange={formik.handleChange}
+              error={formik.touched[el.id] && !!formik.errors[el.id]}
+              helperText={formik.touched[el.id] && formik.errors[el.id]}
+            />
+          ))}
+        </div>
+        <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
+          submit
+        </Button>
+      </Form>
+      <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </>
   );
 };
 
