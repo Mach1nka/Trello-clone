@@ -17,7 +17,13 @@ import {
   DataForUpdatingColumnPos,
   DataForDeletingColumn
 } from './actions';
-import { getColumns, updateColumnData } from '../../api/column-requests';
+import {
+  getColumns,
+  createColumn,
+  updateColumnName,
+  updateColumnPosition,
+  deleteColumn
+} from '../../api/column-requests';
 import { signOutUser } from '../auth/actions';
 import { deleteBoardsData } from '../board/actions';
 
@@ -37,7 +43,7 @@ function* watchGetColumns(): SagaIterator {
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const data: Column | number = yield call(updateColumnData, columnData.payload, 'POST');
+  const data: Column | number = yield call(createColumn, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -52,7 +58,7 @@ function* watchCreateColumn(): SagaIterator {
 }
 
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
-  const data: Column | number = yield call(updateColumnData, columnData.payload, 'PATCH', '/name');
+  const data: Column | number = yield call(updateColumnName, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -67,12 +73,7 @@ function* watchRenameColumn(): SagaIterator {
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const data: Column[] | number = yield call(
-    updateColumnData,
-    columnData.payload,
-    'PUT',
-    '/position'
-  );
+  const data: Column[] | number = yield call(updateColumnPosition, columnData.payload);
   if (data === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
@@ -87,7 +88,7 @@ function* watchChangeColumnPos(): SagaIterator {
 }
 
 function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletingColumn }) {
-  yield call(updateColumnData, columnData.payload, 'DELETE');
+  yield call(deleteColumn, columnData.payload);
   const data: Column[] | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
     yield put(signOutUser());

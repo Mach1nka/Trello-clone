@@ -28,4 +28,16 @@ function updateBoardData(
     .catch((error) => error);
 }
 
-export { getBoards, updateBoardData };
+function createBoard(data: DataForCreatingBoard): Promise<Response> {
+  return updateBoardData(data, 'POST');
+}
+
+function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
+  return updateBoardData(data, 'PATCH');
+}
+
+function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
+  return updateBoardData(data, 'DELETE');
+}
+
+export { getBoards, createBoard, updateBoardName, deleteBoard };

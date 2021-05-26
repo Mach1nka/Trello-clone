@@ -38,4 +38,36 @@ function updateCardData(
     .catch((error) => error);
 }
 
-export { getCards, updateCardData };
+function createCard(data: DataForCreatingCard): Promise<Response> {
+  return updateCardData(data, 'POST');
+}
+
+function updateCardName(data: DataForRenamingCard): Promise<Response> {
+  return updateCardData(data, 'PATCH', '/name');
+}
+
+function updateCardDescription(data: DataForUpdatingCardDesc): Promise<Response> {
+  return updateCardData(data, 'PATCH', '/description');
+}
+
+function updateCardPosition(data: DataForUpdatingCardPos): Promise<Response> {
+  return updateCardData(data, 'PUT', '/position');
+}
+
+function updateCardStatus(data: DataForUpdatingCardStatus): Promise<Response> {
+  return updateCardData(data, 'PUT', '/status');
+}
+
+function deleteCard(data: DataForDeletingCard): Promise<Response> {
+  return updateCardData(data, 'DELETE');
+}
+
+export {
+  getCards,
+  createCard,
+  updateCardName,
+  updateCardDescription,
+  updateCardPosition,
+  updateCardStatus,
+  deleteCard
+};

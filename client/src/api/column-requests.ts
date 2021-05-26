@@ -34,4 +34,20 @@ function updateColumnData(
     .catch((error) => error);
 }
 
-export { getColumns, updateColumnData };
+function createColumn(data: DataForCreatingColumn): Promise<Response> {
+  return updateColumnData(data, 'POST');
+}
+
+function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
+  return updateColumnData(data, 'PATCH', '/name');
+}
+
+function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
+  return updateColumnData(data, 'PUT', '/position');
+}
+
+function deleteColumn(data: DataForDeletingColumn): Promise<Response> {
+  return updateColumnData(data, 'DELETE');
+}
+
+export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };

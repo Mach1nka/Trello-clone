@@ -137,6 +137,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
   const { columnId, boardId } = req.body;
   try {
     await Column.findByIdAndDelete(columnId);
+    await Card.deleteMany({ columnId });
     await Column.find({ boardId }, async (_err, data) => {
       if (data) {
         const bulkArr: any[] = [];
@@ -146,7 +147,6 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
           name: el.name,
           position: idx
         }));
-        await Card.deleteMany({ columnId });
 
         elementsWithUpdatedPos.forEach((el) => {
           bulkArr.push({
@@ -156,7 +156,8 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
             }
           });
         });
-        await Column.bulkWrite(elementsWithUpdatedPos);
+
+        await Column.bulkWrite(bulkArr);
       }
       res.status(204).end();
     });
