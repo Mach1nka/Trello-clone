@@ -1,7 +1,12 @@
+import React, { Dispatch, SetStateAction } from 'react';
 import { makeStyles } from '@material-ui/core';
-import React from 'react';
 import SignUp from './sign-up';
 import LogIn from './log-in';
+
+export interface Props {
+  isOpenBackdrop: boolean;
+  setBackdropView: Dispatch<SetStateAction<boolean>>;
+}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -53,12 +58,12 @@ const authForms = [
   {
     value: '1',
     label: 'Sign Up',
-    component: <SignUp />
+    component: (props: Props): JSX.Element => <SignUp {...props} />
   },
   {
     value: '2',
     label: 'Log In',
-    component: <LogIn />
+    component: (props: Props): JSX.Element => <LogIn {...props} />
   }
 ];
 

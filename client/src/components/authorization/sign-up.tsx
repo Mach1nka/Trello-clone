@@ -1,20 +1,15 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { TextField, Button, Backdrop, CircularProgress } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
 import { registerUser } from '../../store/auth/actions';
 import { SignUpForm as Form } from './sc';
-import { registrationFields, useStyles } from './constants';
+import { registrationFields, useStyles, Props } from './constants';
 
 type FormikProps = {
   [key: string]: string;
 };
-
-interface Props {
-  isOpenBackdrop: boolean;
-  setBackdropView: Dispatch<SetStateAction<boolean>>;
-}
 
 const SignUp: React.FC<Props> = ({ isOpenBackdrop, setBackdropView }) => {
   const dispatch = useDispatch();

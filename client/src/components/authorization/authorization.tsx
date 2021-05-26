@@ -36,7 +36,7 @@ const Authorization: React.FC = () => {
           </TabList>
           {authForms.map((el) => (
             <TabPanel key={el.value} style={{ height: '65%' }} value={el.value}>
-              {React.cloneElement(el.component, { isOpenBackdrop, setBackdropView })}
+              {el.component({ isOpenBackdrop, setBackdropView })}
             </TabPanel>
           ))}
         </TabContext>
