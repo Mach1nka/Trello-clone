@@ -7,32 +7,27 @@ import {
   ColumnContainer as Container,
   ColumnHeader,
   ColumnContent as Content,
-  ColumnFooter,
-  CardContainer
+  ColumnFooter
 } from './sc';
 import { useStyles } from './constants';
 import { deleteColumn } from '../../store/column/actions';
+import CardsContainer from '../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
+import CreateCardModal from '../cards/create-card-modal';
 
 interface Props {
   columnName: string;
-  columnsContainerId: string;
   columnId: string;
   position: number;
   boardId: string;
 }
 
-const Column: React.FC<Props> = ({
-  columnName,
-  columnsContainerId,
-  columnId,
-  boardId,
-  position
-}) => {
+const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
+  const [isOpenCreateCardModal, setCreateCardModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const classes = useStyles();
   const isOpenMenu = Boolean(anchorEl);
@@ -42,7 +37,7 @@ const Column: React.FC<Props> = ({
   };
 
   const handleDelete = () => {
-    dispatch(deleteColumn({ columnsContainerId, columnId, boardId }));
+    dispatch(deleteColumn({ columnId, boardId }));
     setAnchorEl(null);
   };
 
@@ -78,27 +73,36 @@ const Column: React.FC<Props> = ({
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
           </ColumnHeader>
-          <CardContainer />
+          <CardsContainer columnId={columnId} />
           <ColumnFooter>
-            <Button fullWidth size="small" startIcon={<AddIcon />}>
+            <Button
+              onClick={() => setCreateCardModalView(true)}
+              fullWidth
+              size="small"
+              startIcon={<AddIcon />}
+            >
               Create new card
             </Button>
           </ColumnFooter>
         </Content>
       </Container>
       <RenameColumnModal
-        columnsContainerId={columnsContainerId}
         isOpen={isOpenRenameModal}
         columnId={columnId}
         setModalView={setRenameModalView}
         columnName={columnName}
       />
       <ChangeColumnPosition
-        columnsContainerId={columnsContainerId}
         position={position}
+        boardId={boardId}
         isOpen={isOpenPositionModal}
         columnId={columnId}
         setModalView={setPositionModalView}
+      />
+      <CreateCardModal
+        isOpen={isOpenCreateCardModal}
+        columnId={columnId}
+        setModalView={setCreateCardModalView}
       />
     </>
   );

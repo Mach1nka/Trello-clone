@@ -4,35 +4,35 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
-import { changeColumnPosition } from '../../store/column/actions';
+import { changeCardPosition } from '../../store/card/actions';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
-  boardId: string;
+  cardId: string;
   position: number;
 }
 
-const ChangeColumnPosition: React.FC<Props> = ({
+const ChangeCardPosition: React.FC<Props> = ({
   isOpen,
   setModalView,
   columnId,
-  boardId,
+  cardId,
   position
 }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const positionArr = useAppSelector((state) =>
-    state.boardColumns.columns.map((el) => el.position)
+    state.cardData.cards[columnId].map((el) => el.position)
   );
 
   const formHandler = (values: { newPosition: number }) => {
     if (values.newPosition !== position) {
       dispatch(
-        changeColumnPosition({
-          boardId,
+        changeCardPosition({
+          cardId,
           newPosition: values.newPosition,
           columnId
         })
@@ -43,7 +43,7 @@ const ChangeColumnPosition: React.FC<Props> = ({
 
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change column position</DialogTitle>
+      <DialogTitle className={classes.dialogTitle}>Change card position</DialogTitle>
       <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
@@ -73,4 +73,4 @@ const ChangeColumnPosition: React.FC<Props> = ({
   );
 };
 
-export default ChangeColumnPosition;
+export default ChangeCardPosition;

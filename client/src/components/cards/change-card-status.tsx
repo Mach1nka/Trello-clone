@@ -4,60 +4,54 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
-import { changeColumnPosition } from '../../store/column/actions';
+import { changeCardStatus, getCards } from '../../store/card/actions';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
-  boardId: string;
-  position: number;
+  cardId: string;
 }
 
-const ChangeColumnPosition: React.FC<Props> = ({
-  isOpen,
-  setModalView,
-  columnId,
-  boardId,
-  position
-}) => {
+const ChangeCardStatus: React.FC<Props> = ({ isOpen, setModalView, columnId, cardId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const positionArr = useAppSelector((state) =>
-    state.boardColumns.columns.map((el) => el.position)
+  const columnsArr = useAppSelector((state) =>
+    state.boardColumns.columns.map((el) => ({ columnName: el.name, columnId: el.id }))
   );
 
-  const formHandler = (values: { newPosition: number }) => {
-    if (values.newPosition !== position) {
+  const formHandler = (values: { newStatus: string }) => {
+    if (values.newStatus !== columnId) {
       dispatch(
-        changeColumnPosition({
-          boardId,
-          newPosition: values.newPosition,
+        changeCardStatus({
+          cardId,
+          newColumnId: values.newStatus,
           columnId
         })
       );
+      dispatch(getCards(values.newStatus));
     }
     setModalView(false);
   };
 
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change column position</DialogTitle>
-      <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
+      <DialogTitle className={classes.dialogTitle}>Change card position</DialogTitle>
+      <Formik initialValues={{ newStatus: columnId }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField
               label="Position"
-              name="newPosition"
-              id="newPosition"
+              name="newStatus"
+              id="newStatus"
               select
-              value={props.values.newPosition}
+              value={props.values.newStatus}
               onChange={props.handleChange}
             >
-              {positionArr.map((el) => (
-                <MenuItem key={el} value={el}>
-                  {el + 1}
+              {columnsArr.map((el) => (
+                <MenuItem key={el.columnId} value={el.columnId}>
+                  {el.columnName}
                 </MenuItem>
               ))}
             </TextField>
@@ -73,4 +67,4 @@ const ChangeColumnPosition: React.FC<Props> = ({
   );
 };
 
-export default ChangeColumnPosition;
+export default ChangeCardStatus;

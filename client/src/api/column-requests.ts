@@ -7,53 +7,41 @@ import {
 } from '../store/column/actions';
 import { requestHeader, responseHandler } from './constants';
 
-function getColumns(boardId: string): Promise<Response> {
-  return fetch(`${serverURL}/columns/${boardId}`, {
+const getColumns = (boardId: string): Promise<Response> =>
+  fetch(`${serverURL}/columns/${boardId}`, {
     method: 'GET',
     headers: requestHeader()
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function createColumn(data: DataForCreatingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column`, {
-    method: 'POST',
+const updateColumnData = (
+  data:
+    | DataForCreatingColumn
+    | DataForRenamingColumn
+    | DataForUpdatingColumnPos
+    | DataForDeletingColumn,
+  reqMethod: string,
+  path = ''
+): Promise<Response> =>
+  fetch(`${serverURL}/column${path}`, {
+    method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column/name`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
+const createColumn = (data: DataForCreatingColumn): Promise<Response> =>
+  updateColumnData(data, 'POST');
 
-function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
-  return fetch(`${serverURL}/column/position`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
+const updateColumnName = (data: DataForRenamingColumn): Promise<Response> =>
+  updateColumnData(data, 'PATCH', '/name');
 
-function deleteColumn(data: DataForDeletingColumn): Promise<Response> {
-  return fetch(`${serverURL}/column`, {
-    method: 'DELETE',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
+const updateColumnPosition = (data: DataForUpdatingColumnPos): Promise<Response> =>
+  updateColumnData(data, 'PUT', '/position');
+
+const deleteColumn = (data: DataForDeletingColumn): Promise<Response> =>
+  updateColumnData(data, 'DELETE');
 
 export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };

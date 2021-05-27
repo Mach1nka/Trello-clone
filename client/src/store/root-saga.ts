@@ -9,6 +9,15 @@ import {
   watchDeleteColumn,
   watchChangeColumnPos
 } from './column/saga';
+import {
+  watchGetCards,
+  watchCreateCard,
+  watchRenameCard,
+  watchChangeCardPos,
+  watchChangeCardDesc,
+  watchChangeCardStatus,
+  watchDeleteCard
+} from './card/saga';
 
 export default function* rootSaga(): SagaIterator {
   yield all([
@@ -22,6 +31,13 @@ export default function* rootSaga(): SagaIterator {
     call(watchCreateColumn),
     call(watchRenameColumn),
     call(watchChangeColumnPos),
-    call(watchDeleteColumn)
+    call(watchDeleteColumn),
+    call(watchGetCards),
+    call(watchCreateCard),
+    call(watchRenameCard),
+    call(watchChangeCardPos),
+    call(watchChangeCardDesc),
+    call(watchChangeCardStatus),
+    call(watchDeleteCard)
   ]);
 }
