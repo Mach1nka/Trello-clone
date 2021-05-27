@@ -6,38 +6,33 @@ import {
 } from '../store/board/actions';
 import { requestHeader, responseHandler } from './constants';
 
-function getBoards(): Promise<Response> {
-  return fetch(`${serverURL}/boards`, {
+const getBoards = (): Promise<Response> =>
+  fetch(`${serverURL}/boards`, {
     method: 'GET',
     headers: requestHeader()
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function updateBoardData(
+const updateBoardData = (
   data: DataForRenamingBoard | DataForCreatingBoard | DataForDeletingBoard,
   reqMethod: string
-): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
+): Promise<Response> =>
+  fetch(`${serverURL}/board`, {
     method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function createBoard(data: DataForCreatingBoard): Promise<Response> {
-  return updateBoardData(data, 'POST');
-}
+const createBoard = (data: DataForCreatingBoard): Promise<Response> =>
+  updateBoardData(data, 'POST');
 
-function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
-  return updateBoardData(data, 'PATCH');
-}
+const updateBoardName = (data: DataForRenamingBoard): Promise<Response> =>
+  updateBoardData(data, 'PATCH');
 
-function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
-  return updateBoardData(data, 'DELETE');
-}
+const deleteBoard = (data: DataForDeletingBoard): Promise<Response> =>
+  updateBoardData(data, 'DELETE');
 
 export { getBoards, createBoard, updateBoardName, deleteBoard };

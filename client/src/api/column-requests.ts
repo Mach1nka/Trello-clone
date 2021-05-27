@@ -7,16 +7,15 @@ import {
 } from '../store/column/actions';
 import { requestHeader, responseHandler } from './constants';
 
-function getColumns(boardId: string): Promise<Response> {
-  return fetch(`${serverURL}/columns/${boardId}`, {
+const getColumns = (boardId: string): Promise<Response> =>
+  fetch(`${serverURL}/columns/${boardId}`, {
     method: 'GET',
     headers: requestHeader()
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function updateColumnData(
+const updateColumnData = (
   data:
     | DataForCreatingColumn
     | DataForRenamingColumn
@@ -24,30 +23,25 @@ function updateColumnData(
     | DataForDeletingColumn,
   reqMethod: string,
   path = ''
-): Promise<Response> {
-  return fetch(`${serverURL}/column${path}`, {
+): Promise<Response> =>
+  fetch(`${serverURL}/column${path}`, {
     method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function createColumn(data: DataForCreatingColumn): Promise<Response> {
-  return updateColumnData(data, 'POST');
-}
+const createColumn = (data: DataForCreatingColumn): Promise<Response> =>
+  updateColumnData(data, 'POST');
 
-function updateColumnName(data: DataForRenamingColumn): Promise<Response> {
-  return updateColumnData(data, 'PATCH', '/name');
-}
+const updateColumnName = (data: DataForRenamingColumn): Promise<Response> =>
+  updateColumnData(data, 'PATCH', '/name');
 
-function updateColumnPosition(data: DataForUpdatingColumnPos): Promise<Response> {
-  return updateColumnData(data, 'PUT', '/position');
-}
+const updateColumnPosition = (data: DataForUpdatingColumnPos): Promise<Response> =>
+  updateColumnData(data, 'PUT', '/position');
 
-function deleteColumn(data: DataForDeletingColumn): Promise<Response> {
-  return updateColumnData(data, 'DELETE');
-}
+const deleteColumn = (data: DataForDeletingColumn): Promise<Response> =>
+  updateColumnData(data, 'DELETE');
 
 export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };

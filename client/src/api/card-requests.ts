@@ -9,14 +9,13 @@ import {
 } from '../store/card/actions';
 import { requestHeader, responseHandler } from './constants';
 
-function getCards(columnId: string): Promise<Response> {
-  return fetch(`${serverURL}/cards/${columnId}`, {
+const getCards = (columnId: string): Promise<Response> =>
+  fetch(`${serverURL}/cards/${columnId}`, {
     method: 'GET',
     headers: requestHeader()
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
 function updateCardData(
   data:
@@ -38,29 +37,21 @@ function updateCardData(
     .catch((error) => error);
 }
 
-function createCard(data: DataForCreatingCard): Promise<Response> {
-  return updateCardData(data, 'POST');
-}
+const createCard = (data: DataForCreatingCard): Promise<Response> => updateCardData(data, 'POST');
 
-function updateCardName(data: DataForRenamingCard): Promise<Response> {
-  return updateCardData(data, 'PATCH', '/name');
-}
+const updateCardName = (data: DataForRenamingCard): Promise<Response> =>
+  updateCardData(data, 'PATCH', '/name');
 
-function updateCardDescription(data: DataForUpdatingCardDesc): Promise<Response> {
-  return updateCardData(data, 'PATCH', '/description');
-}
+const updateCardDescription = (data: DataForUpdatingCardDesc): Promise<Response> =>
+  updateCardData(data, 'PATCH', '/description');
 
-function updateCardPosition(data: DataForUpdatingCardPos): Promise<Response> {
-  return updateCardData(data, 'PUT', '/position');
-}
+const updateCardPosition = (data: DataForUpdatingCardPos): Promise<Response> =>
+  updateCardData(data, 'PUT', '/position');
 
-function updateCardStatus(data: DataForUpdatingCardStatus): Promise<Response> {
-  return updateCardData(data, 'PUT', '/status');
-}
+const updateCardStatus = (data: DataForUpdatingCardStatus): Promise<Response> =>
+  updateCardData(data, 'PUT', '/status');
 
-function deleteCard(data: DataForDeletingCard): Promise<Response> {
-  return updateCardData(data, 'DELETE');
-}
+const deleteCard = (data: DataForDeletingCard): Promise<Response> => updateCardData(data, 'DELETE');
 
 export {
   getCards,
