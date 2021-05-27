@@ -14,7 +14,7 @@ interface ParamTypes {
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
   const { boardId } = useParams<ParamTypes>();
-  const { columns, id: columnsContainerId } = useAppSelector((state) => state.boardColumns);
+  const { columns } = useAppSelector((state) => state.boardColumns);
   const [dragEl, setDragEl] = useState<ColumnType | null>(null);
 
   const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
@@ -26,8 +26,8 @@ const ColumnsContainer: React.FC = () => {
     if (dragEl && column.position !== dragEl.position) {
       dispatch(
         changeColumnPosition({
-          columnsContainerId,
-          columnId: dragEl._id,
+          boardId,
+          columnId: dragEl.id,
           newPosition: column.position
         })
       );
@@ -42,19 +42,13 @@ const ColumnsContainer: React.FC = () => {
     <Container>
       {columns.map((el) => (
         <div
-          key={el._id}
+          key={el.id}
           draggable
           onDragStart={(e) => dragStartHandler(e, el)}
           onDragOver={(e) => e.preventDefault()}
           onDrop={(e) => dropHandler(e, el)}
         >
-          <Column
-            columnName={el.name}
-            columnsContainerId={columnsContainerId}
-            columnId={el._id}
-            boardId={boardId}
-            position={el.position}
-          />
+          <Column columnName={el.name} columnId={el.id} boardId={boardId} position={el.position} />
         </div>
       ))}
       <CreateColumn boardId={boardId} newPosition={columns.length} />

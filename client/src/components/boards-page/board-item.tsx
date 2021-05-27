@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
 import { Card } from './sc';
 import { useStyles } from './constants';
-import { deleteAllColumns } from '../../store/column/actions';
+import { deleteColumnsData } from '../../store/column/actions';
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
 
@@ -26,7 +26,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
         style={{ textDecoration: 'none' }}
         to={locationParams}
         onClick={() => {
-          dispatch(deleteAllColumns());
+          dispatch(deleteColumnsData());
         }}
       >
         <Card isDefaultCard={isDefaultCard}>

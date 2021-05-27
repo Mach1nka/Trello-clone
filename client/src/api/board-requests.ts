@@ -6,43 +6,33 @@ import {
 } from '../store/board/actions';
 import { requestHeader, responseHandler } from './constants';
 
-function getBoards(): Promise<Response> {
-  return fetch(`${serverURL}/boards`, {
+const getBoards = (): Promise<Response> =>
+  fetch(`${serverURL}/boards`, {
     method: 'GET',
     headers: requestHeader()
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function createBoard(data: DataForCreatingBoard): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
-    method: 'POST',
+const updateBoardData = (
+  data: DataForRenamingBoard | DataForCreatingBoard | DataForDeletingBoard,
+  reqMethod: string
+): Promise<Response> =>
+  fetch(`${serverURL}/board`, {
+    method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
   })
     .then((resp) => responseHandler(resp))
     .catch((error) => error);
-}
 
-function updateBoardName(data: DataForRenamingBoard): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
-    method: 'PATCH',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
+const createBoard = (data: DataForCreatingBoard): Promise<Response> =>
+  updateBoardData(data, 'POST');
 
-function deleteBoard(data: DataForDeletingBoard): Promise<Response> {
-  return fetch(`${serverURL}/board`, {
-    method: 'DELETE',
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
+const updateBoardName = (data: DataForRenamingBoard): Promise<Response> =>
+  updateBoardData(data, 'PATCH');
+
+const deleteBoard = (data: DataForDeletingBoard): Promise<Response> =>
+  updateBoardData(data, 'DELETE');
 
 export { getBoards, createBoard, updateBoardName, deleteBoard };

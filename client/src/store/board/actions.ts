@@ -71,7 +71,7 @@ const putRenamedBoard = (renamedBoard: Board): { type: string; payload: Board } 
   payload: renamedBoard
 });
 
-const deleteAllBoards = (): { type: string } => ({ type: DELETE_BOARDS_DATA });
+const deleteBoardsData = (): { type: string } => ({ type: DELETE_BOARDS_DATA });
 
 export {
   GET_BOARDS,
@@ -89,5 +89,5 @@ export {
   createBoard,
   renameBoard,
   deleteBoard,
-  deleteAllBoards
+  deleteBoardsData
 };

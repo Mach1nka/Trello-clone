@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface BoardInDB extends mongoose.Document {
+export interface BoardsInDB extends mongoose.Document {
   name: string;
   user: string;
 }
@@ -17,4 +17,4 @@ const BoardSchema = new Schema({
   }
 });
 
-export default mongoose.model<BoardInDB>('boards', BoardSchema);
+export default mongoose.model<BoardsInDB>('boards', BoardSchema);

@@ -1,13 +1,9 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface ColumnData extends mongoose.Document {
+export interface ColumnsInDB extends mongoose.Document {
+  boardId: string;
   name: string;
   position: number;
-}
-
-export interface ColumnInDB extends mongoose.Document {
-  boardId: string;
-  columns: ColumnData[];
 }
 
 const ColumnSchema = new Schema({
@@ -16,18 +12,14 @@ const ColumnSchema = new Schema({
     type: Schema.Types.ObjectId,
     required: true
   },
-  columns: [
-    {
-      name: {
-        type: String,
-        required: true
-      },
-      position: {
-        type: Number,
-        required: true
-      }
-    }
-  ]
+  name: {
+    type: String,
+    required: true
+  },
+  position: {
+    type: Number,
+    required: true
+  }
 });
 
-export default mongoose.model<ColumnInDB>('columns', ColumnSchema);
+export default mongoose.model<ColumnsInDB>('columns', ColumnSchema);
