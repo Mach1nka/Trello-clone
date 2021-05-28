@@ -7,6 +7,7 @@ import { deleteCard } from '../../store/card/actions';
 import RenameCardModal from './rename-card';
 import ChangeCardPosition from './change-card-position';
 import ChangeCardStatus from './change-card-status';
+import CardsDescription from './cards-description';
 
 interface Props {
   cardId: string;
@@ -19,11 +20,13 @@ interface Props {
 const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [isOpenRenameModal, setOpenRenameModalView] = useState(false);
+  const [isOpenDescriptionModal, setDescriptionModalView] = useState(false);
+  const [isOpenRenameModal, setRenameModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const [isOpenStatusModal, setStatusModalView] = useState(false);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
@@ -33,7 +36,7 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
   };
 
   const handleChangeName = () => {
-    setOpenRenameModalView(true);
+    setRenameModalView(true);
     setAnchorEl(null);
   };
 
@@ -49,7 +52,7 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
 
   return (
     <>
-      <Container>
+      <Container onClick={() => setDescriptionModalView(true)}>
         <Typography style={{ width: '200px' }} variant="subtitle2">
           {name}
         </Typography>
@@ -64,6 +67,7 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
           anchorEl={anchorEl}
           open={Boolean(anchorEl)}
           keepMounted
+          onClick={(e) => e.stopPropagation()}
           onClose={() => setAnchorEl(null)}
         >
           <MenuItem onClick={handleDelete}>Delete</MenuItem>
@@ -72,9 +76,16 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
           <MenuItem onClick={handleChangeStatus}>Change column</MenuItem>
         </Menu>
       </Container>
+      <CardsDescription
+        isOpen={isOpenDescriptionModal}
+        setModalView={setDescriptionModalView}
+        name={name}
+        description={description}
+        cardId={cardId}
+      />
       <RenameCardModal
         isOpen={isOpenRenameModal}
-        setModalView={setOpenRenameModalView}
+        setModalView={setRenameModalView}
         cardName={name}
         cardId={cardId}
       />
