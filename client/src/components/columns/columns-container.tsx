@@ -1,11 +1,12 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { ColumnsContainer as Container } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import Column from './column';
 import CreateColumn from './create-column-button';
-import { getColumns } from '../../store/column/actions';
+import { getColumns, Column as ColumnType } from '../../store/column/actions';
+import { changeCardStatus, Card as CardType } from '../../store/card/actions';
 
 interface ParamTypes {
   boardId: string;
@@ -13,8 +14,22 @@ interface ParamTypes {
 
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
+
+  const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
+    e.preventDefault();
+    if (draggableCard) {
+      dispatch(
+        changeCardStatus({
+          cardId: draggableCard.id,
+          columnId: draggableCard.columnId,
+          newColumnId: column.id
+        })
+      );
+    }
+  };
 
   useEffect(() => {
     dispatch(getColumns(boardId));
@@ -23,13 +38,17 @@ const ColumnsContainer: React.FC = () => {
   return (
     <Container>
       {columns.map((el) => (
-        <Column
-          key={el.id}
-          columnName={el.name}
-          columnId={el.id}
-          boardId={boardId}
-          position={el.position}
-        />
+        <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => dropHandler(e, el)}>
+          <Column
+            key={el.id}
+            columnName={el.name}
+            columnId={el.id}
+            boardId={boardId}
+            position={el.position}
+            draggableCard={draggableCard}
+            setDraggableCard={setDraggableCard}
+          />
+        </div>
       ))}
       <CreateColumn boardId={boardId} newPosition={columns.length} />
     </Container>
