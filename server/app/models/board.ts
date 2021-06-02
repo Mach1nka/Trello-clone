@@ -2,7 +2,7 @@ import mongoose, { Schema } from 'mongoose';
 
 export interface BoardsInDB extends mongoose.Document {
   name: string;
-  user: string;
+  users: Schema.Types.ObjectId[];
 }
 
 const BoardSchema = new Schema({
@@ -10,11 +10,7 @@ const BoardSchema = new Schema({
     type: String,
     required: true
   },
-  user: {
-    ref: 'users',
-    type: Schema.Types.ObjectId,
-    required: true
-  }
+  users: [{ ref: 'users', type: Schema.Types.ObjectId, required: true }]
 });
 
 export default mongoose.model<BoardsInDB>('boards', BoardSchema);
