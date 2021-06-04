@@ -17,13 +17,29 @@ const ColumnsContainer: React.FC = () => {
   const { columns } = useAppSelector((state) => state.boardColumns);
   const [dragEl, setDragEl] = useState<ColumnType | null>(null);
 
-  const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
+  const dragStartHandler = (column: ColumnType) => {
     setDragEl(column);
+  };
+
+  const draOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    if (e.currentTarget.firstChild) {
+      e.currentTarget.firstChild.style.background = 'rgba(0,0,0,0.2)';
+    }
+  };
+
+  const dragLeaveEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    if (e.currentTarget.firstChild) {
+      e.currentTarget.firstChild.style.background = 'none';
+    }
   };
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
     e.preventDefault();
     if (dragEl && column.position !== dragEl.position) {
+      if (e.currentTarget.firstChild) {
+        e.currentTarget.firstChild.style.background = 'none';
+      }
       dispatch(
         changeColumnPosition({
           boardId,
@@ -44,8 +60,10 @@ const ColumnsContainer: React.FC = () => {
         <div
           key={el.id}
           draggable
-          onDragStart={(e) => dragStartHandler(e, el)}
-          onDragOver={(e) => e.preventDefault()}
+          onDragStart={() => dragStartHandler(el)}
+          onDragLeave={(e) => dragLeaveEndHandler(e)}
+          onDragOver={(e) => draOverHandler(e)}
+          onDragEnd={(e) => dragLeaveEndHandler(e)}
           onDrop={(e) => dropHandler(e, el)}
         >
           <Column columnName={el.name} columnId={el.id} boardId={boardId} position={el.position} />
