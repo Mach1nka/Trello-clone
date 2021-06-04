@@ -38,9 +38,8 @@ const ColumnsContainer: React.FC = () => {
   return (
     <Container>
       {columns.map((el) => (
-        <div onDragOver={(e) => e.preventDefault()} onDrop={(e) => dropHandler(e, el)}>
+        <div key={el.id} onDragOver={(e) => e.preventDefault()}>
           <Column
-            key={el.id}
             columnName={el.name}
             columnId={el.id}
             boardId={boardId}
