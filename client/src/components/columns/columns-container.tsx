@@ -17,10 +17,12 @@ const ColumnsContainer: React.FC = () => {
   const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
+  const columnToDnD = useAppSelector((state) => state.cardData.cards);
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
     e.preventDefault();
-    if (draggableCard) {
+    const isEmptyColumn = columnToDnD[column.id].length;
+    if (draggableCard && !isEmptyColumn) {
       dispatch(
         changeCardStatus({
           cardId: draggableCard.id,
@@ -28,6 +30,7 @@ const ColumnsContainer: React.FC = () => {
           newColumnId: column.id
         })
       );
+      setDraggableCard(null);
     }
   };
 
@@ -38,7 +41,7 @@ const ColumnsContainer: React.FC = () => {
   return (
     <Container>
       {columns.map((el) => (
-        <div key={el.id} onDragOver={(e) => e.preventDefault()}>
+        <div key={el.id} onDrop={(e) => dropHandler(e, el)} onDragOver={(e) => e.preventDefault()}>
           <Column
             columnName={el.name}
             columnId={el.id}

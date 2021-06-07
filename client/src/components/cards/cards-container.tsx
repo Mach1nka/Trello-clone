@@ -41,11 +41,13 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
 
   const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
     setPointCard(false);
+    setDraggableCard(null);
     e.currentTarget.firstChild.style.background = '#fff';
   };
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
     e.preventDefault();
+    setDraggableCard(null);
     setPointCard(false);
     e.currentTarget.firstChild.style.background = '#fff';
     if (draggableCard && draggableCard.columnId !== card.columnId) {
