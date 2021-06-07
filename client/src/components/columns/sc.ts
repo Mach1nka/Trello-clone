@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface Props {
+  isPointColumns: boolean;
+}
+
 const ColumnsContainer = styled.div`
   display: flex;
   flex-wrap: nowrap;
@@ -16,6 +20,8 @@ const ColumnContainer = styled.div`
   width: 270px;
   height: 100%;
   margin: 0 4px;
+  border-radius: 5px;
+  cursor: pointer;
 `;
 
 const ColumnContent = styled.div`
@@ -49,11 +55,18 @@ const CreateColumnContainer = styled.div`
   border-radius: 5px;
 `;
 
+const DragWrapper = styled.div<Props>`
+  & > * {
+    pointer-events: ${(props) => (props.isPointColumns ? 'none' : 'auto')};
+  }
+`;
+
 export {
   ColumnsContainer,
   ColumnContainer,
   ColumnHeader,
   ColumnContent,
   ColumnFooter,
-  CreateColumnContainer
+  CreateColumnContainer,
+  DragWrapper
 };

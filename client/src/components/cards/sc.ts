@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 interface Props {
-  isPointCard: boolean;
+  isPointCards: boolean;
 }
 
 const CardsContainer = styled.div`
@@ -27,7 +27,7 @@ const CardContainer = styled.div`
 const DragWrapper = styled.div<Props>`
   margin-bottom: 8px;
   & * {
-    pointer-events: ${(props) => (props.isPointCard ? 'none' : 'auto')};
+    pointer-events: ${(props) => (props.isPointCards ? 'none' : 'auto')};
   }
 `;
 

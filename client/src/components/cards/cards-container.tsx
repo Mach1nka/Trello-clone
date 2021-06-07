@@ -19,11 +19,12 @@ interface Props {
 const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggableCard }) => {
   const dispatch = useDispatch();
   const cardsData = useAppSelector((state) => state.cardData.cards[columnId]);
-  const [isPointCard, setPointCard] = useState(false);
+  const [isPointCards, setPointCards] = useState(false);
 
   const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
+    e.stopPropagation();
     setDraggableCard(card);
-    setPointCard(true);
+    setPointCards(true);
   };
 
   const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
@@ -31,16 +32,14 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
     e.currentTarget.firstChild.style.background = 'rgba(0, 0, 0, 0.03)';
   };
 
-  const dragEnterHandler = (e: React.DragEvent<HTMLDivElement>) => {
-    setPointCard(true);
-  };
+  const dragEnterHandler = () => setPointCards(true);
 
   const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.currentTarget.firstChild.style.background = '#fff';
   };
 
   const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
-    setPointCard(false);
+    setPointCards(false);
     setDraggableCard(null);
     e.currentTarget.firstChild.style.background = '#fff';
   };
@@ -48,7 +47,7 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
     e.preventDefault();
     setDraggableCard(null);
-    setPointCard(false);
+    setPointCards(false);
     e.currentTarget.firstChild.style.background = '#fff';
     if (draggableCard && draggableCard.columnId !== card.columnId) {
       dispatch(
@@ -80,12 +79,12 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
       {cardsData?.map((el) => (
         <DragWrapper
           key={el.id}
-          isPointCard={isPointCard}
+          isPointCards={isPointCards}
           draggable
           onDragStart={(e) => dragStartHandler(e, el)}
           onDragEnd={(e) => dragEndHandler(e)}
           onDragLeave={(e) => dragLeaveHandler(e)}
-          onDragEnter={(e) => dragEnterHandler(e)}
+          onDragEnter={() => dragEnterHandler()}
           onDragOver={(e) => dragOverHandler(e)}
           onDrop={(e) => dropHandler(e, el)}
         >

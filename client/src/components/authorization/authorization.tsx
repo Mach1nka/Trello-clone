@@ -7,6 +7,7 @@ import { authForms, useStyles } from './constants';
 
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
+  const [isOpenBackdrop, setBackdropView] = useState(false);
   const classes = useStyles();
   const [isOpenModal, setModalView] = useState(false);
   const { message } = useAppSelector((state) => state.authData);
@@ -15,7 +16,12 @@ const Authorization: React.FC = () => {
 
   return (
     <Container maxWidth="xs">
-      <ErrorModal isOpen={isOpenModal} setModalView={setModalView} errorText={message} />
+      <ErrorModal
+        setBackdropView={setBackdropView}
+        isOpen={isOpenModal}
+        setModalView={setModalView}
+        errorText={message}
+      />
       <Paper elevation={6} className={classes.paper}>
         <TabContext value={tabIndex}>
           <TabList
@@ -30,7 +36,7 @@ const Authorization: React.FC = () => {
           </TabList>
           {authForms.map((el) => (
             <TabPanel key={el.value} style={{ height: '65%' }} value={el.value}>
-              {el.component}
+              {el.component({ isOpenBackdrop, setBackdropView })}
             </TabPanel>
           ))}
         </TabContext>
