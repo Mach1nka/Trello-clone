@@ -1,16 +1,18 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useFormik } from 'formik';
 import {
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
   Button,
-  IconButton,
+  TextField,
   Typography
 } from '@material-ui/core';
-import EditIcon from '@material-ui/icons/Edit';
+import { changeCardDescription, renameCard } from '../../store/card/actions';
 import { useStyles } from './constants';
-import ChangeCardDescriptionModal from './change-card-description';
+import { descriptionTextValidation, cardNameValidation } from './utils';
 
 interface Props {
   name: string;
@@ -21,8 +23,19 @@ interface Props {
 }
 
 const CardsDescription: React.FC<Props> = ({ name, description, isOpen, setModalView, cardId }) => {
+  const dispatch = useDispatch();
+  const [isNameFocused, setIsNamedFocused] = useState(false);
+  const [isDescriptionFocused, setssDescriptionFocused] = useState(false);
   const classes = useStyles();
-  const [isOpenRenameModal, setRenameModalView] = useState(false);
+
+  const formik = useFormik({
+    initialValues: { newName: name },
+    validationSchema: cardNameValidation,
+    onSubmit: (values) => {
+      dispatch(renameCard({ cardId, newName: values.newName }));
+    }
+  });
+
   return (
     <>
       <Dialog
@@ -33,19 +46,34 @@ const CardsDescription: React.FC<Props> = ({ name, description, isOpen, setModal
           setModalView(false);
         }}
       >
-        <DialogTitle>{name}</DialogTitle>
+        <DialogTitle>
+          {!isNameFocused ? (
+            <Typography onClick={() => setIsNamedFocused(true)} className={classes.cardName}>
+              {name}
+            </Typography>
+          ) : (
+            <form autoComplete="off" onSubmit={formik.handleSubmit}>
+              <TextField
+                id="newName"
+                name="newName"
+                autoFocus
+                fullWidth
+                inputProps={{ className: classes.cardName }}
+                defaultValue={name}
+                onChange={formik.handleChange}
+                error={formik.touched.newName && !!formik.errors.newName}
+                helperText={formik.touched.newName && formik.errors.newName}
+                onBlur={() => {
+                  setIsNamedFocused(false);
+                  formik.submitForm();
+                }}
+              />
+            </form>
+          )}
+        </DialogTitle>
         <DialogContent>
-          <Typography variant="button">
-            Description
-            <IconButton
-              onClick={() => setRenameModalView(true)}
-              size="small"
-              style={{ alignSelf: 'flex-start', fontSize: '16px', marginLeft: '5px' }}
-            >
-              <EditIcon style={{ fontSize: 'inherit' }} />
-            </IconButton>
-          </Typography>
-          <Typography gutterBottom className={classes.descriptionText} variant="body2">
+          <Typography variant="button">Description</Typography>
+          <Typography gutterBottom className={classes.descriptionText}>
             {description}
           </Typography>
         </DialogContent>
@@ -53,12 +81,6 @@ const CardsDescription: React.FC<Props> = ({ name, description, isOpen, setModal
           <Button onClick={() => setModalView(false)}>close</Button>
         </DialogActions>
       </Dialog>
-      <ChangeCardDescriptionModal
-        isOpen={isOpenRenameModal}
-        setModalView={setRenameModalView}
-        cardId={cardId}
-        cardDescription={description}
-      />
     </>
   );
 };
