@@ -7,13 +7,15 @@ interface Props {
   errorText: string;
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
+  setBackdropView: Dispatch<SetStateAction<boolean>>;
 }
 
-const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView }) => {
+const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView, setBackdropView }) => {
   const dispatch = useDispatch();
   const upperErrorText = errorText.toUpperCase();
 
   const handleClose = () => {
+    setBackdropView(false);
     setModalView(false);
     dispatch(putErrorMessage(''));
   };
