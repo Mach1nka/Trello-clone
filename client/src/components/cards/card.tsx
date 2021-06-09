@@ -7,7 +7,7 @@ import { deleteCard } from '../../store/card/actions';
 import RenameCardModal from './rename-card';
 import ChangeCardPosition from './change-card-position';
 import ChangeCardStatus from './change-card-status';
-import CardsDescription from './cards-description';
+import CardDetails from './card-details';
 
 interface Props {
   cardId: string;
@@ -76,7 +76,7 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
           <MenuItem onClick={handleChangeStatus}>Change column</MenuItem>
         </Menu>
       </Container>
-      <CardsDescription
+      <CardDetails
         isOpen={isOpenDescriptionModal}
         setModalView={setDescriptionModalView}
         name={name}

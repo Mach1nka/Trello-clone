@@ -3,7 +3,11 @@ import { makeStyles } from '@material-ui/core';
 const useStyles = makeStyles(() => ({
   descriptionText: {
     minHeight: '100px',
-    fontSize: '14px'
+    fontSize: '15px'
+  },
+  descriptionTextarea: {
+    padding: '0',
+    height: '80px !important'
   },
   cardName: {
     fontSize: '20px',
