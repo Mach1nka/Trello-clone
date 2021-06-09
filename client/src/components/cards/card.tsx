@@ -79,9 +79,11 @@ const Card: React.FC<Props> = ({ cardId, description, name, position, columnId }
       <CardDetails
         isOpen={isOpenDescriptionModal}
         setModalView={setDescriptionModalView}
+        setStatusModalView={setStatusModalView}
         name={name}
         description={description}
         cardId={cardId}
+        columnId={columnId}
       />
       <RenameCardModal
         isOpen={isOpenRenameModal}
