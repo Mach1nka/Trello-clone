@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { ColumnsContainer as Container } from './sc';
+import { ColumnsContainer as Container, DragWrapper } from './sc';
 import { useAppSelector } from '../../store/hooks';
 import Column from './column';
 import CreateColumn from './create-column-button';
 import { getColumns, changeColumnPosition, Column as ColumnType } from '../../store/column/actions';
+import { changeCardStatus, Card as CardType } from '../../store/card/actions';
 
 interface ParamTypes {
   boardId: string;
@@ -13,40 +14,71 @@ interface ParamTypes {
 
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
+  const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(null);
+  const [isPointColumns, setPointColumns] = useState(false);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
-  const [dragEl, setDragEl] = useState<ColumnType | null>(null);
+  const columnToDnD = useAppSelector((state) => state.cardData.cards);
 
-  const dragStartHandler = (column: ColumnType) => {
-    setDragEl(column);
+  const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
+    e.preventDefault();
+    const isEmptyColumn = columnToDnD[column.id].length;
+    if (draggableCard && !isEmptyColumn) {
+      dispatch(
+        changeCardStatus({
+          cardId: draggableCard.id,
+          columnId: draggableCard.columnId,
+          newColumnId: column.id
+        })
+      );
+      setDraggableCard(null);
+      return;
+    }
+    if (draggableColumn && column.position !== draggableColumn.position) {
+      dispatch(
+        changeColumnPosition({
+          boardId,
+          columnId: draggableColumn.id,
+          newPosition: column.position
+        })
+      );
+      setDraggableColumn(null);
+    }
+    e.currentTarget.firstChild.style.background = 'none';
   };
 
-  const draOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragStartHandler = (column: ColumnType) => {
+    if (!draggableCard) {
+      setDraggableColumn(column);
+      setPointColumns(true);
+    }
+  };
+
+  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (e.currentTarget.firstChild) {
+    if (!draggableCard && draggableColumn) {
       e.currentTarget.firstChild.style.background = 'rgba(0,0,0,0.2)';
     }
   };
 
-  const dragLeaveEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
-    if (e.currentTarget.firstChild) {
+  const dragEnterHandler = () => {
+    if (!draggableCard && draggableColumn) {
+      setPointColumns(true);
+    }
+  };
+
+  const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    if (!draggableCard && draggableColumn) {
       e.currentTarget.firstChild.style.background = 'none';
     }
   };
 
-  const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
-    e.preventDefault();
-    if (dragEl && column.position !== dragEl.position) {
-      if (e.currentTarget.firstChild) {
-        e.currentTarget.firstChild.style.background = 'none';
-      }
-      dispatch(
-        changeColumnPosition({
-          boardId,
-          columnId: dragEl.id,
-          newPosition: column.position
-        })
-      );
+  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    setPointColumns(false);
+    setDraggableColumn(null);
+    if (!draggableCard && draggableColumn) {
+      e.currentTarget.firstChild.style.background = 'none';
     }
   };
 
@@ -57,17 +89,26 @@ const ColumnsContainer: React.FC = () => {
   return (
     <Container>
       {columns.map((el) => (
-        <div
+        <DragWrapper
           key={el.id}
+          isPointColumns={isPointColumns}
           draggable
           onDragStart={() => dragStartHandler(el)}
-          onDragLeave={(e) => dragLeaveEndHandler(e)}
-          onDragOver={(e) => draOverHandler(e)}
-          onDragEnd={(e) => dragLeaveEndHandler(e)}
+          onDragLeave={(e) => dragLeaveHandler(e)}
+          onDragOver={(e) => dragOverHandler(e)}
+          onDragEnter={() => dragEnterHandler()}
+          onDragEnd={(e) => dragEndHandler(e)}
           onDrop={(e) => dropHandler(e, el)}
         >
-          <Column columnName={el.name} columnId={el.id} boardId={boardId} position={el.position} />
-        </div>
+          <Column
+            columnName={el.name}
+            columnId={el.id}
+            boardId={boardId}
+            position={el.position}
+            draggableCard={draggableCard}
+            setDraggableCard={setDraggableCard}
+          />
+        </DragWrapper>
       ))}
       <CreateColumn boardId={boardId} newPosition={columns.length} />
     </Container>
