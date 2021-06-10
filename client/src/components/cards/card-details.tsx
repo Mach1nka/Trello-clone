@@ -62,7 +62,7 @@ const CardDetails: React.FC<Props> = ({
       <DialogTitle>
         {!isNameFocused ? (
           <Typography onClick={() => setIsNamedFocused(true)} className={classes.cardName}>
-            {name}
+            {formik.values.name}
           </Typography>
         ) : (
           <form autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -122,7 +122,7 @@ const CardDetails: React.FC<Props> = ({
               className={classes.descriptionText}
               onClick={() => setIsDescriptionFocused(true)}
             >
-              {description}
+              {formik.values.description}
             </Typography>
           )}
         </div>
