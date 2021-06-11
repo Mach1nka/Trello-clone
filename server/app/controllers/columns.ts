@@ -94,6 +94,7 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
     await Column.find({ boardId }, async (_err, data) => {
       if (data) {
         const bulkArr: any[] = [];
+        data.sort((a, b) => a.position - b.position);
         const indexOldEl = data.findIndex((el) => el._id.toString() === columnId) as number;
         const editableEl = data.find((el) => el._id.toString() === columnId) as ColumnsInDB;
 

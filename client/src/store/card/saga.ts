@@ -100,14 +100,16 @@ function* watchChangeCardDesc(): SagaIterator {
 
 function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpdatingCardStatus }) {
   yield call(updateCardStatus, columnData.payload);
-  const data: Card[] | number = yield call(getCards, columnData.payload.columnId);
-  if (data === 401) {
+  const updatedColumn: Card[] | number = yield call(getCards, columnData.payload.columnId);
+  const columnWithNewCard: Card[] | number = yield call(getCards, columnData.payload.newColumnId);
+  if (updatedColumn === 401 || columnWithNewCard === 401) {
     yield put(signOutUser());
     yield put(deleteBoardsData());
     yield put(deleteColumnsData());
     yield put(deleteCardsData());
   } else {
-    yield put(putCards(data as Card[]));
+    yield put(putCards(updatedColumn as Card[]));
+    yield put(putCards(columnWithNewCard as Card[]));
   }
 }
 

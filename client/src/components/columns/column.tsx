@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, Menu, MenuItem, IconButton, Button } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -15,15 +15,25 @@ import CardsContainer from '../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
 import CreateCardModal from '../cards/create-card-modal';
+import { Card as CardType } from '../../store/card/actions';
 
 interface Props {
   columnName: string;
   columnId: string;
   position: number;
   boardId: string;
+  draggableCard: null | CardType;
+  setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
 }
 
-const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) => {
+const Column: React.FC<Props> = ({
+  columnName,
+  columnId,
+  boardId,
+  position,
+  draggableCard,
+  setDraggableCard
+}) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
@@ -56,7 +66,7 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
       <Container>
         <Content>
           <ColumnHeader>
-            <Typography className={classes.columnName} display="block" variant="h6">
+            <Typography className={classes.columnName} variant="h6">
               {columnName}
             </Typography>
             <IconButton size="small" onClick={handleMenu}>
@@ -73,7 +83,11 @@ const Column: React.FC<Props> = ({ columnName, columnId, boardId, position }) =>
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
           </ColumnHeader>
-          <CardsContainer columnId={columnId} />
+          <CardsContainer
+            columnId={columnId}
+            draggableCard={draggableCard}
+            setDraggableCard={setDraggableCard}
+          />
           <ColumnFooter>
             <Button
               onClick={() => setCreateCardModalView(true)}
