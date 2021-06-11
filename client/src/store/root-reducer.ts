@@ -2,8 +2,9 @@ import { combineReducers } from 'redux';
 import authData from './auth/reducer';
 import userBoards from './board/reducer';
 import boardColumns from './column/reducer';
-import cardData from './card/reducer';
+import cardsData from './card/reducer';
+import modalsData from './data-for-modals/reducer';
 
-const rootReducer = combineReducers({ authData, userBoards, boardColumns, cardData });
+const rootReducer = combineReducers({ authData, userBoards, boardColumns, cardsData, modalsData });
 
 export default rootReducer;

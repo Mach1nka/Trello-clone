@@ -11,7 +11,7 @@ interface Props {
 
 const CardsContainer: React.FC<Props> = ({ columnId }) => {
   const dispatch = useDispatch();
-  const cardsData = useAppSelector((state) => state.cardData.cards[columnId]);
+  const cardsData = useAppSelector((state) => state.cardsData[columnId]);
 
   useEffect(() => {
     dispatch(getCards(columnId));
@@ -23,10 +23,9 @@ const CardsContainer: React.FC<Props> = ({ columnId }) => {
         <Card
           key={el.id}
           cardId={el.id}
-          description={el.description}
           name={el.name}
-          position={el.position}
           columnId={columnId}
+          description={el.description}
         />
       ))}
     </Container>

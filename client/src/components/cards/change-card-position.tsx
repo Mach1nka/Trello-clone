@@ -1,32 +1,24 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
 import { changeCardPosition } from '../../store/card/actions';
+import { setModalsStates } from '../../store/data-for-modals/actions';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
   cardId: string;
   position: number;
 }
 
-const ChangeCardPosition: React.FC<Props> = ({
-  isOpen,
-  setModalView,
-  columnId,
-  cardId,
-  position
-}) => {
+const ChangeCardPosition: React.FC<Props> = ({ isOpen, columnId, cardId, position }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
-  const positionArr = useAppSelector((state) =>
-    state.cardData.cards[columnId].map((el) => el.position)
-  );
+  const positionArr = useAppSelector((state) => state.cardsData[columnId].map((el) => el.position));
 
   const formHandler = (values: { newPosition: number }) => {
     if (values.newPosition !== position) {
@@ -38,11 +30,16 @@ const ChangeCardPosition: React.FC<Props> = ({
         })
       );
     }
-    setModalView(false);
+    dispatch(setModalsStates({ isPositionModalVisible: false }));
   };
 
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={isOpen}
+      onClose={() => dispatch(setModalsStates({ isPositionModalVisible: false }))}
+    >
       <DialogTitle className={classes.dialogTitle}>Change card position</DialogTitle>
       <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
         {(props) => (

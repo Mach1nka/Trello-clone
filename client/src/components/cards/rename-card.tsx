@@ -1,20 +1,20 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
 import { ModalForm as Form } from '../boards-page/sc';
 import { renameCard } from '../../store/card/actions';
+import { setModalsStates } from '../../store/data-for-modals/actions';
 import { configValidationSchema } from '../boards-page/utils';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
   cardId: string;
   cardName: string;
 }
 
-const RenameCardModal: React.FC<Props> = ({ isOpen, setModalView, cardId, cardName }) => {
+const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
   const classes = useStyles();
@@ -25,11 +25,16 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, setModalView, cardId, cardNa
     validationSchema,
     onSubmit: (values) => {
       dispatch(renameCard({ newName: values.newName, cardId }));
-      setModalView(false);
+      dispatch(setModalsStates({ isRenameModalVisible: false }));
     }
   });
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={isOpen}
+      onClose={() => dispatch(setModalsStates({ isRenameModalVisible: false }))}
+    >
       <DialogTitle className={classes.dialogTitle}>Change card name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField

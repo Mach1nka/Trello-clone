@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import {
@@ -14,6 +14,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 import { useAppSelector } from '../../store/hooks';
 import { changeCardDescription, renameCard, deleteCard } from '../../store/card/actions';
+import { setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
 import { useStyles } from './constants';
 import { configValidationSchema } from './utils';
 
@@ -23,19 +24,9 @@ interface Props {
   columnId: string;
   description: string;
   isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
-  setStatusModalView: Dispatch<SetStateAction<boolean>>;
 }
 
-const CardDetails: React.FC<Props> = ({
-  name,
-  description,
-  isOpen,
-  setModalView,
-  cardId,
-  columnId,
-  setStatusModalView
-}) => {
+const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, columnId }) => {
   const dispatch = useDispatch();
   const columnName = useAppSelector(
     (state) => state.boardColumns.columns.find((el) => el.id === columnId)?.name
@@ -58,11 +49,16 @@ const CardDetails: React.FC<Props> = ({
   });
 
   return (
-    <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog
+      fullWidth
+      maxWidth="sm"
+      open={isOpen}
+      onClose={() => dispatch(setModalsStates({ isDetailsModalVisible: false }))}
+    >
       <DialogTitle>
         {!isNameFocused ? (
           <Typography onClick={() => setIsNamedFocused(true)} className={classes.cardName}>
-            {formik.values.name}
+            {formik.values.name || name}
           </Typography>
         ) : (
           <form autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -86,7 +82,7 @@ const CardDetails: React.FC<Props> = ({
         <Typography variant="body2">
           It is in column
           <Button
-            onClick={() => setStatusModalView(true)}
+            onClick={() => dispatch(setModalsStates({ isStatusModalVisible: true }))}
             classes={{ text: classes.columnNameButton }}
           >
             {columnName}
@@ -122,16 +118,28 @@ const CardDetails: React.FC<Props> = ({
               className={classes.descriptionText}
               onClick={() => setIsDescriptionFocused(true)}
             >
-              {formik.values.description}
+              {formik.values.description || name}
             </Typography>
           )}
         </div>
       </DialogContent>
       <DialogActions classes={{ root: classes.dialogActions }}>
-        <IconButton onClick={() => dispatch(deleteCard({ columnId, cardId }))}>
+        <IconButton
+          onClick={() => {
+            dispatch(deleteCard({ columnId, cardId }));
+            dispatch(resetModalData());
+          }}
+        >
           <DeleteIcon color="secondary" />
         </IconButton>
-        <Button onClick={() => setModalView(false)}>close</Button>
+        <Button
+          onClick={() => {
+            dispatch(setModalsStates({ isDetailsModalVisible: false }));
+            dispatch(resetModalData());
+          }}
+        >
+          close
+        </Button>
       </DialogActions>
     </Dialog>
   );
