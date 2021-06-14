@@ -7,6 +7,7 @@ import { useStyles } from './constants';
 import { getBoards } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
 import { deleteCardsData } from '../../store/card/actions';
+import { resetModalData } from '../../store/data-for-modals/actions';
 import { CardContainer } from './sc';
 
 const BoardsList: React.FC = () => {
@@ -18,6 +19,7 @@ const BoardsList: React.FC = () => {
     dispatch(deleteColumnsData());
     dispatch(deleteCardsData());
     dispatch(getBoards());
+    dispatch(resetModalData());
   }, []);
 
   return (

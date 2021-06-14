@@ -18,7 +18,7 @@ interface Props {
 
 const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggableCard }) => {
   const dispatch = useDispatch();
-  const cardsData = useAppSelector((state) => state.cardData.cards[columnId]);
+  const cardsData = useAppSelector((state) => state.cardsData[columnId]);
   const [isPointCards, setPointCards] = useState(false);
 
   const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
@@ -88,13 +88,7 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
           onDragOver={(e) => dragOverHandler(e)}
           onDrop={(e) => dropHandler(e, el)}
         >
-          <Card
-            cardId={el.id}
-            description={el.description}
-            name={el.name}
-            position={el.position}
-            columnId={columnId}
-          />
+          <Card cardId={el.id} description={el.description} name={el.name} columnId={columnId} />
         </DragWrapper>
       ))}
     </Container>

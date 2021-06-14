@@ -14,16 +14,12 @@ export interface DataFromServer {
 }
 
 export interface CardData {
-  cards: {
-    [x: string]: Card[];
-  };
+  [x: string]: Card[];
 }
 
-const cardDataIS: CardData = {
-  cards: {}
-};
+const cardDataIS: CardData = {};
 
-const cardData = (
+const cardsData = (
   state = cardDataIS,
   { type, payload }: { type: string; payload: DataFromServer | Card }
 ): CardData => {
@@ -32,10 +28,7 @@ const cardData = (
       if (payload.hasOwnProperty('columnId')) {
         return {
           ...state,
-          cards: {
-            ...state.cards,
-            [payload.columnId]: payload.cards as Card[]
-          }
+          [payload.columnId]: payload.cards as Card[]
         };
       }
       return { ...state };
@@ -43,12 +36,9 @@ const cardData = (
       if (payload.hasOwnProperty('id')) {
         return {
           ...state,
-          cards: {
-            ...state.cards,
-            [payload.columnId]: state.cards[payload.columnId]
-              ? state.cards[payload.columnId].concat(payload as Card)
-              : [payload]
-          }
+          [payload.columnId]: state[payload.columnId]
+            ? state[payload.columnId].concat(payload as Card)
+            : [payload as Card]
         };
       }
       return { ...state };
@@ -56,10 +46,7 @@ const cardData = (
       if (payload.hasOwnProperty('id')) {
         return {
           ...state,
-          cards: {
-            ...state.cards,
-            [payload.columnId]: replaceCardDescription(state, payload as Card)
-          }
+          [payload.columnId]: replaceCardDescription(state, payload as Card)
         };
       }
       return { ...state };
@@ -67,10 +54,7 @@ const cardData = (
       if (payload.hasOwnProperty('columnId')) {
         return {
           ...state,
-          cards: {
-            ...state.cards,
-            [payload.columnId]: payload.cards as Card[]
-          }
+          [payload.columnId]: payload.cards as Card[]
         };
       }
       return { ...state };
@@ -81,4 +65,4 @@ const cardData = (
   }
 };
 
-export default cardData;
+export default cardsData;
