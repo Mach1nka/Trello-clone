@@ -30,7 +30,7 @@ const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, new
   });
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Create new board</DialogTitle>
+      <DialogTitle className={classes.dialogTitle}>Create new column</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"

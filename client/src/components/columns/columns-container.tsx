@@ -3,10 +3,11 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { ColumnsContainer as Container, DragWrapper } from './sc';
 import { useAppSelector } from '../../store/hooks';
-import Column from './column';
-import CreateColumn from './create-column-button';
 import { getColumns, changeColumnPosition, Column as ColumnType } from '../../store/column/actions';
 import { changeCardStatus, Card as CardType } from '../../store/card/actions';
+import Column from './column';
+import CreateColumn from './create-column-button';
+import ModalsContainer from '../cards/modals-container';
 
 interface ParamTypes {
   boardId: string;
@@ -19,7 +20,8 @@ const ColumnsContainer: React.FC = () => {
   const [isPointColumns, setPointColumns] = useState(false);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
-  const columnToDnD = useAppSelector((state) => state.cardData.cards);
+  const columnCount = useAppSelector((state) => Object.keys(state.cardsData).length);
+  const columnToDnD = useAppSelector((state) => state.cardsData);
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
     e.preventDefault();
@@ -87,31 +89,34 @@ const ColumnsContainer: React.FC = () => {
   }, []);
 
   return (
-    <Container>
-      {columns.map((el) => (
-        <DragWrapper
-          key={el.id}
-          isPointColumns={isPointColumns}
-          draggable
-          onDragStart={() => dragStartHandler(el)}
-          onDragLeave={(e) => dragLeaveHandler(e)}
-          onDragOver={(e) => dragOverHandler(e)}
-          onDragEnter={() => dragEnterHandler()}
-          onDragEnd={(e) => dragEndHandler(e)}
-          onDrop={(e) => dropHandler(e, el)}
-        >
-          <Column
-            columnName={el.name}
-            columnId={el.id}
-            boardId={boardId}
-            position={el.position}
-            draggableCard={draggableCard}
-            setDraggableCard={setDraggableCard}
-          />
-        </DragWrapper>
-      ))}
-      <CreateColumn boardId={boardId} newPosition={columns.length} />
-    </Container>
+    <>
+      <Container>
+        {columns.map((el) => (
+          <DragWrapper
+            key={el.id}
+            isPointColumns={isPointColumns}
+            draggable
+            onDragStart={() => dragStartHandler(el)}
+            onDragLeave={(e) => dragLeaveHandler(e)}
+            onDragOver={(e) => dragOverHandler(e)}
+            onDragEnter={() => dragEnterHandler()}
+            onDragEnd={(e) => dragEndHandler(e)}
+            onDrop={(e) => dropHandler(e, el)}
+          >
+            <Column
+              columnName={el.name}
+              columnId={el.id}
+              boardId={boardId}
+              position={el.position}
+              draggableCard={draggableCard}
+              setDraggableCard={setDraggableCard}
+            />
+          </DragWrapper>
+        ))}
+        <CreateColumn boardId={boardId} newPosition={columns.length} />
+      </Container>
+      {columnCount ? <ModalsContainer /> : null}
+    </>
   );
 };
 

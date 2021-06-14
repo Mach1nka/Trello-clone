@@ -25,9 +25,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
       <Link
         style={{ textDecoration: 'none' }}
         to={locationParams}
-        onClick={() => {
-          dispatch(deleteColumnsData());
-        }}
+        onClick={() => dispatch(deleteColumnsData())}
       >
         <Card isDefaultCard={isDefaultCard}>
           <Typography

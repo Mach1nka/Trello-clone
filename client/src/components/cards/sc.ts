@@ -22,6 +22,11 @@ const CardContainer = styled.div`
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0px 4px 6px -4px rgb(0 0 0 / 50%);
+  transition: all ease-in 0.1s;
+  :hover {
+    cursor: pointer;
+    background-color: rgba(0, 0, 0, 0.03);
+  }
 `;
 
 const DragWrapper = styled.div<Props>`

@@ -1,20 +1,20 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
 import { changeCardStatus, getCards } from '../../store/card/actions';
+import { setModalsStates, setCardData } from '../../store/data-for-modals/actions';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
   cardId: string;
 }
 
-const ChangeCardStatus: React.FC<Props> = ({ isOpen, setModalView, columnId, cardId }) => {
+const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const columnsArr = useAppSelector((state) =>
@@ -30,19 +30,25 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, setModalView, columnId, car
           columnId
         })
       );
+      dispatch(setCardData({ cardId, columnId: values.newStatus }));
       dispatch(getCards(values.newStatus));
     }
-    setModalView(false);
+    dispatch(setModalsStates({ isStatusModalVisible: false }));
   };
 
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change card position</DialogTitle>
+    <Dialog
+      fullWidth
+      maxWidth="xs"
+      open={isOpen}
+      onClose={() => dispatch(setModalsStates({ isStatusModalVisible: false }))}
+    >
+      <DialogTitle className={classes.dialogTitle}>Change card status</DialogTitle>
       <Formik initialValues={{ newStatus: columnId }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField
-              label="Position"
+              label="Column"
               name="newStatus"
               id="newStatus"
               select

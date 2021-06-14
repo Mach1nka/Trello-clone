@@ -17,7 +17,7 @@ interface Props {
 const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) => {
   const dispatch = useDispatch();
   const positionOfNewCard = useAppSelector((state) =>
-    state.cardData.cards[columnId] ? state.cardData.cards[columnId].length : 0
+    state.cardsData[columnId] ? state.cardsData[columnId].length : 0
   );
   const validationSchema = configValidationSchema;
   const classes = useStyles();
