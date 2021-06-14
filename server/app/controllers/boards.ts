@@ -83,8 +83,8 @@ const deleteBoard = async (req: Request, res: Response): Promise<void> => {
 
   try {
     const board = await Board.findById(boardId);
-    const isOwnerId = board?._id.toString() === userId;
-
+    const isOwnerId = board?.owner.toString() === userId;
+    
     if (isOwnerId) {
       await Column.findOneAndDelete({ boardId });
       await Board.findByIdAndDelete(boardId);
