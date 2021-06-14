@@ -118,7 +118,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
               className={classes.descriptionText}
               onClick={() => setIsDescriptionFocused(true)}
             >
-              {formik.values.description || name}
+              {formik.values.description || description}
             </Typography>
           )}
         </div>
