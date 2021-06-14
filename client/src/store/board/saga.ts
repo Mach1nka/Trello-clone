@@ -5,6 +5,7 @@ import {
   GET_BOARDS,
   CREATE_BOARD,
   RENAME_BOARD,
+  SHARE_BOARD,
   putUserBoards,
   putCreatedBoard,
   putRenamedBoard,
@@ -17,7 +18,13 @@ import {
 } from './actions';
 import { signOutUser } from '../auth/actions';
 import { deleteColumnsData } from '../column/actions';
-import { getBoards, createBoard, updateBoardName, deleteBoard } from '../../api/board-requests';
+import {
+  getBoards,
+  createBoard,
+  updateBoardName,
+  shareBoard,
+  deleteBoard
+} from '../../api/board-requests';
 
 function* workerGetBoards(): SagaIterator {
   const data: BoardList | number = yield call(getBoards);
@@ -64,6 +71,19 @@ function* watchRenameBoard(): SagaIterator {
   yield takeEvery(RENAME_BOARD, workerRenameBoard);
 }
 
+function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
+  const data: null | number = yield call(shareBoard, board.payload);
+  if (data === 401) {
+    yield put(signOutUser());
+    yield put(deleteBoardsData());
+    yield put(deleteColumnsData());
+  }
+}
+
+function* watchShareBoard(): SagaIterator {
+  yield takeEvery(SHARE_BOARD, workerShareBoard);
+}
+
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
   const data: BoardList | number = yield call(getBoards);
@@ -80,4 +100,4 @@ function* watchDeleteBoard(): SagaIterator {
   yield takeEvery(DELETE_BOARD, workerDeleteBoard);
 }
 
-export { watchGetBoards, watchCreateBoard, watchRenameBoard, watchDeleteBoard };
+export { watchGetBoards, watchCreateBoard, watchRenameBoard, watchDeleteBoard, watchShareBoard };

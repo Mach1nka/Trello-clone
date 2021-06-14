@@ -1,10 +1,10 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
-import { useFormik } from 'formik';
-import * as yup from 'yup';
+import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import useFetchUsers from '../../../utils/fetch-user-hook';
+import { shareBoard } from '../../store/board/actions';
 import { ShareModalForm as Form } from './sc';
 import { useStyles } from './constants';
 
@@ -19,18 +19,10 @@ const ShareBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => 
   const classes = useStyles();
   const users = useFetchUsers();
 
-  const validationSchema = yup.object({
-    user: yup.string().required('User is required')
-  });
-
-  const formik = useFormik({
-    initialValues: { user: '' },
-    validationSchema,
-    onSubmit: (values) => {
-      dispatch();
-      setModalView(false);
-    }
-  });
+  const formHandler = (values: { userId: string }) => {
+    dispatch(shareBoard({ boardId, userId: values.userId }));
+    setModalView(false);
+  };
 
   return (
     <Dialog
@@ -41,29 +33,27 @@ const ShareBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => 
       onClose={() => setModalView(false)}
     >
       <DialogTitle className={classes.dialogTitle}>Share board</DialogTitle>
-      <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <Autocomplete
-          classes={{ root: classes.autocompleteRoot }}
-          options={users}
-          id="user"
-          onChange={(_e, value) => formik.setFieldValue('user', value?.id)}
-          getOptionLabel={(option) => option.login}
-          renderInput={(params) => (
-            <TextField
-              {...params}
-              error={formik.touched.user && !!formik.errors.user}
-              helperText={formik.touched.user && formik.errors.user}
-              label="Choose user"
-              variant="outlined"
+      <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>
+        {(props) => (
+          <Form onSubmit={props.handleSubmit}>
+            <Autocomplete
+              classes={{ root: classes.autocompleteRoot }}
+              options={users}
+              id="userId"
+              onChange={(_e, value) => props.setFieldValue('userId', value?.id)}
+              getOptionLabel={(option) => option.login}
+              renderInput={(params) => (
+                <TextField {...params} label="Choose user" variant="outlined" />
+              )}
             />
-          )}
-        />
-        <DialogActions>
-          <Button type="submit" color="secondary" variant="contained">
-            Share
-          </Button>
-        </DialogActions>
-      </Form>
+            <DialogActions>
+              <Button type="submit" color="secondary" variant="contained">
+                Share
+              </Button>
+            </DialogActions>
+          </Form>
+        )}
+      </Formik>
     </Dialog>
   );
 };

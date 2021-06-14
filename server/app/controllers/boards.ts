@@ -55,21 +55,17 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
 };
 
 const shareBoard = async (req: Request, res: Response): Promise<void> => {
-  const { boardId, newUserId } = req.body;
+  const { boardId, userId } = req.body;
   try {
     const sharedBoard = await Board.findById(boardId);
     const arrayOfAccessUsers = sharedBoard?.accessUsers;
     if (arrayOfAccessUsers) {
-      const isUserExist = arrayOfAccessUsers.includes(newUserId);
+      const isUserExist = arrayOfAccessUsers.includes(userId);
       if (isUserExist) {
         res.status(409).json({ message: 'the user has already existed' });
       } else {
-        const { id, name } = (await Board.findByIdAndUpdate(
-          boardId,
-          { accessUsers: [...arrayOfAccessUsers, newUserId] },
-          { new: true }
-        )) as BoardsInDB;
-        res.status(200).json({ id, name });
+        await Board.findByIdAndUpdate(boardId, { accessUsers: [...arrayOfAccessUsers, userId] });
+        res.status(204).end();
       }
     }
   } catch (error) {
@@ -84,7 +80,7 @@ const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   try {
     const board = await Board.findById(boardId);
     const isOwnerId = board?.owner.toString() === userId;
-    
+
     if (isOwnerId) {
       await Column.findOneAndDelete({ boardId });
       await Board.findByIdAndDelete(boardId);
