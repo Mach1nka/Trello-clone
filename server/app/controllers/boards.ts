@@ -5,14 +5,17 @@ import { PassportUser } from '../types/types';
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;
+
   try {
-    const userBoards = await Board.find({ user: _id });
-    const filteredBoardObj = userBoards.length
-      ? userBoards.map((el) => ({
+    const ownBoards = await Board.find({ owner: _id });
+    const sharedBoards = await Board.find().where('accessUsers').in([_id]);
+    const allBoards = [...ownBoards, ...sharedBoards];
+    const filteredBoardObj = allBoards.length
+      ? allBoards.map((el) => ({
           id: el._id,
           name: el.name
         }))
-      : userBoards;
+      : allBoards;
     res.status(200).json({ boards: filteredBoardObj });
   } catch (error) {
     console.log(error);
@@ -25,7 +28,7 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
   try {
     const board = new Board({
       name,
-      user: userId
+      owner: userId
     });
     await board.save((_err, model) => {
       res.status(201).json({ name, id: model._id });
@@ -39,8 +42,8 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
   const { boardId, newName } = req.body;
   try {
-    const { id, name } = (await Board.findOneAndUpdate(
-      { _id: boardId },
+    const { id, name } = (await Board.findByIdAndUpdate(
+      boardId,
       { name: newName },
       { new: true }
     )) as BoardsInDB;
@@ -51,11 +54,44 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+const shareBoard = async (req: Request, res: Response): Promise<void> => {
+  const { boardId, newUserId } = req.body;
+  try {
+    const sharedBoard = await Board.findById(boardId);
+    const arrayOfAccessUsers = sharedBoard?.accessUsers;
+    if (arrayOfAccessUsers) {
+      const isUserExist = arrayOfAccessUsers.includes(newUserId);
+      if (isUserExist) {
+        res.status(409).json({ message: 'the user has already existed' });
+      } else {
+        const { id, name } = (await Board.findByIdAndUpdate(
+          boardId,
+          { accessUsers: [...arrayOfAccessUsers, newUserId] },
+          { new: true }
+        )) as BoardsInDB;
+        res.status(200).json({ id, name });
+      }
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).end();
+  }
+};
+
 const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   const { boardId, userId } = req.body;
+
   try {
-    await Column.findOneAndDelete({ boardId });
-    await Board.findOneAndDelete({ _id: boardId, user: userId });
+    const board = await Board.findById(boardId);
+    const isOwnerId = board?._id.toString() === userId;
+
+    if (isOwnerId) {
+      await Column.findOneAndDelete({ boardId });
+      await Board.findByIdAndDelete(boardId);
+    } else {
+      const updatedUsersArr = board?.accessUsers.filter((el) => el.toString() !== userId);
+      await Board.findByIdAndUpdate(boardId, { accessUsers: updatedUsersArr });
+    }
     res.status(204).end();
   } catch (error) {
     console.log(error);
@@ -63,4 +99,4 @@ const deleteBoard = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-export { getAllBoards, createNewBoard, updateBoardName, deleteBoard };
+export { getAllBoards, createNewBoard, updateBoardName, shareBoard, deleteBoard };

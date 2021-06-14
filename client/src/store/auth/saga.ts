@@ -1,11 +1,11 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 import { registerUser, loginUser } from '../../api/auth-requests';
-import { REGISTRATION_USER, LOGIN_USER, putAuthData, AccountData, UserAction } from './actions';
+import { REGISTRATION_USER, LOGIN_USER, putAuthData, UserAction } from './actions';
+import handleSagaRequest from '../../../utils/handle-saga-request';
 
 function* workerUserLogin(userData: UserAction) {
-  const data: AccountData = yield call(loginUser, userData.payload);
-  yield put(putAuthData(data));
+  yield handleSagaRequest(loginUser, userData.payload, putAuthData);
 }
 
 function* watchUserLogin(): SagaIterator {
@@ -13,8 +13,7 @@ function* watchUserLogin(): SagaIterator {
 }
 
 function* workerUserRegistration(userData: UserAction) {
-  const data: AccountData = yield call(registerUser, userData.payload);
-  yield put(putAuthData(data));
+  yield handleSagaRequest(registerUser, userData.payload, putAuthData);
 }
 
 function* watchUserRegistration(): SagaIterator {
