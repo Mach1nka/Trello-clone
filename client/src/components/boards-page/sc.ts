@@ -42,10 +42,20 @@ const ModalForm = styled.form`
   justify-content: center;
 `;
 
+const ShareModalForm = styled.form`
+  width: 100%;
+  height: 140px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-direction: column;
+`;
+
 const BoardOptions = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
 `;
 
-export { CardContainer, Card, ModalForm, BoardOptions };
+export { CardContainer, Card, ModalForm, BoardOptions, ShareModalForm };
