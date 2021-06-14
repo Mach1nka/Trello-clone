@@ -8,8 +8,8 @@ import { useStyles } from './constants';
 import { useAppSelector } from '../../store/hooks';
 import { BoardOptions as Container } from './sc';
 import RenameBoardModal from './rename-board';
-import ShareBoardModal from './share-board';
 import { deleteBoard } from '../../store/board/actions';
+import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 
 interface Props {
   boardId: string;
@@ -17,7 +17,6 @@ interface Props {
 
 const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const [isOpenRenameModal, setRenameModalView] = useState(false);
-  const [isOpenShareModal, setShareModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
@@ -39,7 +38,8 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
         <Fab
           onClick={(e) => {
             e.preventDefault();
-            setShareModalView(true);
+            dispatch(setModalData({ boardId }));
+            dispatch(setModalsStates({ isShareModalVisible: true }));
           }}
           className={classes.editBoardNameButton}
         >
@@ -55,11 +55,6 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
           <EditIcon fontSize="inherit" />
         </Fab>
       </Container>
-      <ShareBoardModal
-        isOpen={isOpenShareModal}
-        setModalView={setShareModalView}
-        boardId={boardId}
-      />
       <RenameBoardModal
         isOpen={isOpenRenameModal}
         setModalView={setRenameModalView}

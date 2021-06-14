@@ -6,10 +6,11 @@ import ChangeCardStatus from './change-card-status';
 import CardDetails from './card-details';
 
 const ModalsContainer: React.FC = () => {
-  const { cardData, modalsStates } = useAppSelector((state) => state.modalsData);
+  const { dataForModals, modalsStates } = useAppSelector((state) => state.modalsData);
   const selectedCard = useAppSelector(
     (state) =>
-      cardData.cardId && state.cardsData[cardData.columnId].find((el) => el.id === cardData.cardId)
+      dataForModals.columnId &&
+      state.cardsData[dataForModals.columnId].find((el) => el.id === dataForModals.cardId)
   );
 
   if (selectedCard) {
@@ -19,24 +20,24 @@ const ModalsContainer: React.FC = () => {
           isOpen={modalsStates.isDetailsModalVisible}
           name={selectedCard.name}
           description={selectedCard.description}
-          cardId={cardData.cardId}
-          columnId={cardData.columnId}
+          cardId={dataForModals.cardId}
+          columnId={dataForModals.columnId}
         />
         <ChangeCardStatus
           isOpen={modalsStates.isStatusModalVisible}
-          cardId={cardData.cardId}
-          columnId={cardData.columnId}
+          cardId={dataForModals.cardId}
+          columnId={dataForModals.columnId}
         />
         <RenameCardModal
           isOpen={modalsStates.isRenameModalVisible}
           cardName={selectedCard.name}
-          cardId={cardData.cardId}
+          cardId={dataForModals.cardId}
         />
         <ChangeCardPosition
           isOpen={modalsStates.isPositionModalVisible}
           position={selectedCard.position}
-          cardId={cardData.cardId}
-          columnId={cardData.columnId}
+          cardId={dataForModals.cardId}
+          columnId={dataForModals.columnId}
         />
       </>
     );

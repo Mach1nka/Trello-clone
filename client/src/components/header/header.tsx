@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
@@ -7,6 +7,7 @@ import { signOutUser } from '../../store/auth/actions';
 import { deleteBoardsData } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
 import { deleteCardsData } from '../../store/card/actions';
+import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 import ShareBoardModal from '../boards-page/share-board';
 
 interface Location {
@@ -19,7 +20,6 @@ interface Location {
 
 const Header: React.FC = () => {
   const { pathname, state }: Location = useLocation();
-  const [isOpenModal, setModalView] = useState(false);
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
@@ -54,7 +54,14 @@ const Header: React.FC = () => {
               >
                 Boards
               </Button>
-              <Button onClick={() => setModalView(true)} variant="outlined" color="default">
+              <Button
+                onClick={() => {
+                  dispatch(setModalData({ boardId }));
+                  dispatch(setModalsStates({ isShareModalVisible: true }));
+                }}
+                variant="outlined"
+                color="default"
+              >
                 Share
               </Button>
             </div>
@@ -67,7 +74,7 @@ const Header: React.FC = () => {
           </Button>
         </Toolbar>
       </AppBar>
-      <ShareBoardModal isOpen={isOpenModal} setModalView={setModalView} boardId={boardId} />
+      <ShareBoardModal />
     </>
   );
 };

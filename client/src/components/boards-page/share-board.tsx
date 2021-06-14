@@ -1,36 +1,34 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
+import { useAppSelector } from '../../store/hooks';
 import useFetchUsers from '../../../utils/fetch-user-hook';
 import { shareBoard } from '../../store/board/actions';
+import { setModalsStates } from '../../store/data-for-modals/actions';
 import { ShareModalForm as Form } from './sc';
 import { useStyles } from './constants';
 
-interface Props {
-  isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
-  boardId: string;
-}
-
-const ShareBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
+const ShareBoardModal: React.FC = () => {
   const dispatch = useDispatch();
+  const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
+  const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
   const classes = useStyles();
   const users = useFetchUsers();
 
   const formHandler = (values: { userId: string }) => {
     dispatch(shareBoard({ boardId, userId: values.userId }));
-    setModalView(false);
+    dispatch(setModalsStates({ isShareModalVisible: false }));
   };
 
   return (
     <Dialog
       fullWidth
       maxWidth="xs"
-      open={isOpen}
+      open={isShareModalVisible}
       onClick={(evt) => evt.stopPropagation()}
-      onClose={() => setModalView(false)}
+      onClose={() => dispatch(setModalsStates({ isShareModalVisible: false }))}
     >
       <DialogTitle className={classes.dialogTitle}>Share board</DialogTitle>
       <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>
