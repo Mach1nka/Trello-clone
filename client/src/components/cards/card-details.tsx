@@ -39,11 +39,10 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
     initialValues: { name, description },
     validationSchema: configValidationSchema,
     onSubmit: (values) => {
-      if (values.name !== name) {
+      if (values.name !== formik.initialValues.name) {
         dispatch(renameCard({ cardId, newName: values.name }));
-        formik.values.name = '';
       }
-      if (values.description !== description) {
+      if (values.description !== formik.initialValues.description) {
         dispatch(changeCardDescription({ cardId, newDescription: values.description }));
       }
     }
