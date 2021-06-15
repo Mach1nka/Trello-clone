@@ -4,7 +4,7 @@ const LOGIN_USER = 'LOGIN_USER';
 const PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR';
 const SIGN_OUT_USER = 'SIGN_OUT_USER';
 
-interface AccountData {
+export interface AccountData {
   login: string;
   token: string;
   id: string;
