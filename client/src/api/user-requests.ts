@@ -6,8 +6,8 @@ export interface User {
   login: string;
 }
 
-const getUsers = (): Promise<User[]> =>
-  fetch(`${serverURL}/users`, {
+const getUsers = (searchValue = ''): Promise<User[]> =>
+  fetch(`${serverURL}/users/${searchValue}`, {
     method: 'GET',
     headers: requestHeader()
   })

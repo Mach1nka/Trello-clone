@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
@@ -12,10 +12,11 @@ import { useStyles } from './constants';
 
 const ShareBoardModal: React.FC = () => {
   const dispatch = useDispatch();
+  const [searchUserLogin, setUserLogin] = useState('');
   const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
   const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
   const classes = useStyles();
-  const users = useFetchUsers();
+  const users = useFetchUsers(searchUserLogin);
 
   const formHandler = (values: { userId: string }) => {
     dispatch(shareBoard({ boardId, userId: values.userId }));
@@ -41,7 +42,12 @@ const ShareBoardModal: React.FC = () => {
               onChange={(_e, value) => props.setFieldValue('userId', value?.id)}
               getOptionLabel={(option) => option.login}
               renderInput={(params) => (
-                <TextField {...params} label="Choose user" variant="outlined" />
+                <TextField
+                  {...params}
+                  onChange={(event) => setTimeout(() => setUserLogin(event.target.value), 500)}
+                  label="Choose user"
+                  variant="outlined"
+                />
               )}
             />
             <DialogActions>
