@@ -4,14 +4,14 @@ interface Props {
   readonly isDefaultCard: boolean | undefined;
 }
 
-const CardContainer = styled.div`
+const BoardsContainer = styled.div`
   display: flex;
   height: 90%;
   align-items: start;
   flex-wrap: wrap;
 `;
 
-const Card = styled.div<Props>`
+const Board = styled.div<Props>`
   display: flex;
   flex-direction: ${(props) => (props.isDefaultCard ? 'row' : 'column')};
   align-items: ${(props) => (props.isDefaultCard ? 'center' : '')};
@@ -58,4 +58,4 @@ const BoardOptions = styled.div`
   justify-content: space-between;
 `;
 
-export { CardContainer, Card, ModalForm, BoardOptions, ShareModalForm };
+export { BoardsContainer, Board, ModalForm, BoardOptions, ShareModalForm };

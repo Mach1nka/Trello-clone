@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  cardContainer: {
+  boardsContainer: {
     backgroundColor: theme.palette.primary.contrastText,
     minHeight: '40vh',
     marginTop: '5%',

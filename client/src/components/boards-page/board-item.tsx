@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
-import { Card } from './sc';
+import { Board } from './sc';
 import { useStyles } from './constants';
 import { deleteColumnsData } from '../../store/column/actions';
 import BoardOptions from './board-options';
@@ -12,14 +12,15 @@ interface Props {
   isDefaultCard?: boolean;
   boardName: string;
   boardId?: string;
+  isOwnBoards?: boolean;
 }
 
-const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
+const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBoards }) => {
   const [isOpenModal, setModalView] = useState(false);
   const dispatch = useDispatch();
   const classes = useStyles();
 
-  if (!isDefaultCard && boardId) {
+  if (!isDefaultCard && boardId && isOwnBoards) {
     const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
     return (
       <Link
@@ -27,7 +28,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
         to={locationParams}
         onClick={() => dispatch(deleteColumnsData())}
       >
-        <Card isDefaultCard={isDefaultCard}>
+        <Board isDefaultCard={isDefaultCard}>
           <Typography
             color="inherit"
             className={classes.boardName}
@@ -37,17 +38,38 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId }) => {
             {boardName}
           </Typography>
           <BoardOptions boardId={boardId} />
-        </Card>
+        </Board>
+      </Link>
+    );
+  }
+  if (!isDefaultCard && !isOwnBoards && boardId) {
+    const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
+    return (
+      <Link
+        style={{ textDecoration: 'none' }}
+        to={locationParams}
+        onClick={() => dispatch(deleteColumnsData())}
+      >
+        <Board isDefaultCard={isDefaultCard}>
+          <Typography
+            color="inherit"
+            className={classes.boardName}
+            variant="subtitle2"
+            align="left"
+          >
+            {boardName}
+          </Typography>
+        </Board>
       </Link>
     );
   }
   return (
     <>
-      <Card onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
+      <Board onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
         <Typography color="inherit" className={classes.boardName} variant="subtitle2" align="left">
           {boardName}
         </Typography>
-      </Card>
+      </Board>
       <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} />
     </>
   );

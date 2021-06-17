@@ -14,7 +14,8 @@ export interface Board {
 }
 
 export interface BoardList {
-  boards: Board[];
+  ownBoards: Board[];
+  sharedBoards: Board[];
 }
 
 export interface DataForCreatingBoard {
@@ -25,6 +26,7 @@ export interface DataForCreatingBoard {
 export interface DataForRenamingBoard {
   newName: string;
   boardId: string;
+  userId: string;
 }
 
 export interface DataForDeletingBoard {

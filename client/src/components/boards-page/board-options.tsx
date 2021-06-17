@@ -59,6 +59,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
         isOpen={isOpenRenameModal}
         setModalView={setRenameModalView}
         boardId={boardId}
+        userId={id}
       />
       <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
         <CircularProgress color="inherit" />

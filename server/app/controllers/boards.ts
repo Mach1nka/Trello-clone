@@ -9,14 +9,19 @@ const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   try {
     const ownBoards = await Board.find({ owner: _id });
     const sharedBoards = await Board.find().where('accessUsers').in([_id]);
-    const allBoards = [...ownBoards, ...sharedBoards];
-    const filteredBoardObj = allBoards.length
-      ? allBoards.map((el) => ({
+    const filteredOwnBoardObj = ownBoards.length
+      ? ownBoards.map((el) => ({
           id: el._id,
           name: el.name
         }))
-      : allBoards;
-    res.status(200).json({ boards: filteredBoardObj });
+      : ownBoards;
+    const filteredSharedBoardObj = sharedBoards.length
+      ? sharedBoards.map((el) => ({
+          id: el._id,
+          name: el.name
+        }))
+      : sharedBoards;
+    res.status(200).json({ ownBoards: filteredOwnBoardObj, sharedBoards: filteredSharedBoardObj });
   } catch (error) {
     console.log(error);
     res.status(500).end();
@@ -40,14 +45,20 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
-  const { boardId, newName } = req.body;
+  const { boardId, newName, userId } = req.body;
+
   try {
-    const { id, name } = (await Board.findByIdAndUpdate(
-      boardId,
-      { name: newName },
-      { new: true }
-    )) as BoardsInDB;
-    res.status(200).json({ id, name });
+    const board = await Board.findById(boardId);
+    const isOwnerId = board?.owner.toString() === userId;
+    if (isOwnerId) {
+      const { id, name } = (await Board.findByIdAndUpdate(
+        boardId,
+        { name: newName },
+        { new: true }
+      )) as BoardsInDB;
+      res.status(200).json({ id, name });
+    }
+    res.status(400).end();
   } catch (error) {
     console.log(error);
     res.status(500).end();
