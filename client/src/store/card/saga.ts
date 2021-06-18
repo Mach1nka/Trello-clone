@@ -12,7 +12,6 @@ import {
   putCreatedCard,
   putUpdatedCard,
   putUpdatedCardsPos,
-  deleteCardsData,
   Card,
   DataForCreatingCard,
   DataForRenamingCard,
@@ -31,16 +30,13 @@ import {
   deleteCard
 } from '../../api/card-requests';
 import { signOutUser } from '../auth/actions';
-import { deleteBoardsData } from '../board/actions';
-import { deleteColumnsData } from '../column/actions';
+import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetCards(columnData: { type: string; payload: string }): SagaIterator {
   const data: Card[] | number = yield call(getCards, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putCards(data as Card[]));
   }
@@ -53,10 +49,8 @@ function* watchGetCards(): SagaIterator {
 function* workerCreateCard(columnData: { type: string; payload: DataForCreatingCard }) {
   const data: Card | number = yield call(createCard, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putCreatedCard(data as Card));
   }
@@ -69,10 +63,8 @@ function* watchCreateCard(): SagaIterator {
 function* workerRenameCard(columnData: { type: string; payload: DataForRenamingCard }) {
   const data: Card | number = yield call(updateCardName, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putUpdatedCard(data as Card));
   }
@@ -85,10 +77,8 @@ function* watchRenameCard(): SagaIterator {
 function* workerChangeCardDesc(columnData: { type: string; payload: DataForUpdatingCardDesc }) {
   const data: Card | number = yield call(updateCardDescription, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putUpdatedCard(data as Card));
   }
@@ -103,10 +93,8 @@ function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpd
   const updatedColumn: Card[] | number = yield call(getCards, columnData.payload.columnId);
   const columnWithNewCard: Card[] | number = yield call(getCards, columnData.payload.newColumnId);
   if (updatedColumn === 401 || columnWithNewCard === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putCards(updatedColumn as Card[]));
     yield put(putCards(columnWithNewCard as Card[]));
@@ -120,10 +108,8 @@ function* watchChangeCardStatus(): SagaIterator {
 function* workerChangeCardPos(columnData: { type: string; payload: DataForUpdatingCardPos }) {
   const data: Card[] | number = yield call(updateCardPosition, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putUpdatedCardsPos(data as Card[]));
   }
@@ -137,10 +123,8 @@ function* workerDeleteCard(columnData: { type: string; payload: DataForDeletingC
   yield call(deleteCard, columnData.payload);
   const data: Card[] | number = yield call(getCards, columnData.payload.columnId);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
-    yield put(deleteCardsData());
   } else {
     yield put(putCards(data as Card[]));
   }

@@ -4,9 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
 import { useStyles } from './constants';
 import { signOutUser } from '../../store/auth/actions';
-import { deleteBoardsData } from '../../store/board/actions';
-import { deleteColumnsData } from '../../store/column/actions';
-import { deleteCardsData } from '../../store/card/actions';
+import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 interface Location {
   state: {
@@ -25,9 +23,7 @@ const Header: React.FC = () => {
 
   const handleSignOut = () => {
     dispatch(signOutUser());
-    dispatch(deleteBoardsData());
-    dispatch(deleteColumnsData());
-    dispatch(deleteCardsData());
+    removeAuthDataFromLocalStorage();
     history.push('/auth');
   };
 

@@ -8,7 +8,6 @@ import {
   putUserBoards,
   putCreatedBoard,
   putRenamedBoard,
-  deleteBoardsData,
   BoardList,
   Board,
   DataForCreatingBoard,
@@ -16,15 +15,14 @@ import {
   DataForDeletingBoard
 } from './actions';
 import { signOutUser } from '../auth/actions';
-import { deleteColumnsData } from '../column/actions';
 import { getBoards, createBoard, updateBoardName, deleteBoard } from '../../api/board-requests';
+import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetBoards(): SagaIterator {
   const data: BoardList | number = yield call(getBoards);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putUserBoards(data as BoardList));
   }
@@ -37,9 +35,8 @@ function* watchGetBoards(): SagaIterator {
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
   const data: Board | number = yield call(createBoard, boardData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putCreatedBoard(data as Board));
   }
@@ -52,9 +49,8 @@ function* watchCreateBoard(): SagaIterator {
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
   const data: Board | number = yield call(updateBoardName, board.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putRenamedBoard(data as Board));
   }
@@ -68,9 +64,8 @@ function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard
   yield call(deleteBoard, board.payload);
   const data: BoardList | number = yield call(getBoards);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putUserBoards(data as BoardList));
   }

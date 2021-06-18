@@ -10,7 +10,6 @@ import {
   putCreatedColumn,
   putRenamedColumn,
   putUpdatedPos,
-  deleteColumnsData,
   Column,
   DataForCreatingColumn,
   DataForRenamingColumn,
@@ -25,14 +24,13 @@ import {
   deleteColumn
 } from '../../api/column-requests';
 import { signOutUser } from '../auth/actions';
-import { deleteBoardsData } from '../board/actions';
+import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
   const data: Column[] | number = yield call(getColumns, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putColumns(data as Column[]));
   }
@@ -45,9 +43,8 @@ function* watchGetColumns(): SagaIterator {
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
   const data: Column | number = yield call(createColumn, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putCreatedColumn(data as Column));
   }
@@ -60,9 +57,8 @@ function* watchCreateColumn(): SagaIterator {
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
   const data: Column | number = yield call(updateColumnName, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putRenamedColumn(data as Column));
   }
@@ -75,9 +71,8 @@ function* watchRenameColumn(): SagaIterator {
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
   const data: Column[] | number = yield call(updateColumnPosition, columnData.payload);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putUpdatedPos(data as Column[]));
   }
@@ -91,9 +86,8 @@ function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletin
   yield call(deleteColumn, columnData.payload);
   const data: Column[] | number = yield call(getColumns, columnData.payload.boardId);
   if (data === 401) {
+    removeAuthDataFromLocalStorage();
     yield put(signOutUser());
-    yield put(deleteBoardsData());
-    yield put(deleteColumnsData());
   } else {
     yield put(putColumns(data as Column[]));
   }
