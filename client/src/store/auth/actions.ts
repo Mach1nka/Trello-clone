@@ -2,9 +2,9 @@ const PUT_USER_DATA = 'PUT_USER_DATA';
 const REGISTRATION_USER = 'REGISTRATION_USER';
 const LOGIN_USER = 'LOGIN_USER';
 const PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR';
-const SIGN_OUT_USER = 'SIGN_OUT_USER';
+const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
-interface AccountData {
+export interface AccountData {
   login: string;
   token: string;
   id: string;
@@ -42,7 +42,7 @@ const loginUser = (userData: UserData): UserAction => ({
 });
 
 const signOutUser = (): { type: string } => ({
-  type: SIGN_OUT_USER
+  type: USER_LOGGED_OUT
 });
 
 export {
@@ -50,7 +50,7 @@ export {
   LOGIN_USER,
   PUT_USER_DATA,
   PUT_MESSAGE_ERROR,
-  SIGN_OUT_USER,
+  USER_LOGGED_OUT,
   putAuthData,
   registerUser,
   loginUser,
