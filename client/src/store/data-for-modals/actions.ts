@@ -12,8 +12,8 @@ export interface ModalsStates {
 export interface CardData {
   cardId: string;
   columnId: string;
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
 }
 
 export interface ModalsData {

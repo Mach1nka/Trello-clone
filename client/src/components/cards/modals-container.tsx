@@ -41,7 +41,15 @@ const ModalsContainer: React.FC = () => {
       </>
     );
   }
-  return null;
+  return (
+    <CardDetails
+      isOpen={modalsStates.isDetailsModalVisible}
+      name={cardData.name}
+      description={cardData.description}
+      cardId={cardData.cardId}
+      columnId={cardData.columnId}
+    />
+  );
 };
 
 export default ModalsContainer;

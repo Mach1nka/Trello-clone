@@ -30,7 +30,7 @@ const modalsData = (
     case SET_CARD_DATA:
       return {
         ...state,
-        cardData: { ...state.cardData, ...(payload as CardData) }
+        cardData: payload as CardData
       };
     case SET_MODAL_STATE:
       return {

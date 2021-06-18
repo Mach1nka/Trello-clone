@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
-import { changeCardStatus, getCards } from '../../store/card/actions';
+import { changeCardStatus } from '../../store/card/actions';
 import { setModalsStates, setCardData } from '../../store/data-for-modals/actions';
 import { useStyles } from '../boards-page/constants';
 
@@ -21,6 +21,10 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
     state.boardColumns.columns.map((el) => ({ columnName: el.name, columnId: el.id }))
   );
 
+  const { name, description } = useAppSelector((state) =>
+    state.cardsData[columnId].find((el) => el.id === cardId)
+  );
+
   const formHandler = (values: { newStatus: string }) => {
     if (values.newStatus !== columnId) {
       dispatch(
@@ -30,8 +34,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
           columnId
         })
       );
-      dispatch(setCardData({ cardId, columnId: values.newStatus }));
-      dispatch(getCards(values.newStatus));
+      dispatch(setCardData({ cardId, columnId: values.newStatus, name, description }));
     }
     dispatch(setModalsStates({ isStatusModalVisible: false }));
   };
