@@ -8,12 +8,12 @@ import { getBoards } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
 import { deleteCardsData } from '../../store/card/actions';
 import { resetModalData } from '../../store/data-for-modals/actions';
-import { CardContainer } from './sc';
+import { BoardsContainer } from './sc';
 
 const BoardsList: React.FC = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { boards } = useAppSelector((state) => state.userBoards);
+  const { ownBoards, sharedBoards } = useAppSelector((state) => state.userBoards);
 
   useEffect(() => {
     dispatch(deleteColumnsData());
@@ -24,16 +24,28 @@ const BoardsList: React.FC = () => {
 
   return (
     <Container>
-      <Card className={classes.cardContainer}>
+      <Card className={classes.boardsContainer}>
         <Typography gutterBottom color="secondary" variant="h5" component="h5">
           My Boards
         </Typography>
-        <CardContainer>
+        <BoardsContainer>
           <BoardItem isDefaultCard boardName="create new board" />
-          {boards.map((el) => (
-            <BoardItem key={el.id} boardName={el.name} boardId={el.id} />
+          {ownBoards.map((el) => (
+            <BoardItem isOwnBoards key={el.id} boardName={el.name} boardId={el.id} />
           ))}
-        </CardContainer>
+        </BoardsContainer>
+        {sharedBoards.length ? (
+          <>
+            <Typography gutterBottom color="secondary" variant="h5" component="h5">
+              Shared Boards
+            </Typography>
+            <BoardsContainer>
+              {sharedBoards.map((el) => (
+                <BoardItem key={el.id} boardName={el.name} boardId={el.id} />
+              ))}
+            </BoardsContainer>
+          </>
+        ) : null}
       </Card>
     </Container>
   );

@@ -9,7 +9,8 @@ import {
 import replaceBoardName from '../../../utils/replace-board-name';
 
 const userBoardsIS: BoardList = {
-  boards: []
+  ownBoards: [],
+  sharedBoards: []
 };
 
 const userBoards = (
@@ -22,12 +23,12 @@ const userBoards = (
     case PUT_RENAMED_BOARD:
       return {
         ...state,
-        boards: replaceBoardName(state, payload as Board)
+        ownBoards: replaceBoardName(state, payload as Board)
       };
     case PUT_CREATED_BOARD:
       return {
         ...state,
-        boards: state.boards.concat(payload as Board)
+        ownBoards: state.ownBoards.concat(payload as Board)
       };
     case DELETE_BOARDS_DATA:
       return { ...state, ...userBoardsIS };

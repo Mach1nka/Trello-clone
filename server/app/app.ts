@@ -9,6 +9,7 @@ import { router as authRoutes } from './routes/auth';
 import { router as boardsRoutes } from './routes/boards';
 import { router as columnsRoutes } from './routes/columns';
 import { router as cardsRoutes } from './routes/cards';
+import { router as usersRoutes } from './routes/users';
 
 const app = express();
 
@@ -40,5 +41,6 @@ app.use('/api', authRoutes);
 app.use('/api', boardsRoutes);
 app.use('/api', columnsRoutes);
 app.use('/api', cardsRoutes);
+app.use('/api', usersRoutes);
 
 export default app;

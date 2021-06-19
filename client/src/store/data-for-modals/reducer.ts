@@ -8,17 +8,19 @@ import {
 } from './actions';
 
 const modalsDataIS: ModalsData = {
-  cardData: {
+  dataForModals: {
     cardId: '',
     columnId: '',
     name: '',
-    description: ''
+    description: '',
+    boardId: ''
   },
   modalsStates: {
     isRenameModalVisible: false,
     isDetailsModalVisible: false,
     isStatusModalVisible: false,
-    isPositionModalVisible: false
+    isPositionModalVisible: false,
+    isShareModalVisible: false
   }
 };
 
@@ -30,7 +32,7 @@ const modalsData = (
     case SET_CARD_DATA:
       return {
         ...state,
-        cardData: payload as CardData
+        dataForModals: { ...state.dataForModals, ...(payload as CardData) }
       };
     case SET_MODAL_STATE:
       return {

@@ -4,7 +4,7 @@ import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 import { CardContainer as Container } from './sc';
 import { deleteCard } from '../../store/card/actions';
-import { setCardData, setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
+import { setModalData, setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
 
 interface Props {
   cardId: string;
@@ -46,7 +46,7 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   return (
     <Container
       onClick={() => {
-        dispatch(setCardData({ cardId, columnId, name, description }));
+        dispatch(setModalData({ cardId, columnId, name, description }));
         dispatch(setModalsStates({ isDetailsModalVisible: true }));
       }}
     >
