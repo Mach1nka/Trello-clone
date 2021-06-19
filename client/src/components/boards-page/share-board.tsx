@@ -6,7 +6,7 @@ import Autocomplete from '@material-ui/lab/Autocomplete';
 import { useAppSelector } from '../../store/hooks';
 import useFetchUsers from '../../../utils/fetch-user-hook';
 import { shareBoard } from '../../store/board/actions';
-import { setModalsStates } from '../../store/data-for-modals/actions';
+import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 import { ShareModalForm as Form } from './sc';
 import { useStyles } from './constants';
 
@@ -16,9 +16,10 @@ const ShareBoardModal: React.FC = () => {
   const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
   const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
   const classes = useStyles();
-  let users = useFetchUsers(searchUserLogin);
+  const users = useFetchUsers(searchUserLogin);
 
   const formHandler = (values: { userId: string }) => {
+    setUserLogin('');
     dispatch(shareBoard({ boardId, userId: values.userId }));
     dispatch(setModalsStates({ isShareModalVisible: false }));
   };
@@ -30,7 +31,8 @@ const ShareBoardModal: React.FC = () => {
       open={isShareModalVisible}
       onClick={(evt) => evt.stopPropagation()}
       onClose={() => {
-        users = [];
+        setUserLogin('');
+        dispatch(setModalData({ boardId: '' }));
         dispatch(setModalsStates({ isShareModalVisible: false }));
       }}
     >

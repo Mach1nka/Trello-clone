@@ -29,19 +29,16 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   };
 
   const handleChangeName = () => {
-    dispatch(setModalData({ cardId, columnId }));
     dispatch(setModalsStates({ isRenameModalVisible: true }));
     setAnchorEl(null);
   };
 
   const handleChangePosition = () => {
-    dispatch(setModalData({ cardId, columnId }));
     dispatch(setModalsStates({ isPositionModalVisible: true }));
     setAnchorEl(null);
   };
 
   const handleChangeStatus = () => {
-    dispatch(setModalData({ cardId, columnId }));
     dispatch(setModalsStates({ isStatusModalVisible: true }));
     setAnchorEl(null);
   };

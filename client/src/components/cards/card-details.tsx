@@ -37,6 +37,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
 
   const formik = useFormik({
     initialValues: { name, description },
+    enableReinitialize: true,
     validationSchema: configValidationSchema,
     onSubmit: (values) => {
       if (values.name !== formik.initialValues.name) {
@@ -53,12 +54,15 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
       fullWidth
       maxWidth="sm"
       open={isOpen}
-      onClose={() => dispatch(setModalsStates({ isDetailsModalVisible: false }))}
+      onClose={() => {
+        dispatch(resetModalData());
+        dispatch(setModalsStates({ isDetailsModalVisible: false }));
+      }}
     >
       <DialogTitle>
         {!isNameFocused ? (
           <Typography onClick={() => setIsNamedFocused(true)} className={classes.cardName}>
-            {formik.values.name || name}
+            {formik.values.name}
           </Typography>
         ) : (
           <form autoComplete="off" onSubmit={formik.handleSubmit}>
@@ -118,7 +122,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
               className={classes.descriptionText}
               onClick={() => setIsDescriptionFocused(true)}
             >
-              {formik.values.description || description}
+              {formik.values.description}
             </Typography>
           )}
         </div>
