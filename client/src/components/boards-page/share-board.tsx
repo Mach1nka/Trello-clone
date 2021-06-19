@@ -16,7 +16,7 @@ const ShareBoardModal: React.FC = () => {
   const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
   const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
   const classes = useStyles();
-  const users = useFetchUsers(searchUserLogin);
+  let users = useFetchUsers(searchUserLogin);
 
   const formHandler = (values: { userId: string }) => {
     dispatch(shareBoard({ boardId, userId: values.userId }));
@@ -29,7 +29,10 @@ const ShareBoardModal: React.FC = () => {
       maxWidth="xs"
       open={isShareModalVisible}
       onClick={(evt) => evt.stopPropagation()}
-      onClose={() => dispatch(setModalsStates({ isShareModalVisible: false }))}
+      onClose={() => {
+        users = [];
+        dispatch(setModalsStates({ isShareModalVisible: false }));
+      }}
     >
       <DialogTitle className={classes.dialogTitle}>Share board</DialogTitle>
       <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>
