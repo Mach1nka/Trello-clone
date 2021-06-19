@@ -12,13 +12,14 @@ interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   boardId: string;
+  userId: string;
 }
 
-const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) => {
+const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, userId }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const currentBoardObj = useAppSelector((state) =>
-    state.userBoards.boards.filter((el) => el.id === boardId).pop()
+    state.userBoards.ownBoards.filter((el) => el.id === boardId).pop()
   );
   const currentBoardName = currentBoardObj?.name || '';
 
@@ -31,7 +32,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId }) =>
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameBoard({ newName: values.newName, boardId }));
+      dispatch(renameBoard({ newName: values.newName, boardId, userId }));
       setModalView(false);
     }
   });

@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles((theme) => ({
-  cardContainer: {
+  boardsContainer: {
     backgroundColor: theme.palette.primary.contrastText,
     minHeight: '40vh',
     marginTop: '5%',
@@ -25,6 +25,9 @@ const useStyles = makeStyles((theme) => ({
     zIndex: theme.zIndex.drawer + 1,
     color: '#fff',
     backgroundColor: 'rgba(0, 0, 0, 0.2)'
+  },
+  autocompleteRoot: {
+    width: '260px'
   }
 }));
 

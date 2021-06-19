@@ -2,19 +2,21 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
+import ShareIcon from '@material-ui/icons/Share';
 import { Fab, Backdrop, CircularProgress } from '@material-ui/core';
 import { useStyles } from './constants';
 import { useAppSelector } from '../../store/hooks';
 import { BoardOptions as Container } from './sc';
 import RenameBoardModal from './rename-board';
 import { deleteBoard } from '../../store/board/actions';
+import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 
 interface Props {
   boardId: string;
 }
 
 const BoardOptions: React.FC<Props> = ({ boardId }) => {
-  const [isOpenModal, setModalView] = useState(false);
+  const [isOpenRenameModal, setRenameModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
   const dispatch = useDispatch();
   const { id } = useAppSelector((state) => state.authData);
@@ -24,8 +26,8 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
     <>
       <Container>
         <Fab
-          onClick={(evt) => {
-            evt.preventDefault();
+          onClick={(e) => {
+            e.preventDefault();
             setBackdropView(true);
             dispatch(deleteBoard({ userId: id, boardId }));
           }}
@@ -34,16 +36,31 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
           <DeleteIcon fontSize="inherit" />
         </Fab>
         <Fab
+          onClick={(e) => {
+            e.preventDefault();
+            dispatch(setModalData({ boardId }));
+            dispatch(setModalsStates({ isShareModalVisible: true }));
+          }}
           className={classes.editBoardNameButton}
-          onClick={(evt) => {
-            evt.preventDefault();
-            setModalView(true);
+        >
+          <ShareIcon fontSize="inherit" />
+        </Fab>
+        <Fab
+          className={classes.editBoardNameButton}
+          onClick={(e) => {
+            e.preventDefault();
+            setRenameModalView(true);
           }}
         >
           <EditIcon fontSize="inherit" />
         </Fab>
       </Container>
-      <RenameBoardModal isOpen={isOpenModal} setModalView={setModalView} boardId={boardId} />
+      <RenameBoardModal
+        isOpen={isOpenRenameModal}
+        setModalView={setRenameModalView}
+        boardId={boardId}
+        userId={id}
+      />
       <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
         <CircularProgress color="inherit" />
       </Backdrop>

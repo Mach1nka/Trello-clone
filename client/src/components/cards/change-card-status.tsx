@@ -5,7 +5,7 @@ import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from 
 import { useAppSelector } from '../../store/hooks';
 import { ModalForm as Form } from '../boards-page/sc';
 import { changeCardStatus, getCards } from '../../store/card/actions';
-import { setModalsStates, setCardData } from '../../store/data-for-modals/actions';
+import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 import { useStyles } from '../boards-page/constants';
 
 interface Props {
@@ -30,7 +30,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
           columnId
         })
       );
-      dispatch(setCardData({ cardId, columnId: values.newStatus }));
+      dispatch(setModalData({ cardId, columnId: values.newStatus }));
       dispatch(getCards(values.newStatus));
     }
     dispatch(setModalsStates({ isStatusModalVisible: false }));

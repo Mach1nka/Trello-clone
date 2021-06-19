@@ -7,21 +7,23 @@ export interface ModalsStates {
   isDetailsModalVisible: boolean;
   isStatusModalVisible: boolean;
   isPositionModalVisible: boolean;
+  isShareModalVisible: boolean;
 }
 
 export interface CardData {
   cardId: string;
   columnId: string;
-  name?: string;
-  description?: string;
+  name: string;
+  description: string;
+  boardId?: string;
 }
 
 export interface ModalsData {
-  cardData: CardData;
+  dataForModals: CardData;
   modalsStates: ModalsStates;
 }
 
-const setCardData = (
+const setModalData = (
   cardData: CardData
 ): {
   type: string;
@@ -47,7 +49,7 @@ export {
   SET_CARD_DATA,
   SET_MODAL_STATE,
   RESET_MODAL_DATA,
-  setCardData,
+  setModalData,
   setModalsStates,
   resetModalData
 };

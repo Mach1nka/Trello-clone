@@ -5,6 +5,7 @@ const PUT_RENAMED_BOARD = 'PUT_RENAMED_BOARD';
 const GET_BOARDS = 'GET_BOARDS';
 const CREATE_BOARD = 'CREATE_BOARD';
 const RENAME_BOARD = 'RENAME_BOARD';
+const SHARE_BOARD = 'SHARE_BOARD';
 const DELETE_BOARDS_DATA = 'DELETE_BOARDS_DATA';
 
 export interface Board {
@@ -13,7 +14,8 @@ export interface Board {
 }
 
 export interface BoardList {
-  boards: Board[];
+  ownBoards: Board[];
+  sharedBoards: Board[];
 }
 
 export interface DataForCreatingBoard {
@@ -24,6 +26,7 @@ export interface DataForCreatingBoard {
 export interface DataForRenamingBoard {
   newName: string;
   boardId: string;
+  userId: string;
 }
 
 export interface DataForDeletingBoard {
@@ -46,6 +49,13 @@ const renameBoard = (
   data: DataForRenamingBoard
 ): { type: string; payload: DataForRenamingBoard } => ({
   type: RENAME_BOARD,
+  payload: data
+});
+
+const shareBoard = (
+  data: DataForDeletingBoard
+): { type: string; payload: DataForDeletingBoard } => ({
+  type: SHARE_BOARD,
   payload: data
 });
 
@@ -77,6 +87,7 @@ export {
   GET_BOARDS,
   CREATE_BOARD,
   RENAME_BOARD,
+  SHARE_BOARD,
   DELETE_BOARD,
   PUT_USER_BOARDS,
   PUT_CREATED_BOARD,
@@ -88,6 +99,7 @@ export {
   getBoards,
   createBoard,
   renameBoard,
+  shareBoard,
   deleteBoard,
   deleteBoardsData
 };

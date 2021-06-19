@@ -16,9 +16,10 @@ const getBoards = (): Promise<Response> =>
 
 const updateBoardData = (
   data: DataForRenamingBoard | DataForCreatingBoard | DataForDeletingBoard,
-  reqMethod: string
+  reqMethod: string,
+  path = ''
 ): Promise<Response> =>
-  fetch(`${serverURL}/board`, {
+  fetch(`${serverURL}/board${path}`, {
     method: reqMethod,
     headers: requestHeader(),
     body: JSON.stringify(data)
@@ -30,9 +31,12 @@ const createBoard = (data: DataForCreatingBoard): Promise<Response> =>
   updateBoardData(data, 'POST');
 
 const updateBoardName = (data: DataForRenamingBoard): Promise<Response> =>
-  updateBoardData(data, 'PATCH');
+  updateBoardData(data, 'PATCH', '/rename');
+
+const shareBoard = (data: DataForDeletingBoard): Promise<Response> =>
+  updateBoardData(data, 'PATCH', '/share');
 
 const deleteBoard = (data: DataForDeletingBoard): Promise<Response> =>
   updateBoardData(data, 'DELETE');
 
-export { getBoards, createBoard, updateBoardName, deleteBoard };
+export { getBoards, createBoard, updateBoardName, shareBoard, deleteBoard };
