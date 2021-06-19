@@ -24,7 +24,7 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, co
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameColumn({ newName: values.newName, columnId }));
+      dispatch(renameColumn({ newName: values.newName.trim(), columnId }));
       setModalView(false);
     }
   });

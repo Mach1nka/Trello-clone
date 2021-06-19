@@ -32,7 +32,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameBoard({ newName: values.newName, boardId, userId }));
+      dispatch(renameBoard({ newName: values.newName.trim(), boardId, userId }));
       setModalView(false);
     }
   });

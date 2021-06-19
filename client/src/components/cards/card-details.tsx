@@ -44,7 +44,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
         dispatch(renameCard({ cardId, newName: values.name }));
       }
       if (values.description !== formik.initialValues.description) {
-        dispatch(changeCardDescription({ cardId, newDescription: values.description }));
+        dispatch(changeCardDescription({ cardId, newDescription: values.description.trim() }));
       }
     }
   });

@@ -16,7 +16,7 @@ const getCards = async (req: Request, res: Response): Promise<void> => {
       }));
       res.status(200).json({ columnId, cards: preparedArr });
     } else {
-      res.status(404).json({ columnId, cards: [] });
+      res.status(200).json({ columnId, cards: [] });
     }
   } catch (error) {
     console.log(error);

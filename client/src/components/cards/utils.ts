@@ -10,7 +10,6 @@ const configValidationSchema: SchemaOf<Validation> = yup.object({
   name: yup
     .string()
     .strict()
-    .trim('Name cannot include leading and trailing spaces')
     .min(2, 'Name must be more than 2 symbols')
     .max(30, 'Max length is 30 symbols')
     .required('New name is required')

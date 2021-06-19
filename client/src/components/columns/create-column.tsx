@@ -24,7 +24,7 @@ const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, new
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(createColumn({ name: values.name, boardId, position: newPosition }));
+      dispatch(createColumn({ name: values.name.trim(), boardId, position: newPosition }));
       setModalView(false);
     }
   });

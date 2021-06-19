@@ -29,9 +29,9 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
     onSubmit: (values) => {
       dispatch(
         createCard({
-          name: values.name,
+          name: values.name.trim(),
           columnId,
-          description: values.description,
+          description: values.description.trim(),
           position: positionOfNewCard
         })
       );

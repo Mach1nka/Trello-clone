@@ -24,7 +24,7 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameCard({ newName: values.newName, cardId }));
+      dispatch(renameCard({ newName: values.newName.trim(), cardId }));
       dispatch(setModalsStates({ isRenameModalVisible: false }));
     }
   });

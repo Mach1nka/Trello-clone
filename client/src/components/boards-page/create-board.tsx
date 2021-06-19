@@ -27,7 +27,7 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(createBoard({ name: values.boardName, userId: id }));
+      dispatch(createBoard({ name: values.boardName.trim(), userId: id }));
       setModalView(false);
     }
   });
