@@ -20,7 +20,7 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: path.resolve(__dirname, 'src', '_redirects.txt'),
+          from: path.resolve(__dirname, 'src', '_redirects'),
           to: path.resolve(__dirname, 'dist')
         },
       ],
