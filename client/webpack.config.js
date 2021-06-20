@@ -2,6 +2,8 @@ const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+
 
 module.exports = {
   entry: path.join(__dirname, 'src', 'index.tsx'),
@@ -15,6 +17,14 @@ module.exports = {
   },
   plugins: [
     new CleanWebpackPlugin(),
+    new CopyPlugin({
+      patterns: [
+        {
+          from: path.resolve(__dirname, 'src', '_redirects.txt'),
+          to: path.resolve(__dirname, 'dist')
+        },
+      ],
+    }),
     new HtmlWebpackPlugin({
       minify: {
         collapseWhitespace: true,
