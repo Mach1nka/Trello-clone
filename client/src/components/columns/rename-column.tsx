@@ -46,7 +46,12 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, co
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Rename
           </Button>
         </DialogActions>

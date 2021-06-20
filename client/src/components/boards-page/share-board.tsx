@@ -56,7 +56,7 @@ const ShareBoardModal: React.FC = () => {
               )}
             />
             <DialogActions>
-              <Button type="submit" color="secondary" variant="contained">
+              <Button classes={{ root: classes.submitButton }} type="submit" variant="contained">
                 Share
               </Button>
             </DialogActions>

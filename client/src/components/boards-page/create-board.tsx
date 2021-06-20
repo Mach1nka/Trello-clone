@@ -49,7 +49,12 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
           helperText={formik.touched.boardName && formik.errors.boardName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            classes={{ root: classes.submitButton }}
+            size="small"
+            type="submit"
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

@@ -61,7 +61,12 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            classes={{ root: classes.submitButton }}
+            size="small"
+            type="submit"
+            variant="contained"
+          >
             Save
           </Button>
         </DialogActions>

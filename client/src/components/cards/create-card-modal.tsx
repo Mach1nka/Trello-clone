@@ -68,7 +68,12 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
           helperText={formik.touched.description && formik.errors.description}
         />
         <DialogActions style={{ padding: '10px 0' }}>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

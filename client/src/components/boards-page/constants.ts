@@ -28,6 +28,12 @@ const useStyles = makeStyles((theme) => ({
   },
   autocompleteRoot: {
     width: '260px'
+  },
+  submitButton: {
+    backgroundColor: 'rgba(240, 125, 57, 0.85)',
+    '&:hover': {
+      backgroundColor: theme.palette.warning.main
+    }
   }
 }));
 

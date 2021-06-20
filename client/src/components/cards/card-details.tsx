@@ -55,7 +55,6 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
       maxWidth="sm"
       open={isOpen}
       onClose={() => {
-        dispatch(resetModalData());
         dispatch(setModalsStates({ isDetailsModalVisible: false }));
       }}
     >
@@ -134,7 +133,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
             dispatch(resetModalData());
           }}
         >
-          <DeleteIcon color="secondary" />
+          <DeleteIcon color="error" />
         </IconButton>
         <Button
           onClick={() => {

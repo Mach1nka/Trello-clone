@@ -65,7 +65,12 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
               ))}
             </TextField>
             <DialogActions>
-              <Button size="small" type="submit" color="secondary" variant="contained">
+              <Button
+                size="small"
+                type="submit"
+                classes={{ root: classes.submitButton }}
+                variant="contained"
+              >
                 Change
               </Button>
             </DialogActions>

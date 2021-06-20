@@ -46,7 +46,7 @@ const Header: React.FC = () => {
                 style={{ marginRight: '10px' }}
                 onClick={handleButton}
                 variant="outlined"
-                color="default"
+                classes={{ root: classes.navButton }}
               >
                 Boards
               </Button>
@@ -56,16 +56,21 @@ const Header: React.FC = () => {
                   dispatch(setModalsStates({ isShareModalVisible: true }));
                 }}
                 variant="outlined"
-                color="default"
+                classes={{ root: classes.navButton }}
               >
                 Share
               </Button>
             </div>
           ) : null}
-          <Typography color="textPrimary" variant="h6">
+          <Typography className={classes.boardName} variant="h6">
             {boardName}
           </Typography>
-          <Button variant="outlined" color="default" onClick={handleLogOut}>
+          <Button
+            onClick={handleLogOut}
+            variant="outlined"
+            color="default"
+            classes={{ root: classes.navButton }}
+          >
             Log Out
           </Button>
         </Toolbar>

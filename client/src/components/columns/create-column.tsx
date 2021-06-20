@@ -45,7 +45,12 @@ const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, new
           helperText={formik.touched.name && formik.errors.name}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

@@ -49,7 +49,12 @@ const ChangeCardDescriptionModal: React.FC<Props> = ({
           helperText={formik.touched.newDescription && formik.errors.newDescription}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Change
           </Button>
         </DialogActions>
