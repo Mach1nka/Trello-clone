@@ -10,7 +10,7 @@ const ColumnsContainer = styled.div`
   overflow-x: auto;
   width: 100%;
   height: 85vh;
-  margin: 3% 0;
+  margin: 2.3% 0;
   padding: 8px;
   box-sizing: border-box;
   background-color: rgba(241, 245, 237, 0.3);
