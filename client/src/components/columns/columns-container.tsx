@@ -9,7 +9,7 @@ import { getColumns, changeColumnPosition, Column as ColumnType } from '../../st
 import { changeCardStatus, Card as CardType } from '../../store/card/actions';
 import Column from './column';
 import CreateColumn from './create-column-button';
-import ModalsContainer from '../cards/modals-container';
+import ModalsContainer from '../cards/components/modals-container';
 
 interface ParamTypes {
   boardId: string;

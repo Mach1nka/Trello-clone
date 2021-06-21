@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { ModalForm as Form } from '../boards-page/sc';
-import { changeCardDescription } from '../../store/card/actions';
-import { useStyles } from '../boards-page/constants';
-import { descriptionTextValidation } from './utils';
+import { ModalForm as Form } from '../../boards-page/sc';
+import { changeCardDescription } from '../../../store/card/actions';
+import { useStyles } from '../../boards-page/constants';
+import { descriptionTextValidation } from '../utils';
 
 interface Props {
   isOpen: boolean;

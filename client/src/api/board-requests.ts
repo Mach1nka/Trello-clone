@@ -4,7 +4,7 @@ import {
   DataForCreatingBoard,
   DataForDeletingBoard
 } from '../store/board/actions';
-import { requestHeader, responseHandler } from './constants';
+import { requestHeader, responseHandler } from './utils';
 
 const getBoards = (): Promise<Response> =>
   fetch(`${serverURL}/boards`, {

@@ -8,7 +8,7 @@ import {
   changeCardPosition,
   Card as CardType
 } from '../../store/card/actions';
-import Card from './card';
+import Card from './components/card';
 
 interface Props {
   columnId: string;

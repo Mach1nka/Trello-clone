@@ -12,11 +12,11 @@ import {
   IconButton
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useAppSelector } from '../../store/hooks';
-import { changeCardDescription, renameCard, deleteCard } from '../../store/card/actions';
-import { setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
-import { useStyles } from './constants';
-import { configValidationSchema } from './utils';
+import { useAppSelector } from '../../../store/hooks';
+import { changeCardDescription, renameCard, deleteCard } from '../../../store/card/actions';
+import { setModalsStates, resetModalData } from '../../../store/modals/actions';
+import { useStyles } from '../constants';
+import { configValidationSchema } from '../utils';
 
 interface Props {
   name: string;

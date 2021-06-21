@@ -4,12 +4,12 @@ import EditIcon from '@material-ui/icons/Edit';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ShareIcon from '@material-ui/icons/Share';
 import { Fab, Backdrop, CircularProgress } from '@material-ui/core';
-import { useStyles } from './constants';
-import { useAppSelector } from '../../store/hooks';
-import { BoardOptions as Container } from './sc';
+import { useStyles } from '../constants';
+import { useAppSelector } from '../../../store/hooks';
+import { BoardOptions as Container } from '../sc';
 import RenameBoardModal from './rename-board';
-import { deleteBoard } from '../../store/board/actions';
-import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
+import { deleteBoard } from '../../../store/board/actions';
+import { setModalsStates, setModalData } from '../../../store/modals/actions';
 
 interface Props {
   boardId: string;

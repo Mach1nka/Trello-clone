@@ -1,7 +1,7 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { makeStyles } from '@material-ui/core';
-import SignUp from './sign-up';
-import LogIn from './log-in';
+import SignUp from './components/sign-up';
+import LogIn from './components/log-in';
 
 export interface Props {
   setBackdropView: Dispatch<SetStateAction<boolean>>;

@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { Container, Card, Typography } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
-import BoardItem from './board-item';
+import BoardItem from './components/board-item';
 import { useStyles } from './constants';
 import { getBoards } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
 import { deleteCardsData } from '../../store/card/actions';
-import { resetModalData } from '../../store/data-for-modals/actions';
+import { resetModalData } from '../../store/modals/actions';
 import { BoardsContainer } from './sc';
 
 const BoardsList: React.FC = () => {

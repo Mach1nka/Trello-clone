@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Paper, Container, Tab, Backdrop, CircularProgress } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { useAppSelector } from '../../store/hooks';
-import ErrorModal from './error-modal';
+import ErrorModal from './components/error-modal';
 import { authForms, useStyles } from './constants';
 
 const Authorization: React.FC = () => {

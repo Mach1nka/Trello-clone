@@ -5,7 +5,7 @@ import {
   DataForUpdatingColumnPos,
   DataForDeletingColumn
 } from '../store/column/actions';
-import { requestHeader, responseHandler } from './constants';
+import { requestHeader, responseHandler } from './utils';
 
 const getColumns = (boardId: string): Promise<Response> =>
   fetch(`${serverURL}/columns/${boardId}`, {

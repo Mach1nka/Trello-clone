@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
-import { ModalForm as Form } from '../boards-page/sc';
-import { changeCardStatus } from '../../store/card/actions';
-import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
-import { useStyles } from '../boards-page/constants';
+import { useAppSelector } from '../../../store/hooks';
+import { ModalForm as Form } from '../../boards-page/sc';
+import { changeCardStatus } from '../../../store/card/actions';
+import { setModalsStates, setModalData } from '../../../store/modals/actions';
+import { useStyles } from '../../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
