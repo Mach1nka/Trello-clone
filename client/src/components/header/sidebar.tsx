@@ -7,9 +7,15 @@ interface Props {
   boardName: string;
   handleBoardsButton: () => void;
   handleShareButton: () => void;
+  isOwnBoard: number;
 }
 
-const Sidebar: React.FC<Props> = ({ boardName, handleBoardsButton, handleShareButton }) => {
+const Sidebar: React.FC<Props> = ({
+  boardName,
+  handleBoardsButton,
+  handleShareButton,
+  isOwnBoard
+}) => {
   const classes = useStyles();
   const [isOpenSidebar, setSidebarState] = useState(false);
   return (
@@ -26,15 +32,17 @@ const Sidebar: React.FC<Props> = ({ boardName, handleBoardsButton, handleShareBu
           <ListItem divider>
             <ListItemText classes={{ primary: classes.listItemText }} primary={boardName} />
           </ListItem>
-          <ListItem
-            button
-            onClick={() => {
-              handleShareButton();
-              setSidebarState(false);
-            }}
-          >
-            <ListItemText primary="Share" />
-          </ListItem>
+          {isOwnBoard !== -1 && (
+            <ListItem
+              button
+              onClick={() => {
+                handleShareButton();
+                setSidebarState(false);
+              }}
+            >
+              <ListItemText primary="Share" />
+            </ListItem>
+          )}
           <ListItem
             button
             onClick={() => {

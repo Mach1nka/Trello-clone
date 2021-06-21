@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
+import { useAppSelector } from '../../store/hooks';
 import { useStyles } from './constants';
 import { signOutUser } from '../../store/auth/actions';
 import { setModalsStates, setModalData } from '../../store/modals/actions';
@@ -27,6 +28,9 @@ const Header: React.FC = () => {
   const pathLength = 14;
   const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardName : '';
   const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardId : '';
+  const isOwnBoard = useAppSelector((data) =>
+    data.userBoards.ownBoards.findIndex((el) => el.id === boardId)
+  );
   const isMainPage = pathname === '/boards';
 
   const handleShareButton = () => {
@@ -57,13 +61,15 @@ const Header: React.FC = () => {
             >
               Boards
             </Button>
-            <Button
-              onClick={handleShareButton}
-              variant="outlined"
-              classes={{ root: classes.navButton }}
-            >
-              Share
-            </Button>
+            {isOwnBoard !== -1 && (
+              <Button
+                onClick={handleShareButton}
+                variant="outlined"
+                classes={{ root: classes.navButton }}
+              >
+                Share
+              </Button>
+            )}
           </div>
           <Typography className={classes.boardName} variant="h6">
             {boardName}
@@ -74,6 +80,7 @@ const Header: React.FC = () => {
           handleBoardsButton={handleBoardsButton}
           handleShareButton={handleShareButton}
           boardName={boardName}
+          isOwnBoard={isOwnBoard}
         />
       )}
     </>
