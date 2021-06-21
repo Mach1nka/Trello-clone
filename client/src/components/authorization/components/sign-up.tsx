@@ -3,9 +3,9 @@ import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../store/auth/actions';
-import { SignUpForm as Form } from './sc';
-import { registrationFields, useStyles, Props } from './constants';
+import { registerUser } from '../../../store/auth/actions';
+import { SignUpForm as Form } from '../sc';
+import { registrationFields, useStyles, Props } from '../constants';
 
 type FormikProps = {
   [key: string]: string;

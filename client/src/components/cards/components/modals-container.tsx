@@ -1,5 +1,5 @@
 import React from 'react';
-import { useAppSelector } from '../../store/hooks';
+import { useAppSelector } from '../../../store/hooks';
 import RenameCardModal from './rename-card';
 import ChangeCardPosition from './change-card-position';
 import ChangeCardStatus from './change-card-status';

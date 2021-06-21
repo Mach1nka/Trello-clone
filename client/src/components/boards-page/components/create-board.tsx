@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, TextField, DialogActions, Button } from '@material-ui/core';
-import { ModalForm as Form } from './sc';
-import { useAppSelector } from '../../store/hooks';
-import { createBoard } from '../../store/board/actions';
-import { useStyles } from './constants';
-import { configValidationSchema } from './utils';
+import { ModalForm as Form } from '../sc';
+import { useAppSelector } from '../../../store/hooks';
+import { createBoard } from '../../../store/board/actions';
+import { useStyles } from '../constants';
+import { configValidationSchema } from '../utils';
 
 interface Props {
   isOpen: boolean;

@@ -5,8 +5,8 @@ import { useStyles } from './constants';
 
 interface Props {
   boardName: string;
-  handleBoardsButton: void;
-  handleShareButton: void;
+  handleBoardsButton: () => void;
+  handleShareButton: () => void;
 }
 
 const Sidebar: React.FC<Props> = ({ boardName, handleBoardsButton, handleShareButton }) => {
