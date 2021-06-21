@@ -13,6 +13,20 @@ const useStyles = makeStyles((theme) => ({
     '&:hover': {
       backgroundColor: 'rgba(252, 241, 194, 0.8)'
     }
+  },
+  burgerButton: {
+    color: 'rgba(252, 241, 194, 0.8)',
+    '&:hover': {
+      color: '#fcf1c2'
+    }
+  },
+  drawer: {
+    width: '165px',
+    backgroundColor: '#ebecf0'
+  },
+  listItemText: {
+    textOverflow: 'ellipsis',
+    overflow: 'hidden'
   }
 }));
 

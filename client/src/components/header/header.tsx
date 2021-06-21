@@ -6,7 +6,9 @@ import { useStyles } from './constants';
 import { signOutUser } from '../../store/auth/actions';
 import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
 import ShareBoardModal from '../boards-page/share-board';
+import Sidebar from './sidebar';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+import useWindowSize from '../../../utils/window-size-hook';
 
 interface Location {
   state: {
@@ -21,10 +23,16 @@ const Header: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const classes = useStyles();
+  const { width } = useWindowSize();
   const pathLength = 14;
   const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardName : '';
   const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardId : '';
   const isMainPage = pathname === '/boards';
+
+  const handleShareButton = () => {
+    dispatch(setModalData({ boardId }));
+    dispatch(setModalsStates({ isShareModalVisible: true }));
+  };
 
   const handleLogOut = () => {
     dispatch(signOutUser());
@@ -32,39 +40,51 @@ const Header: React.FC = () => {
     history.push('/auth');
   };
 
-  const handleButton = () => {
+  const handleBoardsButton = () => {
     history.push('/boards');
   };
+
+  const controls = !isMainPage ? (
+    <>
+      {width && width >= 768 ? (
+        <>
+          <div>
+            <Button
+              style={{ marginRight: '10px' }}
+              onClick={handleBoardsButton}
+              variant="outlined"
+              classes={{ root: classes.navButton }}
+            >
+              Boards
+            </Button>
+            <Button
+              onClick={handleShareButton}
+              variant="outlined"
+              classes={{ root: classes.navButton }}
+            >
+              Share
+            </Button>
+          </div>
+          <Typography className={classes.boardName} variant="h6">
+            {boardName}
+          </Typography>
+        </>
+      ) : (
+        <Sidebar
+          handleBoardsButton={handleBoardsButton}
+          handleShareButton={handleShareButton}
+          boardName={boardName}
+        />
+      )}
+    </>
+  ) : null;
 
   return (
     <>
       <AppBar position="static" className={classes.appBar}>
         <Toolbar className={classes.toolBar}>
-          {!isMainPage ? (
-            <div>
-              <Button
-                style={{ marginRight: '10px' }}
-                onClick={handleButton}
-                variant="outlined"
-                classes={{ root: classes.navButton }}
-              >
-                Boards
-              </Button>
-              <Button
-                onClick={() => {
-                  dispatch(setModalData({ boardId }));
-                  dispatch(setModalsStates({ isShareModalVisible: true }));
-                }}
-                variant="outlined"
-                classes={{ root: classes.navButton }}
-              >
-                Share
-              </Button>
-            </div>
-          ) : null}
-          <Typography className={classes.boardName} variant="h6">
-            {boardName}
-          </Typography>
+          {controls}
+          {!controls && <div />}
           <Button
             onClick={handleLogOut}
             variant="outlined"
