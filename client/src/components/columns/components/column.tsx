@@ -8,14 +8,14 @@ import {
   ColumnHeader,
   ColumnContent as Content,
   ColumnFooter
-} from './sc';
-import { useStyles } from './constants';
-import { deleteColumn } from '../../store/column/actions';
-import CardsContainer from '../cards/cards-container';
+} from '../sc';
+import { useStyles } from '../constants';
+import { deleteColumn } from '../../../store/column/actions';
+import CardsContainer from '../../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
-import CreateCardModal from '../cards/components/create-card-modal';
-import { Card as CardType } from '../../store/card/actions';
+import CreateCardModal from '../../cards/components/create-card-modal';
+import { Card as CardType } from '../../../store/card/actions';
 
 interface Props {
   columnName: string;
