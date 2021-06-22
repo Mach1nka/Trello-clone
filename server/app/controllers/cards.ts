@@ -166,7 +166,7 @@ const updateCardPosition = async (req: Request, res: Response): Promise<void> =>
 };
 
 const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, newColumnId, cardId, newPosition } = req.body;
+  const { columnId, newColumnId, cardId, newPosition = 0 } = req.body;
   try {
     if (typeof newPosition === 'number') {
       await Card.findByIdAndUpdate(cardId, { columnId: newColumnId, position: newPosition });
@@ -196,11 +196,21 @@ const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
         await Card.bulkWrite(bulkArr);
       }
     });
-
     await Card.find({ columnId: newColumnId }, async (_err, data) => {
       if (data) {
         const bulkArr: any[] = [];
         data.sort((a, b) => a.position - b.position);
+
+        const indexOldEl = data.findIndex((el) => el._id.toString() === cardId) as number;
+        const editableEl = data.find((el) => el._id.toString() === cardId) as CardsInDB;
+
+        if (editableEl.position < newPosition) {
+          data.splice(+newPosition + 1, 0, editableEl);
+          data.splice(indexOldEl, 1);
+        } else {
+          data.splice(+newPosition, 0, editableEl);
+          data.splice(indexOldEl + 1, 1);
+        }
         const elementsWithUpdatedPos = data.map((el, idx) => ({
           _id: el._id,
           columnId: el.columnId,

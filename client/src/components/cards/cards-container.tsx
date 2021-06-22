@@ -58,6 +58,7 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
           newPosition: card.position
         })
       );
+      return;
     }
     if (draggableCard && draggableCard.position !== card.position) {
       dispatch(
