@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { CardContainer as Container } from './sc';
-import { deleteCard } from '../../store/card/actions';
-import { setModalData, setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
+import { CardContainer as Container } from '../sc';
+import { deleteCard } from '../../../store/card/actions';
+import { setModalData, setModalsStates, resetModalData } from '../../../store/modals/actions';
 
 interface Props {
   cardId: string;
@@ -29,16 +29,19 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   };
 
   const handleChangeName = () => {
+    dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isRenameModalVisible: true }));
     setAnchorEl(null);
   };
 
   const handleChangePosition = () => {
+    dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isPositionModalVisible: true }));
     setAnchorEl(null);
   };
 
   const handleChangeStatus = () => {
+    dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isStatusModalVisible: true }));
     setAnchorEl(null);
   };

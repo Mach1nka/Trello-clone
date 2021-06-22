@@ -1,17 +1,17 @@
 import React from 'react';
-import { TextField, Button, Backdrop, CircularProgress } from '@material-ui/core';
+import { TextField, Button } from '@material-ui/core';
 import * as yup from 'yup';
 import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
-import { registerUser } from '../../store/auth/actions';
-import { SignUpForm as Form } from './sc';
-import { registrationFields, useStyles, Props } from './constants';
+import { registerUser } from '../../../store/auth/actions';
+import { SignUpForm as Form } from '../sc';
+import { registrationFields, useStyles, Props } from '../constants';
 
 type FormikProps = {
   [key: string]: string;
 };
 
-const SignUp: React.FC<Props> = ({ isOpenBackdrop, setBackdropView }) => {
+const SignUp: React.FC<Props> = ({ setBackdropView }) => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const validationSchema = yup.object({
@@ -48,35 +48,36 @@ const SignUp: React.FC<Props> = ({ isOpenBackdrop, setBackdropView }) => {
     }
   });
   return (
-    <>
-      <Form onSubmit={formik.handleSubmit} autoComplete="off">
-        <div>
-          {registrationFields.map((el) => (
-            <TextField
-              key={el.id}
-              size="medium"
-              margin="normal"
-              variant="outlined"
-              fullWidth
-              id={el.id}
-              name={el.id}
-              label={el.label}
-              type={el.type}
-              autoFocus={el.autoFocus}
-              onChange={formik.handleChange}
-              error={formik.touched[el.id] && !!formik.errors[el.id]}
-              helperText={formik.touched[el.id] && formik.errors[el.id]}
-            />
-          ))}
-        </div>
-        <Button size="large" type="submit" fullWidth color="secondary" variant="contained">
-          submit
-        </Button>
-      </Form>
-      <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
+    <Form onSubmit={formik.handleSubmit} autoComplete="off">
+      <div>
+        {registrationFields.map((el) => (
+          <TextField
+            key={el.id}
+            size="medium"
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            id={el.id}
+            name={el.id}
+            label={el.label}
+            type={el.type}
+            autoFocus={el.autoFocus}
+            onChange={formik.handleChange}
+            error={formik.touched[el.id] && !!formik.errors[el.id]}
+            helperText={formik.touched[el.id] && formik.errors[el.id]}
+          />
+        ))}
+      </div>
+      <Button
+        size="large"
+        type="submit"
+        fullWidth
+        classes={{ root: classes.submitButton }}
+        variant="contained"
+      >
+        submit
+      </Button>
+    </Form>
   );
 };
 

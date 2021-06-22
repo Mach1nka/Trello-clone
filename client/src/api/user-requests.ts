@@ -1,5 +1,5 @@
 import { serverURL } from './api-data';
-import { requestHeader, responseHandler } from './constants';
+import { requestHeader, responseHandler } from './utils';
 
 export interface User {
   id: string;

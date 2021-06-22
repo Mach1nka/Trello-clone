@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { useAppSelector } from '../../store/hooks';
-import useFetchUsers from '../../../utils/fetch-user-hook';
-import { shareBoard } from '../../store/board/actions';
-import { setModalsStates, setModalData } from '../../store/data-for-modals/actions';
-import { ShareModalForm as Form } from './sc';
-import { useStyles } from './constants';
+import { useAppSelector } from '../../../store/hooks';
+import useFetchUsers from '../../../../utils/fetch-user-hook';
+import { shareBoard } from '../../../store/board/actions';
+import { setModalsStates, setModalData } from '../../../store/modals/actions';
+import { ShareModalForm as Form } from '../sc';
+import { useStyles } from '../constants';
 
 const ShareBoardModal: React.FC = () => {
   const dispatch = useDispatch();
@@ -56,7 +56,7 @@ const ShareBoardModal: React.FC = () => {
               )}
             />
             <DialogActions>
-              <Button type="submit" color="secondary" variant="contained">
+              <Button classes={{ root: classes.submitButton }} type="submit" variant="contained">
                 Share
               </Button>
             </DialogActions>

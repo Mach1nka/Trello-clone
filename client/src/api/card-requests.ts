@@ -7,7 +7,7 @@ import {
   DataForUpdatingCardStatus,
   DataForDeletingCard
 } from '../store/card/actions';
-import { requestHeader, responseHandler } from './constants';
+import { requestHeader, responseHandler } from './utils';
 
 const getCards = (columnId: string): Promise<Response> =>
   fetch(`${serverURL}/cards/${columnId}`, {

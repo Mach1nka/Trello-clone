@@ -12,11 +12,11 @@ import {
   IconButton
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { useAppSelector } from '../../store/hooks';
-import { changeCardDescription, renameCard, deleteCard } from '../../store/card/actions';
-import { setModalsStates, resetModalData } from '../../store/data-for-modals/actions';
-import { useStyles } from './constants';
-import { configValidationSchema } from './utils';
+import { useAppSelector } from '../../../store/hooks';
+import { changeCardDescription, renameCard, deleteCard } from '../../../store/card/actions';
+import { setModalsStates, resetModalData } from '../../../store/modals/actions';
+import { useStyles } from '../constants';
+import { configValidationSchema } from '../utils';
 
 interface Props {
   name: string;
@@ -44,7 +44,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
         dispatch(renameCard({ cardId, newName: values.name }));
       }
       if (values.description !== formik.initialValues.description) {
-        dispatch(changeCardDescription({ cardId, newDescription: values.description }));
+        dispatch(changeCardDescription({ cardId, newDescription: values.description.trim() }));
       }
     }
   });
@@ -55,7 +55,6 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
       maxWidth="sm"
       open={isOpen}
       onClose={() => {
-        dispatch(resetModalData());
         dispatch(setModalsStates({ isDetailsModalVisible: false }));
       }}
     >
@@ -134,7 +133,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
             dispatch(resetModalData());
           }}
         >
-          <DeleteIcon color="secondary" />
+          <DeleteIcon color="error" />
         </IconButton>
         <Button
           onClick={() => {

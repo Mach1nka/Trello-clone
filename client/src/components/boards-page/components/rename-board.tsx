@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
-import { ModalForm as Form } from './sc';
-import { renameBoard } from '../../store/board/actions';
-import { useStyles } from './constants';
-import { configValidationSchema } from './utils';
+import { useAppSelector } from '../../../store/hooks';
+import { ModalForm as Form } from '../sc';
+import { renameBoard } from '../../../store/board/actions';
+import { useStyles } from '../constants';
+import { configValidationSchema } from '../utils';
 
 interface Props {
   isOpen: boolean;
@@ -32,7 +32,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameBoard({ newName: values.newName, boardId, userId }));
+      dispatch(renameBoard({ newName: values.newName.trim(), boardId, userId }));
       setModalView(false);
     }
   });
@@ -61,7 +61,12 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            classes={{ root: classes.submitButton }}
+            size="small"
+            type="submit"
+            variant="contained"
+          >
             Save
           </Button>
         </DialogActions>

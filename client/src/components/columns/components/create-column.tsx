@@ -2,10 +2,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { ModalForm as Form } from '../boards-page/sc';
-import { createColumn } from '../../store/column/actions';
-import { configValidationSchema } from '../boards-page/utils';
-import { useStyles } from '../boards-page/constants';
+import { ModalForm as Form } from '../../boards-page/sc';
+import { createColumn } from '../../../store/column/actions';
+import { configValidationSchema } from '../../boards-page/utils';
+import { useStyles } from '../../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
@@ -24,7 +24,7 @@ const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, new
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(createColumn({ name: values.name, boardId, position: newPosition }));
+      dispatch(createColumn({ name: values.name.trim(), boardId, position: newPosition }));
       setModalView(false);
     }
   });
@@ -45,7 +45,12 @@ const CreateColumnModal: React.FC<Props> = ({ isOpen, setModalView, boardId, new
           helperText={formik.touched.name && formik.errors.name}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

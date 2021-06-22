@@ -22,7 +22,7 @@ const Board = styled.div<Props>`
   margin-bottom: 12px;
   width: 200px;
   height: 100px;
-  background-color: ${(props) => (!props.isDefaultCard ? '#0079bf' : '#f1f5ed')};
+  background-color: ${(props) => (!props.isDefaultCard ? '#0b3c48' : '#f1f5ed')};
   border-radius: 5px;
   padding: 8px;
   box-sizing: border-box;

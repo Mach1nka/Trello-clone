@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
-import { CreateColumnContainer as Container } from './sc';
+import { CreateColumnContainer as Container } from '../sc';
 import CreateColumnModal from './create-column';
 
 interface Props {

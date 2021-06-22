@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, TextField, DialogActions, Button } from '@material-ui/core';
-import { ModalForm as Form } from './sc';
-import { useAppSelector } from '../../store/hooks';
-import { createBoard } from '../../store/board/actions';
-import { useStyles } from './constants';
-import { configValidationSchema } from './utils';
+import { ModalForm as Form } from '../sc';
+import { useAppSelector } from '../../../store/hooks';
+import { createBoard } from '../../../store/board/actions';
+import { useStyles } from '../constants';
+import { configValidationSchema } from '../utils';
 
 interface Props {
   isOpen: boolean;
@@ -27,7 +27,7 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(createBoard({ name: values.boardName, userId: id }));
+      dispatch(createBoard({ name: values.boardName.trim(), userId: id }));
       setModalView(false);
     }
   });
@@ -49,7 +49,12 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
           helperText={formik.touched.boardName && formik.errors.boardName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            classes={{ root: classes.submitButton }}
+            size="small"
+            type="submit"
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

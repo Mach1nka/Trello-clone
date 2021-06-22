@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
+import { Backdrop, CircularProgress } from '@material-ui/core';
 import { ColumnsContainer as Container, DragWrapper } from './sc';
+import { useStyles } from '../boards-page/constants';
 import { useAppSelector } from '../../store/hooks';
 import { getColumns, changeColumnPosition, Column as ColumnType } from '../../store/column/actions';
 import { changeCardStatus, Card as CardType } from '../../store/card/actions';
-import Column from './column';
-import CreateColumn from './create-column-button';
-import ModalsContainer from '../cards/modals-container';
+import Column from './components/column';
+import CreateColumn from './components/create-column-button';
+import ModalsContainer from '../cards/components/modals-container';
 
 interface ParamTypes {
   boardId: string;
@@ -15,12 +17,13 @@ interface ParamTypes {
 
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const classes = useStyles();
   const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(null);
   const [isPointColumns, setPointColumns] = useState(false);
+  const [backdropState, setBackdropState] = useState(true);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
-  const columnCount = useAppSelector((state) => Object.keys(state.cardsData).length);
   const columnToDnD = useAppSelector((state) => state.cardsData);
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
@@ -86,6 +89,10 @@ const ColumnsContainer: React.FC = () => {
 
   useEffect(() => {
     dispatch(getColumns(boardId));
+    const timer = setTimeout(() => {
+      setBackdropState(false);
+    }, 800);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
@@ -115,7 +122,10 @@ const ColumnsContainer: React.FC = () => {
         ))}
         <CreateColumn boardId={boardId} newPosition={columns.length} />
       </Container>
-      {columnCount ? <ModalsContainer /> : null}
+      {columns.length ? <ModalsContainer /> : null}
+      <Backdrop className={classes.backdrop} open={columns.length ? false : backdropState}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 };

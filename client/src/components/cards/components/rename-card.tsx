@@ -2,11 +2,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { ModalForm as Form } from '../boards-page/sc';
-import { renameCard } from '../../store/card/actions';
-import { setModalsStates } from '../../store/data-for-modals/actions';
-import { configValidationSchema } from '../boards-page/utils';
-import { useStyles } from '../boards-page/constants';
+import { ModalForm as Form } from '../../boards-page/sc';
+import { renameCard } from '../../../store/card/actions';
+import { setModalsStates } from '../../../store/modals/actions';
+import { configValidationSchema } from '../../boards-page/utils';
+import { useStyles } from '../../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
@@ -24,7 +24,7 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      dispatch(renameCard({ newName: values.newName, cardId }));
+      dispatch(renameCard({ newName: values.newName.trim(), cardId }));
       dispatch(setModalsStates({ isRenameModalVisible: false }));
     }
   });
@@ -51,7 +51,12 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Rename
           </Button>
         </DialogActions>

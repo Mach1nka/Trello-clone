@@ -10,7 +10,6 @@ const configValidationSchema = (fieldName: string): SchemaOf<Validation> =>
     [fieldName]: yup
       .string()
       .strict()
-      .trim('New name cannot include leading and trailing spaces')
       .min(2, 'New name must be more than 2 symbols')
       .max(30, 'Max length is 30 symbols')
       .required('New name is required')

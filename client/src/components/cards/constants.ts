@@ -32,6 +32,12 @@ const useStyles = makeStyles((theme) => ({
       color: theme.palette.primary.main,
       textDecoration: 'underline',
       backgroundColor: 'unset'
+    },
+    submitButton: {
+      backgroundColor: 'rgba(240, 125, 57, 0.85)',
+      '&:hover': {
+        backgroundColor: theme.palette.warning.main
+      }
     }
   }
 }));

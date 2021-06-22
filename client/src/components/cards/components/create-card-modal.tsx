@@ -2,11 +2,11 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
-import { ModalForm as Form } from './sc';
-import { createCard } from '../../store/card/actions';
-import { configValidationSchema } from './utils';
-import { useStyles } from '../boards-page/constants';
+import { useAppSelector } from '../../../store/hooks';
+import { ModalForm as Form } from '../sc';
+import { createCard } from '../../../store/card/actions';
+import { configValidationSchema } from '../utils';
+import { useStyles } from '../../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
@@ -29,9 +29,9 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
     onSubmit: (values) => {
       dispatch(
         createCard({
-          name: values.name,
+          name: values.name.trim(),
           columnId,
-          description: values.description,
+          description: values.description.trim(),
           position: positionOfNewCard
         })
       );
@@ -68,7 +68,12 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
           helperText={formik.touched.description && formik.errors.description}
         />
         <DialogActions style={{ padding: '10px 0' }}>
-          <Button size="small" type="submit" color="secondary" variant="contained">
+          <Button
+            size="small"
+            type="submit"
+            classes={{ root: classes.submitButton }}
+            variant="contained"
+          >
             Create
           </Button>
         </DialogActions>

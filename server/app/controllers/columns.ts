@@ -15,7 +15,7 @@ const getColumns = async (req: Request, res: Response): Promise<void> => {
       }));
       res.status(200).json(preparedArr);
     } else {
-      res.status(404).json({ message: 'columns have not been found' });
+      res.status(200).json([]);
     }
   } catch (error) {
     console.log(error);

@@ -8,7 +8,7 @@ import {
   changeCardPosition,
   Card as CardType
 } from '../../store/card/actions';
-import Card from './card';
+import Card from './components/card';
 
 interface Props {
   columnId: string;
@@ -58,6 +58,7 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
           newPosition: card.position
         })
       );
+      return;
     }
     if (draggableCard && draggableCard.position !== card.position) {
       dispatch(

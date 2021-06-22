@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { Typography } from '@material-ui/core';
-import { Board } from './sc';
-import { useStyles } from './constants';
-import { deleteColumnsData } from '../../store/column/actions';
+import { Board } from '../sc';
+import { useStyles } from '../constants';
+import { deleteColumnsData } from '../../../store/column/actions';
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
 
