@@ -1,8 +1,10 @@
+import 'express-async-errors';
 import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 import bodyParser from 'body-parser';
+
 import passportMiddleware from './middleware/passport';
 import KEYS from '../config/keys';
 import errorMiddleware from './middleware/errorHandler';

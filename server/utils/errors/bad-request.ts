@@ -4,7 +4,7 @@ class BadRequest {
   statusCode: number;
 
   errors: {
-    message?: string;
+    msg?: string;
     param?: string;
     location?: string;
   };

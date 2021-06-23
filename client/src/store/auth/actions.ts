@@ -4,11 +4,24 @@ const LOGIN_USER = 'LOGIN_USER';
 const PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR';
 const USER_LOGGED_OUT = 'USER_LOGGED_OUT';
 
-export interface AccountData {
+export interface SuccessResponse {
   login: string;
   token: string;
   id: string;
+}
+
+export interface ErrorResponse {
   message: string;
+  statusCode: string;
+}
+
+export interface AccountDataInStore extends SuccessResponse {
+  message: string;
+}
+
+export interface ServerResponse {
+  data: SuccessResponse;
+  statusCode: number;
 }
 
 export interface UserData {
@@ -26,7 +39,7 @@ const putErrorMessage = (message: string): { type: string; payload: string } => 
   payload: message
 });
 
-const putAuthData = (userData: AccountData): { type: string; payload: AccountData } => ({
+const putAuthData = (userData: SuccessResponse): { type: string; payload: SuccessResponse } => ({
   type: PUT_USER_DATA,
   payload: userData
 });

@@ -1,6 +1,6 @@
 import mongoose, { Schema } from 'mongoose';
 
-interface UserInDB extends mongoose.Document {
+export interface UserInDB extends mongoose.Document {
   login: string;
   password: string;
 }

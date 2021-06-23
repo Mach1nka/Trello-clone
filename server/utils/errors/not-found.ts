@@ -1,6 +1,6 @@
-import { Error } from '../../types/errors';
+import { CommonError } from '../../types/errors';
 
-class NotFound extends Error {
+class NotFound extends CommonError {
   constructor(message = 'Not Found', statusCode = 404) {
     super(message, statusCode);
   }
