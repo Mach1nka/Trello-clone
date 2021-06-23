@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getUsers, User } from '../src/api/user-requests';
+import { getUsers, User, UsersResponse } from '../src/api/user-requests';
 
 const useFetchUsers = (userName: string): User[] => {
   const [data, setData] = useState<User[]>([]);
@@ -7,9 +7,9 @@ const useFetchUsers = (userName: string): User[] => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const usersArr: User[] = await getUsers(userName);
-        if (usersArr) {
-          setData(usersArr);
+        const res: UsersResponse = await getUsers(userName);
+        if (res.statusCode === 200) {
+          setData(res.data);
         }
       } catch (e) {
         console.error(e);

@@ -6,7 +6,12 @@ export interface User {
   login: string;
 }
 
-const getUsers = (searchValue = ''): Promise<User[]> =>
+export interface UsersResponse {
+  statusCode: number;
+  data: User[];
+}
+
+const getUsers = (searchValue = ''): Promise<UsersResponse> =>
   fetch(`${serverURL}/users/${searchValue}`, {
     method: 'GET',
     headers: requestHeader()

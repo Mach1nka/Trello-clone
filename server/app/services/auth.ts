@@ -9,7 +9,7 @@ interface AuthData {
   password: string;
 }
 
-async function authLogin(reqBody: AuthData): Promise<UserInDB> {
+async function loginService(reqBody: AuthData): Promise<UserInDB> {
   const { login, password } = reqBody;
   const user = await User.findOne({ login });
 
@@ -26,7 +26,7 @@ async function authLogin(reqBody: AuthData): Promise<UserInDB> {
   return user;
 }
 
-async function authRegister(reqBody: AuthData): Promise<UserInDB> {
+async function registerService(reqBody: AuthData): Promise<UserInDB> {
   const { login, password } = reqBody;
   const candidate = await User.findOne({ login });
 
@@ -45,4 +45,4 @@ async function authRegister(reqBody: AuthData): Promise<UserInDB> {
   return createdUser;
 }
 
-export { authLogin, authRegister };
+export { loginService, registerService };
