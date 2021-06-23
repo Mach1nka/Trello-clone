@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import User from '../models/user';
-import { PassportUser } from '../types/types';
+import { PassportUser } from '../../types/types';
 
 const getUsers = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;

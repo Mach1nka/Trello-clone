@@ -38,6 +38,7 @@ const ColumnsContainer: React.FC = () => {
         })
       );
       setDraggableCard(null);
+      e.currentTarget.firstChild.style.background = 'none';
       return;
     }
     if (draggableColumn && column.position !== draggableColumn.position) {

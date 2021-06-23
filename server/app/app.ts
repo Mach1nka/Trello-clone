@@ -5,6 +5,7 @@ import passport from 'passport';
 import bodyParser from 'body-parser';
 import passportMiddleware from './middleware/passport';
 import KEYS from '../config/keys';
+import errorMiddleware from './middleware/errorHandler';
 import { router as authRoutes } from './routes/auth';
 import { router as boardsRoutes } from './routes/boards';
 import { router as columnsRoutes } from './routes/columns';
@@ -37,10 +38,13 @@ passportMiddleware();
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
 app.use('/api', authRoutes);
 app.use('/api', boardsRoutes);
 app.use('/api', columnsRoutes);
 app.use('/api', cardsRoutes);
 app.use('/api', usersRoutes);
+
+app.use(errorMiddleware);
 
 export default app;

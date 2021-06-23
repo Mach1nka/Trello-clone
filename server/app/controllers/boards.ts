@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Board, { BoardsInDB } from '../models/board';
 import Column from '../models/column';
-import { PassportUser } from '../types/types';
+import { PassportUser } from '../../types/types';
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
   const { _id } = req.user as PassportUser;
