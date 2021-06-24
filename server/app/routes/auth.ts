@@ -6,7 +6,7 @@ import { logIn, register } from '../controllers/auth';
 const router = express.Router();
 
 router.post(
-  '/auth/login',
+  '/login',
   [
     check('login', 'Please include a valid email').exists(),
     check('password', 'Password is required').exists()
@@ -14,6 +14,6 @@ router.post(
   logIn
 );
 
-router.post('/auth/sign-up', register);
+router.post('/sign-up', register); // вынести общу часть
 
 export { router };

@@ -1,5 +1,7 @@
 import express from 'express';
 import passport from 'passport';
+import { check } from 'express-validator';
+
 import {
   getAllBoards,
   createNewBoard,
@@ -11,9 +13,46 @@ import {
 const router = express.Router();
 
 router.get('/boards', passport.authenticate('jwt', { session: false }), getAllBoards);
-router.post('/board', passport.authenticate('jwt', { session: false }), createNewBoard);
-router.patch('/board/rename', passport.authenticate('jwt', { session: false }), updateBoardName);
-router.patch('/board/share', passport.authenticate('jwt', { session: false }), shareBoard);
-router.delete('/board', passport.authenticate('jwt', { session: false }), deleteBoard);
+
+router.post(
+  '/board',
+  [
+    check('userId', 'User Id is required').exists(),
+    check('name', 'Name is required').exists(),
+    passport.authenticate('jwt', { session: false })
+  ],
+  createNewBoard
+);
+
+router.patch(
+  '/board/rename',
+  [
+    check('boardId', 'Board Id is required').exists(),
+    check('newName', 'New name is required').exists(),
+    check('userId', 'User Id is required').exists(),
+    passport.authenticate('jwt', { session: false })
+  ],
+  updateBoardName
+);
+
+router.patch(
+  '/board/share',
+  [
+    check('boardId', 'Board Id is required').exists(),
+    check('userId', 'User Id is required').exists(),
+    passport.authenticate('jwt', { session: false })
+  ],
+  shareBoard
+);
+
+router.delete(
+  '/board',
+  [
+    check('boardId', 'Board Id is required').exists(),
+    check('userId', 'User Id is required').exists(),
+    passport.authenticate('jwt', { session: false })
+  ],
+  deleteBoard
+);
 
 export { router };

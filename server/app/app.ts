@@ -41,7 +41,7 @@ passportMiddleware();
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/api', authRoutes);
+app.use('/api/auth', authRoutes);
 app.use('/api', boardsRoutes);
 app.use('/api', columnsRoutes);
 app.use('/api', cardsRoutes);
