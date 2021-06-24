@@ -7,9 +7,9 @@ import BadRequest from '../../utils/errors/bad-request';
 import {
   getBoardsService,
   createBoardService,
-  updateBoardNameService,
+  updateNameService,
   shareBoardService,
-  deleteBoardService
+  deleteService
 } from '../services/boards';
 import { PassportUser } from '../../types/types';
 
@@ -41,7 +41,7 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest(errors.array());
   }
 
-  const { id, name } = await updateBoardNameService(req.body);
+  const { id, name } = await updateNameService(req.body);
 
   res.json(new BadRequest({ id, name }));
 };
@@ -65,7 +65,7 @@ const deleteBoard = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest(errors.array());
   }
 
-  await deleteBoardService(req.body);
+  await deleteService(req.body);
   res.status(204).json(new BaseResponse({}, 204));
 };
 

@@ -65,7 +65,7 @@ const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardsInD
   return createdBoard;
 };
 
-const updateBoardNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInDB> => {
+const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInDB> => {
   const { boardId, userId, newName } = reqBody;
   const board = await Board.findById(boardId);
 
@@ -93,7 +93,7 @@ const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void
   const sharedBoard = await Board.findById(boardId);
 
   if (!sharedBoard) {
-    throw new BadRequest();
+    throw new NotFound();
   }
 
   const arrayOfAccessUsers = sharedBoard.accessUsers;
@@ -111,7 +111,7 @@ const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void
   await Board.findByIdAndUpdate(boardId, { accessUsers: [...arrayOfAccessUsers, userId] });
 };
 
-const deleteBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
+const deleteService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
   const { boardId, userId } = reqBody;
   const board = await Board.findById(boardId);
 
@@ -133,7 +133,7 @@ const deleteBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<voi
 export {
   getBoardsService,
   createBoardService,
-  updateBoardNameService,
+  updateNameService,
   shareBoardService,
-  deleteBoardService
+  deleteService
 };
