@@ -1,4 +1,4 @@
-import User from '../models/user';
+import User, { UserInDB } from '../models/user';
 
 interface SearchUser {
   id: string;
@@ -7,12 +7,14 @@ interface SearchUser {
 
 async function getUsersService(searchValue: string, userId: string): Promise<SearchUser[]> {
   const regex = new RegExp(searchValue);
-  const allUsers = await User.find({ login: { $regex: regex, $options: 'i' } });
+  const allUsers: UserInDB[] = await User.find({ login: { $regex: regex, $options: 'i' } });
 
-  const filteredUsers = allUsers.filter((el) => el._id.toString() !== userId.toString());
+  const filteredUsers: UserInDB[] = allUsers.filter(
+    (el) => el._id.toString() !== userId.toString()
+  );
 
-  const preparedData = filteredUsers.map((el) => ({
-    id: el._id,
+  const preparedData: SearchUser[] = filteredUsers.map((el) => ({
+    id: String(el._id),
     login: el.login
   }));
 

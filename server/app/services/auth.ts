@@ -11,7 +11,7 @@ interface AuthData {
 
 async function loginService(reqBody: AuthData): Promise<UserInDB> {
   const { login, password } = reqBody;
-  const user = await User.findOne({ login });
+  const user: UserInDB | null = await User.findOne({ login });
 
   if (!user) {
     throw new InvalidCredentials();
@@ -28,7 +28,7 @@ async function loginService(reqBody: AuthData): Promise<UserInDB> {
 
 async function registerService(reqBody: AuthData): Promise<UserInDB> {
   const { login, password } = reqBody;
-  const candidate = await User.findOne({ login });
+  const candidate: UserInDB | null = await User.findOne({ login });
 
   if (candidate) {
     throw new AlreadyExists();

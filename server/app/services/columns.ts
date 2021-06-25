@@ -1,4 +1,4 @@
-import Column from '../models/column';
+import Column, { ColumnsInDB } from '../models/column';
 import Card from '../models/card';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
@@ -37,17 +37,14 @@ interface BodyForDeleteColumn {
 const getColumnsService = async (boardId: string): Promise<FilteredColumn[]> => {
   const columnsArr = await Column.find({ boardId });
 
-  if (columnsArr.length) {
-    const preparedArr: FilteredColumn[] = columnsArr.map((el) => ({
-      id: String(el._id),
-      name: el.name,
-      position: el.position,
-      boardId: el.boardId
-    }));
+  const preparedArr: FilteredColumn[] = columnsArr.map((el) => ({
+    id: String(el._id),
+    name: el.name,
+    position: el.position,
+    boardId: el.boardId
+  }));
 
-    return preparedArr;
-  }
-  return [];
+  return preparedArr;
 };
 
 const createColumnService = async (reqBody: BodyForCreatColumn): Promise<FilteredColumn> => {
@@ -98,7 +95,11 @@ const createColumnService = async (reqBody: BodyForCreatColumn): Promise<Filtere
 
 const updateNameService = async (reqBody: BodyForRenameColumn): Promise<FilteredColumn> => {
   const { columnId, newName } = reqBody;
-  const renamedColumn = await Column.findByIdAndUpdate(columnId, { name: newName }, { new: true });
+  const renamedColumn: ColumnsInDB | null = await Column.findByIdAndUpdate(
+    columnId,
+    { name: newName },
+    { new: true }
+  );
 
   if (!renamedColumn) {
     throw new BadRequest();
@@ -130,9 +131,14 @@ const updatePositionService = async (
     throw new BadRequest();
   }
 
-  const updatedArr = insertColumnToArr(columnsArr, editableEl, newPosition, indexOldEl);
+  const updatedArr: ColumnsInDB[] = insertColumnToArr(
+    columnsArr,
+    editableEl,
+    newPosition,
+    indexOldEl
+  );
 
-  const elementsWithUpdatedPos = updatedArr.map((el, idx) => ({
+  const elementsWithUpdatedPos: FilteredColumn[] = updatedArr.map((el, idx) => ({
     id: el._id,
     boardId: el.boardId,
     name: el.name,
@@ -159,9 +165,9 @@ const deleteService = async (reqBody: BodyForDeleteColumn): Promise<void> => {
   await Column.findByIdAndDelete(columnId);
   await Card.deleteMany({ columnId });
 
-  const columns = await Column.find({ boardId });
-  const elementsWithUpdatedPos = columns.map((el, idx) => ({
-    _id: el._id,
+  const columns: ColumnsInDB[] = await Column.find({ boardId });
+  const elementsWithUpdatedPos: FilteredColumn[] = columns.map((el, idx) => ({
+    id: el._id,
     boardId: el.boardId,
     name: el.name,
     position: idx
@@ -170,7 +176,7 @@ const deleteService = async (reqBody: BodyForDeleteColumn): Promise<void> => {
   elementsWithUpdatedPos.forEach((el) => {
     bulkArr.push({
       updateOne: {
-        filter: { _id: el._id },
+        filter: { _id: el.id },
         update: { position: el.position }
       }
     });

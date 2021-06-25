@@ -67,7 +67,7 @@ const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardsInD
 
 const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInDB> => {
   const { boardId, userId, newName } = reqBody;
-  const board = await Board.findById(boardId);
+  const board: BoardsInDB | null = await Board.findById(boardId);
 
   if (!board) {
     throw new NotFound();
@@ -79,7 +79,11 @@ const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInD
     throw new BadRequest();
   }
 
-  const updatedBoard = await Board.findByIdAndUpdate(boardId, { name: newName }, { new: true });
+  const updatedBoard: BoardsInDB | null = await Board.findByIdAndUpdate(
+    boardId,
+    { name: newName },
+    { new: true }
+  );
 
   if (!updatedBoard) {
     throw new BadRequest();
@@ -90,7 +94,7 @@ const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInD
 
 const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
   const { boardId, userId } = reqBody;
-  const sharedBoard = await Board.findById(boardId);
+  const sharedBoard: BoardsInDB | null = await Board.findById(boardId);
 
   if (!sharedBoard) {
     throw new NotFound();
@@ -113,7 +117,7 @@ const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void
 
 const deleteService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
   const { boardId, userId } = reqBody;
-  const board = await Board.findById(boardId);
+  const board: BoardsInDB | null = await Board.findById(boardId);
 
   if (!board) {
     throw new NotFound();
