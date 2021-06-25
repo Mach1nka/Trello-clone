@@ -1,272 +1,94 @@
 import { Request, Response } from 'express';
-import Card, { CardsInDB } from '../models/card';
+import { validationResult } from 'express-validator';
+
+import BaseResponse from '../../utils/base-response';
+import BadRequest from '../../utils/errors/bad-request';
+import {
+  getCardsService,
+  createCardService,
+  updateNameService,
+  updateDescriptionService,
+  updatePositionService,
+  deleteService
+} from '../services/cards';
 
 const getCards = async (req: Request, res: Response): Promise<void> => {
-  const { columnId } = req.params;
-  try {
-    const cardsArr = await Card.find({ columnId });
-    if (cardsArr.length) {
-      cardsArr.sort((a, b) => a.position - b.position);
-      const preparedArr = cardsArr.map((el) => ({
-        id: el._id,
-        name: el.name,
-        description: el.description,
-        position: el.position,
-        columnId: el.columnId
-      }));
-      res.status(200).json({ columnId, cards: preparedArr });
-    } else {
-      res.status(200).json({ columnId, cards: [] });
-    }
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  const { columnId } = req.params;
+
+  const cards = await getCardsService(columnId);
+  res.json(new BaseResponse(cards));
 };
 
 const createNewCard = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, description, position, name } = req.body;
-  const newCard = new Card({
-    columnId,
-    name,
-    description,
-    position: Number(position)
-  });
-  try {
-    await newCard.save();
-    const cardsData = await Card.find({ columnId });
-    if (cardsData.length) {
-      const bulkArr: any[] = [];
-      cardsData.sort((a, b) => a.position - b.position);
-      const elementsWithUpdatedPos = cardsData.map((el, idx) => ({
-        _id: el._id,
-        name: el.name,
-        description: el.description,
-        position: idx,
-        columnId: el.columnId
-      }));
-      elementsWithUpdatedPos.forEach((el) => {
-        bulkArr.push({
-          updateOne: {
-            filter: { _id: el._id },
-            update: { position: el.position }
-          }
-        });
-      });
-      await Card.bulkWrite(bulkArr);
-    }
-    const createdCard = (await Card.findById(newCard._id)) as CardsInDB;
-    res.status(201).json({
-      id: createdCard._id,
-      columnId: createdCard.columnId,
-      name: createdCard.name,
-      description: createdCard.description,
-      position: createdCard.position
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  const createdCard = await createCardService(req.body);
+  res.status(201).json(new BaseResponse(createdCard, 201));
 };
 
 const updateCardName = async (req: Request, res: Response): Promise<void> => {
-  const { cardId, newName } = req.body;
-  try {
-    await Card.findByIdAndUpdate(cardId, { name: newName }, { new: true }, (_err, data) => {
-      if (!data) {
-        res.status(404).json({ message: 'the card has not been found' });
-      } else {
-        res.status(200).json({
-          id: data._id,
-          columnId: data.columnId,
-          name: data.name,
-          description: data.description,
-          position: data.position
-        });
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  const renamedCard = await updateNameService(req.body);
+  res.json(new BaseResponse(renamedCard));
 };
 
 const updateCardDescription = async (req: Request, res: Response): Promise<void> => {
-  const { cardId, newDescription } = req.body;
-  try {
-    await Card.findByIdAndUpdate(
-      cardId,
-      { description: newDescription },
-      { new: true },
-      (_err, data) => {
-        if (!data) {
-          res.status(404).json({ message: 'the card has not been found' });
-        } else {
-          res.status(200).json({
-            id: data._id,
-            columnId: data.columnId,
-            name: data.name,
-            description: data.description,
-            position: data.position
-          });
-        }
-      }
-    );
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  const updatedCard = await updateDescriptionService(req.body);
+  res.json(new BaseResponse(updatedCard));
 };
 
 const updateCardPosition = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, newPosition, cardId } = req.body;
-  try {
-    await Card.find({ columnId }, async (_err, data) => {
-      if (data) {
-        const bulkArr: any[] = [];
-        data.sort((a, b) => a.position - b.position);
-        const indexOldEl = data.findIndex((el) => el._id.toString() === cardId) as number;
-        const editableEl = data.find((el) => el._id.toString() === cardId) as CardsInDB;
+  const errors = validationResult(req);
 
-        if (editableEl.position < newPosition) {
-          data.splice(+newPosition + 1, 0, editableEl);
-          data.splice(indexOldEl, 1);
-        } else {
-          data.splice(+newPosition, 0, editableEl);
-          data.splice(indexOldEl + 1, 1);
-        }
-
-        const elementsWithUpdatedPos = data.map((el, idx) => ({
-          id: el._id,
-          columnId: el.columnId,
-          name: el.name,
-          description: el.description,
-          position: idx
-        }));
-
-        elementsWithUpdatedPos.forEach((el) => {
-          bulkArr.push({
-            updateOne: {
-              filter: { _id: el.id },
-              update: { position: el.position }
-            }
-          });
-        });
-        await Card.bulkWrite(bulkArr);
-
-        res.status(200).json({ columnId, cards: elementsWithUpdatedPos });
-      } else {
-        res.status(404).json({ message: 'the card has not been found' });
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  const cards = await updatePositionService(req.body);
+  res.json(new BaseResponse(cards));
 };
 
 const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
-  const { columnId, newColumnId, cardId, newPosition = 0 } = req.body;
-  try {
-    if (typeof newPosition === 'number') {
-      await Card.findByIdAndUpdate(cardId, { columnId: newColumnId, position: newPosition });
-    } else {
-      await Card.findByIdAndUpdate(cardId, { columnId: newColumnId });
-    }
+  const errors = validationResult(req);
 
-    await Card.find({ columnId }, async (_err, data) => {
-      if (data) {
-        const bulkArr: any[] = [];
-        const elementsWithUpdatedPos = data.map((el, idx) => ({
-          _id: el._id,
-          columnId: el.columnId,
-          name: el.name,
-          description: el.description,
-          position: idx
-        }));
-
-        elementsWithUpdatedPos.forEach((el) => {
-          bulkArr.push({
-            updateOne: {
-              filter: { _id: el._id },
-              update: { position: el.position }
-            }
-          });
-        });
-        await Card.bulkWrite(bulkArr);
-      }
-    });
-    await Card.find({ columnId: newColumnId }, async (_err, data) => {
-      if (data) {
-        const bulkArr: any[] = [];
-        data.sort((a, b) => a.position - b.position);
-
-        const indexOldEl = data.findIndex((el) => el._id.toString() === cardId) as number;
-        const editableEl = data.find((el) => el._id.toString() === cardId) as CardsInDB;
-
-        if (editableEl.position < newPosition) {
-          data.splice(+newPosition + 1, 0, editableEl);
-          data.splice(indexOldEl, 1);
-        } else {
-          data.splice(+newPosition, 0, editableEl);
-          data.splice(indexOldEl + 1, 1);
-        }
-        const elementsWithUpdatedPos = data.map((el, idx) => ({
-          _id: el._id,
-          columnId: el.columnId,
-          name: el.name,
-          description: el.description,
-          position: idx
-        }));
-
-        elementsWithUpdatedPos.forEach((el) => {
-          bulkArr.push({
-            updateOne: {
-              filter: { _id: el._id },
-              update: { position: el.position }
-            }
-          });
-        });
-        await Card.bulkWrite(bulkArr);
-        res.status(204).end();
-      }
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  await updatePositionService(req.body);
+  res.status(204).json(new BaseResponse({}, 204));
 };
 
 const deleteCard = async (req: Request, res: Response): Promise<void> => {
-  const { cardId, columnId } = req.body;
-  try {
-    await Card.findByIdAndDelete(cardId);
-    await Card.find({ columnId }, async (_err, data) => {
-      if (data) {
-        const bulkArr: any[] = [];
-        const elementsWithUpdatedPos = data.map((el, idx) => ({
-          _id: el._id,
-          columnId: el.columnId,
-          name: el.name,
-          description: el.description,
-          position: idx
-        }));
-        elementsWithUpdatedPos.forEach((el) => {
-          bulkArr.push({
-            updateOne: {
-              filter: { _id: el._id },
-              update: { position: el.position }
-            }
-          });
-        });
-        await Card.bulkWrite(bulkArr);
-      }
-      res.status(204).end();
-    });
-  } catch (error) {
-    console.log(error);
-    res.status(500).end();
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
   }
+
+  await deleteService(req.body);
+  res.status(204).json(new BaseResponse({}, 204));
 };
 
 export {

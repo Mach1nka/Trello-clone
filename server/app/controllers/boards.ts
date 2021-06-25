@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { validationResult } from 'express-validator';
 
-import { BoardsInDB } from '../models/board';
 import BaseResponse from '../../utils/base-response';
 import BadRequest from '../../utils/errors/bad-request';
 import {
@@ -29,9 +28,9 @@ const createNewBoard = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest(errors.array());
   }
 
-  const createdBoard: BoardsInDB = await createBoardService(req.body);
+  const { id, name } = await createBoardService(req.body);
 
-  res.status(201).json(new BaseResponse(createdBoard, 201));
+  res.status(201).json(new BaseResponse({ id, name }, 201));
 };
 
 const updateBoardName = async (req: Request, res: Response): Promise<void> => {
