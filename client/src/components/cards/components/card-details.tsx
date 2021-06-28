@@ -128,6 +128,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
       </DialogContent>
       <DialogActions classes={{ root: classes.dialogActions }}>
         <IconButton
+          aria-label="delete card"
           onClick={() => {
             dispatch(deleteCard({ columnId, cardId }));
             dispatch(resetModalData());

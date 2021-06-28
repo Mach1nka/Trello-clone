@@ -26,6 +26,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
     <>
       <Container>
         <Fab
+          aria-label="delete board"
           onClick={(e) => {
             e.preventDefault();
             setBackdropView(true);
@@ -36,6 +37,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
           <DeleteIcon fontSize="inherit" />
         </Fab>
         <Fab
+          aria-label="share board"
           onClick={(e) => {
             e.preventDefault();
             dispatch(setModalData({ boardId }));
@@ -46,6 +48,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
           <ShareIcon fontSize="inherit" />
         </Fab>
         <Fab
+          aria-label="rename board"
           className={classes.editBoardNameButton}
           onClick={(e) => {
             e.preventDefault();

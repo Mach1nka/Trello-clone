@@ -69,7 +69,7 @@ const Column: React.FC<Props> = ({
             <Typography className={classes.columnName} variant="h6">
               {columnName}
             </Typography>
-            <IconButton size="small" onClick={handleMenu}>
+            <IconButton size="small" aria-label="column settings" onClick={handleMenu}>
               <MoreHorizIcon />
             </IconButton>
             <Menu

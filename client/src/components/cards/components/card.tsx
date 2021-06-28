@@ -57,6 +57,7 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
         {name}
       </Typography>
       <IconButton
+        aria-label="edit card"
         onClick={handleMenu}
         size="small"
         style={{ alignSelf: 'flex-start', fontSize: '15px' }}

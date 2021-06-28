@@ -20,7 +20,11 @@ const Sidebar: React.FC<Props> = ({
   const [isOpenSidebar, setSidebarState] = useState(false);
   return (
     <>
-      <IconButton onClick={() => setSidebarState(true)} classes={{ root: classes.burgerButton }}>
+      <IconButton
+        aria-label="menu"
+        onClick={() => setSidebarState(true)}
+        classes={{ root: classes.burgerButton }}
+      >
         <MenuIcon />
       </IconButton>
       <Drawer

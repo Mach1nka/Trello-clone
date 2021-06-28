@@ -12,21 +12,14 @@ const CopyPlugin = require("copy-webpack-plugin");
 const config = (argv) => {
   const hash = `[hash:7]`;
   let buildHash = hash;
-	let buildTimestamp = Number(new Date());
-  let commitSHA = hash;
 
   if (argv.env) {
     buildHash = "BUILD_HASH" in argv.env ? argv.env.BUILD_HASH : hash;
-		buildTimestamp = "BUILD_TIMESTAMP" in argv.env ? argv.env.BUILD_TIMESTAMP : buildTimestamp;
-    commitSHA = "COMMIT_SHA" in argv.env ? argv.env.COMMIT_SHA : hash;
   }
 
   const envKeys = {
     NODE_ENV: JSON.stringify(`production`),
-		BACK_ENV: JSON.stringify(`production`),
     BUILD_HASH: JSON.stringify(buildHash),
-    BUILD_TIMESTAMP: JSON.stringify(buildTimestamp),
-    COMMIT_SHA: JSON.stringify(commitSHA)
   };
 
   return {
