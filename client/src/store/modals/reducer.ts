@@ -7,7 +7,7 @@ import {
   CardData
 } from './actions';
 
-const modalsDataIS: ModalsData = {
+const initialModalsState: ModalsData = {
   dataForModals: {
     cardId: '',
     columnId: '',
@@ -25,7 +25,7 @@ const modalsDataIS: ModalsData = {
 };
 
 const modalsData = (
-  state = modalsDataIS,
+  state = initialModalsState,
   { type, payload }: { type: string; payload: ModalsStates | CardData }
 ): ModalsData => {
   switch (type) {
@@ -40,7 +40,7 @@ const modalsData = (
         modalsStates: { ...state.modalsStates, ...(payload as ModalsStates) }
       };
     case RESET_MODAL_DATA:
-      return { ...state, ...modalsDataIS };
+      return { ...state, ...initialModalsState };
     default:
       return state;
   }

@@ -1,5 +1,6 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
+
 import {
   DELETE_BOARD,
   GET_BOARDS,
@@ -15,7 +16,6 @@ import {
   DataForRenamingBoard,
   DataForDeletingBoard
 } from './actions';
-import { signOutUser } from '../auth/actions';
 import {
   getBoards,
   createBoard,
@@ -23,13 +23,14 @@ import {
   shareBoard,
   deleteBoard
 } from '../../api/board-requests';
+import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetBoards(): SagaIterator {
   const data: BoardList | number = yield call(getBoards);
-  if (data === 401) {
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
-    yield put(signOutUser());
+    resetStore();
   } else {
     yield put(putUserBoards(data.data));
   }
@@ -41,9 +42,9 @@ function* watchGetBoards(): SagaIterator {
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
   const data: Board | number = yield call(createBoard, boardData.payload);
-  if (data === 401) {
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
-    yield put(signOutUser());
+    resetStore();
   } else {
     yield put(putCreatedBoard(data.data));
   }
@@ -55,9 +56,9 @@ function* watchCreateBoard(): SagaIterator {
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
   const data: Board | number = yield call(updateBoardName, board.payload);
-  if (data === 401) {
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
-    yield put(signOutUser());
+    resetStore();
   } else {
     yield put(putRenamedBoard(data.data));
   }
@@ -69,8 +70,8 @@ function* watchRenameBoard(): SagaIterator {
 
 function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
   const data: null | number = yield call(shareBoard, board.payload);
-  if (data === 401) {
-    yield put(signOutUser());
+  if (data.statusCode === 401) {
+    resetStore();
   }
 }
 
@@ -81,9 +82,9 @@ function* watchShareBoard(): SagaIterator {
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
   const data: BoardList | number = yield call(getBoards);
-  if (data === 401) {
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
-    yield put(signOutUser());
+    resetStore();
   } else {
     yield put(putUserBoards(data.data));
   }

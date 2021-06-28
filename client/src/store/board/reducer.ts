@@ -8,13 +8,13 @@ import {
 } from './actions';
 import replaceBoardName from '../../../utils/replace-board-name';
 
-const userBoardsIS: BoardList = {
+const initialBoardsState: BoardList = {
   ownBoards: [],
   sharedBoards: []
 };
 
 const userBoards = (
-  state = userBoardsIS,
+  state = initialBoardsState,
   { type, payload }: { type: string; payload: BoardList | Board }
 ): BoardList => {
   switch (type) {
@@ -31,7 +31,7 @@ const userBoards = (
         ownBoards: state.ownBoards.concat(payload as Board)
       };
     case DELETE_BOARDS_DATA:
-      return { ...state, ...userBoardsIS };
+      return { ...state, ...initialBoardsState };
     default:
       return state;
   }

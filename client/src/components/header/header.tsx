@@ -4,7 +4,7 @@ import { useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
 import { useAppSelector } from '../../store/hooks';
 import { useStyles } from './constants';
-import { signOutUser } from '../../store/auth/actions';
+import resetStore from '../../../utils/reset-store';
 import { setModalsStates, setModalData } from '../../store/modals/actions';
 import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
@@ -39,7 +39,7 @@ const Header: React.FC = () => {
   };
 
   const handleLogOut = () => {
-    dispatch(signOutUser());
+    resetStore();
     removeAuthDataFromLocalStorage();
     history.push('/auth');
   };

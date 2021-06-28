@@ -12,12 +12,12 @@ export interface ColumnData {
   columns: Column[];
 }
 
-const boardColumnsIS: ColumnData = {
+const initialColumnsState: ColumnData = {
   columns: []
 };
 
 const boardColumns = (
-  state = boardColumnsIS,
+  state = initialColumnsState,
   { type, payload }: { type: string; payload: Column[] | Column }
 ): ColumnData => {
   switch (type) {
@@ -48,7 +48,7 @@ const boardColumns = (
       }
       return { ...state };
     case DELETE_COLUMNS_DATA:
-      return { ...state, ...boardColumnsIS };
+      return { ...state, ...initialColumnsState };
     default:
       return state;
   }

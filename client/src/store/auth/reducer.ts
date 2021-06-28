@@ -1,12 +1,13 @@
 import {
   PUT_USER_DATA,
   PUT_MESSAGE_ERROR,
+  USER_LOGGED_OUT,
   AccountDataInStore,
   SuccessResponse,
   ErrorResponse
 } from './actions';
 
-const authDataIS: AccountDataInStore = {
+const initialAuthState: AccountDataInStore = {
   login: '',
   token: '',
   id: '',
@@ -14,7 +15,7 @@ const authDataIS: AccountDataInStore = {
 };
 
 const authData = (
-  state = authDataIS,
+  state = initialAuthState,
   { type, payload }: { type: string; payload: SuccessResponse | ErrorResponse }
 ): AccountDataInStore => {
   switch (type) {
@@ -24,6 +25,11 @@ const authData = (
       return {
         ...state,
         message: payload.message
+      };
+    case USER_LOGGED_OUT:
+      return {
+        ...state,
+        ...initialAuthState
       };
     default:
       return state;

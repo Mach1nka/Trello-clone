@@ -17,10 +17,10 @@ export interface CardData {
   [x: string]: Card[];
 }
 
-const cardDataIS: CardData = {};
+const initialCardsState: CardData = {};
 
 const cardsData = (
-  state = cardDataIS,
+  state = initialCardsState,
   { type, payload }: { type: string; payload: DataFromServer | Card }
 ): CardData => {
   switch (type) {
@@ -57,7 +57,7 @@ const cardsData = (
       }
       return { ...state };
     case DELETE_CARDS_DATA:
-      return { ...state, ...cardDataIS };
+      return { ...state, ...initialCardsState };
     default:
       return state;
   }
