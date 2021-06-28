@@ -32,7 +32,7 @@ function* workerGetColumns(columnData: { type: string; payload: string }): SagaI
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putColumns(data as Column[]));
+    yield put(putColumns(data.data));
   }
 }
 
@@ -46,7 +46,7 @@ function* workerCreateColumn(columnData: { type: string; payload: DataForCreatin
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCreatedColumn(data as Column));
+    yield put(putCreatedColumn(data.data));
   }
 }
 
@@ -60,7 +60,7 @@ function* workerRenameColumn(columnData: { type: string; payload: DataForRenamin
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putRenamedColumn(data as Column));
+    yield put(putRenamedColumn(data.data));
   }
 }
 
@@ -74,7 +74,7 @@ function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpda
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUpdatedPos(data as Column[]));
+    yield put(putUpdatedPos(data.data));
   }
 }
 
@@ -89,7 +89,7 @@ function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletin
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putColumns(data as Column[]));
+    yield put(putColumns(data.data));
   }
 }
 

@@ -31,7 +31,7 @@ function* workerGetBoards(): SagaIterator {
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUserBoards(data as BoardList));
+    yield put(putUserBoards(data.data));
   }
 }
 
@@ -45,7 +45,7 @@ function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingB
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCreatedBoard(data as Board));
+    yield put(putCreatedBoard(data.data));
   }
 }
 
@@ -59,7 +59,7 @@ function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putRenamedBoard(data as Board));
+    yield put(putRenamedBoard(data.data));
   }
 }
 
@@ -85,7 +85,7 @@ function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUserBoards(data as BoardList));
+    yield put(putUserBoards(data.data));
   }
 }
 

@@ -38,7 +38,7 @@ function* workerGetCards(columnData: { type: string; payload: string }): SagaIte
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCards(data as Card[]));
+    yield put(putCards(data.data));
   }
 }
 
@@ -52,7 +52,7 @@ function* workerCreateCard(columnData: { type: string; payload: DataForCreatingC
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCreatedCard(data as Card));
+    yield put(putCreatedCard(data.data));
   }
 }
 
@@ -66,7 +66,7 @@ function* workerRenameCard(columnData: { type: string; payload: DataForRenamingC
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUpdatedCard(data as Card));
+    yield put(putUpdatedCard(data.data));
   }
 }
 
@@ -80,7 +80,7 @@ function* workerChangeCardDesc(columnData: { type: string; payload: DataForUpdat
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUpdatedCard(data as Card));
+    yield put(putUpdatedCard(data.data));
   }
 }
 
@@ -96,8 +96,8 @@ function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpd
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCards(updatedColumn as Card[]));
-    yield put(putCards(columnWithNewCard as Card[]));
+    yield put(putCards(updatedColumn.data));
+    yield put(putCards(columnWithNewCard.data));
   }
 }
 
@@ -111,7 +111,7 @@ function* workerChangeCardPos(columnData: { type: string; payload: DataForUpdati
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putUpdatedCardsPos(data as Card[]));
+    yield put(putUpdatedCardsPos(data.data));
   }
 }
 
@@ -126,7 +126,7 @@ function* workerDeleteCard(columnData: { type: string; payload: DataForDeletingC
     removeAuthDataFromLocalStorage();
     yield put(signOutUser());
   } else {
-    yield put(putCards(data as Card[]));
+    yield put(putCards(data.data));
   }
 }
 

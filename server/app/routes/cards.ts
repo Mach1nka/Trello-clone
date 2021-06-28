@@ -19,7 +19,7 @@ router.get('/cards/:columnId', passport.authenticate('jwt', { session: false }),
 router.post(
   '/card',
   [
-    check('cardId', 'Card Id is required').exists(),
+    check('columnId', 'Card Id is required').exists(),
     check('name', 'Name is required').exists(),
     check('position', 'Position is required').exists().isNumeric(),
     passport.authenticate('jwt', { session: false })

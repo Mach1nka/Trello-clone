@@ -30,13 +30,10 @@ const boardColumns = (
       }
       return { ...state };
     case PUT_CREATED_COLUMN:
-      if (payload.hasOwnProperty('id')) {
-        return {
-          ...state,
-          columns: [...state.columns, ...[payload as Column]]
-        };
-      }
-      return { ...state };
+      return {
+        ...state,
+        columns: [...state.columns, ...[payload as Column]]
+      };
     case PUT_RENAMED_COLUMN:
       return {
         ...state,

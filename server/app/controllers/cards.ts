@@ -9,6 +9,7 @@ import {
   updateNameService,
   updateDescriptionService,
   updatePositionService,
+  updateStatusService,
   deleteService
 } from '../services/cards';
 
@@ -22,7 +23,7 @@ const getCards = async (req: Request, res: Response): Promise<void> => {
   const { columnId } = req.params;
 
   const cards = await getCardsService(columnId);
-  res.json(new BaseResponse(cards));
+  res.json(new BaseResponse({ columnId, cards }));
 };
 
 const createNewCard = async (req: Request, res: Response): Promise<void> => {
@@ -65,8 +66,9 @@ const updateCardPosition = async (req: Request, res: Response): Promise<void> =>
     throw new BadRequest(errors.array());
   }
 
+  const { columnId } = req.body;
   const cards = await updatePositionService(req.body);
-  res.json(new BaseResponse(cards));
+  res.json(new BaseResponse({ columnId, cards }));
 };
 
 const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
@@ -76,7 +78,7 @@ const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest(errors.array());
   }
 
-  await updatePositionService(req.body);
+  await updateStatusService(req.body);
   res.status(204).json(new BaseResponse({}, 204));
 };
 

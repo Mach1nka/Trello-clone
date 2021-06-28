@@ -25,13 +25,11 @@ const cardsData = (
 ): CardData => {
   switch (type) {
     case PUT_CARDS:
-      if (payload.hasOwnProperty('columnId')) {
-        return {
-          ...state,
-          [payload.columnId]: payload.cards as Card[]
-        };
-      }
-      return { ...state };
+      return {
+        ...state,
+        [payload.columnId]: payload.cards as Card[]
+      };
+
     case PUT_CREATED_CARD:
       if (payload.hasOwnProperty('id')) {
         return {

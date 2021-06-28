@@ -24,11 +24,11 @@ const ColumnsContainer: React.FC = () => {
   const [backdropState, setBackdropState] = useState(true);
   const { boardId } = useParams<ParamTypes>();
   const { columns } = useAppSelector((state) => state.boardColumns);
-  const columnToDnD = useAppSelector((state) => state.cardsData);
+  const columnForDnD = useAppSelector((state) => state.cardsData);
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
     e.preventDefault();
-    const isEmptyColumn = columnToDnD[column.id].length;
+    const isEmptyColumn = columnForDnD[column.id].length;
     if (draggableCard && !isEmptyColumn) {
       dispatch(
         changeCardStatus({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
@@ -10,6 +10,7 @@ import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 import useWindowSize from '../../../utils/window-size-hook';
+import { getBoards } from '../../store/board/actions';
 
 interface Location {
   state: {
@@ -25,12 +26,11 @@ const Header: React.FC = () => {
   const dispatch = useDispatch();
   const classes = useStyles();
   const { width } = useWindowSize();
+  const { ownBoards, sharedBoards } = useAppSelector((data) => data.userBoards);
   const pathLength = 14;
-  const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardName : '';
-  const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state.boardId : '';
-  const isOwnBoard = useAppSelector((data) =>
-    data.userBoards.ownBoards.findIndex((el) => el.id === boardId)
-  );
+  const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardName : '';
+  const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardId : '';
+  const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
   const isMainPage = pathname === '/boards';
 
   const handleShareButton = () => {
@@ -47,6 +47,13 @@ const Header: React.FC = () => {
   const handleBoardsButton = () => {
     history.push('/boards');
   };
+
+  useEffect(() => {
+    console.log(ownBoards.length);
+    if (!ownBoards.length && !sharedBoards.length) {
+      getBoards();
+    }
+  }, [boardId]);
 
   const controls = !isMainPage ? (
     <>
