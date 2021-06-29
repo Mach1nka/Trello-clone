@@ -1,9 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import { MuiThemeProvider } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
+
 import Authorization from '../authorization/authorization';
 import Main from '../main/main';
+import { useAppSelector } from '../../store/hooks';
 import { defaultColorsMU } from './constants';
 
 const App: React.FC = () => {

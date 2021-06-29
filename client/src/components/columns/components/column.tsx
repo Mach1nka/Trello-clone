@@ -1,21 +1,16 @@
 import React, { useState, Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
-import { Typography, Menu, MenuItem, IconButton, Button } from '@material-ui/core';
+import { Menu, MenuItem, IconButton, Button } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import AddIcon from '@material-ui/icons/Add';
-import {
-  ColumnContainer as Container,
-  ColumnHeader,
-  ColumnContent as Content,
-  ColumnFooter
-} from '../sc';
-import { useStyles } from '../constants';
-import { deleteColumn } from '../../../store/column/actions';
+
 import CardsContainer from '../../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
 import CreateCardModal from '../../cards/components/create-card-modal';
+import { deleteColumn } from '../../../store/column/actions';
 import { Card as CardType } from '../../../store/card/actions';
+import { ColumnSC as SC } from '../sc';
 
 interface Props {
   columnName: string;
@@ -39,7 +34,6 @@ const Column: React.FC<Props> = ({
   const [isOpenRenameModal, setRenameModalView] = useState(false);
   const [isOpenCreateCardModal, setCreateCardModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
-  const classes = useStyles();
   const isOpenMenu = Boolean(anchorEl);
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
@@ -63,12 +57,10 @@ const Column: React.FC<Props> = ({
 
   return (
     <>
-      <Container>
-        <Content>
-          <ColumnHeader>
-            <Typography className={classes.columnName} variant="h6">
-              {columnName}
-            </Typography>
+      <SC.Container>
+        <SC.Content>
+          <SC.Header>
+            <SC.Name variant="h6">{columnName}</SC.Name>
             <IconButton size="small" aria-label="column settings" onClick={handleMenu}>
               <MoreHorizIcon />
             </IconButton>
@@ -82,13 +74,13 @@ const Column: React.FC<Props> = ({
               <MenuItem onClick={handleRename}>Rename</MenuItem>
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
             </Menu>
-          </ColumnHeader>
+          </SC.Header>
           <CardsContainer
             columnId={columnId}
             draggableCard={draggableCard}
             setDraggableCard={setDraggableCard}
           />
-          <ColumnFooter>
+          <SC.Footer>
             <Button
               onClick={() => setCreateCardModalView(true)}
               fullWidth
@@ -97,9 +89,9 @@ const Column: React.FC<Props> = ({
             >
               Create new card
             </Button>
-          </ColumnFooter>
-        </Content>
-      </Container>
+          </SC.Footer>
+        </SC.Content>
+      </SC.Container>
       <RenameColumnModal
         isOpen={isOpenRenameModal}
         columnId={columnId}

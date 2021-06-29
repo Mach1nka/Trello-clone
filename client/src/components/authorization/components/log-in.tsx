@@ -1,9 +1,8 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { TextField, useTheme } from '@material-ui/core';
+import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { ThemeProvider } from 'styled-components';
 
 import { loginUser } from '../../../store/auth/actions';
 import { AuthorizationSC as SC } from '../sc';
@@ -15,7 +14,6 @@ type FormikProps = {
 
 const LogIn: React.FC<Props> = ({ setBackdropView }) => {
   const dispatch = useDispatch();
-  const theme = useTheme();
 
   const validationSchema = yup.object({
     login: yup
@@ -49,7 +47,7 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
   });
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
         <div>
           {loginFields.map((el) => (
@@ -74,7 +72,7 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
           submit
         </SC.SubmitButton>
       </SC.LogInForm>
-    </ThemeProvider>
+    </>
   );
 };
 

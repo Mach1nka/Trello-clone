@@ -1,11 +1,13 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
+
 import { ModalForm as Form } from '../../boards-page/sc';
 import { renameColumn } from '../../../store/column/actions';
 import { configValidationSchema } from '../../boards-page/utils';
 import { useStyles } from '../../boards-page/constants';
+import { SubmitButton } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -46,14 +48,9 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, co
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button
-            size="small"
-            type="submit"
-            classes={{ root: classes.submitButton }}
-            variant="contained"
-          >
+          <SubmitButton size="small" type="submit" variant="contained">
             Rename
-          </Button>
+          </SubmitButton>
         </DialogActions>
       </Form>
     </Dialog>

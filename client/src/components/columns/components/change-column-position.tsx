@@ -1,11 +1,13 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
+
 import { useAppSelector } from '../../../store/hooks';
 import { ModalForm as Form } from '../../boards-page/sc';
 import { changeColumnPosition } from '../../../store/column/actions';
 import { useStyles } from '../../boards-page/constants';
+import { SubmitButton } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -62,14 +64,9 @@ const ChangeColumnPosition: React.FC<Props> = ({
               ))}
             </TextField>
             <DialogActions>
-              <Button
-                size="small"
-                type="submit"
-                classes={{ root: classes.submitButton }}
-                variant="contained"
-              >
+              <SubmitButton size="small" type="submit" variant="contained">
                 Change
-              </Button>
+              </SubmitButton>
             </DialogActions>
           </Form>
         )}

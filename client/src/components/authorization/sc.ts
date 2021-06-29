@@ -35,9 +35,9 @@ const AuthorizationSC = {
   `,
   SubmitButton: styled(Button)`
     ${({ theme }: MUOptions) => `
-      background-color: rgba(240, 125, 57, 0.85);
+      background-color: rgba(240, 125, 57, 0.85) !important;
       &:hover {
-        background-color: ${theme.palette.warning.main};
+        background-color: ${theme.palette.warning.main} !important;
       }
     `}
   `,
