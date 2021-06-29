@@ -1,18 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Container, Card, Typography, Backdrop, CircularProgress } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
+import { Container, Typography, CircularProgress, useTheme } from '@material-ui/core';
+import { ThemeProvider } from 'styled-components';
+
 import BoardItem from './components/board-item';
-import { useStyles } from './constants';
+import { useAppSelector } from '../../store/hooks';
 import { getBoards } from '../../store/board/actions';
 import { deleteColumnsData } from '../../store/column/actions';
 import { deleteCardsData } from '../../store/card/actions';
 import { resetModalData } from '../../store/modals/actions';
-import { BoardsContainer } from './sc';
+import { BoardsContainer, BoardSC as SC } from './sc';
 
 const BoardsList: React.FC = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
+  const theme = useTheme();
   const [backdropState, setBackdropState] = useState(true);
   const { ownBoards, sharedBoards } = useAppSelector((state) => state.userBoards);
 
@@ -28,9 +29,9 @@ const BoardsList: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Container>
-        <Card className={classes.boardsContainer}>
+        <SC.Container>
           <Typography gutterBottom color="secondary" variant="h5" component="h5">
             My Boards
           </Typography>
@@ -52,15 +53,12 @@ const BoardsList: React.FC = () => {
               </BoardsContainer>
             </>
           ) : null}
-        </Card>
+        </SC.Container>
       </Container>
-      <Backdrop
-        className={classes.backdrop}
-        open={ownBoards.length || sharedBoards.length ? false : backdropState}
-      >
+      <SC.Backdrop open={ownBoards.length || sharedBoards.length ? false : backdropState}>
         <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
+      </SC.Backdrop>
+    </ThemeProvider>
   );
 };
 

@@ -28,7 +28,7 @@ const AuthorizationSC = {
   `,
   Backdrop: styled(Backdrop)`
     ${({ theme }: MUOptions) => `
-      z-index: ${theme.zIndex.drawer + 1};
+      z-index: ${theme.zIndex.drawer + 1} !important;
       color: #fff;
       background-color: rgba(0, 0, 0, 0.2);
     `}

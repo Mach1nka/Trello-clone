@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { Backdrop, CircularProgress } from '@material-ui/core';
+import { CircularProgress, useTheme } from '@material-ui/core';
+import { ThemeProvider } from 'styled-components';
 
 import Column from './components/column';
 import CreateColumn from './components/create-column-button';
@@ -9,8 +10,7 @@ import ModalsContainer from '../cards/components/modals-container';
 import { useAppSelector } from '../../store/hooks';
 import { getColumns, changeColumnPosition, Column as ColumnType } from '../../store/column/actions';
 import { changeCardStatus, Card as CardType } from '../../store/card/actions';
-import { ColumnsContainer as Container, DragWrapper } from './sc';
-import { useStyles } from '../boards-page/constants';
+import { ColumnsContainer as Container, DragWrapper, ColumnSC as SC } from './sc';
 
 interface ParamTypes {
   boardId: string;
@@ -18,7 +18,7 @@ interface ParamTypes {
 
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+  const theme = useTheme();
   const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(null);
   const [isPointColumns, setPointColumns] = useState(false);
@@ -98,7 +98,7 @@ const ColumnsContainer: React.FC = () => {
   }, []);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Container>
         {columns.map((el) => (
           <DragWrapper
@@ -125,10 +125,10 @@ const ColumnsContainer: React.FC = () => {
         <CreateColumn boardId={boardId} newPosition={columns.length} />
       </Container>
       {columns.length ? <ModalsContainer /> : null}
-      <Backdrop className={classes.backdrop} open={columns.length ? false : backdropState}>
+      <SC.Backdrop open={columns.length ? false : backdropState}>
         <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
+      </SC.Backdrop>
+    </ThemeProvider>
   );
 };
 

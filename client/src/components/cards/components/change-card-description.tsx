@@ -1,12 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
-import { ModalForm as Form } from '../../boards-page/sc';
 import { changeCardDescription } from '../../../store/card/actions';
 import { descriptionTextValidation } from '../utils';
-import { useStyles } from '../../boards-page/constants';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -22,7 +21,6 @@ const ChangeCardDescriptionModal: React.FC<Props> = ({
   cardDescription
 }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
 
   const formik = useFormik({
     initialValues: { newDescription: cardDescription },
@@ -34,7 +32,7 @@ const ChangeCardDescriptionModal: React.FC<Props> = ({
   });
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change card description</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change card description</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
@@ -50,14 +48,9 @@ const ChangeCardDescriptionModal: React.FC<Props> = ({
           helperText={formik.touched.newDescription && formik.errors.newDescription}
         />
         <DialogActions>
-          <Button
-            size="small"
-            type="submit"
-            classes={{ root: classes.submitButton }}
-            variant="contained"
-          >
+          <SubmitButton size="small" type="submit" variant="contained">
             Change
-          </Button>
+          </SubmitButton>
         </DialogActions>
       </Form>
     </Dialog>

@@ -1,12 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
+
 import { useAppSelector } from '../../../store/hooks';
-import { ModalForm as Form } from '../sc';
 import { renameBoard } from '../../../store/board/actions';
-import { useStyles } from '../constants';
 import { configValidationSchema } from '../utils';
+import { ModalForm as Form, SubmitButton } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -17,7 +17,6 @@ interface Props {
 
 const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, userId }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const currentBoardObj = useAppSelector((state) =>
     state.userBoards.ownBoards.filter((el) => el.id === boardId).pop()
   );
@@ -45,7 +44,7 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
       onClick={(evt) => evt.stopPropagation()}
       onClose={() => setModalView(false)}
     >
-      <DialogTitle className={classes.dialogTitle}>Change board name</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change board name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
@@ -61,14 +60,9 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button
-            classes={{ root: classes.submitButton }}
-            size="small"
-            type="submit"
-            variant="contained"
-          >
+          <SubmitButton size="small" type="submit" variant="contained">
             Save
-          </Button>
+          </SubmitButton>
         </DialogActions>
       </Form>
     </Dialog>

@@ -4,10 +4,8 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { ModalForm as Form } from '../../boards-page/sc';
 import { changeColumnPosition } from '../../../store/column/actions';
-import { useStyles } from '../../boards-page/constants';
-import { SubmitButton } from '../sc';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -25,7 +23,6 @@ const ChangeColumnPosition: React.FC<Props> = ({
   position
 }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const positionArr = useAppSelector((state) =>
     state.boardColumns.columns.map((el) => el.position)
   );
@@ -45,7 +42,7 @@ const ChangeColumnPosition: React.FC<Props> = ({
 
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change column position</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change column position</DialogTitle>
       <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>

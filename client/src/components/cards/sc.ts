@@ -59,13 +59,6 @@ const CardSC = {
         background-color: unset !important;
       }`}
   `,
-  SubmitButton: styled(Button)`
-    ${({ theme }: MUOptions) => `
-  background-color: rgba(240, 125, 57, 0.85) !important;
-  &:hover {
-    background-color: ${theme.palette.warning.main} !important;
-  }`}
-  `,
   NameField: styled(TextField)`
     & .MuiInput-input {
       font-size: 20px;
@@ -93,10 +86,27 @@ const DragWrapper = styled.div<Props>`
   }
 `;
 
-const ModalForm = styled.form`
+const CreateCardForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 0 20px 5px 20px;
 `;
 
-export { CardsContainer, CardSC, ModalForm, DragWrapper };
+const ModalForm = styled.form`
+  height: 70px;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+`;
+
+const SubmitButton = styled(Button)`
+  ${({ theme }: MUOptions) => `
+  background-color: rgba(240, 125, 57, 0.85) !important;
+  &:hover {
+    background-color: ${theme.palette.warning.main} !important;
+  }`}
+`;
+
+export { CardsContainer, CardSC, CreateCardForm, ModalForm, DragWrapper, SubmitButton };

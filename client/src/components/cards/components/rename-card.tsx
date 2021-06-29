@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
-import { ModalForm as Form } from '../../boards-page/sc';
 import { renameCard } from '../../../store/card/actions';
 import { setModalsStates } from '../../../store/modals/actions';
 import { configValidationSchema } from '../../boards-page/utils';
-import { useStyles } from '../../boards-page/constants';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -18,7 +17,6 @@ interface Props {
 const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
-  const classes = useStyles();
   const initialValues = { newName: cardName };
 
   const formik = useFormik({
@@ -36,7 +34,7 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
       open={isOpen}
       onClose={() => dispatch(setModalsStates({ isRenameModalVisible: false }))}
     >
-      <DialogTitle className={classes.dialogTitle}>Change card name</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change card name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
@@ -52,14 +50,9 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
           helperText={formik.touched.newName && formik.errors.newName}
         />
         <DialogActions>
-          <Button
-            size="small"
-            type="submit"
-            classes={{ root: classes.submitButton }}
-            variant="contained"
-          >
+          <SubmitButton size="small" type="submit" variant="contained">
             Rename
-          </Button>
+          </SubmitButton>
         </DialogActions>
       </Form>
     </Dialog>

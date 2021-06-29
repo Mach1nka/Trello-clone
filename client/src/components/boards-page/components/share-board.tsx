@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { Dialog, DialogTitle, DialogActions, TextField, Button } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
+import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
+
 import { useAppSelector } from '../../../store/hooks';
 import useFetchUsers from '../../../../utils/fetch-user-hook';
 import { shareBoard } from '../../../store/board/actions';
 import { setModalsStates, setModalData } from '../../../store/modals/actions';
-import { ShareModalForm as Form } from '../sc';
-import { useStyles } from '../constants';
+import { ShareModalForm as Form, BoardSC as SC, SubmitButton } from '../sc';
 
 const ShareBoardModal: React.FC = () => {
   const dispatch = useDispatch();
   const [searchUserLogin, setUserLogin] = useState('');
+  const users = useFetchUsers(searchUserLogin);
+
   const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
   const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
-  const classes = useStyles();
-  const users = useFetchUsers(searchUserLogin);
 
   const formHandler = (values: { userId: string }) => {
     setUserLogin('');
@@ -36,12 +35,11 @@ const ShareBoardModal: React.FC = () => {
         dispatch(setModalsStates({ isShareModalVisible: false }));
       }}
     >
-      <DialogTitle className={classes.dialogTitle}>Share board</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Share board</DialogTitle>
       <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
-            <Autocomplete
-              classes={{ root: classes.autocompleteRoot }}
+            <SC.Autocomplete
               options={users}
               id="userId"
               onChange={(_e, value) => props.setFieldValue('userId', value?.id)}
@@ -56,9 +54,9 @@ const ShareBoardModal: React.FC = () => {
               )}
             />
             <DialogActions>
-              <Button classes={{ root: classes.submitButton }} type="submit" variant="contained">
+              <SubmitButton type="submit" variant="contained">
                 Share
-              </Button>
+              </SubmitButton>
             </DialogActions>
           </Form>
         )}

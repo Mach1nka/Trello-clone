@@ -3,11 +3,9 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
-import { ModalForm as Form } from '../../boards-page/sc';
 import { renameColumn } from '../../../store/column/actions';
 import { configValidationSchema } from '../../boards-page/utils';
-import { useStyles } from '../../boards-page/constants';
-import { SubmitButton } from '../sc';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -19,7 +17,6 @@ interface Props {
 const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, columnName }) => {
   const dispatch = useDispatch();
   const validationSchema = configValidationSchema('newName');
-  const classes = useStyles();
   const initialValues = { newName: columnName };
 
   const formik = useFormik({
@@ -32,7 +29,7 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, co
   });
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Change column name</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change column name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"

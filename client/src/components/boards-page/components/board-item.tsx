@@ -1,12 +1,10 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { Typography } from '@material-ui/core';
-import { Board } from '../sc';
-import { useStyles } from '../constants';
-import { deleteColumnsData } from '../../../store/column/actions';
+
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
+import { deleteColumnsData } from '../../../store/column/actions';
+import { BoardSC as SC } from '../sc';
 
 interface Props {
   isDefaultCard?: boolean;
@@ -18,58 +16,47 @@ interface Props {
 const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBoards }) => {
   const [isOpenModal, setModalView] = useState(false);
   const dispatch = useDispatch();
-  const classes = useStyles();
 
   if (!isDefaultCard && boardId && isOwnBoards) {
     const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
     return (
-      <Link
+      <SC.Link
         style={{ textDecoration: 'none' }}
         to={locationParams}
         onClick={() => dispatch(deleteColumnsData())}
       >
-        <Board isDefaultCard={isDefaultCard}>
-          <Typography
-            color="inherit"
-            className={classes.boardName}
-            variant="subtitle2"
-            align="left"
-          >
+        <SC.Board isDefaultCard={isDefaultCard}>
+          <SC.Name color="inherit" variant="subtitle2" align="left">
             {boardName}
-          </Typography>
+          </SC.Name>
           <BoardOptions boardId={boardId} />
-        </Board>
-      </Link>
+        </SC.Board>
+      </SC.Link>
     );
   }
   if (!isDefaultCard && !isOwnBoards && boardId) {
     const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
     return (
-      <Link
+      <SC.Link
         style={{ textDecoration: 'none' }}
         to={locationParams}
         onClick={() => dispatch(deleteColumnsData())}
       >
-        <Board isDefaultCard={isDefaultCard}>
-          <Typography
-            color="inherit"
-            className={classes.boardName}
-            variant="subtitle2"
-            align="left"
-          >
+        <SC.Board isDefaultCard={isDefaultCard}>
+          <SC.Name color="inherit" variant="subtitle2" align="left">
             {boardName}
-          </Typography>
-        </Board>
-      </Link>
+          </SC.Name>
+        </SC.Board>
+      </SC.Link>
     );
   }
   return (
     <>
-      <Board onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
-        <Typography color="inherit" className={classes.boardName} variant="subtitle2" align="left">
+      <SC.Board onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
+        <SC.Name color="inherit" variant="subtitle2" align="left">
           {boardName}
-        </Typography>
-      </Board>
+        </SC.Name>
+      </SC.Board>
       <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} />
     </>
   );

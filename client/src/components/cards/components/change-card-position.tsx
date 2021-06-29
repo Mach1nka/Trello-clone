@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { ModalForm as Form } from '../../boards-page/sc';
 import { changeCardPosition } from '../../../store/card/actions';
 import { setModalsStates } from '../../../store/modals/actions';
-import { useStyles } from '../../boards-page/constants';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -18,7 +17,6 @@ interface Props {
 
 const ChangeCardPosition: React.FC<Props> = ({ isOpen, columnId, cardId, position }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const positionArr = useAppSelector((state) => state.cardsData[columnId].map((el) => el.position));
 
   const formHandler = (values: { newPosition: number }) => {
@@ -41,7 +39,7 @@ const ChangeCardPosition: React.FC<Props> = ({ isOpen, columnId, cardId, positio
       open={isOpen}
       onClose={() => dispatch(setModalsStates({ isPositionModalVisible: false }))}
     >
-      <DialogTitle className={classes.dialogTitle}>Change card position</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change card position</DialogTitle>
       <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
@@ -60,14 +58,9 @@ const ChangeCardPosition: React.FC<Props> = ({ isOpen, columnId, cardId, positio
               ))}
             </TextField>
             <DialogActions>
-              <Button
-                size="small"
-                type="submit"
-                classes={{ root: classes.submitButton }}
-                variant="contained"
-              >
+              <SubmitButton size="small" type="submit" variant="contained">
                 Change
-              </Button>
+              </SubmitButton>
             </DialogActions>
           </Form>
         )}

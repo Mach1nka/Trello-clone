@@ -1,13 +1,12 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { ModalForm as Form } from '../../boards-page/sc';
 import { changeCardStatus } from '../../../store/card/actions';
 import { setModalsStates, setModalData } from '../../../store/modals/actions';
-import { useStyles } from '../../boards-page/constants';
+import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
   isOpen: boolean;
@@ -17,7 +16,6 @@ interface Props {
 
 const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const columnsArr = useAppSelector((state) =>
     state.boardColumns.columns.map((el) => ({ columnName: el.name, columnId: el.id }))
   );
@@ -47,7 +45,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
       open={isOpen}
       onClose={() => dispatch(setModalsStates({ isStatusModalVisible: false }))}
     >
-      <DialogTitle className={classes.dialogTitle}>Change card status</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Change card status</DialogTitle>
       <Formik initialValues={{ newStatus: columnId }} onSubmit={(values) => formHandler(values)}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
@@ -66,14 +64,9 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
               ))}
             </TextField>
             <DialogActions>
-              <Button
-                size="small"
-                type="submit"
-                classes={{ root: classes.submitButton }}
-                variant="contained"
-              >
+              <SubmitButton size="small" type="submit" variant="contained">
                 Change
-              </Button>
+              </SubmitButton>
             </DialogActions>
           </Form>
         )}

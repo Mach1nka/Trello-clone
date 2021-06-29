@@ -2,9 +2,10 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { CardSC as SC } from '../sc';
+
 import { deleteCard } from '../../../store/card/actions';
 import { setModalData, setModalsStates, resetModalData } from '../../../store/modals/actions';
+import { CardSC as SC } from '../sc';
 
 interface Props {
   cardId: string;

@@ -1,13 +1,12 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
-import { Dialog, TextField, DialogActions, DialogTitle, Button } from '@material-ui/core';
+import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
 import { createCard } from '../../../store/card/actions';
-import { ModalForm as Form } from '../sc';
+import { CreateCardForm as Form, SubmitButton } from '../sc';
 import { configValidationSchema } from '../utils';
-import { useStyles } from '../../boards-page/constants';
 
 interface Props {
   isOpen: boolean;
@@ -21,7 +20,6 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
     state.cardsData[columnId] ? state.cardsData[columnId].length : 0
   );
   const validationSchema = configValidationSchema;
-  const classes = useStyles();
   const initialValues = { name: '', description: '' };
 
   const formik = useFormik({
@@ -41,7 +39,7 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
   });
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
-      <DialogTitle className={classes.dialogTitle}>Create new card</DialogTitle>
+      <DialogTitle style={{ textAlign: 'center' }}>Create new card</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
@@ -69,14 +67,9 @@ const CreateCardModal: React.FC<Props> = ({ isOpen, setModalView, columnId }) =>
           helperText={formik.touched.description && formik.errors.description}
         />
         <DialogActions style={{ padding: '10px 0' }}>
-          <Button
-            size="small"
-            type="submit"
-            classes={{ root: classes.submitButton }}
-            variant="contained"
-          >
+          <SubmitButton size="small" type="submit" variant="contained">
             Create
-          </Button>
+          </SubmitButton>
         </DialogActions>
       </Form>
     </Dialog>

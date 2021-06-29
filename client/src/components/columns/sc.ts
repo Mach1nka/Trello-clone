@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography, Button } from '@material-ui/core';
+import { Typography, Button, Backdrop } from '@material-ui/core';
 
 import { MUOptions } from '../../types/sc';
 
@@ -66,8 +66,24 @@ const ColumnSC = {
     font-weight: 400;
     max-width: 190px;
     overflow-wrap: break-word;
+  `,
+  Backdrop: styled(Backdrop)`
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.2);
+    ${({ theme }: MUOptions) => `
+      z-index: ${theme.zIndex.drawer + 1} !important;
+    }`}
   `
 };
+
+const ModalForm = styled.form`
+  height: 70px;
+  width: 100%;
+  background-color: #fff;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+`;
 
 const SubmitButton = styled(Button)`
   ${({ theme }: MUOptions) => `
@@ -77,4 +93,4 @@ const SubmitButton = styled(Button)`
   }`}
 `;
 
-export { ColumnsContainer, ColumnSC, SubmitButton, DragWrapper };
+export { ColumnsContainer, ColumnSC, ModalForm, SubmitButton, DragWrapper };
