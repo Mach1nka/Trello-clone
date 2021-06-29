@@ -1,14 +1,15 @@
 import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
+
+import Card from './components/card';
 import { useAppSelector } from '../../store/hooks';
-import { CardsContainer as Container, DragWrapper } from './sc';
 import {
   getCards,
   changeCardStatus,
   changeCardPosition,
   Card as CardType
 } from '../../store/card/actions';
-import Card from './components/card';
+import { CardsContainer as Container, DragWrapper } from './sc';
 
 interface Props {
   columnId: string;

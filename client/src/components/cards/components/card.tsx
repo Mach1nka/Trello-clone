@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
-import { CardContainer as Container } from '../sc';
+import { CardSC as SC } from '../sc';
 import { deleteCard } from '../../../store/card/actions';
 import { setModalData, setModalsStates, resetModalData } from '../../../store/modals/actions';
 
@@ -47,7 +47,7 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   };
 
   return (
-    <Container
+    <SC.Container
       onClick={() => {
         dispatch(setModalData({ cardId, columnId, name, description }));
         dispatch(setModalsStates({ isDetailsModalVisible: true }));
@@ -76,7 +76,7 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
         <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
         <MenuItem onClick={handleChangeStatus}>Change column</MenuItem>
       </Menu>
-    </Container>
+    </SC.Container>
   );
 };
 

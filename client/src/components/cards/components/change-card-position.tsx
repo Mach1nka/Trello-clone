@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, Button, MenuItem } from '@material-ui/core';
+
 import { useAppSelector } from '../../../store/hooks';
 import { ModalForm as Form } from '../../boards-page/sc';
 import { changeCardPosition } from '../../../store/card/actions';

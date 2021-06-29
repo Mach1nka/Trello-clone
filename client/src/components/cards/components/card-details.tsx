@@ -5,18 +5,17 @@ import {
   Dialog,
   DialogTitle,
   DialogContent,
-  DialogActions,
   Button,
-  TextField,
   Typography,
   IconButton
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+
 import { useAppSelector } from '../../../store/hooks';
 import { changeCardDescription, renameCard, deleteCard } from '../../../store/card/actions';
 import { setModalsStates, resetModalData } from '../../../store/modals/actions';
-import { useStyles } from '../constants';
 import { configValidationSchema } from '../utils';
+import { CardSC as SC } from '../sc';
 
 interface Props {
   name: string;
@@ -28,12 +27,12 @@ interface Props {
 
 const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, columnId }) => {
   const dispatch = useDispatch();
+  const [isNameFocused, setIsNamedFocused] = useState(false);
+  const [isDescriptionFocused, setIsDescriptionFocused] = useState(false);
+
   const columnName = useAppSelector(
     (state) => state.boardColumns.columns.find((el) => el.id === columnId)?.name
   );
-  const [isNameFocused, setIsNamedFocused] = useState(false);
-  const [isDescriptionFocused, setIsDescriptionFocused] = useState(false);
-  const classes = useStyles();
 
   const formik = useFormik({
     initialValues: { name, description },
@@ -60,17 +59,14 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
     >
       <DialogTitle>
         {!isNameFocused ? (
-          <Typography onClick={() => setIsNamedFocused(true)} className={classes.cardName}>
-            {formik.values.name}
-          </Typography>
+          <SC.Name onClick={() => setIsNamedFocused(true)}>{formik.values.name}</SC.Name>
         ) : (
           <form autoComplete="off" onSubmit={formik.handleSubmit}>
-            <TextField
+            <SC.NameField
               id="name"
               name="name"
               autoFocus
               fullWidth
-              inputProps={{ className: classes.cardName }}
               defaultValue={name}
               onChange={formik.handleChange}
               error={formik.touched.name && !!formik.errors.name}
@@ -84,12 +80,11 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
         )}
         <Typography variant="body2">
           It is in column
-          <Button
+          <SC.ColumnNameButton
             onClick={() => dispatch(setModalsStates({ isStatusModalVisible: true }))}
-            classes={{ text: classes.columnNameButton }}
           >
             {columnName}
-          </Button>
+          </SC.ColumnNameButton>
         </Typography>
       </DialogTitle>
       <DialogContent>
@@ -97,13 +92,12 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
         <div>
           {isDescriptionFocused || !description ? (
             <form autoComplete="off" onSubmit={formik.handleSubmit}>
-              <TextField
+              <SC.DescriptionField
                 id="description"
                 name="description"
                 autoFocus={isDescriptionFocused}
                 fullWidth
                 placeholder={!description ? 'Add description' : ''}
-                inputProps={{ className: classes.descriptionTextarea }}
                 InputProps={{ inputComponent: 'textarea' }}
                 variant="filled"
                 defaultValue={description}
@@ -117,16 +111,13 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
               />
             </form>
           ) : (
-            <Typography
-              className={classes.descriptionText}
-              onClick={() => setIsDescriptionFocused(true)}
-            >
+            <SC.DescriptionText onClick={() => setIsDescriptionFocused(true)}>
               {formik.values.description}
-            </Typography>
+            </SC.DescriptionText>
           )}
         </div>
       </DialogContent>
-      <DialogActions classes={{ root: classes.dialogActions }}>
+      <SC.DialogActions>
         <IconButton
           aria-label="delete card"
           onClick={() => {
@@ -144,7 +135,7 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
         >
           close
         </Button>
-      </DialogActions>
+      </SC.DialogActions>
     </Dialog>
   );
 };

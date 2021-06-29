@@ -144,7 +144,7 @@ const updateDescriptionService = async (
   const { cardId, newDescription } = reqBody;
   const updatedCard: CardsInDB | null = await Card.findByIdAndUpdate(
     cardId,
-    { name: newDescription },
+    { description: newDescription },
     { new: true }
   );
 
