@@ -1,11 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import * as yup from 'yup';
+import { TextField, useTheme } from '@material-ui/core';
 import { useFormik } from 'formik';
-import { TextField, Button } from '@material-ui/core';
+import * as yup from 'yup';
+import { ThemeProvider } from 'styled-components';
+
 import { loginUser } from '../../../store/auth/actions';
-import { LogInForm as Form } from '../sc';
-import { loginFields, useStyles, Props } from '../constants';
+import { AuthorizationSC as SC } from '../sc';
+import { loginFields, Props } from '../constants';
 
 type FormikProps = {
   [key: string]: string;
@@ -13,7 +15,8 @@ type FormikProps = {
 
 const LogIn: React.FC<Props> = ({ setBackdropView }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+  const theme = useTheme();
+
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -30,10 +33,12 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       .min(6, 'Login must be more than 6 symbols')
       .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters')
   });
+
   const initialValues: FormikProps = {
     login: '',
     password: ''
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -42,37 +47,34 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       dispatch(loginUser({ login: values.login, password: values.password }));
     }
   });
+
   return (
-    <Form onSubmit={formik.handleSubmit} autoComplete="off">
-      <div>
-        {loginFields.map((el) => (
-          <TextField
-            key={el.id}
-            size="medium"
-            margin="normal"
-            variant="outlined"
-            fullWidth
-            id={el.id}
-            name={el.id}
-            label={el.label}
-            type={el.type}
-            autoFocus={el.autoFocus}
-            onChange={formik.handleChange}
-            error={formik.touched[el.id] && !!formik.errors[el.id]}
-            helperText={formik.touched[el.id] && formik.errors[el.id]}
-          />
-        ))}
-      </div>
-      <Button
-        size="large"
-        type="submit"
-        fullWidth
-        classes={{ root: classes.submitButton }}
-        variant="contained"
-      >
-        submit
-      </Button>
-    </Form>
+    <ThemeProvider theme={theme}>
+      <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
+        <div>
+          {loginFields.map((el) => (
+            <TextField
+              key={el.id}
+              size="medium"
+              margin="normal"
+              variant="outlined"
+              fullWidth
+              id={el.id}
+              name={el.id}
+              label={el.label}
+              type={el.type}
+              autoFocus={el.autoFocus}
+              onChange={formik.handleChange}
+              error={formik.touched[el.id] && !!formik.errors[el.id]}
+              helperText={formik.touched[el.id] && formik.errors[el.id]}
+            />
+          ))}
+        </div>
+        <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
+          submit
+        </SC.SubmitButton>
+      </SC.LogInForm>
+    </ThemeProvider>
   );
 };
 

@@ -1,11 +1,12 @@
 import React from 'react';
-import { TextField, Button } from '@material-ui/core';
-import * as yup from 'yup';
-import { useFormik } from 'formik';
 import { useDispatch } from 'react-redux';
+import { TextField } from '@material-ui/core';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
 import { registerUser } from '../../../store/auth/actions';
-import { SignUpForm as Form } from '../sc';
-import { registrationFields, useStyles, Props } from '../constants';
+import { AuthorizationSC as SC } from '../sc';
+import { registrationFields, Props } from '../constants';
 
 type FormikProps = {
   [key: string]: string;
@@ -13,7 +14,7 @@ type FormikProps = {
 
 const SignUp: React.FC<Props> = ({ setBackdropView }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -34,11 +35,13 @@ const SignUp: React.FC<Props> = ({ setBackdropView }) => {
       .required('Password is required')
       .oneOf([yup.ref('password')], 'Passwords does not match')
   });
+
   const initialValues: FormikProps = {
     login: '',
     password: '',
     confirmPassword: ''
   };
+
   const formik = useFormik({
     initialValues,
     validationSchema,
@@ -47,8 +50,9 @@ const SignUp: React.FC<Props> = ({ setBackdropView }) => {
       dispatch(registerUser({ login: values.login, password: values.password }));
     }
   });
+
   return (
-    <Form onSubmit={formik.handleSubmit} autoComplete="off">
+    <SC.SignUpForm onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
         {registrationFields.map((el) => (
           <TextField
@@ -68,16 +72,10 @@ const SignUp: React.FC<Props> = ({ setBackdropView }) => {
           />
         ))}
       </div>
-      <Button
-        size="large"
-        type="submit"
-        fullWidth
-        classes={{ root: classes.submitButton }}
-        variant="contained"
-      >
+      <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
         submit
-      </Button>
-    </Form>
+      </SC.SubmitButton>
+    </SC.SignUpForm>
   );
 };
 

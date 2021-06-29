@@ -1,21 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Container, Tab, Backdrop, CircularProgress } from '@material-ui/core';
+import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
+import { ThemeProvider } from 'styled-components';
+
 import { useAppSelector } from '../../store/hooks';
 import ErrorModal from './components/error-modal';
-import { authForms, useStyles } from './constants';
+import { authForms } from './constants';
+import { AuthorizationSC as SC } from './sc';
 
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
-  const [isOpenBackdrop, setBackdropView] = useState(false);
-  const classes = useStyles();
   const [isOpenModal, setModalView] = useState(false);
+  const [isOpenBackdrop, setBackdropView] = useState(false);
+
+  const theme = useTheme();
   const { message } = useAppSelector((state) => state.authData);
 
   useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
 
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Container maxWidth="xs">
         <ErrorModal
           setBackdropView={setBackdropView}
@@ -23,7 +27,7 @@ const Authorization: React.FC = () => {
           setModalView={setModalView}
           errorText={message}
         />
-        <Paper elevation={6} className={classes.paper}>
+        <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>
             <TabList
               onChange={(_evt, index: number) => setTabIndex(`${index}`)}
@@ -41,12 +45,12 @@ const Authorization: React.FC = () => {
               </TabPanel>
             ))}
           </TabContext>
-        </Paper>
+        </SC.Paper>
       </Container>
-      <Backdrop className={classes.backdrop} open={isOpenBackdrop}>
+      <SC.Backdrop open={isOpenBackdrop}>
         <CircularProgress color="inherit" />
-      </Backdrop>
-    </>
+      </SC.Backdrop>
+    </ThemeProvider>
   );
 };
 

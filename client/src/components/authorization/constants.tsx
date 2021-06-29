@@ -1,31 +1,11 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { makeStyles } from '@material-ui/core';
+
 import SignUp from './components/sign-up';
 import LogIn from './components/log-in';
 
 export interface Props {
   setBackdropView: Dispatch<SetStateAction<boolean>>;
 }
-
-const useStyles = makeStyles((theme) => ({
-  paper: {
-    width: 'inherit',
-    height: '500px',
-    marginTop: '30%'
-  },
-  backdrop: {
-    zIndex: theme.zIndex.drawer + 1,
-    color: '#fff',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)'
-  },
-  submitButton: {
-    backgroundColor: 'rgba(240, 125, 57, 0.85)',
-    '&:hover': {
-      backgroundColor: theme.palette.warning.main
-    }
-  },
-  errorButton: { color: '#f07d39' }
-}));
 
 const registrationFields = [
   {
@@ -73,4 +53,4 @@ const authForms = [
   }
 ];
 
-export { registrationFields, loginFields, authForms, useStyles };
+export { registrationFields, loginFields, authForms };

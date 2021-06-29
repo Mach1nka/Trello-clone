@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Drawer, List, ListItem, ListItemText, IconButton } from '@material-ui/core';
+import { ListItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useStyles } from './constants';
+
+import { HeaderSC as SC } from './sc';
 
 interface Props {
   boardName: string;
@@ -16,25 +17,17 @@ const Sidebar: React.FC<Props> = ({
   handleShareButton,
   isOwnBoard
 }) => {
-  const classes = useStyles();
   const [isOpenSidebar, setSidebarState] = useState(false);
+
   return (
     <>
-      <IconButton
-        aria-label="menu"
-        onClick={() => setSidebarState(true)}
-        classes={{ root: classes.burgerButton }}
-      >
+      <SC.BurgerButton aria-label="menu" onClick={() => setSidebarState(true)}>
         <MenuIcon />
-      </IconButton>
-      <Drawer
-        classes={{ paper: classes.drawer }}
-        onClose={() => setSidebarState(false)}
-        open={isOpenSidebar}
-      >
-        <List>
+      </SC.BurgerButton>
+      <SC.Drawer onClose={() => setSidebarState(false)} open={isOpenSidebar}>
+        <SC.List>
           <ListItem divider>
-            <ListItemText classes={{ primary: classes.listItemText }} primary={boardName} />
+            <SC.ListItemText primary={boardName} />
           </ListItem>
           {isOwnBoard !== -1 && (
             <ListItem
@@ -44,7 +37,7 @@ const Sidebar: React.FC<Props> = ({
                 setSidebarState(false);
               }}
             >
-              <ListItemText primary="Share" />
+              <SC.ListItemText primary="Share" />
             </ListItem>
           )}
           <ListItem
@@ -54,10 +47,10 @@ const Sidebar: React.FC<Props> = ({
               setSidebarState(false);
             }}
           >
-            <ListItemText primary="Boards" />
+            <SC.ListItemText primary="Boards" />
           </ListItem>
-        </List>
-      </Drawer>
+        </SC.List>
+      </SC.Drawer>
     </>
   );
 };

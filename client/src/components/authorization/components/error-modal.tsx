@@ -1,8 +1,9 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
-import { Dialog, DialogTitle, DialogActions, Button, Typography } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, Typography } from '@material-ui/core';
+
 import { putErrorMessage } from '../../../store/auth/actions';
-import { useStyles } from '../constants';
+import { AuthorizationSC as SC } from '../sc';
 
 interface Props {
   errorText: string;
@@ -13,7 +14,7 @@ interface Props {
 
 const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView, setBackdropView }) => {
   const dispatch = useDispatch();
-  const classes = useStyles();
+
   const upperErrorText = errorText.toUpperCase();
 
   const handleClose = () => {
@@ -30,9 +31,9 @@ const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView, setBackd
         </Typography>
       </DialogTitle>
       <DialogActions>
-        <Button onClick={handleClose} classes={{ root: classes.errorButton }} autoFocus>
+        <SC.ErrorButton onClick={handleClose} autoFocus>
           OK
-        </Button>
+        </SC.ErrorButton>
       </DialogActions>
     </Dialog>
   );

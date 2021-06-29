@@ -1,16 +1,18 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { AppBar, Toolbar, Button, Typography } from '@material-ui/core';
-import { useAppSelector } from '../../store/hooks';
-import { useStyles } from './constants';
-import resetStore from '../../../utils/reset-store';
-import { setModalsStates, setModalData } from '../../store/modals/actions';
+import { useTheme } from '@material-ui/core';
+import { ThemeProvider } from 'styled-components';
+
 import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
-import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
-import useWindowSize from '../../../utils/window-size-hook';
+import { useAppSelector } from '../../store/hooks';
 import { getBoards } from '../../store/board/actions';
+import { setModalsStates, setModalData } from '../../store/modals/actions';
+import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+import resetStore from '../../../utils/reset-store';
+import useWindowSize from '../../../utils/window-size-hook';
+import { HeaderSC as SC } from './sc';
 
 interface Location {
   state: {
@@ -24,9 +26,10 @@ const Header: React.FC = () => {
   const { pathname, state }: Location = useLocation();
   const history = useHistory();
   const dispatch = useDispatch();
-  const classes = useStyles();
   const { width } = useWindowSize();
+  const theme = useTheme();
   const { ownBoards, sharedBoards } = useAppSelector((data) => data.userBoards);
+
   const pathLength = 14;
   const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardName : '';
   const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardId : '';
@@ -60,27 +63,20 @@ const Header: React.FC = () => {
       {width && width >= 768 ? (
         <>
           <div>
-            <Button
+            <SC.NavButton
               style={{ marginRight: '10px' }}
               onClick={handleBoardsButton}
               variant="outlined"
-              classes={{ root: classes.navButton }}
             >
               Boards
-            </Button>
+            </SC.NavButton>
             {isOwnBoard !== -1 && (
-              <Button
-                onClick={handleShareButton}
-                variant="outlined"
-                classes={{ root: classes.navButton }}
-              >
+              <SC.NavButton onClick={handleShareButton} variant="outlined">
                 Share
-              </Button>
+              </SC.NavButton>
             )}
           </div>
-          <Typography className={classes.boardName} variant="h6">
-            {boardName}
-          </Typography>
+          <SC.BoardName variant="h6">{boardName}</SC.BoardName>
         </>
       ) : (
         <Sidebar
@@ -94,23 +90,18 @@ const Header: React.FC = () => {
   ) : null;
 
   return (
-    <>
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar className={classes.toolBar}>
+    <ThemeProvider theme={theme}>
+      <SC.AppBar position="static">
+        <SC.ToolBar>
           {controls}
           {!controls && <div />}
-          <Button
-            onClick={handleLogOut}
-            variant="outlined"
-            color="default"
-            classes={{ root: classes.navButton }}
-          >
+          <SC.NavButton onClick={handleLogOut} variant="outlined" color="default">
             Log Out
-          </Button>
-        </Toolbar>
-      </AppBar>
+          </SC.NavButton>
+        </SC.ToolBar>
+      </SC.AppBar>
       <ShareBoardModal />
-    </>
+    </ThemeProvider>
   );
 };
 
