@@ -9,13 +9,15 @@ import {
   SHARE_BOARD,
   putUserBoards,
   putCreatedBoard,
-  putRenamedBoard,
-  BoardList,
-  Board,
+  putRenamedBoard
+} from './actions';
+import {
+  UpdatedBoard,
+  ListBoardData,
   DataForCreatingBoard,
   DataForRenamingBoard,
   DataForDeletingBoard
-} from './actions';
+} from './types';
 import {
   getBoards,
   createBoard,
@@ -27,8 +29,8 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetBoards(): SagaIterator {
-  const data: BoardList | number = yield call(getBoards);
-  if (data.statusCode === 401) {
+  const data: ListBoardData | number = yield call(getBoards);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -41,8 +43,8 @@ function* watchGetBoards(): SagaIterator {
 }
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const data: Board | number = yield call(createBoard, boardData.payload);
-  if (data.statusCode === 401) {
+  const data: UpdatedBoard | number = yield call(createBoard, boardData.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -55,8 +57,8 @@ function* watchCreateBoard(): SagaIterator {
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const data: Board | number = yield call(updateBoardName, board.payload);
-  if (data.statusCode === 401) {
+  const data: UpdatedBoard | number = yield call(updateBoardName, board.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -70,7 +72,7 @@ function* watchRenameBoard(): SagaIterator {
 
 function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
   const data: null | number = yield call(shareBoard, board.payload);
-  if (data.statusCode === 401) {
+  if (data === 401) {
     resetStore();
   }
 }
@@ -81,8 +83,8 @@ function* watchShareBoard(): SagaIterator {
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
-  const data: BoardList | number = yield call(getBoards);
-  if (data.statusCode === 401) {
+  const data: ListBoardData | number = yield call(getBoards);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {

@@ -1,38 +1,17 @@
-const PUT_USER_BOARDS = 'PUT_USER_BOARDS';
-const PUT_CREATED_BOARD = 'PUT_CREATE_BOARD';
-const DELETE_BOARD = 'DELETE_BOARD';
-const PUT_RENAMED_BOARD = 'PUT_RENAMED_BOARD';
+import {
+  DataForCreatingBoard,
+  DataForRenamingBoard,
+  DataForDeletingBoard,
+  BoardTypes,
+  BoardList,
+  Board
+} from './types';
+
 const GET_BOARDS = 'GET_BOARDS';
 const CREATE_BOARD = 'CREATE_BOARD';
 const RENAME_BOARD = 'RENAME_BOARD';
 const SHARE_BOARD = 'SHARE_BOARD';
-const DELETE_BOARDS_DATA = 'DELETE_BOARDS_DATA';
-
-export interface Board {
-  name: string;
-  id: string;
-}
-
-export interface BoardList {
-  ownBoards: Board[];
-  sharedBoards: Board[];
-}
-
-export interface DataForCreatingBoard {
-  name: string;
-  userId: string;
-}
-
-export interface DataForRenamingBoard {
-  newName: string;
-  boardId: string;
-  userId: string;
-}
-
-export interface DataForDeletingBoard {
-  userId: string;
-  boardId: string;
-}
+const DELETE_BOARD = 'DELETE_BOARD';
 
 const getBoards = (): { type: string } => ({
   type: GET_BOARDS
@@ -67,21 +46,21 @@ const deleteBoard = (
 });
 
 const putUserBoards = (boards: BoardList): { type: string; payload: BoardList } => ({
-  type: PUT_USER_BOARDS,
+  type: BoardTypes.PUT_USER_BOARDS,
   payload: boards
 });
 
 const putCreatedBoard = (newBoard: Board): { type: string; payload: Board } => ({
-  type: PUT_CREATED_BOARD,
+  type: BoardTypes.PUT_CREATED_BOARD,
   payload: newBoard
 });
 
 const putRenamedBoard = (renamedBoard: Board): { type: string; payload: Board } => ({
-  type: PUT_RENAMED_BOARD,
+  type: BoardTypes.PUT_RENAMED_BOARD,
   payload: renamedBoard
 });
 
-const deleteBoardsData = (): { type: string } => ({ type: DELETE_BOARDS_DATA });
+const deleteBoardsData = (): { type: string } => ({ type: BoardTypes.DELETE_BOARDS_DATA });
 
 export {
   GET_BOARDS,
@@ -89,10 +68,6 @@ export {
   RENAME_BOARD,
   SHARE_BOARD,
   DELETE_BOARD,
-  PUT_USER_BOARDS,
-  PUT_CREATED_BOARD,
-  PUT_RENAMED_BOARD,
-  DELETE_BOARDS_DATA,
   putUserBoards,
   putCreatedBoard,
   putRenamedBoard,

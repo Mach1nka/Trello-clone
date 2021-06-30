@@ -1,11 +1,4 @@
-import {
-  PUT_USER_BOARDS,
-  PUT_RENAMED_BOARD,
-  PUT_CREATED_BOARD,
-  DELETE_BOARDS_DATA,
-  BoardList,
-  Board
-} from './actions';
+import { BoardTypes, BoardList, BoardActions } from './types';
 import replaceBoardName from '../../../utils/replace-board-name';
 
 const initialBoardsState: BoardList = {
@@ -13,24 +6,21 @@ const initialBoardsState: BoardList = {
   sharedBoards: []
 };
 
-const userBoards = (
-  state = initialBoardsState,
-  { type, payload }: { type: string; payload: BoardList | Board }
-): BoardList => {
-  switch (type) {
-    case PUT_USER_BOARDS:
-      return { ...state, ...payload };
-    case PUT_RENAMED_BOARD:
+const userBoards = (state = initialBoardsState, action: BoardActions): BoardList => {
+  switch (action.type) {
+    case BoardTypes.PUT_USER_BOARDS:
+      return { ...state, ...action.payload };
+    case BoardTypes.PUT_RENAMED_BOARD:
       return {
         ...state,
-        ownBoards: replaceBoardName(state, payload as Board)
+        ownBoards: replaceBoardName(state, action.payload)
       };
-    case PUT_CREATED_BOARD:
+    case BoardTypes.PUT_CREATED_BOARD:
       return {
         ...state,
-        ownBoards: state.ownBoards.concat(payload as Board)
+        ownBoards: state.ownBoards.concat(action.payload)
       };
-    case DELETE_BOARDS_DATA:
+    case BoardTypes.DELETE_BOARDS_DATA:
       return { ...state, ...initialBoardsState };
     default:
       return state;

@@ -10,13 +10,16 @@ import {
   putColumns,
   putCreatedColumn,
   putRenamedColumn,
-  putUpdatedPos,
-  Column,
+  putUpdatedPos
+} from './actions';
+import {
+  ListColumnData,
+  UpdatedColumn,
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
   DataForDeletingColumn
-} from './actions';
+} from './types';
 import {
   getColumns,
   createColumn,
@@ -28,8 +31,8 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
-  const data: Column[] | number = yield call(getColumns, columnData.payload);
-  if (data.statusCode === 401) {
+  const data: ListColumnData[] | number = yield call(getColumns, columnData.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -42,8 +45,8 @@ function* watchGetColumns(): SagaIterator {
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const data: Column | number = yield call(createColumn, columnData.payload);
-  if (data.statusCode === 401) {
+  const data: UpdatedColumn | number = yield call(createColumn, columnData.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -56,8 +59,8 @@ function* watchCreateColumn(): SagaIterator {
 }
 
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
-  const data: Column | number = yield call(updateColumnName, columnData.payload);
-  if (data.statusCode === 401) {
+  const data: UpdatedColumn | number = yield call(updateColumnName, columnData.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -70,8 +73,8 @@ function* watchRenameColumn(): SagaIterator {
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const data: Column[] | number = yield call(updateColumnPosition, columnData.payload);
-  if (data.statusCode === 401) {
+  const data: ListColumnData[] | number = yield call(updateColumnPosition, columnData.payload);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -85,8 +88,8 @@ function* watchChangeColumnPos(): SagaIterator {
 
 function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletingColumn }) {
   yield call(deleteColumn, columnData.payload);
-  const data: Column[] | number = yield call(getColumns, columnData.payload.boardId);
-  if (data.statusCode === 401) {
+  const data: ListColumnData[] | number = yield call(getColumns, columnData.payload.boardId);
+  if (data === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {

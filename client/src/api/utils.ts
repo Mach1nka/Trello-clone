@@ -8,6 +8,6 @@ const requestHeader = (): Record<string, string> => {
   };
 };
 
-const responseHandler = (resp: Response) => resp.json();
+const responseHandler = (resp: Response) => (resp.status === 401 ? 401 : resp.json());
 
 export { requestHeader, responseHandler };

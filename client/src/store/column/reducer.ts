@@ -1,11 +1,4 @@
-import {
-  PUT_BOARD_COLUMNS,
-  PUT_CREATED_COLUMN,
-  PUT_COLUMN_WITH_NEW_POSITION,
-  PUT_RENAMED_COLUMN,
-  DELETE_COLUMNS_DATA,
-  Column
-} from './actions';
+import { ColumnTypes, Column, BoardActions } from './types';
 import replaceColumnName from '../../../utils/replace-column-name';
 
 export interface ColumnData {
@@ -16,38 +9,29 @@ const initialColumnsState: ColumnData = {
   columns: []
 };
 
-const boardColumns = (
-  state = initialColumnsState,
-  { type, payload }: { type: string; payload: Column[] | Column }
-): ColumnData => {
-  switch (type) {
-    case PUT_BOARD_COLUMNS:
-      if (Array.isArray(payload)) {
-        return {
-          ...state,
-          columns: payload as Column[]
-        };
-      }
-      return { ...state };
-    case PUT_CREATED_COLUMN:
+const boardColumns = (state = initialColumnsState, action: BoardActions): ColumnData => {
+  switch (action.type) {
+    case ColumnTypes.PUT_COLUMNS:
       return {
         ...state,
-        columns: [...state.columns, ...[payload as Column]]
+        columns: action.payload
       };
-    case PUT_RENAMED_COLUMN:
+    case ColumnTypes.PUT_CREATED_COLUMN:
       return {
         ...state,
-        columns: replaceColumnName(state, payload as Column)
+        columns: [...state.columns, ...[action.payload]]
       };
-    case PUT_COLUMN_WITH_NEW_POSITION:
-      if (Array.isArray(payload)) {
-        return {
-          ...state,
-          columns: payload as Column[]
-        };
-      }
-      return { ...state };
-    case DELETE_COLUMNS_DATA:
+    case ColumnTypes.PUT_RENAMED_COLUMN:
+      return {
+        ...state,
+        columns: replaceColumnName(state, action.payload)
+      };
+    case ColumnTypes.PUT_COLUMN_WITH_NEW_POSITION:
+      return {
+        ...state,
+        columns: action.payload
+      };
+    case ColumnTypes.DELETE_COLUMNS_DATA:
       return { ...state, ...initialColumnsState };
     default:
       return state;

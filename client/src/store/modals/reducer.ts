@@ -1,11 +1,4 @@
-import {
-  SET_CARD_DATA,
-  SET_MODAL_STATE,
-  RESET_MODAL_DATA,
-  ModalsData,
-  ModalsStates,
-  CardData
-} from './actions';
+import { ModalTypes, ModalsData, ModalActions } from './types';
 
 const initialModalsState: ModalsData = {
   dataForModals: {
@@ -24,22 +17,19 @@ const initialModalsState: ModalsData = {
   }
 };
 
-const modalsData = (
-  state = initialModalsState,
-  { type, payload }: { type: string; payload: ModalsStates | CardData }
-): ModalsData => {
-  switch (type) {
-    case SET_CARD_DATA:
+const modalsData = (state = initialModalsState, action: ModalActions): ModalsData => {
+  switch (action.type) {
+    case ModalTypes.SET_CARD_DATA:
       return {
         ...state,
-        dataForModals: { ...state.dataForModals, ...(payload as CardData) }
+        dataForModals: { ...state.dataForModals, ...action.payload }
       };
-    case SET_MODAL_STATE:
+    case ModalTypes.SET_MODAL_STATE:
       return {
         ...state,
-        modalsStates: { ...state.modalsStates, ...(payload as ModalsStates) }
+        modalsStates: { ...state.modalsStates, ...action.payload }
       };
-    case RESET_MODAL_DATA:
+    case ModalTypes.RESET_MODAL_DATA:
       return { ...state, ...initialModalsState };
     default:
       return state;

@@ -1,11 +1,4 @@
-import {
-  PUT_USER_DATA,
-  PUT_MESSAGE_ERROR,
-  USER_LOGGED_OUT,
-  AccountDataInStore,
-  SuccessResponse,
-  ErrorResponse
-} from './actions';
+import { AccountDataInStore, AuthTypes, AuthActions } from './types';
 
 const initialAuthState: AccountDataInStore = {
   login: '',
@@ -14,19 +7,16 @@ const initialAuthState: AccountDataInStore = {
   message: ''
 };
 
-const authData = (
-  state = initialAuthState,
-  { type, payload }: { type: string; payload: SuccessResponse | ErrorResponse }
-): AccountDataInStore => {
-  switch (type) {
-    case PUT_USER_DATA:
-      return { ...state, ...payload };
-    case PUT_MESSAGE_ERROR:
+const authData = (state = initialAuthState, action: AuthActions): AccountDataInStore => {
+  switch (action.type) {
+    case AuthTypes.PUT_USER_DATA:
+      return { ...state, ...action.payload };
+    case AuthTypes.PUT_MESSAGE_ERROR:
       return {
         ...state,
-        message: payload.message
+        message: action.payload.message
       };
-    case USER_LOGGED_OUT:
+    case AuthTypes.USER_LOGGED_OUT:
       return {
         ...state,
         ...initialAuthState
