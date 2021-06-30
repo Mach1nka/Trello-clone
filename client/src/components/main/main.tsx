@@ -1,9 +1,11 @@
 import React, { useEffect } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch } from 'react-router-dom';
 import { useAppSelector } from '../../store/hooks';
+
 import BoardsList from '../boards-page/boards-list';
 import ColumnsContainer from '../columns/columns-container';
 import Header from '../header/header';
+import PrivateRoute from '../routing/private-route';
 import { saveAuthDataToLocalStorage } from '../../../utils/auth-data-localstorage';
 
 const Main: React.FC = () => {
@@ -16,8 +18,8 @@ const Main: React.FC = () => {
     <>
       <Header />
       <Switch>
-        <Route exact path="/boards" component={BoardsList} />
-        <Route path="/boards/board/:boardId" component={ColumnsContainer} />
+        <PrivateRoute exact path="/boards" component={BoardsList} />
+        <PrivateRoute exact={false} path="/boards/board/:boardId" component={ColumnsContainer} />
       </Switch>
     </>
   );

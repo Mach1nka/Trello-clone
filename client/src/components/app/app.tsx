@@ -4,25 +4,19 @@ import { MuiThemeProvider } from '@material-ui/core';
 
 import Authorization from '../authorization/authorization';
 import Main from '../main/main';
-import { useAppSelector } from '../../store/hooks';
+import PrivateRoute from '../routing/private-route';
 import { defaultColorsMU } from './constants';
 
-const App: React.FC = () => {
-  const { token } = useAppSelector((state) => state.authData);
-  return (
-    <Router>
-      <MuiThemeProvider theme={defaultColorsMU}>
-        <Switch>
-          <Route path="/boards" render={() => (token ? <Main /> : <Redirect to="/auth" />)} />
-          <Route
-            path="/auth"
-            render={() => (!token ? <Authorization /> : <Redirect to="/boards" />)}
-          />
-          <Redirect from="/" to="/boards" />
-        </Switch>
-      </MuiThemeProvider>
-    </Router>
-  );
-};
+const App: React.FC = () => (
+  <Router>
+    <MuiThemeProvider theme={defaultColorsMU}>
+      <Switch>
+        <PrivateRoute exact={false} path="/boards" component={Main} />
+        <Route path="/auth" component={Authorization} />
+        <Redirect from="/" to="/boards" />
+      </Switch>
+    </MuiThemeProvider>
+  </Router>
+);
 
 export default App;

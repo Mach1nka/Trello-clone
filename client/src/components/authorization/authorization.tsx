@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
@@ -12,11 +13,20 @@ const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
   const [isOpenModal, setModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
-
+  const history = useHistory();
   const theme = useTheme();
-  const { message } = useAppSelector((state) => state.authData);
+  const { message, token } = useAppSelector((state) => state.authData);
 
-  useEffect(() => (message ? setModalView(true) : setModalView(false)), [message]);
+  useEffect(() => {
+    if (message) {
+      setModalView(true);
+    } else {
+      setModalView(false);
+    }
+    if (token) {
+      history.push('/boards');
+    }
+  }, [message, token]);
 
   return (
     <ThemeProvider theme={theme}>
