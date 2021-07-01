@@ -35,7 +35,7 @@ async function registerService(reqBody: AuthData): Promise<UserInDB> {
   }
 
   const salt = bcrypt.genSaltSync(10);
-  const user = new User({
+  const user = User.build({
     login,
     password: bcrypt.hashSync(password, salt)
   });

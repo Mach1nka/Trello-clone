@@ -1,8 +1,17 @@
 import mongoose, { Schema } from 'mongoose';
 
+interface UserAttrs {
+  login: string;
+  password: string;
+}
+
 export interface UserInDB extends mongoose.Document {
   login: string;
   password: string;
+}
+
+interface UserModel extends mongoose.Model<UserInDB> {
+  build(attrs: UserAttrs): UserInDB;
 }
 
 const UserSchema = new Schema({
@@ -17,4 +26,10 @@ const UserSchema = new Schema({
   }
 });
 
-export default mongoose.model<UserInDB>('users', UserSchema);
+const User = mongoose.model<UserInDB, UserModel>('users', UserSchema);
+
+UserSchema.statics.build = (attrs: UserModel) => {
+  return new User(attrs);
+};
+
+export default User;
