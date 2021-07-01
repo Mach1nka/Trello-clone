@@ -1,10 +1,10 @@
-import { serverURL } from './api-data';
-import { UserData } from '../store/auth/actions';
+import { serverURL, HEADER } from '../../utils/constants';
+import { UserData } from '../store/auth/types';
 
 const registerUser = (userData: UserData): Promise<Response> =>
   fetch(`${serverURL}/auth/sign-up`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    headers: HEADER,
     body: JSON.stringify(userData)
   })
     .then((resp) => resp.json())
@@ -13,7 +13,7 @@ const registerUser = (userData: UserData): Promise<Response> =>
 const loginUser = (userData: UserData): Promise<Response> =>
   fetch(`${serverURL}/auth/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json;charset=utf-8' },
+    headers: HEADER,
     body: JSON.stringify(userData)
   })
     .then((resp) => resp.json())

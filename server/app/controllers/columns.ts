@@ -59,7 +59,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
   }
 
   await deleteService(req.body);
-  res.status(204).json(new BaseResponse('', 204));
+  res.status(204).json(new BaseResponse({}, 204));
 };
 
 export { getColumns, createNewColumn, updateColumnName, updateColumnPosition, deleteColumn };

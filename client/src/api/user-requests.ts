@@ -1,4 +1,4 @@
-import { serverURL } from './api-data';
+import { serverURL } from '../../utils/constants';
 import { requestHeader, responseHandler } from './utils';
 
 export interface User {

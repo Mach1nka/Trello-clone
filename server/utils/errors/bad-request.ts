@@ -1,18 +1,13 @@
-class BadRequest {
-  message: string;
+import { ValidationError } from 'express-validator';
 
-  statusCode: number;
+import { CommonError } from '../../types/errors';
 
-  errors: {
-    msg?: string;
-    param?: string;
-    location?: string;
-  };
+class BadRequest extends CommonError {
+  errors: Partial<ValidationError>;
 
   constructor(errors = {}, message = 'Bad Request', statusCode = 400) {
+    super(message, statusCode);
     this.errors = errors;
-    this.message = message;
-    this.statusCode = statusCode;
   }
 }
 

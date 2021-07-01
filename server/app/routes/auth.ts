@@ -14,6 +14,13 @@ router.post(
   logIn
 );
 
-router.post('/sign-up', register); // вынести общу часть
+router.post(
+  '/sign-up',
+  [
+    check('login', 'Please include a valid email').exists(),
+    check('password', 'Password is required').exists()
+  ],
+  register
+);
 
 export { router };

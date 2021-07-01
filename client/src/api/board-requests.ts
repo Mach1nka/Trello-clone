@@ -1,9 +1,9 @@
-import { serverURL } from './api-data';
+import { serverURL } from '../../utils/constants';
 import {
   DataForRenamingBoard,
   DataForCreatingBoard,
   DataForDeletingBoard
-} from '../store/board/actions';
+} from '../store/board/types';
 import { requestHeader, responseHandler } from './utils';
 
 const getBoards = (): Promise<Response> =>

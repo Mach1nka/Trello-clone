@@ -1,4 +1,4 @@
-import { serverURL } from './api-data';
+import { serverURL } from '../../utils/constants';
 import {
   DataForCreatingCard,
   DataForRenamingCard,
@@ -6,7 +6,7 @@ import {
   DataForUpdatingCardPos,
   DataForUpdatingCardStatus,
   DataForDeletingCard
-} from '../store/card/actions';
+} from '../store/card/types';
 import { requestHeader, responseHandler } from './utils';
 
 const getCards = (columnId: string): Promise<Response> =>

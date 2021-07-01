@@ -1,10 +1,10 @@
-import { serverURL } from './api-data';
+import { serverURL } from '../../utils/constants';
 import {
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
   DataForDeletingColumn
-} from '../store/column/actions';
+} from '../store/column/types';
 import { requestHeader, responseHandler } from './utils';
 
 const getColumns = (boardId: string): Promise<Response> =>

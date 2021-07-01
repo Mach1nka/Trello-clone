@@ -1,9 +1,9 @@
-class BaseResponse {
+class BaseResponse<T> {
   statusCode: number;
 
-  data: any;
+  data: T;
 
-  constructor(data = {}, statusCode = 200) {
+  constructor(data: T, statusCode = 200) {
     this.statusCode = statusCode;
     this.data = data;
   }

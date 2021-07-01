@@ -1,9 +1,11 @@
 import getToken from '../../utils/get-token';
+import { HEADER } from '../../utils/constants';
 
 const requestHeader = (): Record<string, string> => {
   const authToken = getToken();
+
   return {
-    'Content-Type': 'application/json;charset=utf-8',
+    ...HEADER,
     Authorization: authToken
   };
 };
