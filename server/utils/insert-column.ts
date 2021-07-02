@@ -1,11 +1,11 @@
-import { ColumnsInDB } from '../app/models/column';
+import { ColumnInDB } from '../app/models/column';
 
 const insertColumnToArr = (
-  arr: ColumnsInDB[],
-  editableEl: ColumnsInDB,
+  arr: ColumnInDB[],
+  editableEl: ColumnInDB,
   newPosition: number,
   indexOldEl: number
-): ColumnsInDB[] => {
+): ColumnInDB[] => {
   if (editableEl.position < newPosition) {
     arr.splice(+newPosition + 1, 0, editableEl);
     arr.splice(indexOldEl, 1);

@@ -1,4 +1,4 @@
-import Board, { BoardsInDB } from '../models/board';
+import Board, { BoardInDB } from '../models/board';
 import Column from '../models/column';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
@@ -32,8 +32,8 @@ interface BodyForShareDeleteBoard {
 }
 
 const getBoardsService = async (userId: string): Promise<ReturnValue> => {
-  const ownBoards: BoardsInDB[] = await Board.find({ owner: userId });
-  const sharedBoards: BoardsInDB[] = await Board.find().where('accessUsers').in([userId]);
+  const ownBoards: BoardInDB[] = await Board.find({ owner: userId });
+  const sharedBoards: BoardInDB[] = await Board.find().where('accessUsers').in([userId]);
 
   const filteredOwnBoardObj: FilteredBoard[] = ownBoards.length
     ? ownBoards.map((el) => ({
@@ -52,7 +52,7 @@ const getBoardsService = async (userId: string): Promise<ReturnValue> => {
   return { filteredOwnBoardObj, filteredSharedBoardObj };
 };
 
-const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardsInDB> => {
+const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardInDB> => {
   const { name, userId } = reqBody;
 
   const board = new Board({
@@ -60,14 +60,14 @@ const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardsInD
     owner: userId
   });
 
-  const createdBoard: BoardsInDB = await board.save();
+  const createdBoard: BoardInDB = await board.save();
 
   return createdBoard;
 };
 
-const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInDB> => {
+const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardInDB> => {
   const { boardId, userId, newName } = reqBody;
-  const board: BoardsInDB | null = await Board.findById(boardId);
+  const board: BoardInDB | null = await Board.findById(boardId);
 
   if (!board) {
     throw new NotFound();
@@ -79,7 +79,7 @@ const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInD
     throw new BadRequest();
   }
 
-  const updatedBoard: BoardsInDB | null = await Board.findByIdAndUpdate(
+  const updatedBoard: BoardInDB | null = await Board.findByIdAndUpdate(
     boardId,
     { name: newName },
     { new: true }
@@ -94,7 +94,7 @@ const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardsInD
 
 const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
   const { boardId, userId } = reqBody;
-  const sharedBoard: BoardsInDB | null = await Board.findById(boardId);
+  const sharedBoard: BoardInDB | null = await Board.findById(boardId);
 
   if (!sharedBoard) {
     throw new NotFound();
@@ -117,7 +117,7 @@ const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void
 
 const deleteService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
   const { boardId, userId } = reqBody;
-  const board: BoardsInDB | null = await Board.findById(boardId);
+  const board: BoardInDB | null = await Board.findById(boardId);
 
   if (!board) {
     throw new NotFound();

@@ -1,4 +1,4 @@
-import Card, { CardsInDB } from '../models/card';
+import Card, { CardInDB } from '../models/card';
 import { BulkUpdate, BulkPosition } from '../../types/bulkarr';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
@@ -48,7 +48,7 @@ interface BodyForDelete {
 }
 
 const getCardsService = async (columnId: string): Promise<FilteredCard[]> => {
-  const cardsArr: CardsInDB[] = await Card.find({ columnId });
+  const cardsArr: CardInDB[] = await Card.find({ columnId });
 
   if (cardsArr.length) {
     cardsArr.sort((a, b) => a.position - b.position);
@@ -77,7 +77,7 @@ const createCardService = async (reqBody: BodyForCreatCard): Promise<FilteredCar
   });
 
   await newCard.save();
-  const cardsData: CardsInDB[] = await Card.find({ columnId });
+  const cardsData: CardInDB[] = await Card.find({ columnId });
 
   cardsData.sort((a, b) => a.position - b.position);
 
@@ -100,7 +100,7 @@ const createCardService = async (reqBody: BodyForCreatCard): Promise<FilteredCar
 
   await Card.bulkWrite(bulkArr);
 
-  const createdCard: CardsInDB | null = await Card.findById(newCard._id);
+  const createdCard: CardInDB | null = await Card.findById(newCard._id);
 
   if (!createdCard) {
     throw new NotFound();
@@ -118,7 +118,7 @@ const createCardService = async (reqBody: BodyForCreatCard): Promise<FilteredCar
 
 const updateNameService = async (reqBody: BodyForRenameCard): Promise<FilteredCard> => {
   const { cardId, newName } = reqBody;
-  const updatedCard: CardsInDB | null = await Card.findByIdAndUpdate(
+  const updatedCard: CardInDB | null = await Card.findByIdAndUpdate(
     cardId,
     { name: newName },
     { new: true }
@@ -142,7 +142,7 @@ const updateDescriptionService = async (
   reqBody: BodyForUpdateDescription
 ): Promise<FilteredCard> => {
   const { cardId, newDescription } = reqBody;
-  const updatedCard: CardsInDB | null = await Card.findByIdAndUpdate(
+  const updatedCard: CardInDB | null = await Card.findByIdAndUpdate(
     cardId,
     { description: newDescription },
     { new: true }
@@ -165,18 +165,18 @@ const updateDescriptionService = async (
 const updatePositionService = async (reqBody: BodyForUpdatePos): Promise<FilteredCard[]> => {
   const { columnId, newPosition, cardId } = reqBody;
   const bulkArr: BulkUpdate<BulkPosition>[] = [];
-  const cardsArr: CardsInDB[] = await Card.find({ columnId });
+  const cardsArr: CardInDB[] = await Card.find({ columnId });
 
   cardsArr.sort((a, b) => a.position - b.position);
 
   const indexOldEl = cardsArr.findIndex((el) => el._id.toString() === cardId);
-  const editableEl: CardsInDB | undefined = cardsArr.find((el) => el._id.toString() === cardId);
+  const editableEl: CardInDB | undefined = cardsArr.find((el) => el._id.toString() === cardId);
 
   if (!editableEl) {
     throw new BadRequest();
   }
 
-  const updatedArr: CardsInDB[] = insertCardToArr(cardsArr, editableEl, newPosition, indexOldEl);
+  const updatedArr: CardInDB[] = insertCardToArr(cardsArr, editableEl, newPosition, indexOldEl);
 
   const elementsWithUpdatedPos: FilteredCard[] = updatedArr.map((el, idx) => ({
     id: el._id,
@@ -204,7 +204,7 @@ const updateStatusService = async (reqBody: BodyForUpdateStatus): Promise<void> 
 
   await Card.findByIdAndUpdate(cardId, { columnId: newColumnId, position: newPosition });
 
-  const oldStatusArr: CardsInDB[] = await Card.find({ columnId });
+  const oldStatusArr: CardInDB[] = await Card.find({ columnId });
   const oldStatusBulkArr: BulkUpdate<BulkPosition>[] = [];
 
   const oldStatusArrWithUpdatedPos: FilteredCard[] = oldStatusArr.map((el, idx) => ({
@@ -225,24 +225,19 @@ const updateStatusService = async (reqBody: BodyForUpdateStatus): Promise<void> 
   });
   await Card.bulkWrite(oldStatusBulkArr);
 
-  const newStatusArr: CardsInDB[] = await Card.find({ columnId: newColumnId });
+  const newStatusArr: CardInDB[] = await Card.find({ columnId: newColumnId });
   const newStatusBulkArr: BulkUpdate<BulkPosition>[] = [];
 
   newStatusArr.sort((a, b) => a.position - b.position);
 
   const indexOldEl = newStatusArr.findIndex((el) => el._id.toString() === cardId);
-  const editableEl: CardsInDB | undefined = newStatusArr.find((el) => el._id.toString() === cardId);
+  const editableEl: CardInDB | undefined = newStatusArr.find((el) => el._id.toString() === cardId);
 
   if (!editableEl) {
     throw new BadRequest();
   }
 
-  const updatedArr: CardsInDB[] = insertCardToArr(
-    newStatusArr,
-    editableEl,
-    newPosition,
-    indexOldEl
-  );
+  const updatedArr: CardInDB[] = insertCardToArr(newStatusArr, editableEl, newPosition, indexOldEl);
 
   const newStatusArrWithUpdatedPos: FilteredCard[] = updatedArr.map((el, idx) => ({
     id: el._id,
@@ -268,7 +263,7 @@ const deleteService = async (reqBody: BodyForDelete): Promise<void> => {
   const { cardId, columnId } = reqBody;
 
   await Card.findByIdAndDelete(cardId);
-  const cardsArr: CardsInDB[] = await Card.find({ columnId });
+  const cardsArr: CardInDB[] = await Card.find({ columnId });
 
   if (cardsArr.length) {
     const bulkArr: BulkUpdate<BulkPosition>[] = [];

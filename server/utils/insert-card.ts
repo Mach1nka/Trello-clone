@@ -1,11 +1,11 @@
-import { CardsInDB } from '../app/models/card';
+import { CardInDB } from '../app/models/card';
 
 const insertCardToArr = (
-  arr: CardsInDB[],
-  editableEl: CardsInDB,
+  arr: CardInDB[],
+  editableEl: CardInDB,
   newPosition: number,
   indexOldEl: number
-): CardsInDB[] => {
+): CardInDB[] => {
   if (editableEl.position < newPosition) {
     arr.splice(+newPosition + 1, 0, editableEl);
     arr.splice(indexOldEl, 1);

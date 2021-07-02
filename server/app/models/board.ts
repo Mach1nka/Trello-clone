@@ -1,9 +1,19 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface BoardsInDB extends mongoose.Document {
+interface BoardAttrs {
   name: string;
   owner: string;
   accessUsers: string[];
+}
+
+export interface BoardInDB extends mongoose.Document {
+  name: string;
+  owner: string;
+  accessUsers: string[];
+}
+
+interface BoardModel extends mongoose.Model<BoardInDB> {
+  build(attrs: BoardAttrs): BoardInDB;
 }
 
 const BoardSchema = new Schema({
@@ -15,4 +25,8 @@ const BoardSchema = new Schema({
   accessUsers: [{ ref: 'users', type: Schema.Types.ObjectId, default: [] }]
 });
 
-export default mongoose.model<BoardsInDB>('boards', BoardSchema);
+const Board = mongoose.model<BoardInDB, BoardModel>('boards', BoardSchema);
+
+BoardSchema.statics.build = (attrs: BoardModel) => new Board(attrs);
+
+export default Board;

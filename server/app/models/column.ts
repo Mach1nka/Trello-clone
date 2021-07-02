@@ -1,9 +1,19 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface ColumnsInDB extends mongoose.Document {
+interface ColumnAttrs {
   boardId: string;
   name: string;
   position: number;
+}
+
+export interface ColumnInDB extends mongoose.Document {
+  boardId: string;
+  name: string;
+  position: number;
+}
+
+interface ColumnModel extends mongoose.Model<ColumnInDB> {
+  build(attrs: ColumnAttrs): ColumnInDB;
 }
 
 const ColumnSchema = new Schema({
@@ -22,4 +32,8 @@ const ColumnSchema = new Schema({
   }
 });
 
-export default mongoose.model<ColumnsInDB>('columns', ColumnSchema);
+const Column = mongoose.model<ColumnInDB, ColumnModel>('columns', ColumnSchema);
+
+ColumnSchema.statics.build = (attrs: ColumnModel) => new Column(attrs);
+
+export default mongoose.model<ColumnInDB>('columns', ColumnSchema);

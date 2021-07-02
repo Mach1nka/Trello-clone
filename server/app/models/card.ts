@@ -1,10 +1,21 @@
 import mongoose, { Schema } from 'mongoose';
 
-export interface CardsInDB extends mongoose.Document {
+interface CardAttrs {
+  columnId: string;
+  name: string;
+  description: string[];
+  position: number;
+}
+
+export interface CardInDB extends mongoose.Document {
   columnId: string;
   name: string;
   description: string;
   position: number;
+}
+
+interface CardModel extends mongoose.Model<CardInDB> {
+  build(attrs: CardAttrs): CardInDB;
 }
 
 const CardSchema = new Schema({
@@ -27,4 +38,8 @@ const CardSchema = new Schema({
   }
 });
 
-export default mongoose.model<CardsInDB>('cards', CardSchema);
+const Card = mongoose.model<CardInDB, CardModel>('cards', CardSchema);
+
+CardSchema.statics.build = (attrs: CardModel) => new Card(attrs);
+
+export default Card;

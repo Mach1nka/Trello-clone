@@ -1,4 +1,4 @@
-import Column, { ColumnsInDB } from '../models/column';
+import Column, { ColumnInDB } from '../models/column';
 import Card from '../models/card';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
@@ -97,7 +97,7 @@ const createColumnService = async (reqBody: BodyForCreatColumn): Promise<Filtere
 
 const updateNameService = async (reqBody: BodyForRenameColumn): Promise<FilteredColumn> => {
   const { columnId, newName } = reqBody;
-  const renamedColumn: ColumnsInDB | null = await Column.findByIdAndUpdate(
+  const renamedColumn: ColumnInDB | null = await Column.findByIdAndUpdate(
     columnId,
     { name: newName },
     { new: true }
@@ -133,7 +133,7 @@ const updatePositionService = async (
     throw new BadRequest();
   }
 
-  const updatedArr: ColumnsInDB[] = insertColumnToArr(
+  const updatedArr: ColumnInDB[] = insertColumnToArr(
     columnsArr,
     editableEl,
     newPosition,
@@ -167,7 +167,7 @@ const deleteService = async (reqBody: BodyForDeleteColumn): Promise<void> => {
   await Column.findByIdAndDelete(columnId);
   await Card.deleteMany({ columnId });
 
-  const columns: ColumnsInDB[] = await Column.find({ boardId });
+  const columns: ColumnInDB[] = await Column.find({ boardId });
   const elementsWithUpdatedPos: FilteredColumn[] = columns.map((el, idx) => ({
     id: String(el._id),
     boardId: el.boardId,
