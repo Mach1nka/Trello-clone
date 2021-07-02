@@ -1,5 +1,4 @@
-import { serverURL } from '../../utils/constants';
-import { requestHeader, responseHandler } from './utils';
+import { httpService, requestHeader } from './utils';
 
 export interface User {
   id: string;
@@ -12,11 +11,6 @@ export interface UsersResponse {
 }
 
 const getUsers = (searchValue = ''): Promise<UsersResponse> =>
-  fetch(`${serverURL}/users/${searchValue}`, {
-    method: 'GET',
-    headers: requestHeader()
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
+  httpService.get({ url: '/users', params: searchValue, headersConfig: requestHeader() });
 
 export { getUsers };

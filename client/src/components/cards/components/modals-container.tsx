@@ -1,6 +1,4 @@
 import React from 'react';
-import { ThemeProvider } from 'styled-components';
-import { useTheme } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
 import RenameCardModal from './rename-card';
@@ -16,11 +14,9 @@ const ModalsContainer: React.FC = () => {
       state.cardsData[dataForModals.columnId].find((el) => el.id === dataForModals.cardId)
   );
 
-  const theme = useTheme();
-
   if (selectedCard) {
     return (
-      <ThemeProvider theme={theme}>
+      <>
         <CardDetails
           isOpen={modalsStates.isDetailsModalVisible}
           name={selectedCard.name}
@@ -44,7 +40,7 @@ const ModalsContainer: React.FC = () => {
           cardId={dataForModals.cardId}
           columnId={dataForModals.columnId}
         />
-      </ThemeProvider>
+      </>
     );
   }
   return (

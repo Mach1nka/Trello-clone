@@ -1,4 +1,4 @@
-import { Card } from '../src/store/card/actions';
+import { Card } from '../src/store/card/types';
 import { CardData } from '../src/store/card/reducer';
 
 const replaceCardDescription = (state: CardData, payload: Card): Card[] =>

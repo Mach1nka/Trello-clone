@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Container, Typography, CircularProgress, useTheme } from '@material-ui/core';
-import { ThemeProvider } from 'styled-components';
+import { Container, Typography, CircularProgress } from '@material-ui/core';
 
 import BoardItem from './components/board-item';
 import { useAppSelector } from '../../store/hooks';
@@ -13,7 +12,6 @@ import { BoardsContainer, BoardSC as SC } from './sc';
 
 const BoardsList: React.FC = () => {
   const dispatch = useDispatch();
-  const theme = useTheme();
   const [backdropState, setBackdropState] = useState(true);
   const { ownBoards, sharedBoards } = useAppSelector((state) => state.userBoards);
 
@@ -29,7 +27,7 @@ const BoardsList: React.FC = () => {
   }, []);
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <Container>
         <SC.Container>
           <Typography gutterBottom color="secondary" variant="h5" component="h5">
@@ -58,7 +56,7 @@ const BoardsList: React.FC = () => {
       <SC.Backdrop open={ownBoards.length || sharedBoards.length ? false : backdropState}>
         <CircularProgress color="inherit" />
       </SC.Backdrop>
-    </ThemeProvider>
+    </>
   );
 };
 

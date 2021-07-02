@@ -1,47 +1,24 @@
-import { serverURL } from '../../utils/constants';
 import {
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
   DataForDeletingColumn
 } from '../store/column/types';
-import { requestHeader, responseHandler } from './utils';
+import { httpService, requestHeader } from './utils';
 
 const getColumns = (boardId: string): Promise<Response> =>
-  fetch(`${serverURL}/columns/${boardId}`, {
-    method: 'GET',
-    headers: requestHeader()
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-
-const updateColumnData = (
-  data:
-    | DataForCreatingColumn
-    | DataForRenamingColumn
-    | DataForUpdatingColumnPos
-    | DataForDeletingColumn,
-  reqMethod: string,
-  path = ''
-): Promise<Response> =>
-  fetch(`${serverURL}/column${path}`, {
-    method: reqMethod,
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
+  httpService.get({ url: '/columns', params: boardId, headersConfig: requestHeader() });
 
 const createColumn = (data: DataForCreatingColumn): Promise<Response> =>
-  updateColumnData(data, 'POST');
+  httpService.post({ url: '/column', data, headersConfig: requestHeader() });
 
 const updateColumnName = (data: DataForRenamingColumn): Promise<Response> =>
-  updateColumnData(data, 'PATCH', '/name');
+  httpService.patch({ url: '/column/name', data });
 
 const updateColumnPosition = (data: DataForUpdatingColumnPos): Promise<Response> =>
-  updateColumnData(data, 'PUT', '/position');
+  httpService.put({ url: '/column/position', data });
 
 const deleteColumn = (data: DataForDeletingColumn): Promise<Response> =>
-  updateColumnData(data, 'DELETE');
+  httpService.delete({ url: '/column', data });
 
 export { getColumns, createColumn, updateColumnName, updateColumnPosition, deleteColumn };

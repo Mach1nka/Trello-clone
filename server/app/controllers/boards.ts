@@ -42,7 +42,7 @@ const updateBoardName = async (req: Request, res: Response): Promise<void> => {
 
   const { id, name } = await updateNameService(req.body);
 
-  res.json(new BadRequest({ id, name }));
+  res.json(new BaseResponse({ id, name }));
 };
 
 const shareBoard = async (req: Request, res: Response): Promise<void> => {

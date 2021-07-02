@@ -1,4 +1,3 @@
-import { serverURL } from '../../utils/constants';
 import {
   DataForCreatingCard,
   DataForRenamingCard,
@@ -7,51 +6,28 @@ import {
   DataForUpdatingCardStatus,
   DataForDeletingCard
 } from '../store/card/types';
-import { requestHeader, responseHandler } from './utils';
+import { httpService, requestHeader } from './utils';
 
 const getCards = (columnId: string): Promise<Response> =>
-  fetch(`${serverURL}/cards/${columnId}`, {
-    method: 'GET',
-    headers: requestHeader()
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
+  httpService.get({ url: '/cards', params: columnId, headersConfig: requestHeader() });
 
-function updateCardData(
-  data:
-    | DataForCreatingCard
-    | DataForRenamingCard
-    | DataForUpdatingCardDesc
-    | DataForUpdatingCardPos
-    | DataForUpdatingCardStatus
-    | DataForDeletingCard,
-  reqMethod: string,
-  path = ''
-): Promise<Response> {
-  return fetch(`${serverURL}/card${path}`, {
-    method: reqMethod,
-    headers: requestHeader(),
-    body: JSON.stringify(data)
-  })
-    .then((resp) => responseHandler(resp))
-    .catch((error) => error);
-}
-
-const createCard = (data: DataForCreatingCard): Promise<Response> => updateCardData(data, 'POST');
+const createCard = (data: DataForCreatingCard): Promise<Response> =>
+  httpService.post({ url: '/card', data, headersConfig: requestHeader() });
 
 const updateCardName = (data: DataForRenamingCard): Promise<Response> =>
-  updateCardData(data, 'PATCH', '/name');
+  httpService.patch({ url: '/card/name', data });
 
 const updateCardDescription = (data: DataForUpdatingCardDesc): Promise<Response> =>
-  updateCardData(data, 'PATCH', '/description');
+  httpService.patch({ url: '/card/description', data });
 
 const updateCardPosition = (data: DataForUpdatingCardPos): Promise<Response> =>
-  updateCardData(data, 'PUT', '/position');
+  httpService.put({ url: '/card/position', data });
 
 const updateCardStatus = (data: DataForUpdatingCardStatus): Promise<Response> =>
-  updateCardData(data, 'PUT', '/status');
+  httpService.put({ url: '/card/status', data });
 
-const deleteCard = (data: DataForDeletingCard): Promise<Response> => updateCardData(data, 'DELETE');
+const deleteCard = (data: DataForDeletingCard): Promise<Response> =>
+  httpService.delete({ url: '/card', data });
 
 export {
   getCards,

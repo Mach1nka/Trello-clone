@@ -1,4 +1,4 @@
-import { Column } from '../src/store/column/actions';
+import { Column } from '../src/store/column/types';
 import { ColumnData } from '../src/store/column/reducer';
 
 const replaceColumnName = (state: ColumnData, payload: Column): Column[] =>

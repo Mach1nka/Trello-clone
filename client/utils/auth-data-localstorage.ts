@@ -1,6 +1,6 @@
-import { SuccessResponse } from '../src/store/auth/actions';
+import { AuthData } from '../src/store/auth/types';
 
-const saveAuthDataToLocalStorage = (state: SuccessResponse): void => {
+const saveAuthDataToLocalStorage = (state: AuthData): void => {
   try {
     const serialisedState = {
       authData: { ...state }

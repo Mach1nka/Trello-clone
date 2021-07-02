@@ -1,22 +1,10 @@
-import { serverURL, HEADER } from '../../utils/constants';
 import { UserData } from '../store/auth/types';
+import { httpService } from './utils';
 
 const registerUser = (userData: UserData): Promise<Response> =>
-  fetch(`${serverURL}/auth/sign-up`, {
-    method: 'POST',
-    headers: HEADER,
-    body: JSON.stringify(userData)
-  })
-    .then((resp) => resp.json())
-    .catch((error) => error);
+  httpService.post({ url: '/auth/sign-up', data: userData });
 
 const loginUser = (userData: UserData): Promise<Response> =>
-  fetch(`${serverURL}/auth/login`, {
-    method: 'POST',
-    headers: HEADER,
-    body: JSON.stringify(userData)
-  })
-    .then((resp) => resp.json())
-    .catch((error) => error);
+  httpService.post({ url: '/auth/login', data: userData });
 
 export { registerUser, loginUser };

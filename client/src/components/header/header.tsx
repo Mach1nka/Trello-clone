@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
-import { useTheme } from '@material-ui/core';
-import { ThemeProvider } from 'styled-components';
 
 import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
@@ -27,7 +25,6 @@ const Header: React.FC = () => {
   const history = useHistory();
   const dispatch = useDispatch();
   const { width } = useWindowSize();
-  const theme = useTheme();
   const { ownBoards, sharedBoards } = useAppSelector((data) => data.userBoards);
 
   const pathLength = 14;
@@ -90,7 +87,7 @@ const Header: React.FC = () => {
   ) : null;
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <SC.AppBar position="static">
         <SC.ToolBar>
           {controls}
@@ -101,7 +98,7 @@ const Header: React.FC = () => {
         </SC.ToolBar>
       </SC.AppBar>
       <ShareBoardModal />
-    </ThemeProvider>
+    </>
   );
 };
 
