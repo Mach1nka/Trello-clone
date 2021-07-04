@@ -13,9 +13,11 @@ import { saveAuthDataToLocalStorage } from '../../../utils/auth-data-localstorag
 const Main: React.FC = () => {
   const { authData } = useAppSelector((state) => state);
   const theme = useTheme();
+
   useEffect(() => {
     saveAuthDataToLocalStorage(authData);
   }, [authData.login]);
+
   return (
     <ThemeProvider theme={theme}>
       <Header />

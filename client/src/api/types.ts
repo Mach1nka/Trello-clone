@@ -14,3 +14,8 @@ export interface PutPatchDeleteParams {
   url: string;
   data: any;
 }
+
+export interface ErrorParams {
+  error: string;
+  errorInfo: string;
+}

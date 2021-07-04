@@ -1,0 +1,51 @@
+
+"ReferenceError: useDispatch is not defined" 	
+    at BoardsList (http://localhost:8080/main.bundle.js:1060:18)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4034:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at Ge (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:70882:60)
+    at Main (http://localhost:8080/main.bundle.js:3985:85)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4034:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at ThemeProvider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:22241:24)
+    at ErrorBoundary (http://localhost:8080/main.bundle.js:3629:83)
+    at Router (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56568:30)
+    at BrowserRouter (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56189:35)
+    at App
+    at Provider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:54515:20)
+
+"ReferenceError: useDispatch is not defined" 	
+    at BoardsList (http://localhost:8080/main.bundle.js:1060:18)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4034:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at Ge (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:70882:60)
+    at Main (http://localhost:8080/main.bundle.js:3985:85)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4034:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at ThemeProvider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:22241:24)
+    at ErrorBoundary (http://localhost:8080/main.bundle.js:3629:83)
+    at Router (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56568:30)
+    at BrowserRouter (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56189:35)
+    at App
+    at Provider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:54515:20)
+
+"ReferenceError: dispatch is not defined" 	
+    at BoardsList (http://localhost:8080/main.bundle.js:1061:66)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4033:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at Ge (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:70882:60)
+    at Main (http://localhost:8080/main.bundle.js:3984:85)
+    at Route (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56933:29)
+    at PrivateRoute (http://localhost:8080/main.bundle.js:4033:20)
+    at Switch (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:57135:29)
+    at ThemeProvider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:22241:24)
+    at ErrorBoundary (http://localhost:8080/main.bundle.js:3628:83)
+    at Router (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56568:30)
+    at BrowserRouter (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:56189:35)
+    at App
+    at Provider (http://localhost:8080/vendors-node_modules_babel_runtime_helpers_esm_asyncToGenerator_js-node_modules_babel_runtime-d6174e.bundle.js:54515:20)
