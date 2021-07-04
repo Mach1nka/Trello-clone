@@ -55,7 +55,7 @@ const getBoardsService = async (userId: string): Promise<ReturnValue> => {
 const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardInDB> => {
   const { name, userId } = reqBody;
 
-  const board = new Board({
+  const board = Board.build({
     name,
     owner: userId
   });

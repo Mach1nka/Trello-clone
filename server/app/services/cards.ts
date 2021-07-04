@@ -69,7 +69,7 @@ const createCardService = async (reqBody: BodyForCreatCard): Promise<FilteredCar
   const { columnId, name, description, position } = reqBody;
   const bulkArr: BulkUpdate<BulkPosition>[] = [];
 
-  const newCard = new Card({
+  const newCard = Card.build({
     columnId,
     name,
     description,

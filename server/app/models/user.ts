@@ -26,8 +26,8 @@ const UserSchema = new Schema({
   }
 });
 
-const User = mongoose.model<UserInDB, UserModel>('users', UserSchema);
-
 UserSchema.statics.build = (attrs: UserModel) => new User(attrs);
+
+const User = mongoose.model<UserInDB, UserModel>('users', UserSchema);
 
 export default User;

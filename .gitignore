@@ -18,6 +18,7 @@ Thumbs.db
 *.log*
 node_modules/
 npm-debug.*
+errors/
 
 # Папка с собранными файлами проекта
 public/

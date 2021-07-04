@@ -51,7 +51,8 @@ const getColumnsService = async (boardId: string): Promise<FilteredColumn[]> => 
 
 const createColumnService = async (reqBody: BodyForCreatColumn): Promise<FilteredColumn> => {
   const { position, name, boardId } = reqBody;
-  const newColumn = new Column({
+
+  const newColumn = Column.build({
     boardId,
     name,
     position: Number(position)

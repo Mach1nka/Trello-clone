@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 interface CardAttrs {
   columnId: string;
   name: string;
-  description: string[];
+  description: string;
   position: number;
 }
 
@@ -38,8 +38,8 @@ const CardSchema = new Schema({
   }
 });
 
-const Card = mongoose.model<CardInDB, CardModel>('cards', CardSchema);
-
 CardSchema.statics.build = (attrs: CardModel) => new Card(attrs);
+
+const Card = mongoose.model<CardInDB, CardModel>('cards', CardSchema);
 
 export default Card;

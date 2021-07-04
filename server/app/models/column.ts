@@ -32,8 +32,8 @@ const ColumnSchema = new Schema({
   }
 });
 
-const Column = mongoose.model<ColumnInDB, ColumnModel>('columns', ColumnSchema);
-
 ColumnSchema.statics.build = (attrs: ColumnModel) => new Column(attrs);
 
-export default mongoose.model<ColumnInDB>('columns', ColumnSchema);
+const Column = mongoose.model<ColumnInDB, ColumnModel>('columns', ColumnSchema);
+
+export default Column;

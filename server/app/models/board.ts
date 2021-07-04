@@ -3,7 +3,7 @@ import mongoose, { Schema } from 'mongoose';
 interface BoardAttrs {
   name: string;
   owner: string;
-  accessUsers: string[];
+  accessUsers?: string[];
 }
 
 export interface BoardInDB extends mongoose.Document {
@@ -25,8 +25,8 @@ const BoardSchema = new Schema({
   accessUsers: [{ ref: 'users', type: Schema.Types.ObjectId, default: [] }]
 });
 
-const Board = mongoose.model<BoardInDB, BoardModel>('boards', BoardSchema);
-
 BoardSchema.statics.build = (attrs: BoardModel) => new Board(attrs);
+
+const Board = mongoose.model<BoardInDB, BoardModel>('boards', BoardSchema);
 
 export default Board;

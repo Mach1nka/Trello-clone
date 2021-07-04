@@ -1,6 +1,5 @@
 node_modules
 webpack.config.*
 server/dist
-server/errors
 client/dist
 
