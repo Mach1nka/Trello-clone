@@ -13,6 +13,7 @@ import { router as boardsRoutes } from './routes/boards';
 import { router as columnsRoutes } from './routes/columns';
 import { router as cardsRoutes } from './routes/cards';
 import { router as usersRoutes } from './routes/users';
+import { router as errorRoutes } from './routes/error';
 
 const app = express();
 
@@ -46,6 +47,7 @@ app.use('/api', boardsRoutes);
 app.use('/api', columnsRoutes);
 app.use('/api', cardsRoutes);
 app.use('/api', usersRoutes);
+app.use('/api', errorRoutes);
 
 app.use(errorMiddleware);
 
