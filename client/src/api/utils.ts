@@ -1,6 +1,6 @@
 import getToken from '../../utils/get-token';
 import { HEADER, serverURL } from '../../utils/constants';
-import { GetParams, PostParams, PutPatchDeleteParams } from './types';
+import { GetParams, CRUDParams } from './types';
 
 const requestHeader = (): Headers => {
   const authToken = getToken();
@@ -33,7 +33,7 @@ class HttpService {
       .catch((error) => error);
   };
 
-  post = async ({ url, data, headersConfig }: PostParams) => {
+  post = <T>({ url, data, headersConfig }: CRUDParams<T>) => {
     const path = this.baseUrl + url;
     const headers = headersConfig || HEADER;
 
@@ -46,7 +46,7 @@ class HttpService {
       .catch((error) => error);
   };
 
-  put = async ({ url, data }: PutPatchDeleteParams) => {
+  put = <T>({ url, data }: CRUDParams<T>) => {
     const path = this.baseUrl + url;
     const headers = requestHeader();
 
@@ -59,7 +59,7 @@ class HttpService {
       .catch((error) => error);
   };
 
-  patch = async ({ url, data }: PutPatchDeleteParams) => {
+  patch = <T>({ url, data }: CRUDParams<T>) => {
     const path = this.baseUrl + url;
     const headers = requestHeader();
 
@@ -72,7 +72,7 @@ class HttpService {
       .catch((error) => error);
   };
 
-  delete = async ({ url, data }: PutPatchDeleteParams) => {
+  delete = <T>({ url, data }: CRUDParams<T>) => {
     const path = this.baseUrl + url;
     const headers = requestHeader();
 

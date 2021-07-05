@@ -94,7 +94,10 @@ function* watchChangeCardDesc(): SagaIterator {
 function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpdatingCardStatus }) {
   yield call(updateCardStatus, columnData.payload);
   const updatedColumn: ListCardData | number = yield call(getCards, columnData.payload.columnId);
-  const columnWithNewCard: ListCardData | number = yield call(getCards, columnData.payload.newColumnId);
+  const columnWithNewCard: ListCardData | number = yield call(
+    getCards,
+    columnData.payload.newColumnId
+  );
   if (updatedColumn !== 401 || columnWithNewCard !== 401) {
     yield put(putCards(updatedColumn.data));
     yield put(putCards(columnWithNewCard.data));

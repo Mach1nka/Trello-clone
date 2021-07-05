@@ -3,7 +3,6 @@ import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
-import bodyParser from 'body-parser';
 
 import passportMiddleware from './middleware/passport';
 import KEYS from '../config/keys';
@@ -39,8 +38,7 @@ app.use(
 app.use(passport.initialize());
 passportMiddleware();
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.use('/api/auth', authRoutes);
 app.use('/api', boardsRoutes);

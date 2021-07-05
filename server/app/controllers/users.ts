@@ -1,14 +1,18 @@
 import { Request, Response } from 'express';
 
+import InvalidCredentials from '../../utils/errors/invalid-credentials';
 import BaseResponse from '../../utils/base-response';
 import getUsersService from '../services/users';
-import { PassportUser } from '../../types/types';
 
 const getUsers = async (req: Request, res: Response): Promise<void> => {
-  const { _id } = req.user as PassportUser;
+  const id = req.user?._id;
   const { searchValue } = req.params;
 
-  const users = await getUsersService(searchValue, _id);
+  if (!id) {
+    throw new InvalidCredentials();
+  }
+
+  const users = await getUsersService(searchValue, id);
 
   res.json(new BaseResponse(users));
 };

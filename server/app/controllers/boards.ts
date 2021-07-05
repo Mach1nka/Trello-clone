@@ -3,6 +3,7 @@ import { validationResult } from 'express-validator';
 
 import BaseResponse from '../../utils/base-response';
 import BadRequest from '../../utils/errors/bad-request';
+import InvalidCredentials from '../../utils/errors/invalid-credentials';
 import {
   getBoardsService,
   createBoardService,
@@ -10,11 +11,15 @@ import {
   shareBoardService,
   deleteService
 } from '../services/boards';
-import { PassportUser } from '../../types/types';
 
 const getAllBoards = async (req: Request, res: Response): Promise<void> => {
-  const { _id } = req.user as PassportUser;
-  const { filteredOwnBoardObj, filteredSharedBoardObj } = await getBoardsService(_id);
+  const id = req.user?._id;
+
+  if (!id) {
+    throw new InvalidCredentials();
+  }
+
+  const { filteredOwnBoardObj, filteredSharedBoardObj } = await getBoardsService(id);
 
   res.json(
     new BaseResponse({ ownBoards: filteredOwnBoardObj, sharedBoards: filteredSharedBoardObj })

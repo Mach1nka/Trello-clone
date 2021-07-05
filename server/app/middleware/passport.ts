@@ -3,6 +3,15 @@ import passport from 'passport';
 import User from '../models/user';
 import KEYS from '../../config/keys';
 
+declare global {
+  namespace Express {
+    interface User {
+      _id: string;
+      login: string;
+    }
+  }
+}
+
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: KEYS.JWT_SECRET_KEY

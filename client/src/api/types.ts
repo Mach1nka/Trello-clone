@@ -4,15 +4,10 @@ export interface GetParams {
   headersConfig?: Headers;
 }
 
-export interface PostParams {
+export interface CRUDParams<T> {
   url: string;
-  data: any;
+  data: T;
   headersConfig?: Headers;
-}
-
-export interface PutPatchDeleteParams {
-  url: string;
-  data: any;
 }
 
 export interface ErrorParams {
