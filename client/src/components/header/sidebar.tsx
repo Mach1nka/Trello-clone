@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { ListItem } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -19,34 +19,36 @@ const Sidebar: React.FC<Props> = ({
 }) => {
   const [isOpenSidebar, setSidebarState] = useState(false);
 
+  const showSidebar = useCallback(() => setSidebarState(true), []);
+
+  const hideSidebar = useCallback(() => setSidebarState(false), []);
+
+  const shareHandler = useCallback(() => {
+    handleShareButton();
+    setSidebarState(false);
+  }, []);
+
+  const boardButtonHandler = useCallback(() => {
+    handleBoardsButton();
+    setSidebarState(false);
+  }, []);
+
   return (
     <>
-      <SC.BurgerButton aria-label="menu" onClick={() => setSidebarState(true)}>
+      <SC.BurgerButton aria-label="menu" onClick={showSidebar}>
         <MenuIcon />
       </SC.BurgerButton>
-      <SC.Drawer onClose={() => setSidebarState(false)} open={isOpenSidebar}>
+      <SC.Drawer onClose={hideSidebar} open={isOpenSidebar}>
         <SC.List>
           <ListItem divider>
             <SC.ListItemText primary={boardName} />
           </ListItem>
           {isOwnBoard !== -1 && (
-            <ListItem
-              button
-              onClick={() => {
-                handleShareButton();
-                setSidebarState(false);
-              }}
-            >
+            <ListItem button onClick={shareHandler}>
               <SC.ListItemText primary="Share" />
             </ListItem>
           )}
-          <ListItem
-            button
-            onClick={() => {
-              handleBoardsButton();
-              setSidebarState(false);
-            }}
-          >
+          <ListItem button onClick={boardButtonHandler}>
             <SC.ListItemText primary="Boards" />
           </ListItem>
         </SC.List>

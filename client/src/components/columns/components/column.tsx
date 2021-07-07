@@ -1,4 +1,4 @@
-import React, { useState, Dispatch, SetStateAction } from 'react';
+import React, { useState, useCallback, Dispatch, SetStateAction } from 'react';
 import { useDispatch } from 'react-redux';
 import { Menu, MenuItem, IconButton, Button } from '@material-ui/core';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
@@ -9,7 +9,7 @@ import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
 import CreateCardModal from '../../cards/components/create-card-modal';
 import { deleteColumn } from '../../../store/column/actions';
-import { Card as CardType } from '../../../store/card/actions';
+import { Card as CardType } from '../../../store/card/types';
 import { ColumnSC as SC } from '../sc';
 
 interface Props {
@@ -36,24 +36,27 @@ const Column: React.FC<Props> = ({
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const isOpenMenu = Boolean(anchorEl);
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-  };
+  }, []);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     dispatch(deleteColumn({ columnId, boardId }));
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleRename = () => {
+  const handleRename = useCallback(() => {
     setRenameModalView(true);
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleChangePosition = () => {
+  const handleChangePosition = useCallback(() => {
     setPositionModalView(true);
     setAnchorEl(null);
-  };
+  }, []);
+
+  const onClose = useCallback(() => setAnchorEl(null), []);
+  const showCreateModal = useCallback(() => setCreateCardModalView(true), []);
 
   return (
     <>
@@ -64,12 +67,7 @@ const Column: React.FC<Props> = ({
             <IconButton size="small" aria-label="column settings" onClick={handleMenu}>
               <MoreHorizIcon />
             </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={isOpenMenu}
-              keepMounted
-              onClose={() => setAnchorEl(null)}
-            >
+            <Menu anchorEl={anchorEl} open={isOpenMenu} keepMounted onClose={onClose}>
               <MenuItem onClick={handleDelete}>Delete</MenuItem>
               <MenuItem onClick={handleRename}>Rename</MenuItem>
               <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
@@ -81,12 +79,7 @@ const Column: React.FC<Props> = ({
             setDraggableCard={setDraggableCard}
           />
           <SC.Footer>
-            <Button
-              onClick={() => setCreateCardModalView(true)}
-              fullWidth
-              size="small"
-              startIcon={<AddIcon />}
-            >
+            <Button onClick={showCreateModal} fullWidth size="small" startIcon={<AddIcon />}>
               Create new card
             </Button>
           </SC.Footer>

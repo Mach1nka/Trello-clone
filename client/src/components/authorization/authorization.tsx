@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
@@ -13,8 +13,10 @@ const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
   const [isOpenModal, setModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
+
   const history = useHistory();
   const theme = useTheme();
+
   const { message, token } = useAppSelector((state) => state.authData);
 
   useEffect(() => {
@@ -28,6 +30,11 @@ const Authorization: React.FC = () => {
     }
   }, [message, token]);
 
+  const onChange = useCallback(
+    (_evt: React.ChangeEvent<Record<string, unknown>>, index: number) => setTabIndex(`${index}`),
+    []
+  );
+
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="xs">
@@ -39,12 +46,7 @@ const Authorization: React.FC = () => {
         />
         <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>
-            <TabList
-              onChange={(_evt, index: number) => setTabIndex(`${index}`)}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-            >
+            <TabList onChange={onChange} indicatorColor="primary" textColor="primary" centered>
               {authForms.map((el) => (
                 <Tab key={el.value} label={el.label} value={el.value} />
               ))}

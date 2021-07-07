@@ -23,7 +23,9 @@ const ColumnsContainer: React.FC = () => {
   const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(null);
   const [isPointColumns, setPointColumns] = useState(false);
   const [backdropState, setBackdropState] = useState(true);
+
   const { boardId } = useParams<ParamTypes>();
+
   const { columns } = useAppSelector((state) => state.boardColumns);
   const columnForDnD = useAppSelector((state) => state.cardsData);
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useHistory, useLocation } from 'react-router-dom';
 
@@ -33,20 +33,20 @@ const Header: React.FC = () => {
   const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
   const isMainPage = pathname === '/boards';
 
-  const handleShareButton = () => {
+  const handleShareButton = useCallback(() => {
     dispatch(setModalData({ boardId }));
     dispatch(setModalsStates({ isShareModalVisible: true }));
-  };
+  }, [boardId]);
 
-  const handleLogOut = () => {
+  const handleLogOut = useCallback(() => {
     resetStore();
     removeAuthDataFromLocalStorage();
     history.push('/auth');
-  };
+  }, []);
 
-  const handleBoardsButton = () => {
+  const handleBoardsButton = useCallback(() => {
     history.push('/boards');
-  };
+  }, []);
 
   useEffect(() => {
     console.log(ownBoards.length);

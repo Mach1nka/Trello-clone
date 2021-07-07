@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
@@ -17,11 +17,20 @@ const ShareBoardModal: React.FC = () => {
   const { isShareModalVisible } = useAppSelector((state) => state.modalsData.modalsStates);
   const { boardId } = useAppSelector((state) => state.modalsData.dataForModals);
 
-  const formHandler = (values: { userId: string }) => {
+  const formHandler = useCallback(
+    (values: { userId: string }) => {
+      setUserLogin('');
+      dispatch(shareBoard({ boardId, userId: values.userId }));
+      dispatch(setModalsStates({ isShareModalVisible: false }));
+    },
+    [boardId]
+  );
+
+  const onClose = useCallback(() => {
     setUserLogin('');
-    dispatch(shareBoard({ boardId, userId: values.userId }));
+    dispatch(setModalData({ boardId: '' }));
     dispatch(setModalsStates({ isShareModalVisible: false }));
-  };
+  }, []);
 
   return (
     <Dialog
@@ -29,11 +38,7 @@ const ShareBoardModal: React.FC = () => {
       maxWidth="xs"
       open={isShareModalVisible}
       onClick={(evt) => evt.stopPropagation()}
-      onClose={() => {
-        setUserLogin('');
-        dispatch(setModalData({ boardId: '' }));
-        dispatch(setModalsStates({ isShareModalVisible: false }));
-      }}
+      onClose={onClose}
     >
       <DialogTitle style={{ textAlign: 'center' }}>Share board</DialogTitle>
       <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>

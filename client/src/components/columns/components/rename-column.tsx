@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
@@ -27,8 +27,11 @@ const RenameColumnModal: React.FC<Props> = ({ isOpen, setModalView, columnId, co
       setModalView(false);
     }
   });
+
+  const onClose = useCallback(() => setModalView(false), []);
+
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>Change column name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField

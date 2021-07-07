@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
@@ -24,7 +24,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
     state.cardsData[columnId].find((el) => el.id === cardId)
   );
 
-  const formHandler = (values: { newStatus: string }) => {
+  const formHandler = useCallback((values: { newStatus: string }) => {
     if (values.newStatus !== columnId) {
       dispatch(
         changeCardStatus({
@@ -36,7 +36,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
       dispatch(setModalData({ cardId, columnId: values.newStatus, name, description }));
     }
     dispatch(setModalsStates({ isStatusModalVisible: false }));
-  };
+  }, []);
 
   return (
     <Dialog
@@ -46,7 +46,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
       onClose={() => dispatch(setModalsStates({ isStatusModalVisible: false }))}
     >
       <DialogTitle style={{ textAlign: 'center' }}>Change card status</DialogTitle>
-      <Formik initialValues={{ newStatus: columnId }} onSubmit={(values) => formHandler(values)}>
+      <Formik initialValues={{ newStatus: columnId }} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField

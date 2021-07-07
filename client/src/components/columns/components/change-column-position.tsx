@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
@@ -27,23 +27,28 @@ const ChangeColumnPosition: React.FC<Props> = ({
     state.boardColumns.columns.map((el) => el.position)
   );
 
-  const formHandler = (values: { newPosition: number }) => {
-    if (values.newPosition !== position) {
-      dispatch(
-        changeColumnPosition({
-          boardId,
-          newPosition: values.newPosition,
-          columnId
-        })
-      );
-    }
-    setModalView(false);
-  };
+  const formHandler = useCallback(
+    (values: { newPosition: number }) => {
+      if (values.newPosition !== position) {
+        dispatch(
+          changeColumnPosition({
+            boardId,
+            newPosition: values.newPosition,
+            columnId
+          })
+        );
+      }
+      setModalView(false);
+    },
+    [position]
+  );
+
+  const onClose = useCallback(() => setModalView(false), []);
 
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>Change column position</DialogTitle>
-      <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
+      <Formik initialValues={{ newPosition: position }} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField

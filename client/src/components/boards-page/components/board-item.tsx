@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
 import BoardOptions from './board-options';
@@ -17,14 +17,14 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBo
   const [isOpenModal, setModalView] = useState(false);
   const dispatch = useDispatch();
 
+  const resetColumnsData = useCallback(() => dispatch(deleteColumnsData()), []);
+  const showCreatingModal = useCallback(() => setModalView(true), []);
+
   if (!isDefaultCard && boardId && isOwnBoards) {
     const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
+
     return (
-      <SC.Link
-        style={{ textDecoration: 'none' }}
-        to={locationParams}
-        onClick={() => dispatch(deleteColumnsData())}
-      >
+      <SC.Link style={{ textDecoration: 'none' }} to={locationParams} onClick={resetColumnsData}>
         <SC.Board isDefaultCard={isDefaultCard}>
           <SC.Name color="inherit" variant="subtitle2" align="left">
             {boardName}
@@ -36,12 +36,9 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBo
   }
   if (!isDefaultCard && !isOwnBoards && boardId) {
     const locationParams = { pathname: `/boards/board/${boardId}`, state: { boardName, boardId } };
+
     return (
-      <SC.Link
-        style={{ textDecoration: 'none' }}
-        to={locationParams}
-        onClick={() => dispatch(deleteColumnsData())}
-      >
+      <SC.Link style={{ textDecoration: 'none' }} to={locationParams} onClick={resetColumnsData}>
         <SC.Board isDefaultCard={isDefaultCard}>
           <SC.Name color="inherit" variant="subtitle2" align="left">
             {boardName}
@@ -52,7 +49,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBo
   }
   return (
     <>
-      <SC.Board onClick={() => setModalView(true)} isDefaultCard={isDefaultCard}>
+      <SC.Board onClick={showCreatingModal} isDefaultCard={isDefaultCard}>
         <SC.Name color="inherit" variant="subtitle2" align="left">
           {boardName}
         </SC.Name>

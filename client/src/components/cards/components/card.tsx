@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
@@ -18,42 +18,44 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+  const handleMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget);
-  };
+  }, []);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     dispatch(resetModalData());
     dispatch(deleteCard({ columnId, cardId }));
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleChangeName = () => {
+  const handleChangeName = useCallback(() => {
     dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isRenameModalVisible: true }));
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleChangePosition = () => {
+  const handleChangePosition = useCallback(() => {
     dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isPositionModalVisible: true }));
     setAnchorEl(null);
-  };
+  }, []);
 
-  const handleChangeStatus = () => {
+  const handleChangeStatus = useCallback(() => {
     dispatch(setModalData({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isStatusModalVisible: true }));
     setAnchorEl(null);
-  };
+  }, []);
+
+  const showDetailsModal = useCallback(() => {
+    dispatch(setModalData({ cardId, columnId, name, description }));
+    dispatch(setModalsStates({ isDetailsModalVisible: true }));
+  }, []);
+
+  const onCloseMenu = useCallback(() => setAnchorEl(null), []);
 
   return (
-    <SC.Container
-      onClick={() => {
-        dispatch(setModalData({ cardId, columnId, name, description }));
-        dispatch(setModalsStates({ isDetailsModalVisible: true }));
-      }}
-    >
+    <SC.Container onClick={showDetailsModal}>
       <Typography style={{ width: '200px' }} variant="subtitle2">
         {name}
       </Typography>
@@ -70,7 +72,7 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
         open={Boolean(anchorEl)}
         keepMounted
         onClick={(e) => e.stopPropagation()}
-        onClose={() => setAnchorEl(null)}
+        onClose={onCloseMenu}
       >
         <MenuItem onClick={handleDelete}>Delete</MenuItem>
         <MenuItem onClick={handleChangeName}>Rename</MenuItem>

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, TextField, DialogActions } from '@material-ui/core';
@@ -31,8 +31,10 @@ const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
     }
   });
 
+  const hideCreatingModal = useCallback(() => setModalView(false), []);
+
   return (
-    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={() => setModalView(false)}>
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={hideCreatingModal}>
       <DialogTitle style={{ textAlign: 'center' }}>Create new board</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
@@ -19,28 +19,31 @@ const ChangeCardPosition: React.FC<Props> = ({ isOpen, columnId, cardId, positio
   const dispatch = useDispatch();
   const positionArr = useAppSelector((state) => state.cardsData[columnId].map((el) => el.position));
 
-  const formHandler = (values: { newPosition: number }) => {
-    if (values.newPosition !== position) {
-      dispatch(
-        changeCardPosition({
-          cardId,
-          newPosition: values.newPosition,
-          columnId
-        })
-      );
-    }
-    dispatch(setModalsStates({ isPositionModalVisible: false }));
-  };
+  const formHandler = useCallback(
+    (values: { newPosition: number }) => {
+      if (values.newPosition !== position) {
+        dispatch(
+          changeCardPosition({
+            cardId,
+            newPosition: values.newPosition,
+            columnId
+          })
+        );
+      }
+      dispatch(setModalsStates({ isPositionModalVisible: false }));
+    },
+    [position]
+  );
+
+  const onClose = useCallback(
+    () => dispatch(setModalsStates({ isPositionModalVisible: false })),
+    []
+  );
 
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      open={isOpen}
-      onClose={() => dispatch(setModalsStates({ isPositionModalVisible: false }))}
-    >
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>Change card position</DialogTitle>
-      <Formik initialValues={{ newPosition: position }} onSubmit={(values) => formHandler(values)}>
+      <Formik initialValues={{ newPosition: position }} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField

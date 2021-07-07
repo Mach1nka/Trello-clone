@@ -3,12 +3,8 @@ import { useDispatch } from 'react-redux';
 
 import Card from './components/card';
 import { useAppSelector } from '../../store/hooks';
-import {
-  getCards,
-  changeCardStatus,
-  changeCardPosition,
-  Card as CardType
-} from '../../store/card/actions';
+import { getCards, changeCardStatus, changeCardPosition } from '../../store/card/actions';
+import { Card as CardType } from '../../store/card/types';
 import { CardsContainer as Container, DragWrapper } from './sc';
 
 interface Props {

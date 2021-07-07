@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
@@ -16,6 +16,7 @@ interface Props {
 
 const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
   const dispatch = useDispatch();
+
   const validationSchema = configValidationSchema('newName');
   const initialValues = { newName: cardName };
 
@@ -27,13 +28,10 @@ const RenameCardModal: React.FC<Props> = ({ isOpen, cardId, cardName }) => {
       dispatch(setModalsStates({ isRenameModalVisible: false }));
     }
   });
+  const onClose = useCallback(() => dispatch(setModalsStates({ isRenameModalVisible: false })), []);
+
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      open={isOpen}
-      onClose={() => dispatch(setModalsStates({ isRenameModalVisible: false }))}
-    >
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>Change card name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField

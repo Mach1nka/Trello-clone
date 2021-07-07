@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import {
@@ -48,18 +48,40 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
     }
   });
 
+  const hideDetailsModal = useCallback(() => {
+    dispatch(setModalsStates({ isDetailsModalVisible: false }));
+    dispatch(resetModalData());
+  }, []);
+
+  const blurName = useCallback(() => {
+    setIsNamedFocused(false);
+    formik.submitForm();
+  }, []);
+
+  const blurDescription = useCallback(() => {
+    setIsDescriptionFocused(false);
+    formik.submitForm();
+  }, []);
+
+  const focusName = useCallback(() => setIsNamedFocused(true), []);
+
+  const focusDescription = useCallback(() => setIsDescriptionFocused(true), []);
+
+  const handleDeleteCard = useCallback(() => {
+    dispatch(deleteCard({ columnId, cardId }));
+    dispatch(resetModalData());
+  }, [cardId]);
+
+  const showStatusModal = useCallback(
+    () => dispatch(setModalsStates({ isStatusModalVisible: true })),
+    []
+  );
+
   return (
-    <Dialog
-      fullWidth
-      maxWidth="sm"
-      open={isOpen}
-      onClose={() => {
-        dispatch(setModalsStates({ isDetailsModalVisible: false }));
-      }}
-    >
+    <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={hideDetailsModal}>
       <DialogTitle>
         {!isNameFocused ? (
-          <SC.Name onClick={() => setIsNamedFocused(true)}>{formik.values.name}</SC.Name>
+          <SC.Name onClick={focusName}>{formik.values.name}</SC.Name>
         ) : (
           <form autoComplete="off" onSubmit={formik.handleSubmit}>
             <SC.NameField
@@ -71,20 +93,13 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
               onChange={formik.handleChange}
               error={formik.touched.name && !!formik.errors.name}
               helperText={formik.touched.name && formik.errors.name}
-              onBlur={() => {
-                setIsNamedFocused(false);
-                formik.submitForm();
-              }}
+              onBlur={blurName}
             />
           </form>
         )}
         <Typography variant="body2">
           It is in column
-          <SC.ColumnNameButton
-            onClick={() => dispatch(setModalsStates({ isStatusModalVisible: true }))}
-          >
-            {columnName}
-          </SC.ColumnNameButton>
+          <SC.ColumnNameButton onClick={showStatusModal}>{columnName}</SC.ColumnNameButton>
         </Typography>
       </DialogTitle>
       <DialogContent>
@@ -104,37 +119,21 @@ const CardDetails: React.FC<Props> = ({ name, description, isOpen, cardId, colum
                 onChange={formik.handleChange}
                 error={formik.touched.description && !!formik.errors.description}
                 helperText={formik.touched.description && formik.errors.description}
-                onBlur={() => {
-                  setIsDescriptionFocused(false);
-                  formik.submitForm();
-                }}
+                onBlur={blurDescription}
               />
             </form>
           ) : (
-            <SC.DescriptionText onClick={() => setIsDescriptionFocused(true)}>
+            <SC.DescriptionText onClick={focusDescription}>
               {formik.values.description}
             </SC.DescriptionText>
           )}
         </div>
       </DialogContent>
       <SC.DialogActions>
-        <IconButton
-          aria-label="delete card"
-          onClick={() => {
-            dispatch(deleteCard({ columnId, cardId }));
-            dispatch(resetModalData());
-          }}
-        >
+        <IconButton aria-label="delete card" onClick={handleDeleteCard}>
           <DeleteIcon color="error" />
         </IconButton>
-        <Button
-          onClick={() => {
-            dispatch(setModalsStates({ isDetailsModalVisible: false }));
-            dispatch(resetModalData());
-          }}
-        >
-          close
-        </Button>
+        <Button onClick={hideDetailsModal}>close</Button>
       </SC.DialogActions>
     </Dialog>
   );

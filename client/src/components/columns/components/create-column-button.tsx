@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
@@ -13,10 +13,12 @@ interface Props {
 const CreateColumn: React.FC<Props> = ({ boardId, newPosition }) => {
   const [isOpen, setModalView] = useState(false);
 
+  const onClick = useCallback(() => setModalView(true), []);
+
   return (
     <>
       <SC.CreateColumnContainer>
-        <Button onClick={() => setModalView(true)} fullWidth size="small" startIcon={<AddIcon />}>
+        <Button onClick={onClick} fullWidth size="small" startIcon={<AddIcon />}>
           Create new column
         </Button>
       </SC.CreateColumnContainer>

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
@@ -17,6 +17,7 @@ interface Props {
 
 const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, userId }) => {
   const dispatch = useDispatch();
+
   const currentBoardObj = useAppSelector((state) =>
     state.userBoards.ownBoards.filter((el) => el.id === boardId).pop()
   );
@@ -36,14 +37,11 @@ const RenameBoardModal: React.FC<Props> = ({ isOpen, setModalView, boardId, user
     }
   });
 
+  const onClose = useCallback(() => setModalView(false), []);
+  const onClick = useCallback((evt) => evt.stopPropagation(), []);
+
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      open={isOpen}
-      onClick={(evt) => evt.stopPropagation()}
-      onClose={() => setModalView(false)}
-    >
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClick={onClick} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>Change board name</DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
