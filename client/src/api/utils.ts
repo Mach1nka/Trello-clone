@@ -12,7 +12,7 @@ const requestHeader = (): Headers => {
   return headers;
 };
 
-const responseHandler = (resp: Response) => (resp.status === 401 ? 401 : resp.json());
+const responseHandler = (resp: Response) => resp.json();
 
 class HttpService {
   private baseUrl: string;

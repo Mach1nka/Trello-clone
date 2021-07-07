@@ -1,7 +1,6 @@
 import { call, put, race, delay } from 'redux-saga/effects';
-import { UserData } from '../src/store/auth/actions';
 
-function* handleSagaRequest(api: any, requestData: UserData, putData: any, putMessage: any) {
+function* handleSagaRequest(api: any, requestData: any, putData: any, putMessage: any) {
   const { data, cancel } = yield race({ data: call(api, requestData), cancel: delay(10000) });
 
   if (cancel || data instanceof Error) {

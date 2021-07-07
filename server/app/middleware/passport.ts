@@ -1,7 +1,10 @@
+import { Request, Response, NextFunction } from 'express';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
+
 import User from '../models/user';
 import KEYS from '../../config/keys';
+import InvalidCredentials from '../../utils/errors/invalid-credentials';
 
 declare global {
   namespace Express {
@@ -34,4 +37,17 @@ const passportMiddleware = (): void => {
   );
 };
 
-export default passportMiddleware;
+function jwtAuthenticate(req: Request, res: Response, next: NextFunction): void {
+  passport.authenticate('jwt', { session: false }, (err, user) => {
+    if (err) {
+      next(err);
+    }
+    if (!user) {
+      res.json(new InvalidCredentials());
+    }
+    req.user = user;
+    next();
+  })(req, res, next);
+}
+
+export { passportMiddleware, jwtAuthenticate };

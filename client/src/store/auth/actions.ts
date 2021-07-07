@@ -1,4 +1,4 @@
-import { UserData, UserAction, AuthTypes, AuthData } from './types';
+import { UserData, UserAction, AuthTypes, AuthData, AuthError } from './types';
 
 const REGISTRATION_USER = 'REGISTRATION_USER';
 const LOGIN_USER = 'LOGIN_USER';
@@ -13,7 +13,7 @@ const loginUser = (userData: UserData): UserAction => ({
   payload: userData
 });
 
-const putErrorMessage = (message: string): { type: string; payload: string } => ({
+const putErrorMessage = (message: AuthError): { type: string; payload: AuthError } => ({
   type: AuthTypes.PUT_MESSAGE_ERROR,
   payload: message
 });

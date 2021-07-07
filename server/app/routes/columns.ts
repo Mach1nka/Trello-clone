@@ -1,5 +1,4 @@
 import express from 'express';
-import passport from 'passport';
 import { check } from 'express-validator';
 
 import {
@@ -9,17 +8,18 @@ import {
   updateColumnPosition,
   deleteColumn
 } from '../controllers/columns';
+import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/columns/:boardId', passport.authenticate('jwt', { session: false }), getColumns);
+router.get('/columns/:boardId', jwtAuthenticate, getColumns);
 router.post(
   '/column',
   [
     check('boardId', 'Board Id is required').exists(),
     check('name', 'Name is required').exists(),
     check('position', 'Position is required').exists().isNumeric(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   createNewColumn
 );
@@ -28,15 +28,11 @@ router.patch(
   [
     check('columnId', 'Column Id is required').exists(),
     check('newName', 'New name is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   updateColumnName
 );
-router.put(
-  '/column/position',
-  passport.authenticate('jwt', { session: false }),
-  updateColumnPosition
-);
-router.delete('/column', passport.authenticate('jwt', { session: false }), deleteColumn);
+router.put('/column/position', jwtAuthenticate, updateColumnPosition);
+router.delete('/column', jwtAuthenticate, deleteColumn);
 
 export { router };

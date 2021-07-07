@@ -1,10 +1,10 @@
 import express from 'express';
-import passport from 'passport';
 
 import { getUsers } from '../controllers/users';
+import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/users/:searchValue', passport.authenticate('jwt', { session: false }), getUsers);
+router.get('/users/:searchValue', jwtAuthenticate, getUsers);
 
 export { router };

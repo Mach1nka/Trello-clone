@@ -8,7 +8,7 @@ const router = express.Router();
 router.post(
   '/login',
   [
-    check('login', 'Please include a valid email').exists(),
+    check('login', 'Please include a valid login').exists(),
     check('password', 'Password is required').exists()
   ],
   logIn
@@ -17,7 +17,7 @@ router.post(
 router.post(
   '/sign-up',
   [
-    check('login', 'Please include a valid email').exists(),
+    check('login', 'Please include a valid login').exists(),
     check('password', 'Password is required').exists()
   ],
   register

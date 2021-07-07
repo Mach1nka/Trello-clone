@@ -1,5 +1,4 @@
 import express from 'express';
-import passport from 'passport';
 import { check } from 'express-validator';
 
 import {
@@ -11,10 +10,11 @@ import {
   changeCardStatus,
   deleteCard
 } from '../controllers/cards';
+import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/cards/:columnId', passport.authenticate('jwt', { session: false }), getCards);
+router.get('/cards/:columnId', jwtAuthenticate, getCards);
 
 router.post(
   '/card',
@@ -22,16 +22,13 @@ router.post(
     check('columnId', 'Card Id is required').exists(),
     check('name', 'Name is required').exists(),
     check('position', 'Position is required').exists().isNumeric(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   createNewCard
 );
 router.patch(
   '/card/description',
-  [
-    check('cardId', 'Card Id is required').exists(),
-    passport.authenticate('jwt', { session: false })
-  ],
+  [check('cardId', 'Card Id is required').exists(), jwtAuthenticate],
   updateCardDescription
 );
 
@@ -40,7 +37,7 @@ router.patch(
   [
     check('cardId', 'Card Id is required').exists(),
     check('newName', 'New name is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   updateCardName
 );
@@ -51,7 +48,7 @@ router.put(
     check('cardId', 'Card Id is required').exists(),
     check('columnId', 'Column Id is required').exists(),
     check('newPosition', 'New position Id is required').exists().isNumeric(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   updateCardPosition
 );
@@ -62,11 +59,11 @@ router.put(
     check('cardId', 'Card Id is required').exists(),
     check('columnId', 'Column Id is required').exists(),
     check('newColumnId', 'New column is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   changeCardStatus
 );
 
-router.delete('/card', passport.authenticate('jwt', { session: false }), deleteCard);
+router.delete('/card', jwtAuthenticate, deleteCard);
 
 export { router };

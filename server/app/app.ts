@@ -4,7 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 
-import passportMiddleware from './middleware/passport';
+import { passportMiddleware } from './middleware/passport';
 import KEYS from '../config/keys';
 import errorMiddleware from './middleware/errorHandler';
 import { router as authRoutes } from './routes/auth';
@@ -39,6 +39,7 @@ app.use(passport.initialize());
 passportMiddleware();
 
 app.use(express.json());
+app.use(express.urlencoded());
 
 app.use('/api/auth', authRoutes);
 app.use('/api', boardsRoutes);

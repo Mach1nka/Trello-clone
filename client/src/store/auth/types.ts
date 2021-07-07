@@ -31,7 +31,7 @@ export interface AuthSuccess {
 
 export interface AuthError {
   message: string;
-  statusCode: string;
+  statusCode: number | null;
 }
 
 export type AuthActions =

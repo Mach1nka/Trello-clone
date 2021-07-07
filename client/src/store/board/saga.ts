@@ -11,6 +11,7 @@ import {
   putCreatedBoard,
   putRenamedBoard
 } from './actions';
+import { AuthError } from '../auth/types';
 import {
   UpdatedBoard,
   ListBoardData,
@@ -29,8 +30,8 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetBoards(): SagaIterator {
-  const data: ListBoardData | number = yield call(getBoards);
-  if (data === 401) {
+  const data: ListBoardData | AuthError = yield call(getBoards);
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -43,8 +44,8 @@ function* watchGetBoards(): SagaIterator {
 }
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const data: UpdatedBoard | number = yield call(createBoard, boardData.payload);
-  if (data === 401) {
+  const data: UpdatedBoard | AuthError = yield call(createBoard, boardData.payload);
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -57,8 +58,8 @@ function* watchCreateBoard(): SagaIterator {
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const data: UpdatedBoard | number = yield call(updateBoardName, board.payload);
-  if (data === 401) {
+  const data: UpdatedBoard | AuthError = yield call(updateBoardName, board.payload);
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {
@@ -71,8 +72,8 @@ function* watchRenameBoard(): SagaIterator {
 }
 
 function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
-  const data: null | number = yield call(shareBoard, board.payload);
-  if (data === 401) {
+  const data: null | AuthError = yield call(shareBoard, board.payload);
+  if (data.statusCode === 401) {
     resetStore();
   }
 }
@@ -83,8 +84,8 @@ function* watchShareBoard(): SagaIterator {
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
-  const data: ListBoardData | number = yield call(getBoards);
-  if (data === 401) {
+  const data: ListBoardData | AuthError = yield call(getBoards);
+  if (data.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   } else {

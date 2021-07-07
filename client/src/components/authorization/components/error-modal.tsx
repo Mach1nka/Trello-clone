@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogTitle, DialogActions, Typography } from '@material-ui/core';
 
@@ -17,11 +17,11 @@ const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView, setBackd
 
   const upperErrorText = errorText.toUpperCase();
 
-  const handleClose = () => {
+  const handleClose = useCallback(() => {
     setBackdropView(false);
     setModalView(false);
-    dispatch(putErrorMessage({ message: '' }));
-  };
+    dispatch(putErrorMessage({ message: '', statusCode: null }));
+  }, []);
 
   return (
     <Dialog open={isOpen} onEscapeKeyDown={handleClose} onClose={handleClose}>

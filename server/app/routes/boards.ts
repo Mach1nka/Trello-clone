@@ -1,5 +1,4 @@
 import express from 'express';
-import passport from 'passport';
 import { check } from 'express-validator';
 
 import {
@@ -9,17 +8,18 @@ import {
   updateBoardName,
   shareBoard
 } from '../controllers/boards';
+import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/boards', passport.authenticate('jwt', { session: false }), getAllBoards);
+router.get('/boards', jwtAuthenticate, getAllBoards);
 
 router.post(
   '/board',
   [
     check('userId', 'User Id is required').exists(),
     check('name', 'Name is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   createNewBoard
 );
@@ -30,7 +30,7 @@ router.patch(
     check('boardId', 'Board Id is required').exists(),
     check('newName', 'New name is required').exists(),
     check('userId', 'User Id is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   updateBoardName
 );
@@ -40,7 +40,7 @@ router.patch(
   [
     check('boardId', 'Board Id is required').exists(),
     check('userId', 'User Id is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   shareBoard
 );
@@ -50,7 +50,7 @@ router.delete(
   [
     check('boardId', 'Board Id is required').exists(),
     check('userId', 'User Id is required').exists(),
-    passport.authenticate('jwt', { session: false })
+    jwtAuthenticate
   ],
   deleteBoard
 );
