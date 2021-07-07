@@ -1,11 +1,11 @@
 import express from 'express';
 import { check } from 'express-validator';
 
-import { saveClientError } from '../controllers/errors';
+import { getClientErrors, saveClientError } from '../controllers/errors';
 
 const router = express.Router();
 
-// router.get('/errors', getClientErrors);
+router.get('/errors/:count', getClientErrors);
 
 router.post(
   '/error',
