@@ -41,9 +41,11 @@ function jwtAuthenticate(req: Request, res: Response, next: NextFunction): void 
   passport.authenticate('jwt', { session: false }, (err, user) => {
     if (err) {
       next(err);
+      return;
     }
     if (!user) {
       res.json(new InvalidCredentials());
+      return;
     }
     req.user = user;
     next();
