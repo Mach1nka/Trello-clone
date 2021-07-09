@@ -11,13 +11,13 @@ import {
   putCreatedBoard,
   putRenamedBoard
 } from './actions';
-import { AuthError } from '../auth/types';
 import {
-  UpdatedBoard,
-  ListBoardData,
+  Board,
+  BoardList,
   DataForCreatingBoard,
   DataForRenamingBoard,
-  DataForDeletingBoard
+  DataForDeletingBoard,
+  BaseResponse
 } from './types';
 import {
   getBoards,
@@ -30,12 +30,15 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetBoards(): SagaIterator {
-  const data: ListBoardData | AuthError = yield call(getBoards);
-  if (data.statusCode === 401) {
+  const response: BaseResponse<BoardList> = yield call(getBoards);
+
+  if (response.data) {
+    yield put(putUserBoards(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putUserBoards(data.data));
   }
 }
 
@@ -44,12 +47,15 @@ function* watchGetBoards(): SagaIterator {
 }
 
 function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const data: UpdatedBoard | AuthError = yield call(createBoard, boardData.payload);
-  if (data.statusCode === 401) {
+  const response: BaseResponse<Board> = yield call(createBoard, boardData.payload);
+
+  if (response.data) {
+    yield put(putCreatedBoard(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putCreatedBoard(data.data));
   }
 }
 
@@ -58,12 +64,15 @@ function* watchCreateBoard(): SagaIterator {
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const data: UpdatedBoard | AuthError = yield call(updateBoardName, board.payload);
-  if (data.statusCode === 401) {
+  const response: BaseResponse<Board> = yield call(updateBoardName, board.payload);
+
+  if (response.data) {
+    yield put(putRenamedBoard(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putRenamedBoard(data.data));
   }
 }
 
@@ -72,8 +81,8 @@ function* watchRenameBoard(): SagaIterator {
 }
 
 function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
-  const data: null | AuthError = yield call(shareBoard, board.payload);
-  if (data.statusCode === 401) {
+  const response: BaseResponse<Record<string, never>> = yield call(shareBoard, board.payload);
+  if (response.statusCode === 401) {
     resetStore();
   }
 }
@@ -84,12 +93,15 @@ function* watchShareBoard(): SagaIterator {
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
   yield call(deleteBoard, board.payload);
-  const data: ListBoardData | AuthError = yield call(getBoards);
-  if (data.statusCode === 401) {
+  const response: BaseResponse<BoardList> = yield call(getBoards);
+
+  if (response.data) {
+    yield put(putUserBoards(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putUserBoards(data.data));
   }
 }
 

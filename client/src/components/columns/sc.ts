@@ -3,8 +3,12 @@ import { Typography, Button, Backdrop } from '@material-ui/core';
 
 import { MUOptions } from '../../types/sc';
 
-interface Props {
+interface DragWrapperProps {
   isPointColumns: boolean;
+}
+
+interface ColumnProps {
+  dragStyles: string | null;
 }
 
 const ColumnsContainer = styled.div`
@@ -19,19 +23,20 @@ const ColumnsContainer = styled.div`
   background-color: rgba(241, 245, 237, 0.3);
 `;
 
-const DragWrapper = styled.div<Props>`
+const DragWrapper = styled.div<DragWrapperProps>`
   & > * {
     pointer-events: ${(props) => (props.isPointColumns ? 'none' : 'auto')};
   }
 `;
 
 const ColumnSC = {
-  Container: styled.div`
+  Container: styled.div<ColumnProps>`
     width: 270px;
     height: 100%;
     margin: 0 4px;
     border-radius: 5px;
     cursor: pointer;
+    background-color: ${(props) => (props.dragStyles ? `${props.dragStyles} !important` : '')};
   `,
   Content: styled.div`
     display: flex;

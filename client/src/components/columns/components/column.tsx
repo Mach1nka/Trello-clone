@@ -19,6 +19,10 @@ interface Props {
   boardId: string;
   draggableCard: null | CardType;
   setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
+  dragStyles: {
+    columnId: string;
+    backgroundColor: string;
+  };
 }
 
 const Column: React.FC<Props> = ({
@@ -27,7 +31,8 @@ const Column: React.FC<Props> = ({
   boardId,
   position,
   draggableCard,
-  setDraggableCard
+  setDraggableCard,
+  dragStyles
 }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -60,7 +65,9 @@ const Column: React.FC<Props> = ({
 
   return (
     <>
-      <SC.Container>
+      <SC.Container
+        dragStyles={dragStyles.columnId === columnId ? dragStyles.backgroundColor : null}
+      >
         <SC.Content>
           <SC.Header>
             <SC.Name variant="h6">{columnName}</SC.Name>

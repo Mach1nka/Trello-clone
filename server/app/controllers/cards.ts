@@ -79,7 +79,7 @@ const changeCardStatus = async (req: Request, res: Response): Promise<void> => {
   }
 
   await updateStatusService(req.body);
-  res.status(204).json(new BaseResponse({}, 204));
+  res.status(200).json(new BaseResponse({}, 200));
 };
 
 const deleteCard = async (req: Request, res: Response): Promise<void> => {
@@ -90,7 +90,7 @@ const deleteCard = async (req: Request, res: Response): Promise<void> => {
   }
 
   await deleteService(req.body);
-  res.status(204).json(new BaseResponse({}, 204));
+  res.status(200).json(new BaseResponse({}, 200));
 };
 
 export {

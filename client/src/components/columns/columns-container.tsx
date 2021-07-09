@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { CircularProgress } from '@material-ui/core';
@@ -17,6 +17,16 @@ interface ParamTypes {
   boardId: string;
 }
 
+interface ColumnStyles {
+  columnId: string;
+  backgroundColor: string;
+}
+
+interface ActionStylesReducer {
+  type: string;
+  payload: string;
+}
+
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
   const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
@@ -29,10 +39,30 @@ const ColumnsContainer: React.FC = () => {
   const { columns } = useAppSelector((state) => state.boardColumns);
   const columnForDnD = useAppSelector((state) => state.cardsData);
 
-  const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
-    e.preventDefault();
-    const isEmptyColumn = columnForDnD[column.id].length;
-    if (draggableCard && !isEmptyColumn) {
+  const stylesReducer = useCallback((state: ColumnStyles, action: ActionStylesReducer) => {
+    switch (action.type) {
+      case 'SET_BACKGROUND':
+        return {
+          columnId: action.payload,
+          backgroundColor: 'rgba(0,0,0,0.2)'
+        };
+      case 'RESET_BACKGROUND':
+        return {
+          columnId: action.payload,
+          backgroundColor: 'none'
+        };
+      default:
+        return state;
+    }
+  }, []);
+
+  const [styles, dispatchStyles] = useReducer(stylesReducer, {
+    columnId: '',
+    backgroundColor: 'none'
+  });
+
+  const changeStatus = useCallback(
+    (column: ColumnType) => {
       dispatch(
         changeCardStatus({
           cardId: draggableCard.id,
@@ -41,10 +71,13 @@ const ColumnsContainer: React.FC = () => {
         })
       );
       setDraggableCard(null);
-      e.currentTarget.firstChild.style.background = 'none';
-      return;
-    }
-    if (draggableColumn && column.position !== draggableColumn.position) {
+      dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
+    },
+    [draggableCard]
+  );
+
+  const changePosition = useCallback(
+    (column: ColumnType) => {
       dispatch(
         changeColumnPosition({
           boardId,
@@ -53,8 +86,21 @@ const ColumnsContainer: React.FC = () => {
         })
       );
       setDraggableColumn(null);
+    },
+    [draggableColumn]
+  );
+
+  const dropHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
+    e.preventDefault();
+    const isEmptyColumn = columnForDnD[column.id].length;
+    if (draggableCard && !isEmptyColumn) {
+      changeStatus(column);
+      return;
     }
-    e.currentTarget.firstChild.style.background = 'none';
+    if (draggableColumn && column.position !== draggableColumn.position) {
+      changePosition(column);
+    }
+    dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
   };
 
   const dragStartHandler = (column: ColumnType) => {
@@ -64,30 +110,32 @@ const ColumnsContainer: React.FC = () => {
     }
   };
 
-  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>, column: ColumnType) => {
     e.preventDefault();
     if (!draggableCard && draggableColumn) {
-      e.currentTarget.firstChild.style.background = 'rgba(0,0,0,0.2)';
+      if (column.id !== styles.columnId || styles.backgroundColor === 'none') {
+        dispatchStyles({ type: 'SET_BACKGROUND', payload: column.id });
+      }
     }
   };
 
-  const dragEnterHandler = () => {
+  const dragEnterHandler = useCallback(() => {
     if (!draggableCard && draggableColumn) {
       setPointColumns(true);
     }
-  };
+  }, []);
 
-  const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragLeaveHandler = (column: ColumnType) => {
     if (!draggableCard && draggableColumn) {
-      e.currentTarget.firstChild.style.background = 'none';
+      dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
     }
   };
 
-  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragEndHandler = (column: ColumnType) => {
     setPointColumns(false);
     setDraggableColumn(null);
     if (!draggableCard && draggableColumn) {
-      e.currentTarget.firstChild.style.background = 'none';
+      dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
     }
   };
 
@@ -108,10 +156,10 @@ const ColumnsContainer: React.FC = () => {
             isPointColumns={isPointColumns}
             draggable
             onDragStart={() => dragStartHandler(el)}
-            onDragLeave={(e) => dragLeaveHandler(e)}
-            onDragOver={(e) => dragOverHandler(e)}
-            onDragEnter={() => dragEnterHandler()}
-            onDragEnd={(e) => dragEndHandler(e)}
+            onDragLeave={() => dragLeaveHandler(el)}
+            onDragOver={(e) => dragOverHandler(e, el)}
+            onDragEnter={dragEnterHandler}
+            onDragEnd={() => dragEndHandler(el)}
             onDrop={(e) => dropHandler(e, el)}
           >
             <Column
@@ -121,6 +169,7 @@ const ColumnsContainer: React.FC = () => {
               position={el.position}
               draggableCard={draggableCard}
               setDraggableCard={setDraggableCard}
+              dragStyles={styles}
             />
           </DragWrapper>
         ))}

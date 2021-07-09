@@ -31,18 +31,14 @@ export interface BoardList {
   sharedBoards: Board[];
 }
 
-export interface ListBoardData {
-  data: BoardList;
-  statusCode: number;
-}
-
-export interface UpdatedBoard {
-  data: Board;
-  statusCode: number;
-}
-
 export type BoardActions =
   | { type: BoardTypes.PUT_USER_BOARDS; payload: BoardList }
   | { type: BoardTypes.PUT_CREATED_BOARD; payload: Board }
   | { type: BoardTypes.PUT_RENAMED_BOARD; payload: Board }
   | { type: BoardTypes.DELETE_BOARDS_DATA };
+
+export interface BaseResponse<T> {
+  statusCode: number;
+  message?: string;
+  data?: T;
+}

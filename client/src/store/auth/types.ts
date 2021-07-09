@@ -24,14 +24,14 @@ export interface AccountDataInStore extends AuthData {
   message: string;
 }
 
-export interface AuthSuccess {
-  data: AuthData;
+export interface AuthResponse {
   statusCode: number;
+  data?: AuthData;
+  message?: string;
 }
 
 export interface AuthError {
   message: string;
-  statusCode: number | null;
 }
 
 export type AuthActions =

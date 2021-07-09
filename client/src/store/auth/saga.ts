@@ -3,7 +3,7 @@ import { SagaIterator } from 'redux-saga';
 
 import { registerUser, loginUser } from '../../api/auth-requests';
 import { REGISTRATION_USER, LOGIN_USER, putAuthData, putErrorMessage } from './actions';
-import { AuthSuccess, AuthError, UserAction } from './types';
+import { AuthResponse, UserAction } from './types';
 import handleSagaRequest from '../../../utils/handle-saga-request';
 
 function* workerUserLogin(userData: UserAction) {
@@ -15,11 +15,15 @@ function* watchUserLogin(): SagaIterator {
 }
 
 function* workerUserRegistration(userData: UserAction) {
-  const data: AuthSuccess | AuthError = yield call(registerUser, userData.payload);
-  if (data.message) {
-    yield put(putErrorMessage({ message: data.message }));
+  const response: AuthResponse = yield call(registerUser, userData.payload);
+
+  if (response.message) {
+    yield put(putErrorMessage({ message: response.message }));
   }
-  yield put(putAuthData(data.data));
+
+  if (response.data) {
+    yield put(putAuthData(response.data));
+  }
 }
 
 function* watchUserRegistration(): SagaIterator {
