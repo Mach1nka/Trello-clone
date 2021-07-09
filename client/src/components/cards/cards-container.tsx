@@ -1,4 +1,11 @@
-import React, { useEffect, useState, Dispatch, SetStateAction } from 'react';
+import React, {
+  useEffect,
+  useState,
+  useReducer,
+  useCallback,
+  Dispatch,
+  SetStateAction
+} from 'react';
 import { useDispatch } from 'react-redux';
 
 import Card from './components/card';
@@ -13,10 +20,42 @@ interface Props {
   setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
 }
 
+interface CardStyles {
+  cardId: string;
+  backgroundColor: string;
+}
+
+interface ActionStylesReducer {
+  type: string;
+  payload: string;
+}
+
 const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggableCard }) => {
   const dispatch = useDispatch();
   const cardsData = useAppSelector((state) => state.cardsData[columnId]);
   const [isPointCards, setPointCards] = useState(false);
+
+  const stylesReducer = useCallback((state: CardStyles, action: ActionStylesReducer) => {
+    switch (action.type) {
+      case 'SET_BACKGROUND':
+        return {
+          cardId: action.payload,
+          backgroundColor: 'rgba(0,0,0,0.03)'
+        };
+      case 'RESET_BACKGROUND':
+        return {
+          cardId: action.payload,
+          backgroundColor: 'none'
+        };
+      default:
+        return state;
+    }
+  }, []);
+
+  const [styles, dispatchStyles] = useReducer(stylesReducer, {
+    cardId: '',
+    backgroundColor: 'none'
+  });
 
   const dragStartHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
     e.stopPropagation();
@@ -24,28 +63,30 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
     setPointCards(true);
   };
 
-  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragOverHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
     e.preventDefault();
-    e.currentTarget.firstChild.style.background = 'rgba(0, 0, 0, 0.03)';
+    if (card.id !== styles.cardId || styles.backgroundColor === 'none') {
+      dispatchStyles({ type: 'SET_BACKGROUND', payload: card.id });
+    }
   };
 
-  const dragEnterHandler = () => setPointCards(true);
+  const dragEnterHandler = useCallback(() => setPointCards(true), []);
 
-  const dragLeaveHandler = (e: React.DragEvent<HTMLDivElement>) => {
-    e.currentTarget.firstChild.style.background = '';
+  const dragLeaveHandler = (card: CardType) => {
+    dispatchStyles({ type: 'RESET_BACKGROUND', payload: card.id });
   };
 
-  const dragEndHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dragEndHandler = (card: CardType) => {
     setPointCards(false);
     setDraggableCard(null);
-    e.currentTarget.firstChild.style.background = '';
+    dispatchStyles({ type: 'RESET_BACKGROUND', payload: card.id });
   };
 
   const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
     e.preventDefault();
     setDraggableCard(null);
     setPointCards(false);
-    e.currentTarget.firstChild.style.background = '';
+    dispatchStyles({ type: 'RESET_BACKGROUND', payload: card.id });
     if (draggableCard && draggableCard.columnId !== card.columnId) {
       dispatch(
         changeCardStatus({
@@ -80,13 +121,19 @@ const CardsContainer: React.FC<Props> = ({ columnId, draggableCard, setDraggable
           isPointCards={isPointCards}
           draggable
           onDragStart={(e) => dragStartHandler(e, el)}
-          onDragEnd={(e) => dragEndHandler(e)}
-          onDragLeave={(e) => dragLeaveHandler(e)}
-          onDragEnter={() => dragEnterHandler()}
-          onDragOver={(e) => dragOverHandler(e)}
+          onDragEnd={() => dragEndHandler(el)}
+          onDragLeave={() => dragLeaveHandler(el)}
+          onDragEnter={dragEnterHandler}
+          onDragOver={(e) => dragOverHandler(e, el)}
           onDrop={(e) => dropHandler(e, el)}
         >
-          <Card cardId={el.id} description={el.description} name={el.name} columnId={columnId} />
+          <Card
+            cardId={el.id}
+            description={el.description}
+            name={el.name}
+            columnId={columnId}
+            dragStyles={styles}
+          />
         </DragWrapper>
       ))}
     </Container>

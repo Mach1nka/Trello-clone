@@ -12,9 +12,13 @@ interface Props {
   name: string;
   columnId: string;
   description: string;
+  dragStyles: {
+    cardId: string;
+    backgroundColor: string;
+  };
 }
 
-const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
+const Card: React.FC<Props> = ({ cardId, name, columnId, description, dragStyles }) => {
   const dispatch = useDispatch();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
@@ -55,7 +59,10 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description }) => {
   const onCloseMenu = useCallback(() => setAnchorEl(null), []);
 
   return (
-    <SC.Container onClick={showDetailsModal}>
+    <SC.Container
+      dragStyles={dragStyles.cardId === cardId ? dragStyles.backgroundColor : null}
+      onClick={showDetailsModal}
+    >
       <Typography style={{ width: '200px' }} variant="subtitle2">
         {name}
       </Typography>

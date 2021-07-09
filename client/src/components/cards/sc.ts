@@ -7,6 +7,10 @@ interface Props {
   isPointCards: boolean;
 }
 
+interface CardProps {
+  dragStyles: string | null;
+}
+
 const CardsContainer = styled.div`
   display: flex;
   flex-grow: 1;
@@ -15,7 +19,7 @@ const CardsContainer = styled.div`
 `;
 
 const CardSC = {
-  Container: styled.div`
+  Container: styled.div<CardProps>`
     display: flex;
     justify-content: space-between;
     width: inherit;
@@ -26,6 +30,7 @@ const CardSC = {
     border-radius: 4px;
     box-shadow: 0px 4px 6px -4px rgb(0 0 0 / 50%);
     transition: all ease-in 0.1s;
+    background-color: ${(props) => (props.dragStyles ? `${props.dragStyles} !important` : '')};
     :hover {
       cursor: pointer;
       background-color: rgba(0, 0, 0, 0.03);
