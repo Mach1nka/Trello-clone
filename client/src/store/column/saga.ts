@@ -13,8 +13,8 @@ import {
   putUpdatedPos
 } from './actions';
 import {
-  ListColumnData,
-  UpdatedColumn,
+  Column,
+  BaseResponse,
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
@@ -31,12 +31,15 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
-  const data: ListColumnData[] | number = yield call(getColumns, columnData.payload);
-  if (data === 401) {
+  const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload);
+
+  if (response.data) {
+    yield put(putColumns(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putColumns(data.data));
   }
 }
 
@@ -45,12 +48,15 @@ function* watchGetColumns(): SagaIterator {
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const data: UpdatedColumn | number = yield call(createColumn, columnData.payload);
-  if (data === 401) {
+  const response: BaseResponse<Column> = yield call(createColumn, columnData.payload);
+
+  if (response.data) {
+    yield put(putCreatedColumn(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putCreatedColumn(data.data));
   }
 }
 
@@ -59,12 +65,15 @@ function* watchCreateColumn(): SagaIterator {
 }
 
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
-  const data: UpdatedColumn | number = yield call(updateColumnName, columnData.payload);
-  if (data === 401) {
+  const response: BaseResponse<Column> = yield call(updateColumnName, columnData.payload);
+
+  if (response.data) {
+    yield put(putRenamedColumn(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putRenamedColumn(data.data));
   }
 }
 
@@ -73,12 +82,15 @@ function* watchRenameColumn(): SagaIterator {
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const data: ListColumnData[] | number = yield call(updateColumnPosition, columnData.payload);
-  if (data === 401) {
+  const response: BaseResponse<Column[]> = yield call(updateColumnPosition, columnData.payload);
+
+  if (response.data) {
+    yield put(putUpdatedPos(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putUpdatedPos(data.data));
   }
 }
 
@@ -88,12 +100,15 @@ function* watchChangeColumnPos(): SagaIterator {
 
 function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletingColumn }) {
   yield call(deleteColumn, columnData.payload);
-  const data: ListColumnData[] | number = yield call(getColumns, columnData.payload.boardId);
-  if (data === 401) {
+  const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload.boardId);
+
+  if (response.data) {
+    yield put(putColumns(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
-  } else {
-    yield put(putColumns(data.data));
   }
 }
 

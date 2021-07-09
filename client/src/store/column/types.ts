@@ -35,14 +35,10 @@ export interface DataForDeletingColumn {
   boardId: string;
 }
 
-export interface ListColumnData {
-  data: Column[];
+export interface BaseResponse<T> {
   statusCode: number;
-}
-
-export interface UpdatedColumn {
-  data: Column;
-  statusCode: number;
+  message?: string;
+  data?: T;
 }
 
 export type BoardActions =

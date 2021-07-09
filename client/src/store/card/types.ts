@@ -54,14 +54,10 @@ export interface CardList {
   cards: Card[];
 }
 
-export interface ListCardData {
-  data: Card[];
+export interface BaseResponse<T> {
   statusCode: number;
-}
-
-export interface UpdatedCard {
-  data: Card;
-  statusCode: number;
+  message?: string;
+  data?: T;
 }
 
 export type CardActions =

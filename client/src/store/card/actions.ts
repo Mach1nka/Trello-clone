@@ -6,6 +6,7 @@ import {
   DataForUpdatingCardStatus,
   DataForDeletingCard,
   CardTypes,
+  CardList,
   Card
 } from './types';
 
@@ -58,7 +59,7 @@ const deleteCard = (data: DataForDeletingCard): { type: string; payload: DataFor
   payload: data
 });
 
-const putCards = (cards: Card[]): { type: string; payload: Card[] } => ({
+const putCards = (cards: CardList): { type: string; payload: CardList } => ({
   type: CardTypes.PUT_CARDS,
   payload: cards
 });
@@ -73,7 +74,7 @@ const putUpdatedCard = (updatedCard: Card): { type: string; payload: Card } => (
   payload: updatedCard
 });
 
-const putUpdatedCardsPos = (cardsWithNewPos: Card[]): { type: string; payload: Card[] } => ({
+const putUpdatedCardsPos = (cardsWithNewPos: CardList): { type: string; payload: CardList } => ({
   type: CardTypes.PUT_CARDS_WITH_NEW_POSITION,
   payload: cardsWithNewPos
 });

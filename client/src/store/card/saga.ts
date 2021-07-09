@@ -20,8 +20,9 @@ import {
   DataForUpdatingCardPos,
   DataForUpdatingCardStatus,
   DataForDeletingCard,
-  ListCardData,
-  UpdatedCard
+  BaseResponse,
+  CardList,
+  Card
 } from './types';
 import {
   getCards,
@@ -36,10 +37,13 @@ import resetStore from '../../../utils/reset-store';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 
 function* workerGetCards(columnData: { type: string; payload: string }): SagaIterator {
-  const data: ListCardData | number = yield call(getCards, columnData.payload);
-  if (data !== 401) {
-    yield put(putCards(data.data));
-  } else {
+  const response: BaseResponse<CardList> = yield call(getCards, columnData.payload);
+
+  if (response.data) {
+    yield put(putCards(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -50,10 +54,13 @@ function* watchGetCards(): SagaIterator {
 }
 
 function* workerCreateCard(columnData: { type: string; payload: DataForCreatingCard }) {
-  const data: UpdatedCard | number = yield call(createCard, columnData.payload);
-  if (data !== 401) {
-    yield put(putCreatedCard(data.data));
-  } else {
+  const response: BaseResponse<Card> = yield call(createCard, columnData.payload);
+
+  if (response.data) {
+    yield put(putCreatedCard(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -64,10 +71,12 @@ function* watchCreateCard(): SagaIterator {
 }
 
 function* workerRenameCard(columnData: { type: string; payload: DataForRenamingCard }) {
-  const data: UpdatedCard | number = yield call(updateCardName, columnData.payload);
-  if (data !== 401) {
-    yield put(putUpdatedCard(data.data));
-  } else {
+  const response: BaseResponse<Card> = yield call(updateCardName, columnData.payload);
+  if (response.data) {
+    yield put(putUpdatedCard(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -78,10 +87,12 @@ function* watchRenameCard(): SagaIterator {
 }
 
 function* workerChangeCardDesc(columnData: { type: string; payload: DataForUpdatingCardDesc }) {
-  const data: UpdatedCard | number = yield call(updateCardDescription, columnData.payload);
-  if (data !== 401) {
-    yield put(putUpdatedCard(data.data));
-  } else {
+  const response: BaseResponse<Card> = yield call(updateCardDescription, columnData.payload);
+  if (response.data) {
+    yield put(putUpdatedCard(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -93,15 +104,19 @@ function* watchChangeCardDesc(): SagaIterator {
 
 function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpdatingCardStatus }) {
   yield call(updateCardStatus, columnData.payload);
-  const updatedColumn: ListCardData | number = yield call(getCards, columnData.payload.columnId);
-  const columnWithNewCard: ListCardData | number = yield call(
+
+  const updatedColumn: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId);
+  const columnWithNewCard: BaseResponse<CardList> = yield call(
     getCards,
     columnData.payload.newColumnId
   );
-  if (updatedColumn !== 401 || columnWithNewCard !== 401) {
+
+  if (updatedColumn.data && columnWithNewCard.data) {
     yield put(putCards(updatedColumn.data));
     yield put(putCards(columnWithNewCard.data));
-  } else {
+  }
+
+  if (updatedColumn.statusCode === 401 || columnWithNewCard.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -112,10 +127,13 @@ function* watchChangeCardStatus(): SagaIterator {
 }
 
 function* workerChangeCardPos(columnData: { type: string; payload: DataForUpdatingCardPos }) {
-  const data: ListCardData | number = yield call(updateCardPosition, columnData.payload);
-  if (data !== 401) {
-    yield put(putUpdatedCardsPos(data.data));
-  } else {
+  const response: BaseResponse<CardList> = yield call(updateCardPosition, columnData.payload);
+
+  if (response.data) {
+    yield put(putUpdatedCardsPos(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
@@ -127,10 +145,14 @@ function* watchChangeCardPos(): SagaIterator {
 
 function* workerDeleteCard(columnData: { type: string; payload: DataForDeletingCard }) {
   yield call(deleteCard, columnData.payload);
-  const data: ListCardData | number = yield call(getCards, columnData.payload.columnId);
-  if (data !== 401) {
-    yield put(putCards(data.data));
-  } else {
+
+  const response: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId);
+
+  if (response.data) {
+    yield put(putCards(response.data));
+  }
+
+  if (response.statusCode === 401) {
     removeAuthDataFromLocalStorage();
     resetStore();
   }
