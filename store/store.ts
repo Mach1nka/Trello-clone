@@ -9,7 +9,7 @@ import { State } from './types';
 
 // @note Improve Store types
 export interface SagaStore extends Store<State, AnyAction> {
-  sagaTask: Task;
+  sagaTask?: Task;
 }
 
 export const makeStore = (context: Context): Store => {
