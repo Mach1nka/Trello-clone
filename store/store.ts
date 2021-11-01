@@ -1,21 +1,21 @@
 import { createStore, applyMiddleware, Store, AnyAction } from 'redux';
-import { createWrapper } from 'next-redux-wrapper';
+import { Context, createWrapper } from 'next-redux-wrapper';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import createSagaMiddleware, { Task } from 'redux-saga';
 
 import rootReducer from './root-reducer';
 import rootSaga from './root-saga';
+import { State } from './types';
 
 // @note Improve Store types
-export interface SagaStore extends Store<any, AnyAction> {
+export interface SagaStore extends Store<State, AnyAction> {
   sagaTask: Task;
 }
 
-export const makeStore = (initialState = {}): Store => {
+export const makeStore = (context: Context): Store => {
   const sagaMiddleware = createSagaMiddleware();
   const store = createStore(
     rootReducer,
-    initialState,
     composeWithDevTools(applyMiddleware(sagaMiddleware))
   );
 
@@ -24,4 +24,4 @@ export const makeStore = (initialState = {}): Store => {
   return store;
 };
 
-export const wrapper = createWrapper(makeStore, { debug: true });
+export const wrapper = createWrapper<Store<State>>(makeStore, { debug: true });
