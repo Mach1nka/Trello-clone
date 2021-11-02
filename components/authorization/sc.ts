@@ -25,14 +25,14 @@ const AuthorizationSC = {
     margin-top: 30%;
   `,
   Backdrop: styled(Backdrop)`
-    ${({ theme }: Theme) => `
+    ${({ theme }: { theme: Theme }) => `
       z-index: ${theme.zIndex.drawer + 1} !important;
       color: #fff;
       background-color: rgba(0, 0, 0, 0.2);
     `}
   `,
   SubmitButton: styled(Button)`
-    ${(theme: Theme) => `
+    ${({ theme }: { theme: Theme }) => `
       background-color: rgba(240, 125, 57, 0.85) !important;
       &:hover {
         background-color: ${theme.palette.warning.main} !important;

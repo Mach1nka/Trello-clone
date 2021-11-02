@@ -11,7 +11,9 @@
   "plugins": ["@typescript-eslint", "react", "prettier", "jsx-a11y"],
   "rules": {
     "react/react-in-jsx-scope": "off",
-    "react/no-unescaped-entities": 0
+    "react/no-unescaped-entities": 0,
+    "react/prop-types": 0,
+    "jsx-a11y/no-autofocus": 0
   },
   "globals": {
     "React": "writable"

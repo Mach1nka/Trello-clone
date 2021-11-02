@@ -1,4 +1,4 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga/effects';
 import { SagaIterator } from 'redux-saga';
 
 import { registerUser, loginUser } from 'services/resources/request/auth';
@@ -8,16 +8,16 @@ import {
   putAuthData,
   putErrorMessage,
 } from './action';
-import { AuthResponse, UserAction } from 'services/resources/model/auth.model';
-import handleSagaRequest from '../../../utils/handle-saga-request';
+import {
+  AuthData,
+  AuthResponse,
+  UserAction,
+  UserData,
+} from 'services/resources/model/auth.model';
+import { sagaHandler } from 'services/HttpService/utils';
 
 function* workerUserLogin(userData: UserAction) {
-  yield handleSagaRequest(
-    loginUser,
-    userData.payload,
-    putAuthData,
-    putErrorMessage
-  );
+  sagaHandler<UserData, AuthData>(loginUser, userData.payload, putAuthData);
 }
 
 function* watchUserLogin(): SagaIterator {
@@ -25,15 +25,7 @@ function* watchUserLogin(): SagaIterator {
 }
 
 function* workerUserRegistration(userData: UserAction) {
-  const response: AuthResponse = yield call(registerUser, userData.payload);
-
-  if (response.message) {
-    yield put(putErrorMessage({ message: response.message }));
-  }
-
-  if (response.data) {
-    yield put(putAuthData(response.data));
-  }
+  sagaHandler<UserData, AuthData>(registerUser, userData.payload, putAuthData);
 }
 
 function* watchUserRegistration(): SagaIterator {
