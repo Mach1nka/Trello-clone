@@ -4,7 +4,6 @@ import { ThemeProvider } from '@material-ui/styles';
 import { createGlobalStyle } from 'styled-components';
 
 import { defaultColors } from 'styles/theme';
-import { wrapper } from 'store/store';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -30,4 +29,4 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
   );
 };
 
-export default wrapper.withRedux(App);
+export default App;

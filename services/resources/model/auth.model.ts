@@ -33,8 +33,3 @@ export interface AuthResponse {
 export interface AuthError {
   message: string;
 }
-
-export type AuthActions =
-  | { type: AuthTypes.PUT_USER_DATA; payload: AuthData }
-  | { type: AuthTypes.PUT_MESSAGE_ERROR; payload: AuthError }
-  | { type: AuthTypes.USER_LOGGED_OUT };

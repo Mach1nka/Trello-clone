@@ -1,10 +1,9 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
 
-import { useAppSelector } from 'store/hook';
 import ErrorModal from './errorModal';
 import { authForms } from './constant';
 import { AuthorizationSC as SC } from './sc';
@@ -17,7 +16,9 @@ export const Authorization: React.FC = () => {
   const router = useRouter();
   const theme = useTheme();
 
-  const { message, token } = useAppSelector((state) => state.authData);
+  let message = '';
+  let token = '';
+  // const { message, token } = useContext();
 
   useEffect(() => {
     if (message) {

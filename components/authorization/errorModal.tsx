@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
 import {
   Dialog,
   DialogTitle,
@@ -7,7 +6,6 @@ import {
   Typography,
 } from '@material-ui/core';
 
-import { putErrorMessage } from 'store/auth/action';
 import { AuthorizationSC as SC } from './sc';
 
 interface Props {
@@ -16,21 +14,18 @@ interface Props {
   setModalView: Dispatch<SetStateAction<boolean>>;
   setBackdropView: Dispatch<SetStateAction<boolean>>;
 }
-
+// @note must be changed on Alert
 const ErrorModal: React.FC<Props> = ({
   errorText,
   isOpen,
   setModalView,
   setBackdropView,
 }) => {
-  const dispatch = useDispatch();
-
   const upperErrorText = errorText.toUpperCase();
 
   const handleClose = useCallback(() => {
     setBackdropView(false);
     setModalView(false);
-    dispatch(putErrorMessage({ message: '' }));
   }, []);
 
   return (

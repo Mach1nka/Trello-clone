@@ -1,9 +1,7 @@
-import { useDispatch } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { loginUser } from 'store/auth/action';
 import { AuthorizationSC as SC } from './sc';
 import { loginFields, Props } from './constant';
 
@@ -12,8 +10,6 @@ type FormikProps = {
 };
 
 export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
-  const dispatch = useDispatch();
-
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -41,7 +37,7 @@ export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
     validationSchema,
     onSubmit: (values) => {
       setBackdropView(true);
-      dispatch(loginUser({ login: values.login, password: values.password }));
+      // @note login request
     },
   });
 
