@@ -1,5 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { SagaIterator } from 'redux-saga';
+import { takeEvery, ForkEffect } from 'redux-saga/effects';
 
 import {
   DELETE_BOARD,
@@ -16,8 +15,7 @@ import {
   BoardList,
   DataForCreatingBoard,
   DataForRenamingBoard,
-  DataForDeletingBoard,
-  BaseResponse
+  DataForDeletingBoard
 } from './types';
 import {
   getBoards,
@@ -26,86 +24,53 @@ import {
   shareBoard,
   deleteBoard
 } from '../../api/board-requests';
-import resetStore from '../../../utils/reset-store';
-import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+import handleSagaRequest from '../../../utils/handle-saga-request';
 
-function* workerGetBoards(): SagaIterator {
-  const response: BaseResponse<BoardList> = yield call(getBoards);
-
-  if (response.data) {
-    yield put(putUserBoards(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+function* workerGetBoards() {
+  yield handleSagaRequest<Record<string, never>, BoardList>(getBoards, {}, putUserBoards);
 }
 
-function* watchGetBoards(): SagaIterator {
+function* watchGetBoards(): Generator<ForkEffect> {
   yield takeEvery(GET_BOARDS, workerGetBoards);
 }
 
-function* workerCreateBoard(boardData: { type: string; payload: DataForCreatingBoard }) {
-  const response: BaseResponse<Board> = yield call(createBoard, boardData.payload);
-
-  if (response.data) {
-    yield put(putCreatedBoard(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+function* workerCreateBoard(board: { type: string; payload: DataForCreatingBoard }) {
+  yield handleSagaRequest<DataForCreatingBoard, Board>(createBoard, board.payload, putCreatedBoard);
+  // const response: BaseResponse<Board> = yield call(createBoard, boardData.payload);
 }
 
-function* watchCreateBoard(): SagaIterator {
+function* watchCreateBoard(): Generator<ForkEffect> {
   yield takeEvery(CREATE_BOARD, workerCreateBoard);
 }
 
 function* workerRenameBoard(board: { type: string; payload: DataForRenamingBoard }) {
-  const response: BaseResponse<Board> = yield call(updateBoardName, board.payload);
-
-  if (response.data) {
-    yield put(putRenamedBoard(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForRenamingBoard, Board>(
+    updateBoardName,
+    board.payload,
+    putRenamedBoard
+  );
+  // const response: BaseResponse<Board> = yield call(updateBoardName, board.payload);
 }
 
-function* watchRenameBoard(): SagaIterator {
+function* watchRenameBoard(): Generator<ForkEffect> {
   yield takeEvery(RENAME_BOARD, workerRenameBoard);
 }
 
 function* workerShareBoard(board: { type: string; payload: DataForDeletingBoard }) {
-  const response: BaseResponse<Record<string, never>> = yield call(shareBoard, board.payload);
-  if (response.statusCode === 401) {
-    resetStore();
-  }
+  yield handleSagaRequest<DataForDeletingBoard, Record<string, never>>(shareBoard, board.payload);
+  // const response: BaseResponse<Record<string, never>> = yield call(shareBoard, board.payload);
 }
 
-function* watchShareBoard(): SagaIterator {
+function* watchShareBoard(): Generator<ForkEffect> {
   yield takeEvery(SHARE_BOARD, workerShareBoard);
 }
 
 function* workerDeleteBoard(board: { type: string; payload: DataForDeletingBoard }) {
-  yield call(deleteBoard, board.payload);
-  const response: BaseResponse<BoardList> = yield call(getBoards);
-
-  if (response.data) {
-    yield put(putUserBoards(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForDeletingBoard, Record<string, never>>(deleteBoard, board.payload);
+  yield handleSagaRequest<Record<string, never>, BoardList>(getBoards, {}, putUserBoards);
 }
 
-function* watchDeleteBoard(): SagaIterator {
+function* watchDeleteBoard(): Generator<ForkEffect> {
   yield takeEvery(DELETE_BOARD, workerDeleteBoard);
 }
 

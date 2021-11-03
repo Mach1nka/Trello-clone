@@ -1,5 +1,5 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { SagaIterator } from 'redux-saga';
+import { takeEvery, ForkEffect } from 'redux-saga/effects';
+
 import {
   GET_CARDS,
   CREATE_CARD,
@@ -20,7 +20,6 @@ import {
   DataForUpdatingCardPos,
   DataForUpdatingCardStatus,
   DataForDeletingCard,
-  BaseResponse,
   CardList,
   Card
 } from './types';
@@ -33,132 +32,103 @@ import {
   updateCardStatus,
   deleteCard
 } from '../../api/card-requests';
-import resetStore from '../../../utils/reset-store';
-import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+import handleSagaRequest from '../../../utils/handle-saga-request';
 
-function* workerGetCards(columnData: { type: string; payload: string }): SagaIterator {
-  const response: BaseResponse<CardList> = yield call(getCards, columnData.payload);
-
-  if (response.data) {
-    yield put(putCards(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+function* workerGetCards(columnData: { type: string; payload: string }) {
+  yield handleSagaRequest<string, CardList>(getCards, columnData.payload, putCards);
+  // const response: BaseResponse<CardList> = yield call(getCards, columnData.payload);
 }
 
-function* watchGetCards(): SagaIterator {
+function* watchGetCards(): Generator<ForkEffect> {
   yield takeEvery(GET_CARDS, workerGetCards);
 }
 
 function* workerCreateCard(columnData: { type: string; payload: DataForCreatingCard }) {
-  const response: BaseResponse<Card> = yield call(createCard, columnData.payload);
-
-  if (response.data) {
-    yield put(putCreatedCard(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForCreatingCard, Card>(
+    createCard,
+    columnData.payload,
+    putCreatedCard
+  );
+  // const response: BaseResponse<Card> = yield call(createCard, columnData.payload);
 }
 
-function* watchCreateCard(): SagaIterator {
+function* watchCreateCard(): Generator<ForkEffect> {
   yield takeEvery(CREATE_CARD, workerCreateCard);
 }
 
 function* workerRenameCard(columnData: { type: string; payload: DataForRenamingCard }) {
-  const response: BaseResponse<Card> = yield call(updateCardName, columnData.payload);
-  if (response.data) {
-    yield put(putUpdatedCard(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForRenamingCard, Card>(
+    updateCardName,
+    columnData.payload,
+    putUpdatedCard
+  );
+  // const response: BaseResponse<Card> = yield call(updateCardName, columnData.payload);
 }
 
-function* watchRenameCard(): SagaIterator {
+function* watchRenameCard(): Generator<ForkEffect> {
   yield takeEvery(RENAME_CARD, workerRenameCard);
 }
 
 function* workerChangeCardDesc(columnData: { type: string; payload: DataForUpdatingCardDesc }) {
-  const response: BaseResponse<Card> = yield call(updateCardDescription, columnData.payload);
-  if (response.data) {
-    yield put(putUpdatedCard(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForUpdatingCardDesc, Card>(
+    updateCardDescription,
+    columnData.payload,
+    putUpdatedCard
+  );
+  // const response: BaseResponse<Card> = yield call(updateCardDescription, columnData.payload);
 }
 
-function* watchChangeCardDesc(): SagaIterator {
+function* watchChangeCardDesc(): Generator<ForkEffect> {
   yield takeEvery(CHANGE_CARD_DESCRIPTION, workerChangeCardDesc);
 }
 
 function* workerChangeCardStatus(columnData: { type: string; payload: DataForUpdatingCardStatus }) {
-  yield call(updateCardStatus, columnData.payload);
-
-  const updatedColumn: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId);
-  const columnWithNewCard: BaseResponse<CardList> = yield call(
-    getCards,
-    columnData.payload.newColumnId
+  yield handleSagaRequest<DataForUpdatingCardStatus, Record<string, never>>(
+    updateCardStatus,
+    columnData.payload
   );
 
-  if (updatedColumn.data && columnWithNewCard.data) {
-    yield put(putCards(updatedColumn.data));
-    yield put(putCards(columnWithNewCard.data));
-  }
+  yield handleSagaRequest<string, CardList>(getCards, columnData.payload.columnId, putCards);
+  yield handleSagaRequest<string, CardList>(getCards, columnData.payload.newColumnId, putCards);
 
-  if (updatedColumn.statusCode === 401 || columnWithNewCard.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  // yield call(updateCardStatus, columnData.payload);
+  // const updatedColumn: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId);
+  // const columnWithNewCard: BaseResponse<CardList> = yield call(
+  //   getCards,
+  //   columnData.payload.newColumnId
+  // );
 }
 
-function* watchChangeCardStatus(): SagaIterator {
+function* watchChangeCardStatus(): Generator<ForkEffect> {
   yield takeEvery(CHANGE_CARD_STATUS, workerChangeCardStatus);
 }
 
 function* workerChangeCardPos(columnData: { type: string; payload: DataForUpdatingCardPos }) {
-  const response: BaseResponse<CardList> = yield call(updateCardPosition, columnData.payload);
+  yield handleSagaRequest<DataForUpdatingCardPos, CardList>(
+    updateCardPosition,
+    columnData.payload,
+    putUpdatedCardsPos
+  );
 
-  if (response.data) {
-    yield put(putUpdatedCardsPos(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  // const response: BaseResponse<CardList> = yield call(updateCardPosition, columnData.payload);
 }
 
-function* watchChangeCardPos(): SagaIterator {
+function* watchChangeCardPos(): Generator<ForkEffect> {
   yield takeEvery(CHANGE_CARD_POSITION, workerChangeCardPos);
 }
 
 function* workerDeleteCard(columnData: { type: string; payload: DataForDeletingCard }) {
-  yield call(deleteCard, columnData.payload);
+  yield handleSagaRequest<DataForDeletingCard, Record<string, never>>(
+    deleteCard,
+    columnData.payload
+  );
+  yield handleSagaRequest<string, CardList>(getCards, columnData.payload.columnId, putCards);
 
-  const response: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId);
-
-  if (response.data) {
-    yield put(putCards(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  // yield call(deleteCard, columnData.payload);
+  // const response: BaseResponse<CardList> = yield call(getCards, columnData.payload.columnId)
 }
 
-function* watchDeleteCard(): SagaIterator {
+function* watchDeleteCard(): Generator<ForkEffect> {
   yield takeEvery(DELETE_CARD, workerDeleteCard);
 }
 

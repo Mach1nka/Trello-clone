@@ -1,32 +1,23 @@
-import { takeEvery, put, call } from 'redux-saga/effects';
-import { SagaIterator } from 'redux-saga';
+import { ForkEffect, takeEvery } from 'redux-saga/effects';
 
 import { registerUser, loginUser } from '../../api/auth-requests';
-import { REGISTRATION_USER, LOGIN_USER, putAuthData, putErrorMessage } from './actions';
-import { AuthResponse, UserAction } from './types';
+import { REGISTRATION_USER, LOGIN_USER, putAuthData } from './actions';
+import { AuthData, UserAction, UserData } from './types';
 import handleSagaRequest from '../../../utils/handle-saga-request';
 
 function* workerUserLogin(userData: UserAction) {
-  yield handleSagaRequest(loginUser, userData.payload, putAuthData, putErrorMessage);
+  yield handleSagaRequest<UserData, AuthData>(loginUser, userData.payload, putAuthData);
 }
 
-function* watchUserLogin(): SagaIterator {
+function* watchUserLogin(): Generator<ForkEffect> {
   yield takeEvery(LOGIN_USER, workerUserLogin);
 }
 
 function* workerUserRegistration(userData: UserAction) {
-  const response: AuthResponse = yield call(registerUser, userData.payload);
-
-  if (response.message) {
-    yield put(putErrorMessage({ message: response.message }));
-  }
-
-  if (response.data) {
-    yield put(putAuthData(response.data));
-  }
+  yield handleSagaRequest<UserData, AuthData>(registerUser, userData.payload, putAuthData);
 }
 
-function* watchUserRegistration(): SagaIterator {
+function* watchUserRegistration(): Generator<ForkEffect> {
   yield takeEvery(REGISTRATION_USER, workerUserRegistration);
 }
 
