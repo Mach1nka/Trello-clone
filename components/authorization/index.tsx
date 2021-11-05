@@ -4,6 +4,7 @@ import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
 
+import { AuthContext } from 'context/AuthContext';
 import ErrorModal from './errorModal';
 import { authForms } from './constant';
 import { AuthorizationSC as SC } from './sc';
@@ -16,20 +17,18 @@ export const Authorization: React.FC = () => {
   const router = useRouter();
   const theme = useTheme();
 
-  let message = '';
-  let token = '';
-  // const { message, token } = useContext();
+  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    if (message) {
-      setModalView(true);
-    } else {
-      setModalView(false);
-    }
-    if (token) {
+    // if (message) {
+    //   setModalView(true);
+    // } else {
+    //   setModalView(false);
+    // }
+    if (user.token) {
       router.push('/boards');
     }
-  }, [message, token]);
+  }, [user.token]);
 
   const onChange = useCallback(
     (_evt: React.ChangeEvent<Record<string, unknown>>, index: number) =>
@@ -40,12 +39,12 @@ export const Authorization: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="xs">
-        <ErrorModal
+        {/* <ErrorModal
           setBackdropView={setBackdropView}
           isOpen={isOpenModal}
           setModalView={setModalView}
           errorText={message}
-        />
+        /> */}
         <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>
             <TabList

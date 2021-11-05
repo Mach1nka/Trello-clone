@@ -1,15 +1,21 @@
+import { useContext } from 'react';
 import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { AuthorizationSC as SC } from './sc';
 import { registrationFields, Props } from './constant';
+import { registerUser } from 'services/resources/request/auth';
+import { UserData, AuthTypes } from 'services/resources/model/auth.model';
+import { AuthContext } from 'context/AuthContext';
 
 type FormikProps = {
   [key: string]: string;
 };
 
 export const SignUp: React.FC<Props> = ({ setBackdropView }) => {
+  const { dispatch } = useContext(AuthContext);
+
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -31,7 +37,7 @@ export const SignUp: React.FC<Props> = ({ setBackdropView }) => {
       .oneOf([yup.ref('password')], 'Passwords does not match'),
   });
 
-  const initialValues: FormikProps = {
+  const initialValues: UserData & { confirmPassword: string } & FormikProps = {
     login: '',
     password: '',
     confirmPassword: '',
@@ -41,8 +47,14 @@ export const SignUp: React.FC<Props> = ({ setBackdropView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      setBackdropView(true);
-      // @note registration request
+      // setBackdropView(true);
+      registerUser({ login: values.login, password: values.password })
+        .then((resp) => {
+          dispatch({ type: AuthTypes.LOG_IN, payload: resp.data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   });
 

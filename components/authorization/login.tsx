@@ -1,15 +1,21 @@
+import { useContext } from 'react';
 import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { AuthorizationSC as SC } from './sc';
 import { loginFields, Props } from './constant';
+import { loginUser } from 'services/resources/request/auth';
+import { UserData, AuthTypes } from 'services/resources/model/auth.model';
+import { AuthContext } from 'context/AuthContext';
 
 type FormikProps = {
   [key: string]: string;
 };
 
 export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
+  const { dispatch } = useContext(AuthContext);
+
   const validationSchema = yup.object({
     login: yup
       .string()
@@ -27,7 +33,7 @@ export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters'),
   });
 
-  const initialValues: FormikProps = {
+  const initialValues: UserData & FormikProps = {
     login: '',
     password: '',
   };
@@ -36,8 +42,14 @@ export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      setBackdropView(true);
-      // @note login request
+      // setBackdropView(true);
+      loginUser(values)
+        .then((resp) => {
+          dispatch({ type: AuthTypes.LOG_IN, payload: resp.data });
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   });
 

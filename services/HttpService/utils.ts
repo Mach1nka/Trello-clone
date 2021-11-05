@@ -13,4 +13,9 @@ const requestHeader = (authToken?: string): Headers => {
 
 const responseHandler = (resp: Response): Promise<Response> => resp.json();
 
-export { requestHeader, responseHandler };
+const catchHandler = (err: any): string => {
+  // @note Must be improved
+  return err.message;
+};
+
+export { requestHeader, responseHandler, catchHandler };

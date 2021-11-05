@@ -1,35 +1,21 @@
-export enum AuthTypes {
-  PUT_MESSAGE_ERROR = 'PUT_MESSAGE_ERROR',
-  PUT_USER_DATA = 'PUT_USER_DATA',
-  USER_LOGGED_OUT = 'USER_LOGGED_OUT',
-}
-
-export interface UserData {
+export type UserData = {
   login: string;
   password: string;
-}
+};
 
-export interface UserAction {
-  type: string;
-  payload: UserData;
-}
-
-export interface AuthData {
+export interface AuthDataServer {
   login: string;
   token: string;
   id: string;
 }
 
-export interface AccountDataInStore extends AuthData {
-  message: string;
+export enum AuthTypes {
+  LOG_IN = 'LOG_IN',
+  LOG_OUT = 'LOG_OUT',
 }
 
-export interface AuthResponse {
-  statusCode: number;
-  data?: AuthData;
-  message?: string;
-}
-
-export interface AuthError {
-  message: string;
+export interface AuthData {
+  id: string | null;
+  login: string | null;
+  token: string | null;
 }
