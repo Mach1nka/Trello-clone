@@ -8,14 +8,21 @@ export interface CRUDParams<T> {
   data: T;
 }
 
-export interface ErrorParams {
-  error: string;
-  errorInfo: string;
+export interface BaseResponse<T> {
+  statusCode: number;
+  data: T;
+}
+
+export interface ErrorResponse {
+  statusCode: number;
+  message: string;
+  errors: Record<string, unknown>;
 }
 
 export enum ErrorCode {
   BadRequest = 400,
   InvalidCredentials = 401,
+  Forbidden = 403,
   NotFound = 404,
   InternalError = 500,
 }
@@ -23,6 +30,7 @@ export enum ErrorCode {
 export const HttpErrorCodes = [
   ErrorCode.BadRequest,
   ErrorCode.InternalError,
+  ErrorCode.Forbidden,
   ErrorCode.InvalidCredentials,
-  ErrorCode.InvalidCredentials,
+  ErrorCode.InternalError,
 ];

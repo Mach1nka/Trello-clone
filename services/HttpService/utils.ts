@@ -1,4 +1,15 @@
-import { HttpErrorCodes } from './types';
+import {
+  HttpErrorCodes,
+  ErrorCode,
+  ErrorResponse,
+  BaseResponse,
+} from './types';
+import { httpService } from './index';
+
+export interface ErrorInfo {
+  message: string;
+  statusCode: number;
+}
 
 const requestHeader = (authToken?: string): Headers => {
   const headers = new Headers();
@@ -11,11 +22,42 @@ const requestHeader = (authToken?: string): Headers => {
   return headers;
 };
 
-const responseHandler = (resp: Response): Promise<Response> => resp.json();
+const responseHandler = (resp: Response): BaseResponse<any> | ErrorInfo => {
+  const data = resp.json() as BaseResponse<any> | ErrorInfo;
 
-const catchHandler = (err: any): string => {
-  // @note Must be improved
-  return err.message;
+  if (HttpErrorCodes.includes(data.statusCode)) {
+    const errorInfo = {
+      message: '',
+      statusCode: data.statusCode,
+    };
+
+    if (data.message) {
+      errorInfo.message = data.message;
+    }
+
+    if (data.statusCode === ErrorCode.InvalidCredentials) {
+      httpService.setAuthToken('');
+    }
+
+    return errorInfo;
+  }
+
+  return data;
+};
+
+const catchHandler = (err: any): ErrorInfo => {
+  const errorInfo = {
+    message: '',
+    statusCode: ErrorCode.InternalError,
+  };
+
+  if (err.message) {
+    errorInfo.message = err.message;
+  }
+
+  httpService.setAuthToken('');
+
+  return errorInfo;
 };
 
 export { requestHeader, responseHandler, catchHandler };

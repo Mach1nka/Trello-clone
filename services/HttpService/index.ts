@@ -1,5 +1,5 @@
-import { requestHeader, responseHandler } from './utils';
-import { GetParams, CRUDParams } from './types';
+import { requestHeader, responseHandler, catchHandler } from './utils';
+import { GetParams, CRUDParams, ErrorResponse } from './types';
 import { config } from 'config';
 
 class HttpService {
@@ -15,6 +15,10 @@ class HttpService {
     HttpService.authToken = token;
   };
 
+  getAuthToken = (): string => {
+    return HttpService.authToken;
+  };
+
   get = ({ url, params }: GetParams) => {
     const path = params
       ? `${this.baseUrl + url}/${params}`
@@ -26,7 +30,10 @@ class HttpService {
       headers,
     })
       .then((resp) => responseHandler(resp))
-      .catch((error) => error);
+      .catch((error) => {
+        const errorJson = error.toJSON();
+        console.log('error: ', errorJson);
+      });
   };
 
   post = <T>({ url, data }: CRUDParams<T>) => {
@@ -39,7 +46,10 @@ class HttpService {
       body: JSON.stringify(data),
     })
       .then((resp) => responseHandler(resp))
-      .catch((error) => error);
+      .catch((error) => {
+        const errorJson = error.toJSON();
+        console.log('error: ', errorJson);
+      });
   };
 
   put = <T>({ url, data }: CRUDParams<T>) => {
@@ -52,7 +62,10 @@ class HttpService {
       body: JSON.stringify(data),
     })
       .then((resp) => responseHandler(resp))
-      .catch((error) => error);
+      .catch((error) => {
+        const errorJson = error.toJSON();
+        console.log('error: ', errorJson);
+      });
   };
 
   patch = <T>({ url, data }: CRUDParams<T>) => {
@@ -65,7 +78,10 @@ class HttpService {
       body: JSON.stringify(data),
     })
       .then((resp) => responseHandler(resp))
-      .catch((error) => error);
+      .catch((error) => {
+        const errorJson = error.toJSON();
+        console.log('error: ', errorJson);
+      });
   };
 
   delete = <T>({ url, data }: CRUDParams<T>) => {
@@ -78,7 +94,10 @@ class HttpService {
       body: JSON.stringify(data),
     })
       .then((resp) => responseHandler(resp))
-      .catch((error) => error);
+      .catch((error) => {
+        const errorJson = error.toJSON();
+        console.log('error: ', errorJson);
+      });
   };
 }
 

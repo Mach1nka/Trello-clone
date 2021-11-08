@@ -1,6 +1,7 @@
-import { useReducer, Context, createContext, Dispatch } from 'react';
+import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
 
 import { AuthTypes, AuthData } from 'services/resources/model/auth.model';
+import { httpService } from 'services/HttpService';
 
 interface AuthLogInAction {
   type: AuthTypes.LOG_IN;
@@ -47,6 +48,13 @@ export const AuthContext: Context<AuthContextValue> =
 
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+
+  useEffect(() => {
+    if (!httpService.getAuthToken()) {
+      dispatch({ type: AuthTypes.LOG_OUT });
+    }
+  }, []);
+
   return (
     <AuthContext.Provider value={{ user: state, dispatch }}>
       {children}
