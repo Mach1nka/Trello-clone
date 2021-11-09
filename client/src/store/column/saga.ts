@@ -1,5 +1,4 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { SagaIterator } from 'redux-saga';
+import { takeEvery, ForkEffect } from 'redux-saga/effects';
 
 import {
   GET_COLUMNS,
@@ -14,7 +13,6 @@ import {
 } from './actions';
 import {
   Column,
-  BaseResponse,
   DataForCreatingColumn,
   DataForRenamingColumn,
   DataForUpdatingColumnPos,
@@ -27,92 +25,68 @@ import {
   updateColumnPosition,
   deleteColumn
 } from '../../api/column-requests';
-import resetStore from '../../../utils/reset-store';
-import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+import handleSagaRequest from '../../../utils/handle-saga-request';
 
-function* workerGetColumns(columnData: { type: string; payload: string }): SagaIterator {
-  const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload);
-
-  if (response.data) {
-    yield put(putColumns(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+function* workerGetColumns(columnData: { type: string; payload: string }) {
+  yield handleSagaRequest<string, Column[]>(getColumns, columnData.payload, putColumns);
+  // const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload);
 }
 
-function* watchGetColumns(): SagaIterator {
+function* watchGetColumns(): Generator<ForkEffect> {
   yield takeEvery(GET_COLUMNS, workerGetColumns);
 }
 
 function* workerCreateColumn(columnData: { type: string; payload: DataForCreatingColumn }) {
-  const response: BaseResponse<Column> = yield call(createColumn, columnData.payload);
-
-  if (response.data) {
-    yield put(putCreatedColumn(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForCreatingColumn, Column>(
+    createColumn,
+    columnData.payload,
+    putCreatedColumn
+  );
+  // const response: BaseResponse<Column> = yield call(createColumn, columnData.payload);
 }
 
-function* watchCreateColumn(): SagaIterator {
+function* watchCreateColumn(): Generator<ForkEffect> {
   yield takeEvery(CREATE_COLUMN, workerCreateColumn);
 }
 
 function* workerRenameColumn(columnData: { type: string; payload: DataForRenamingColumn }) {
-  const response: BaseResponse<Column> = yield call(updateColumnName, columnData.payload);
-
-  if (response.data) {
-    yield put(putRenamedColumn(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForRenamingColumn, Column>(
+    updateColumnName,
+    columnData.payload,
+    putRenamedColumn
+  );
+  // const response: BaseResponse<Column> = yield call(updateColumnName, columnData.payload);
 }
 
-function* watchRenameColumn(): SagaIterator {
+function* watchRenameColumn(): Generator<ForkEffect> {
   yield takeEvery(RENAME_COLUMN, workerRenameColumn);
 }
 
 function* workerChangeColumnPos(columnData: { type: string; payload: DataForUpdatingColumnPos }) {
-  const response: BaseResponse<Column[]> = yield call(updateColumnPosition, columnData.payload);
-
-  if (response.data) {
-    yield put(putUpdatedPos(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  yield handleSagaRequest<DataForUpdatingColumnPos, Column[]>(
+    updateColumnPosition,
+    columnData.payload,
+    putUpdatedPos
+  );
+  // const response: BaseResponse<Column[]> = yield call(updateColumnPosition, columnData.payload);
 }
 
-function* watchChangeColumnPos(): SagaIterator {
+function* watchChangeColumnPos(): Generator<ForkEffect> {
   yield takeEvery(CHANGE_COLUMN_POSITION, workerChangeColumnPos);
 }
 
 function* workerDeleteColumn(columnData: { type: string; payload: DataForDeletingColumn }) {
-  yield call(deleteColumn, columnData.payload);
-  const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload.boardId);
+  yield handleSagaRequest<DataForDeletingColumn, Record<string, never>>(
+    deleteColumn,
+    columnData.payload
+  );
+  yield handleSagaRequest<string, Column[]>(getColumns, columnData.payload.boardId, putColumns);
 
-  if (response.data) {
-    yield put(putColumns(response.data));
-  }
-
-  if (response.statusCode === 401) {
-    removeAuthDataFromLocalStorage();
-    resetStore();
-  }
+  // yield call(deleteColumn, columnData.payload);
+  // const response: BaseResponse<Column[]> = yield call(getColumns, columnData.payload.boardId);
 }
 
-function* watchDeleteColumn(): SagaIterator {
+function* watchDeleteColumn(): Generator<ForkEffect> {
   yield takeEvery(DELETE_COLUMN, workerDeleteColumn);
 }
 

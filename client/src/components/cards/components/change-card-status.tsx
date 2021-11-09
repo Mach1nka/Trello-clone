@@ -24,19 +24,22 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
     state.cardsData[columnId].find((el) => el.id === cardId)
   );
 
-  const formHandler = useCallback((values: { newStatus: string }) => {
-    if (values.newStatus !== columnId) {
-      dispatch(
-        changeCardStatus({
-          cardId,
-          newColumnId: values.newStatus,
-          columnId
-        })
-      );
-      dispatch(setCardDataForModal({ cardId, columnId: values.newStatus, name, description }));
-    }
-    dispatch(setModalsStates({ isStatusModalVisible: false }));
-  }, []);
+  const formHandler = useCallback(
+    (values: { newStatus: string }) => {
+      if (values.newStatus !== columnId) {
+        dispatch(
+          changeCardStatus({
+            cardId,
+            newColumnId: values.newStatus,
+            columnId
+          })
+        );
+        dispatch(setCardDataForModal({ cardId, columnId: values.newStatus, name, description }));
+      }
+      dispatch(setModalsStates({ isStatusModalVisible: false }));
+    },
+    [cardId, columnId]
+  );
 
   return (
     <Dialog

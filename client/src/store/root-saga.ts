@@ -1,5 +1,4 @@
-import { all, call } from 'redux-saga/effects';
-import { SagaIterator } from 'redux-saga';
+import { all, AllEffect, call, CallEffect } from 'redux-saga/effects';
 import { watchUserRegistration, watchUserLogin } from './auth/saga';
 import {
   watchGetBoards,
@@ -25,7 +24,7 @@ import {
   watchDeleteCard
 } from './card/saga';
 
-export default function* rootSaga(): SagaIterator {
+export default function* rootSaga(): Generator<AllEffect<CallEffect>> {
   yield all([
     call(watchUserRegistration),
     call(watchUserLogin),
