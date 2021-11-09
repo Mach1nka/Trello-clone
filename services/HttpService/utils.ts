@@ -22,31 +22,19 @@ const requestHeader = (authToken?: string): Headers => {
   return headers;
 };
 
-const responseHandler = (resp: Response): BaseResponse<any> | ErrorInfo => {
-  const data = resp.json() as BaseResponse<any> | ErrorInfo;
+const responseHandler = async <T>(resp: Response): Promise<BaseResponse<T>> => {
+  const data = await resp.json() as BaseResponse<T> | ErrorResponse;
 
   if (HttpErrorCodes.includes(data.statusCode)) {
-    const errorInfo = {
-      message: '',
-      statusCode: data.statusCode,
-    };
-
-    if (data.message) {
-      errorInfo.message = data.message;
-    }
-
-    if (data.statusCode === ErrorCode.InvalidCredentials) {
-      httpService.setAuthToken('');
-    }
-
-    return errorInfo;
+    const error = data as ErrorResponse;
+    throw (error);
   }
 
-  return data;
+  return data as BaseResponse<T>;
 };
 
-const catchHandler = (err: any): ErrorInfo => {
-  const errorInfo = {
+const catchHandler = (err: ErrorResponse) => {
+  const errorInfo: ErrorInfo = {
     message: '',
     statusCode: ErrorCode.InternalError,
   };
@@ -55,9 +43,13 @@ const catchHandler = (err: any): ErrorInfo => {
     errorInfo.message = err.message;
   }
 
-  httpService.setAuthToken('');
+  if (err.statusCode === ErrorCode.InvalidCredentials) {
+    httpService.setAuthToken('');
+  }
 
-  return errorInfo;
+  console.log('error: ', errorInfo);
+
+  throw (errorInfo);
 };
 
 export { requestHeader, responseHandler, catchHandler };

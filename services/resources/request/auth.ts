@@ -5,12 +5,12 @@ import { ErrorInfo } from 'services/HttpService/utils';
 
 const registerUser = (
   userData: UserData
-): Promise<ErrorInfo | BaseResponse<AuthDataServer>> =>
-  httpService.post({ url: '/auth/sign-up', data: userData });
+): Promise<BaseResponse<AuthDataServer>> =>
+  httpService.post<UserData, AuthDataServer>({ url: '/auth/sign-up', data: userData });
 
 const loginUser = (
   userData: UserData
-): Promise<ErrorInfo | BaseResponse<AuthDataServer>> =>
+): Promise<BaseResponse<AuthDataServer>> =>
   httpService.post({ url: '/auth/login', data: userData });
 
 export { registerUser, loginUser };

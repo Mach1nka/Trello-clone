@@ -6,9 +6,10 @@ import * as yup from 'yup';
 import { AuthorizationSC as SC } from './sc';
 import { loginFields, Props } from './constant';
 import { loginUser } from 'services/resources/request/auth';
-import { UserData, AuthTypes } from 'services/resources/model/auth.model';
+import { UserData, AuthActions } from 'services/resources/model/auth.model';
 import { AuthContext } from 'context/AuthContext';
 import { BaseResponse } from 'services/HttpService/types';
+import { ErrorInfo } from 'services/HttpService/utils';
 
 type FormikProps = {
   [key: string]: string;
@@ -43,13 +44,12 @@ export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      // setBackdropView(true);
+      setBackdropView(true);
       loginUser(values).then((resp) => {
-        console.log(resp);
-
-        dispatch({ type: AuthTypes.LOG_IN, payload: resp.data });
+        dispatch({ type: AuthActions.LOG_IN, payload: resp.data });
       })
-      .catch((err) => {
+      .catch((err: ErrorInfo) => {
+        // @note all errors will catch here
         console.log(err);
       });
     },

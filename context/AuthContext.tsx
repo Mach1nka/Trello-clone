@@ -1,22 +1,22 @@
 import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
 
-import { AuthTypes, AuthData } from 'services/resources/model/auth.model';
+import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
 
 interface AuthLogInAction {
-  type: AuthTypes.LOG_IN;
+  type: AuthActions.LOG_IN;
   payload: AuthData;
 }
 
 interface AuthLogOutAction {
-  type: AuthTypes.LOG_OUT;
+  type: AuthActions.LOG_OUT;
 }
 
-type AuthAction = AuthLogInAction | AuthLogOutAction;
+type Action = AuthLogInAction | AuthLogOutAction;
 
 interface AuthContextValue {
   user: AuthData;
-  dispatch: Dispatch<AuthAction>;
+  dispatch: Dispatch<Action>;
 }
 
 const initialState: AuthData = {
@@ -25,11 +25,11 @@ const initialState: AuthData = {
   token: null,
 };
 
-function reducer(state: AuthData, action: AuthAction): AuthData {
+function reducer(state: AuthData, action: Action): AuthData {
   switch (action.type) {
-    case AuthTypes.LOG_IN:
+    case AuthActions.LOG_IN:
       return { ...state, ...action.payload };
-    case AuthTypes.LOG_OUT:
+    case AuthActions.LOG_OUT:
       return { ...state, ...initialState };
     default:
       return state;
@@ -51,7 +51,7 @@ const AuthProvider: React.FC = ({ children }) => {
 
   useEffect(() => {
     if (!httpService.getAuthToken()) {
-      dispatch({ type: AuthTypes.LOG_OUT });
+      dispatch({ type: AuthActions.LOG_OUT });
     }
   }, []);
 

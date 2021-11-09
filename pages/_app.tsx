@@ -2,7 +2,8 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/styles';
 import { createGlobalStyle } from 'styled-components';
-import AuthContext from 'context/AuthContext';
+import AuthProvider from 'context/AuthContext';
+import AlertProvider from 'context/AlertContext';
 
 import { defaultColors } from 'styles/theme';
 
@@ -24,9 +25,12 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
       </Head>
       <ThemeProvider theme={defaultColors}>
         <GlobalStyle />
-        <AuthContext>
-          <Component {...pageProps} />
-        </AuthContext>
+        <AlertProvider>
+          <AuthProvider>
+            <Component {...pageProps} />
+            
+          </AuthProvider>
+        </AlertProvider>  
       </ThemeProvider>
     </>
   );

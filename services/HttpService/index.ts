@@ -1,5 +1,5 @@
-import { requestHeader, responseHandler, catchHandler } from './utils';
-import { GetParams, CRUDParams, ErrorResponse } from './types';
+import { requestHeader, responseHandler, catchHandler, ErrorInfo } from './utils';
+import { GetParams, CRUDParams, BaseResponse } from './types';
 import { config } from 'config';
 
 class HttpService {
@@ -19,7 +19,7 @@ class HttpService {
     return HttpService.authToken;
   };
 
-  get = ({ url, params }: GetParams) => {
+  get = <S>({ url, params }: GetParams): Promise<BaseResponse<S>> => {
     const path = params
       ? `${this.baseUrl + url}/${params}`
       : `${this.baseUrl + url}`;
@@ -29,14 +29,11 @@ class HttpService {
       method: 'GET',
       headers,
     })
-      .then((resp) => responseHandler(resp))
-      .catch((error) => {
-        const errorJson = error.toJSON();
-        console.log('error: ', errorJson);
-      });
+      .then((resp) => responseHandler<S>(resp))
+      .catch(catchHandler);
   };
 
-  post = <T>({ url, data }: CRUDParams<T>) => {
+  post = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S>> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -45,14 +42,11 @@ class HttpService {
       headers,
       body: JSON.stringify(data),
     })
-      .then((resp) => responseHandler(resp))
-      .catch((error) => {
-        const errorJson = error.toJSON();
-        console.log('error: ', errorJson);
-      });
+      .then((resp) => responseHandler<S>(resp))
+      .catch(catchHandler);
   };
 
-  put = <T>({ url, data }: CRUDParams<T>) => {
+  put = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -61,14 +55,11 @@ class HttpService {
       headers,
       body: JSON.stringify(data),
     })
-      .then((resp) => responseHandler(resp))
-      .catch((error) => {
-        const errorJson = error.toJSON();
-        console.log('error: ', errorJson);
-      });
+      .then((resp) => responseHandler<S>(resp))
+      .catch(catchHandler);
   };
 
-  patch = <T>({ url, data }: CRUDParams<T>) => {
+  patch = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -77,14 +68,11 @@ class HttpService {
       headers,
       body: JSON.stringify(data),
     })
-      .then((resp) => responseHandler(resp))
-      .catch((error) => {
-        const errorJson = error.toJSON();
-        console.log('error: ', errorJson);
-      });
+      .then((resp) => responseHandler<S>(resp))
+      .catch(catchHandler);
   };
 
-  delete = <T>({ url, data }: CRUDParams<T>) => {
+  delete = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo>=> {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -93,11 +81,8 @@ class HttpService {
       headers,
       body: JSON.stringify(data),
     })
-      .then((resp) => responseHandler(resp))
-      .catch((error) => {
-        const errorJson = error.toJSON();
-        console.log('error: ', errorJson);
-      });
+      .then((resp) => responseHandler<S>(resp))
+      .catch(catchHandler);
   };
 }
 
