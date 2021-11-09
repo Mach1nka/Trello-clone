@@ -1,20 +1,30 @@
-import { ModalTypes, ModalsStates, CardData } from './types';
+import { ModalTypes, ModalsStates, CardDataForModal, BoardDataForModal } from './types';
 
-const setModalData = (
-  cardData: CardData
+const setCardDataForModal = (
+  cardData: CardDataForModal
 ): {
   type: string;
-  payload: CardData;
+  payload: CardDataForModal;
+} => ({
+  type: ModalTypes.SET_CARD_DATA,
+  payload: cardData
+});
+
+const setBoardIdForModal = (
+  cardData: BoardDataForModal
+): {
+  type: string;
+  payload: BoardDataForModal;
 } => ({
   type: ModalTypes.SET_CARD_DATA,
   payload: cardData
 });
 
 const setModalsStates = (
-  modalsStates: ModalsStates
+  modalsStates: Partial<ModalsStates>
 ): {
   type: string;
-  payload: ModalsStates;
+  payload: Partial<ModalsStates>;
 } => ({
   type: ModalTypes.SET_MODAL_STATE,
   payload: modalsStates
@@ -22,4 +32,4 @@ const setModalsStates = (
 
 const resetModalData = (): { type: string } => ({ type: ModalTypes.RESET_MODAL_DATA });
 
-export { setModalData, setModalsStates, resetModalData };
+export { setCardDataForModal, setBoardIdForModal, setModalsStates, resetModalData };

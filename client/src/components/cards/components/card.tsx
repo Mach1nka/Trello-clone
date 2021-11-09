@@ -4,7 +4,11 @@ import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
 import { deleteCard } from '../../../store/card/actions';
-import { setModalData, setModalsStates, resetModalData } from '../../../store/modals/actions';
+import {
+  setCardDataForModal,
+  setModalsStates,
+  resetModalData
+} from '../../../store/modals/actions';
 import { CardSC as SC } from '../sc';
 
 interface Props {
@@ -34,25 +38,25 @@ const Card: React.FC<Props> = ({ cardId, name, columnId, description, dragStyles
   }, []);
 
   const handleChangeName = useCallback(() => {
-    dispatch(setModalData({ cardId, columnId, name, description }));
+    dispatch(setCardDataForModal({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isRenameModalVisible: true }));
     setAnchorEl(null);
   }, []);
 
   const handleChangePosition = useCallback(() => {
-    dispatch(setModalData({ cardId, columnId, name, description }));
+    dispatch(setCardDataForModal({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isPositionModalVisible: true }));
     setAnchorEl(null);
   }, []);
 
   const handleChangeStatus = useCallback(() => {
-    dispatch(setModalData({ cardId, columnId, name, description }));
+    dispatch(setCardDataForModal({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isStatusModalVisible: true }));
     setAnchorEl(null);
   }, []);
 
   const showDetailsModal = useCallback(() => {
-    dispatch(setModalData({ cardId, columnId, name, description }));
+    dispatch(setCardDataForModal({ cardId, columnId, name, description }));
     dispatch(setModalsStates({ isDetailsModalVisible: true }));
   }, []);
 

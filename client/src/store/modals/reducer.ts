@@ -29,6 +29,11 @@ const modalsData = (state = initialModalsState, action: ModalActions): ModalsDat
         ...state,
         modalsStates: { ...state.modalsStates, ...action.payload }
       };
+    case ModalTypes.SET_BOARD_ID:
+      return {
+        ...state,
+        modalsStates: { ...state.modalsStates, ...action.payload }
+      };
     case ModalTypes.RESET_MODAL_DATA:
       return { ...state, ...initialModalsState };
     default:

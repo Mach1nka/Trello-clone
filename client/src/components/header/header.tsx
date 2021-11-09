@@ -6,7 +6,7 @@ import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
 import { useAppSelector } from '../../store/hooks';
 import { getBoards } from '../../store/board/actions';
-import { setModalsStates, setModalData } from '../../store/modals/actions';
+import { setModalsStates, setBoardIdForModal } from '../../store/modals/actions';
 import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
 import resetStore from '../../../utils/reset-store';
 import useWindowSize from '../../../utils/window-size-hook';
@@ -34,7 +34,7 @@ const Header: React.FC = () => {
   const isMainPage = pathname === '/boards';
 
   const handleShareButton = useCallback(() => {
-    dispatch(setModalData({ boardId }));
+    dispatch(setBoardIdForModal({ boardId }));
     dispatch(setModalsStates({ isShareModalVisible: true }));
   }, [boardId]);
 

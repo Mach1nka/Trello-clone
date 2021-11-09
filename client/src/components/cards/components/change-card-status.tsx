@@ -5,7 +5,7 @@ import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@materi
 
 import { useAppSelector } from '../../../store/hooks';
 import { changeCardStatus } from '../../../store/card/actions';
-import { setModalsStates, setModalData } from '../../../store/modals/actions';
+import { setModalsStates, setCardDataForModal } from '../../../store/modals/actions';
 import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
@@ -33,7 +33,7 @@ const ChangeCardStatus: React.FC<Props> = ({ isOpen, columnId, cardId }) => {
           columnId
         })
       );
-      dispatch(setModalData({ cardId, columnId: values.newStatus, name, description }));
+      dispatch(setCardDataForModal({ cardId, columnId: values.newStatus, name, description }));
     }
     dispatch(setModalsStates({ isStatusModalVisible: false }));
   }, []);

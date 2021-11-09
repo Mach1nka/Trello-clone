@@ -8,7 +8,7 @@ import { CircularProgress } from '@material-ui/core';
 import RenameBoardModal from './rename-board';
 import { useAppSelector } from '../../../store/hooks';
 import { deleteBoard } from '../../../store/board/actions';
-import { setModalsStates, setModalData } from '../../../store/modals/actions';
+import { setModalsStates, setBoardIdForModal } from '../../../store/modals/actions';
 import { BoardSC as SC } from '../sc';
 
 interface Props {
@@ -30,7 +30,7 @@ const BoardOptions: React.FC<Props> = ({ boardId }) => {
 
   const onShareHandler = useCallback((e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    dispatch(setModalData({ boardId }));
+    dispatch(setBoardIdForModal({ boardId }));
     dispatch(setModalsStates({ isShareModalVisible: true }));
   }, []);
 
