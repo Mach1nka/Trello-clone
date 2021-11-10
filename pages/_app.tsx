@@ -2,9 +2,11 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/styles';
 import { createGlobalStyle } from 'styled-components';
+
 import AuthProvider from 'context/AuthContext';
 import AlertProvider from 'context/AlertContext';
-
+import LoaderProvider from 'context/LoaderContext';
+import { Layout } from 'components/layout';
 import { defaultColors } from 'styles/theme';
 
 const GlobalStyle = createGlobalStyle`
@@ -26,11 +28,14 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={defaultColors}>
         <GlobalStyle />
         <AlertProvider>
-          <AuthProvider>
-            <Component {...pageProps} />
-            
-          </AuthProvider>
-        </AlertProvider>  
+          <LoaderProvider>
+            <AuthProvider>
+              <Layout>
+                <Component {...pageProps} />
+              </Layout>
+            </AuthProvider>
+          </LoaderProvider>
+        </AlertProvider>
       </ThemeProvider>
     </>
   );

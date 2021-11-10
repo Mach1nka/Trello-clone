@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Paper, Backdrop, Button, Theme } from '@material-ui/core';
+import { Paper, Button, Theme } from '@material-ui/core';
 
 const AuthorizationSC = {
   SignUpForm: styled.form`
@@ -23,13 +23,6 @@ const AuthorizationSC = {
     width: inherit;
     height: 500px;
     margin-top: 30%;
-  `,
-  Backdrop: styled(Backdrop)`
-    ${({ theme }: { theme: Theme }) => `
-      z-index: ${theme.zIndex.drawer + 1} !important;
-      color: #fff;
-      background-color: rgba(0, 0, 0, 0.2);
-    `}
   `,
   SubmitButton: styled(Button)`
     ${({ theme }: { theme: Theme }) => `

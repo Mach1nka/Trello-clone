@@ -4,19 +4,23 @@ import { useFormik } from 'formik';
 import * as yup from 'yup';
 
 import { AuthorizationSC as SC } from './sc';
-import { loginFields, Props } from './constant';
+import { loginFields } from './constant';
 import { loginUser } from 'services/resources/request/auth';
 import { UserData, AuthActions } from 'services/resources/model/auth.model';
+import { AlertActions, AlertStatusData } from 'context/AlertContext';
 import { AuthContext } from 'context/AuthContext';
-import { BaseResponse } from 'services/HttpService/types';
+import { AlertContext } from 'context/AlertContext';
+import { LoaderContext } from 'context/LoaderContext';
 import { ErrorInfo } from 'services/HttpService/utils';
 
 type FormikProps = {
   [key: string]: string;
 };
 
-export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
-  const { dispatch } = useContext(AuthContext);
+export const LogIn: React.FC = () => {
+  const { dispatch: authDispatch } = useContext(AuthContext);
+  const { dispatch: alertDispatch, alerts } = useContext(AlertContext);
+  const { setLoaderState } = useContext(LoaderContext);
 
   const validationSchema = yup.object({
     login: yup
@@ -44,14 +48,22 @@ export const LogIn: React.FC<Props> = ({ setBackdropView }) => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      setBackdropView(true);
-      loginUser(values).then((resp) => {
-        dispatch({ type: AuthActions.LOG_IN, payload: resp.data });
-      })
-      .catch((err: ErrorInfo) => {
-        // @note all errors will catch here
-        console.log(err);
-      });
+      setLoaderState(true);
+      loginUser(values)
+        .then((resp) => {
+          authDispatch({ type: AuthActions.LOG_IN, payload: resp.data });
+        })
+        .catch((err: ErrorInfo) => {
+          alertDispatch({
+            type: AlertActions.ADD,
+            payload: {
+              id: alerts.length,
+              message: err.message,
+              status: AlertStatusData.ERROR,
+            },
+          });
+        })
+        .finally(() => setLoaderState(false));
     },
   });
 

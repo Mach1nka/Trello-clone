@@ -1,30 +1,19 @@
 import { useEffect, useState, useCallback, useContext } from 'react';
 import { useRouter } from 'next/router';
-import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
+import { Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
-import { ThemeProvider } from 'styled-components';
 
 import { AuthContext } from 'context/AuthContext';
-import ErrorModal from './errorModal';
 import { authForms } from './constant';
 import { AuthorizationSC as SC } from './sc';
 
 export const Authorization: React.FC = () => {
+  const { user } = useContext(AuthContext);
   const [tabIndex, setTabIndex] = useState('1');
-  const [isOpenModal, setModalView] = useState(false);
-  const [isOpenBackdrop, setBackdropView] = useState(false);
 
   const router = useRouter();
-  const theme = useTheme();
-
-  const { user } = useContext(AuthContext);
 
   useEffect(() => {
-    // if (message) {
-    //   setModalView(true);
-    // } else {
-    //   setModalView(false);
-    // }
     if (user.token) {
       router.push('/boards');
     }
@@ -37,41 +26,26 @@ export const Authorization: React.FC = () => {
   );
 
   return (
-    <ThemeProvider theme={theme}>
-      <Container maxWidth="xs">
-        {/* <ErrorModal
-          setBackdropView={setBackdropView}
-          isOpen={isOpenModal}
-          setModalView={setModalView}
-          errorText={message}
-        /> */}
-        <SC.Paper elevation={6}>
-          <TabContext value={tabIndex}>
-            <TabList
-              onChange={onChange}
-              indicatorColor="primary"
-              textColor="primary"
-              centered
-            >
-              {authForms.map((el) => (
-                <Tab key={el.value} label={el.label} value={el.value} />
-              ))}
-            </TabList>
+    <Container maxWidth="xs">
+      <SC.Paper elevation={6}>
+        <TabContext value={tabIndex}>
+          <TabList
+            onChange={onChange}
+            indicatorColor="primary"
+            textColor="primary"
+            centered
+          >
             {authForms.map((el) => (
-              <TabPanel
-                key={el.value}
-                style={{ height: '65%' }}
-                value={el.value}
-              >
-                {el.component({ setBackdropView })}
-              </TabPanel>
+              <Tab key={el.value} label={el.label} value={el.value} />
             ))}
-          </TabContext>
-        </SC.Paper>
-      </Container>
-      <SC.Backdrop open={isOpenBackdrop}>
-        <CircularProgress color="inherit" />
-      </SC.Backdrop>
-    </ThemeProvider>
+          </TabList>
+          {authForms.map(({ value, component: Component }) => (
+            <TabPanel key={value} style={{ height: '65%' }} value={value}>
+              <Component />
+            </TabPanel>
+          ))}
+        </TabContext>
+      </SC.Paper>
+    </Container>
   );
 };

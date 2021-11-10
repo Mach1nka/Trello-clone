@@ -1,4 +1,9 @@
-import { requestHeader, responseHandler, catchHandler, ErrorInfo } from './utils';
+import {
+  requestHeader,
+  responseHandler,
+  catchHandler,
+  ErrorInfo,
+} from './utils';
 import { GetParams, CRUDParams, BaseResponse } from './types';
 import { config } from 'config';
 
@@ -46,7 +51,10 @@ class HttpService {
       .catch(catchHandler);
   };
 
-  put = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
+  put = <T, S>({
+    url,
+    data,
+  }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -59,7 +67,10 @@ class HttpService {
       .catch(catchHandler);
   };
 
-  patch = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
+  patch = <T, S>({
+    url,
+    data,
+  }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 
@@ -72,7 +83,10 @@ class HttpService {
       .catch(catchHandler);
   };
 
-  delete = <T, S>({ url, data }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo>=> {
+  delete = <T, S>({
+    url,
+    data,
+  }: CRUDParams<T>): Promise<BaseResponse<S> | ErrorInfo> => {
     const path = this.baseUrl + url;
     const headers = requestHeader(HttpService.authToken);
 

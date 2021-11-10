@@ -1,18 +1,24 @@
-import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
+import { useReducer, Context, createContext, Dispatch } from 'react';
 
-
-type Status = 'success' | 'info' | 'warning' | 'error';
+type AlertStatus = 'success' | 'info' | 'warning' | 'error';
 
 export interface AlertData {
   id: number;
-  status: Status,
-  message: string,
-  title: string, 
+  status: AlertStatus;
+  message: string;
+  title?: string;
 }
 
 export enum AlertActions {
   ADD = 'ADD',
-  REMOVE = 'REMOVE'
+  REMOVE = 'REMOVE',
+}
+
+export enum AlertStatusData {
+  SUCCESS = 'success',
+  INFO = 'info',
+  WARNING = 'warning',
+  ERROR = 'error',
 }
 
 interface AlertAddAction {
@@ -37,10 +43,10 @@ const initialState: AlertData[] = [];
 function reducer(state: AlertData[], action: Action): AlertData[] {
   switch (action.type) {
     case AlertActions.ADD:
-      return [ ...state, ...[action.payload]];
+      return [...state, ...[action.payload]];
     case AlertActions.REMOVE:
-      const filteredAlerts = state.filter(el => el.id !== action.payload.id)
-      return [ ...state, ...filteredAlerts ];
+      const filteredAlerts = state.filter((el) => el.id !== action.payload.id);
+      return filteredAlerts;
     default:
       return state;
   }

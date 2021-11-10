@@ -23,11 +23,11 @@ const requestHeader = (authToken?: string): Headers => {
 };
 
 const responseHandler = async <T>(resp: Response): Promise<BaseResponse<T>> => {
-  const data = await resp.json() as BaseResponse<T> | ErrorResponse;
+  const data = (await resp.json()) as BaseResponse<T> | ErrorResponse;
 
   if (HttpErrorCodes.includes(data.statusCode)) {
     const error = data as ErrorResponse;
-    throw (error);
+    throw error;
   }
 
   return data as BaseResponse<T>;
@@ -36,7 +36,7 @@ const responseHandler = async <T>(resp: Response): Promise<BaseResponse<T>> => {
 const catchHandler = (err: ErrorResponse) => {
   const errorInfo: ErrorInfo = {
     message: '',
-    statusCode: ErrorCode.InternalError,
+    statusCode: err.statusCode,
   };
 
   if (err.message) {
@@ -49,7 +49,7 @@ const catchHandler = (err: ErrorResponse) => {
 
   console.log('error: ', errorInfo);
 
-  throw (errorInfo);
+  throw errorInfo;
 };
 
 export { requestHeader, responseHandler, catchHandler };
