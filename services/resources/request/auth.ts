@@ -11,6 +11,9 @@ const registerUser = (
   });
 
 const loginUser = (userData: UserData): Promise<BaseResponse<AuthDataServer>> =>
-  httpService.post({ url: '/auth/login', data: userData });
+  httpService.post<UserData, AuthDataServer>({
+    url: '/auth/login',
+    data: userData,
+  });
 
 export { registerUser, loginUser };
