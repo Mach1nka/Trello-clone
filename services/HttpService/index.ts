@@ -1,10 +1,5 @@
-import {
-  requestHeader,
-  responseHandler,
-  catchHandler,
-  ErrorInfo,
-} from './utils';
-import { GetParams, CRUDParams, BaseResponse } from './types';
+import { requestHeader, responseHandler, catchHandler } from './utils';
+import { GetParams, CRUDParams, BaseResponse, ErrorInfo } from './types';
 import { config } from 'config';
 
 class HttpService {

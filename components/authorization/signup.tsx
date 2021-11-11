@@ -11,7 +11,7 @@ import { AlertActions, AlertStatusData } from 'context/AlertContext';
 import { AuthContext } from 'context/AuthContext';
 import { AlertContext } from 'context/AlertContext';
 import { LoaderContext } from 'context/LoaderContext';
-import { ErrorInfo } from 'services/HttpService/utils';
+import { ErrorInfo } from 'services/HttpService/types';
 
 type FormikProps = {
   [key: string]: string;
@@ -59,6 +59,7 @@ export const SignUp: React.FC = () => {
           authDispatch({ type: AuthActions.LOG_IN, payload: resp.data });
         })
         .catch((err: ErrorInfo) => {
+          setLoaderState(false);
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
@@ -67,8 +68,7 @@ export const SignUp: React.FC = () => {
               status: AlertStatusData.ERROR,
             },
           });
-        })
-        .finally(() => setLoaderState(false));
+        });
     },
   });
 

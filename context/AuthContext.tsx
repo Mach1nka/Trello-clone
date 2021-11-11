@@ -48,11 +48,16 @@ export const AuthContext: Context<AuthContextValue> =
 
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  console.log(httpService.getAuthToken());
+
+  if (state.token) {
+    httpService.setAuthToken(state.token);
+  }
 
   useEffect(() => {
-    if (!httpService.getAuthToken()) {
-      dispatch({ type: AuthActions.LOG_OUT });
-    }
+    // if (!httpService.getAuthToken()) {
+    //   dispatch({ type: AuthActions.LOG_OUT });
+    // }
   }, []);
 
   return (

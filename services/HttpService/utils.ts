@@ -2,14 +2,10 @@ import {
   HttpErrorCodes,
   ErrorCode,
   ErrorResponse,
+  ErrorInfo,
   BaseResponse,
 } from './types';
 import { httpService } from './index';
-
-export interface ErrorInfo {
-  message: string;
-  statusCode: number;
-}
 
 const requestHeader = (authToken?: string): Headers => {
   const headers = new Headers();

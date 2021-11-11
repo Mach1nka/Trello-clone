@@ -19,6 +19,11 @@ export interface ErrorResponse {
   errors: Record<string, unknown>;
 }
 
+export interface ErrorInfo {
+  message: string;
+  statusCode: number;
+}
+
 export enum ErrorCode {
   BadRequest = 400,
   InvalidCredentials = 401,
