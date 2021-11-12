@@ -24,6 +24,8 @@ const BoardsContainer = styled.div`
 const BoardSC = {
   Board: styled.div<Props>`
     display: flex;
+    margin-right: 15px;
+    margin-bottom: 12px;
     flex-direction: ${(props) => (props.isDefaultCard ? 'row' : 'column')};
     align-items: ${(props) => (props.isDefaultCard ? 'center' : '')};
     color: ${(props) => (!props.isDefaultCard ? '#fff' : '')};
@@ -43,11 +45,6 @@ const BoardSC = {
     &:hover {
       box-shadow: inset 0px 2px 50px 10px rgba(0, 0, 0, 0.23);
     }
-  `,
-  Link: styled(Link)`
-    text-decoration: none;
-    margin-right: 15px;
-    margin-bottom: 12px;
   `,
   BoardOptions: styled.div`
     width: 100%;

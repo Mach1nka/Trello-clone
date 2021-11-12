@@ -52,7 +52,7 @@ export const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${user.id}`,
               message: 'Board has created successfully',
               status: AlertStatusData.SUCCESS,
             },
@@ -62,7 +62,7 @@ export const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${err.message}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },

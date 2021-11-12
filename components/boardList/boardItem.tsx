@@ -1,4 +1,6 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useState, useCallback } from 'react';
+import Link from 'next/link';
 
 import { BoardOptions } from './boardOptions';
 import { CreateBoardModal } from './createBoard';
@@ -30,17 +32,19 @@ export const BoardItem: React.FC<Props> = ({
     };
 
     return (
-      <SC.Link
+      <Link
         href={locationParams}
         // onClick={resetColumnsData} @note reset column context
       >
-        <SC.Board isDefaultCard={isDefaultCard}>
-          <SC.Name color="inherit" variant="subtitle2" align="left">
-            {boardName}
-          </SC.Name>
-          <BoardOptions boardId={boardId} />
-        </SC.Board>
-      </SC.Link>
+        <a style={{ textDecoration: 'none' }}>
+          <SC.Board isDefaultCard={isDefaultCard}>
+            <SC.Name color="inherit" variant="subtitle2" align="left">
+              {boardName}
+            </SC.Name>
+            <BoardOptions boardId={boardId} />
+          </SC.Board>
+        </a>
+      </Link>
     );
   }
   if (!isDefaultCard && !isOwnBoards && boardId) {
@@ -50,16 +54,18 @@ export const BoardItem: React.FC<Props> = ({
     };
 
     return (
-      <SC.Link
+      <Link
         href={locationParams}
         // onClick={resetColumnsData} @note reset column context
       >
-        <SC.Board isDefaultCard={isDefaultCard}>
-          <SC.Name color="inherit" variant="subtitle2" align="left">
-            {boardName}
-          </SC.Name>
-        </SC.Board>
-      </SC.Link>
+        <a style={{ textDecoration: 'none' }}>
+          <SC.Board isDefaultCard={isDefaultCard}>
+            <SC.Name color="inherit" variant="subtitle2" align="left">
+              {boardName}
+            </SC.Name>
+          </SC.Board>
+        </a>
+      </Link>
     );
   }
   return (

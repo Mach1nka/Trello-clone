@@ -1,9 +1,7 @@
-import { useEffect, useState, useContext } from 'react';
-import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { useEffect, useContext } from 'react';
 import { Container, Typography } from '@material-ui/core';
 
 import { BoardItem } from './boardItem';
-import { getBoards } from 'services/resources/request/board';
 import { BoardContext } from 'context/BoardContext';
 import { LoaderContext } from 'context/LoaderContext';
 // import { deleteColumnsData } from '../../store/column/actions';
@@ -13,21 +11,14 @@ import { BoardsContainer, BoardSC as SC } from './sc';
 
 export const BoardsList: React.FC = () => {
   const { setLoaderState } = useContext(LoaderContext);
-  const {
-    ownBoards,
-    sharedBoards,
-    dispatch: boardDispatch,
-  } = useContext(BoardContext);
-  const [backdropState, setBackdropState] = useState(true);
+  const { ownBoards, sharedBoards } = useContext(BoardContext);
 
   useEffect(() => {
+    setLoaderState(false);
     // dispatch(deleteColumnsData());
     // dispatch(deleteCardsData());
     // dispatch(resetModalData());
-    const timer = setTimeout(() => {
-      //   setLoaderState(ownBoards.length || sharedBoards.length ? false : );
-    }, 800);
-    return () => clearTimeout(timer);
+    //   setLoaderState(ownBoards.length || sharedBoards.length ? false : );
   }, []);
 
   return (
@@ -68,5 +59,3 @@ export const BoardsList: React.FC = () => {
     </Container>
   );
 };
-
-/* open={ownBoards.length || sharedBoards.length ? false : backdropState} */

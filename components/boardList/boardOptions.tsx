@@ -43,7 +43,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${boardId}`,
               message: 'Board has deleted successfully',
               status: AlertStatusData.SUCCESS,
             },
@@ -59,7 +59,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
               alertDispatch({
                 type: AlertActions.ADD,
                 payload: {
-                  id: alerts.length,
+                  id: `${alerts.length}-${err.message}`,
                   message: err.message,
                   status: AlertStatusData.ERROR,
                 },
@@ -72,7 +72,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${err.message}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },

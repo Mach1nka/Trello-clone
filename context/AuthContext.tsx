@@ -50,15 +50,14 @@ const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
   console.log(httpService.getAuthToken());
 
-  if (state.token) {
-    httpService.setAuthToken(state.token);
-  }
-
   useEffect(() => {
+    if (state.token) {
+      httpService.setAuthToken(state.token);
+    }
     // if (!httpService.getAuthToken()) {
     //   dispatch({ type: AuthActions.LOG_OUT });
     // }
-  }, []);
+  }, [state.token]);
 
   return (
     <AuthContext.Provider value={{ user: state, dispatch }}>

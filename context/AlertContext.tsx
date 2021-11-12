@@ -3,7 +3,7 @@ import { useReducer, Context, createContext, Dispatch } from 'react';
 type AlertStatus = 'success' | 'info' | 'warning' | 'error';
 
 export interface AlertData {
-  id: number;
+  id: string;
   status: AlertStatus;
   message: string;
   title?: string;

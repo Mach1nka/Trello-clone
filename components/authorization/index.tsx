@@ -2,6 +2,7 @@ import { useEffect, useState, useCallback, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
+import { setCookies, removeCookies } from 'cookies-next';
 
 import { AuthContext } from 'context/AuthContext';
 import { authForms } from './constant';
@@ -14,8 +15,12 @@ export const Authorization: React.FC = () => {
   const router = useRouter();
 
   useEffect(() => {
+    removeCookies('token');
     if (user.token) {
-      router.push('/boards');
+      setCookies('token', user.token);
+      router.push({
+        pathname: '/boards',
+      });
     }
   }, [user.token]);
 

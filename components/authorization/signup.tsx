@@ -63,7 +63,7 @@ export const SignUp: React.FC = () => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${err.message}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },

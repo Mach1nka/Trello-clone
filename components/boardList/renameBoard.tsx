@@ -59,7 +59,7 @@ export const RenameBoardModal: React.FC<Props> = ({
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${boardId}`,
               message: 'Board has renamed successfully',
               status: AlertStatusData.SUCCESS,
             },
@@ -69,7 +69,7 @@ export const RenameBoardModal: React.FC<Props> = ({
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: alerts.length,
+              id: `${alerts.length}-${err.message}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },
