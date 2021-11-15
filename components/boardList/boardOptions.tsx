@@ -19,6 +19,7 @@ import { getBoards, deleteBoard } from 'services/resources/request/board';
 //   setBoardIdForModal,
 // } from '../../../store/modals/actions';
 import { RenameBoardModal } from './renameBoard';
+import { ShareBoardModal } from './shareBoard';
 import { BoardSC as SC } from './sc';
 
 interface Props {
@@ -31,6 +32,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const { dispatch: boardDispatch } = useContext(BoardContext);
   const { setLoaderState } = useContext(LoaderContext);
 
+  const [isOpenShareModal, setShareModalView] = useState(false);
   const [isOpenRenameModal, setRenameModalView] = useState(false);
 
   const onDeleteHandler = useCallback(
@@ -85,6 +87,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const onShareHandler = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
+      setShareModalView(true);
       //   dispatch(setBoardIdForModal({ boardId }));
       //   dispatch(setModalsStates({ isShareModalVisible: true }));
     },
@@ -117,6 +120,11 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
         setModalView={setRenameModalView}
         boardId={boardId}
         userId={user.id as string}
+      />
+      <ShareBoardModal
+        modalView={isOpenShareModal}
+        setModalView={setShareModalView}
+        boardId={boardId}
       />
     </>
   );

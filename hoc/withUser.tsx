@@ -8,6 +8,7 @@ export const withUser = (WrappedComponent: NextPage<any>) => (props: any) => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
   const [renderComponent, setRenderComponent] = useState<JSX.Element>(<></>);
+  console.log(user.token);
 
   useEffect(() => {
     if (!user.token) {

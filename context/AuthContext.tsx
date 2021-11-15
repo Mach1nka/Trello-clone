@@ -54,9 +54,9 @@ const AuthProvider: React.FC = ({ children }) => {
     if (state.token) {
       httpService.setAuthToken(state.token);
     }
-    // if (!httpService.getAuthToken()) {
-    //   dispatch({ type: AuthActions.LOG_OUT });
-    // }
+    if (!httpService.getAuthToken()) {
+      dispatch({ type: AuthActions.LOG_OUT });
+    }
   }, [state.token]);
 
   return (
