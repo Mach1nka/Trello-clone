@@ -6,8 +6,9 @@ import {
   BaseResponse,
 } from './types';
 import { httpService } from './index';
+import { removeCookies } from 'cookies-next';
 
-const requestHeader = (authToken?: string): Headers => {
+const requestHeader = (authToken: string | null): Headers => {
   const headers = new Headers();
 
   headers.set('Content-Type', 'application/json');
@@ -40,7 +41,8 @@ const catchHandler = (err: ErrorResponse) => {
   }
 
   if (err.statusCode === ErrorCode.InvalidCredentials) {
-    httpService.setAuthToken('');
+    httpService.setAuthToken(null);
+    removeCookies('token');
   }
 
   console.log('error: ', errorInfo);

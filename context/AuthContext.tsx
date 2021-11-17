@@ -1,7 +1,9 @@
 import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
+import { getCookie } from 'cookies-next';
 
 import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
+import { AlertContext } from './AlertContext';
 
 interface AuthLogInAction {
   type: AuthActions.LOG_IN;
@@ -48,14 +50,17 @@ export const AuthContext: Context<AuthContextValue> =
 
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log(httpService.getAuthToken());
+  // const token = useRef(httpService.getAuthToken());
+  // const { alerts } = useContext(AlertContext);
+  // const [httpToken, setToken] = useState(httpService.getAuthToken());
+  // const token = useMemo(() => httpService.getAuthToken(), [alerts]);
 
   useEffect(() => {
     if (state.token) {
       httpService.setAuthToken(state.token);
     }
-    if (!httpService.getAuthToken()) {
-      dispatch({ type: AuthActions.LOG_OUT });
+    if (!state.token) {
+      httpService.setAuthToken('');
     }
   }, [state.token]);
 

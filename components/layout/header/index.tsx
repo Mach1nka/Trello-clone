@@ -7,8 +7,8 @@ import { ShareBoardModal } from '../../boardList/shareBoard';
 import { Sidebar } from './sidebar';
 import { getBoards } from 'services/resources/request/board';
 import { useLogout } from 'utils/logout';
-import { useWindowDimensions } from 'utils/windowSize';
 import { HeaderSC as SC } from './sc';
+import { httpService } from 'services/HttpService';
 
 interface Location {
   state: {
@@ -27,10 +27,12 @@ export const Header: React.FC = () => {
   const { logout } = useLogout();
 
   const pathLength = 14;
-  const boardName =
-    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardName : '';
-  const boardId =
-    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardId : '';
+  const boardName = (
+    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardName : ''
+  ) as string;
+  const boardId = (
+    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardId : ''
+  ) as string;
   const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
   const isMainPage = pathname === '/boards';
 

@@ -1,9 +1,5 @@
 import { useContext, useEffect } from 'react';
-import {
-  GetServerSideProps,
-  InferGetServerSidePropsType,
-  NextPage,
-} from 'next/types';
+import { GetServerSideProps, NextPage } from 'next/types';
 import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
 
@@ -39,21 +35,25 @@ const BoardOverviewPage: NextPage<Props> = ({ boards }: Props) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
   const token = getCookie('token', { req, res });
-  if (typeof token === 'string') {
-    httpService.setAuthToken(token);
-    const { data }: BaseResponse<BoardDataServer> = await getBoards();
+  try {
+    if (typeof token === 'string') {
+      httpService.setAuthToken(token);
+      const { data }: BaseResponse<BoardDataServer> = await getBoards();
+      return {
+        props: {
+          boards: data,
+        },
+      };
+    }
+  } catch (error) {
     return {
-      props: {
-        boards: data,
+      redirect: {
+        destination: '/login',
+        permanent: false,
       },
     };
   }
-  return {
-    redirect: {
-      destination: '/login',
-      permanent: false,
-    },
-  };
+  return { props: {} };
 };
 
 export default withUser(BoardOverviewPage);

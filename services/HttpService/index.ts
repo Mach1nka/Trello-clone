@@ -9,13 +9,13 @@ class HttpService {
     this.baseUrl = baseUrl;
   }
 
-  static authToken = '';
+  static authToken: null | string = null;
 
-  setAuthToken = (token: string): void => {
+  setAuthToken = (token: string | null): void => {
     HttpService.authToken = token;
   };
 
-  getAuthToken = (): string => {
+  getAuthToken = (): string | null => {
     return HttpService.authToken;
   };
 

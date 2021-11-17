@@ -29,6 +29,7 @@ export enum ErrorCode {
   InvalidCredentials = 401,
   Forbidden = 403,
   NotFound = 404,
+  Conflict = 409,
   InternalError = 500,
 }
 
@@ -37,5 +38,6 @@ export const HttpErrorCodes = [
   ErrorCode.InternalError,
   ErrorCode.Forbidden,
   ErrorCode.InvalidCredentials,
+  ErrorCode.Conflict,
   ErrorCode.InternalError,
 ];
