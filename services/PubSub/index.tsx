@@ -1,24 +1,31 @@
-import { channel } from 'diagnostics_channel';
-
 interface EventBusType {
-  subscribers: Record<string, any>;
-  subscribe: (subsName: string, listener) => void;
-  publish: (subsName: string, listener) => undefined | void;
+  subscribers: Record<string, Listener[]>;
+  subscribe: (eventName: PubSubEvents, listener: Listener) => void;
+  publish: (eventName: PubSubEvents) => undefined | void;
+  unsubscribe: (eventName: PubSubEvents) => void;
+}
+
+type Listener = () => void;
+
+export enum PubSubEvents {
+  TokenUpdate = 'TokenUpdate',
 }
 
 export const EventBus: EventBusType = {
   subscribers: {},
-  subscribe(subsName: string, listener) {
-    if (!this.subscribers[subsName]) {
-      this.subscribers[subsName] = [];
+  subscribe(eventName, listener) {
+    if (!this.subscribers[eventName]) {
+      this.subscribers[eventName] = [listener];
     }
-    this.subscribers[subsName].push(listener);
   },
-  publish(subsName: string, data) {
-    const subscriber = this.subscribers[subsName];
-    if (!subscriber || !channel.length) {
+  publish(eventName) {
+    const subscriber = this.subscribers[eventName];
+    if (!subscriber || !subscriber.length) {
       return undefined;
     }
-    subscriber.forEach((listener) => listener(data));
+    subscriber.forEach((listener: Listener) => listener());
+  },
+  unsubscribe(eventName) {
+    delete this.subscribers[eventName];
   },
 };

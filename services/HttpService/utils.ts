@@ -7,6 +7,7 @@ import {
 } from './types';
 import { httpService } from './index';
 import { removeCookies } from 'cookies-next';
+import { EventBus, PubSubEvents } from 'services/PubSub';
 
 const requestHeader = (authToken: string | null): Headers => {
   const headers = new Headers();
@@ -43,6 +44,7 @@ const catchHandler = (err: ErrorResponse) => {
   if (err.statusCode === ErrorCode.InvalidCredentials) {
     httpService.setAuthToken(null);
     removeCookies('token');
+    EventBus.publish(PubSubEvents.TokenUpdate);
   }
 
   console.log('error: ', errorInfo);

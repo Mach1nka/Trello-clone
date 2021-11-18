@@ -3,7 +3,7 @@ import { getCookie } from 'cookies-next';
 
 import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
-import { AlertContext } from './AlertContext';
+import { EventBus, PubSubEvents } from 'services/PubSub';
 
 interface AuthLogInAction {
   type: AuthActions.LOG_IN;
@@ -50,18 +50,18 @@ export const AuthContext: Context<AuthContextValue> =
 
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  // const token = useRef(httpService.getAuthToken());
-  // const { alerts } = useContext(AlertContext);
-  // const [httpToken, setToken] = useState(httpService.getAuthToken());
-  // const token = useMemo(() => httpService.getAuthToken(), [alerts]);
+  console.log();
 
   useEffect(() => {
     if (state.token) {
       httpService.setAuthToken(state.token);
     }
-    if (!state.token) {
-      httpService.setAuthToken('');
-    }
+
+    EventBus.subscribe(PubSubEvents.TokenUpdate, () =>
+      dispatch({ type: AuthActions.LOG_OUT })
+    );
+
+    return () => EventBus.unsubscribe(PubSubEvents.TokenUpdate);
   }, [state.token]);
 
   return (

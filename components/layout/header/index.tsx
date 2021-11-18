@@ -5,10 +5,8 @@ import { removeCookies } from 'cookies-next';
 import { BoardContext } from 'context/BoardContext';
 import { ShareBoardModal } from '../../boardList/shareBoard';
 import { Sidebar } from './sidebar';
-import { getBoards } from 'services/resources/request/board';
 import { useLogout } from 'utils/logout';
 import { HeaderSC as SC } from './sc';
-import { httpService } from 'services/HttpService';
 
 interface Location {
   state: {
@@ -38,8 +36,6 @@ export const Header: React.FC = () => {
 
   const handleShareButton = useCallback(() => {
     setModalView(true);
-    // dispatch(setBoardIdForModal({ boardId }));
-    // dispatch(setModalsStates({ isShareModalVisible: true }));
   }, [boardId]);
 
   const handleLogOut = useCallback(() => {

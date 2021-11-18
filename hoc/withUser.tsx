@@ -18,7 +18,7 @@ export const withUser = (WrappedComponent: NextPage<any>) => (props: any) => {
     } else {
       setRenderComponent(<WrappedComponent {...props} />);
     }
-  }, []);
+  }, [user.token]);
 
   return renderComponent;
 };
