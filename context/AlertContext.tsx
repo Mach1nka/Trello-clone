@@ -54,7 +54,7 @@ function reducer(state: AlertData[], action: Action): AlertData[] {
 
 export const AlertContext: Context<AlertContextValue> =
   createContext<AlertContextValue>({
-    alerts: [],
+    alerts: initialState,
     dispatch: () => {},
   });
 

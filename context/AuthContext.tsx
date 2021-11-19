@@ -1,5 +1,4 @@
 import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
-import { getCookie } from 'cookies-next';
 
 import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
@@ -40,17 +39,12 @@ function reducer(state: AuthData, action: Action): AuthData {
 
 export const AuthContext: Context<AuthContextValue> =
   createContext<AuthContextValue>({
-    user: {
-      id: null,
-      login: null,
-      token: null,
-    },
+    user: { ...initialState },
     dispatch: () => {},
   });
 
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  console.log();
 
   useEffect(() => {
     if (state.token) {

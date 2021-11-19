@@ -13,7 +13,7 @@ import {
 } from 'context/AlertContext';
 import { LoaderContext } from 'context/LoaderContext';
 import { BoardActions } from 'services/resources/model/board.model';
-import { getBoards, deleteBoard } from 'services/resources/request/board';
+import { deleteBoard } from 'services/resources/request/board';
 // import {
 //   setModalsStates,
 //   setBoardIdForModal,
@@ -41,7 +41,11 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
       setLoaderState(true);
       //  @note Type of user must be improved in further. Fields must be string after authorization
       deleteBoard({ userId: user.id as string, boardId })
-        .then(() => {
+        .then((resp) => {
+          boardDispatch({
+            type: BoardActions.PUT_BOARDS,
+            payload: resp.data,
+          });
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
@@ -50,27 +54,8 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
               status: AlertStatusData.SUCCESS,
             },
           });
-          getBoards()
-            .then((resp) => {
-              boardDispatch({
-                type: BoardActions.PUT_BOARDS,
-                payload: resp.data,
-              });
-            })
-            .catch((err: ErrorInfo) => {
-              alertDispatch({
-                type: AlertActions.ADD,
-                payload: {
-                  id: `${alerts.length}-${err.message}`,
-                  message: err.message,
-                  status: AlertStatusData.ERROR,
-                },
-              });
-            })
-            .finally(() => setLoaderState(false));
         })
         .catch((err: ErrorInfo) => {
-          setLoaderState(false);
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
@@ -79,7 +64,8 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
               status: AlertStatusData.ERROR,
             },
           });
-        });
+        })
+        .finally(() => setLoaderState(false));
     },
     []
   );

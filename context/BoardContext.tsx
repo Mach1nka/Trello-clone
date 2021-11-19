@@ -66,8 +66,7 @@ function reducer(state: BoardData, action: Action): BoardData {
 
 export const BoardContext: Context<BoardContextValue> =
   createContext<BoardContextValue>({
-    ownBoards: [],
-    sharedBoards: [],
+    ...initialState,
     dispatch: () => {},
   });
 

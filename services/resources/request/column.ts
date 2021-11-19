@@ -37,11 +37,14 @@ const updateColumnPosition = (
 
 const deleteColumn = (
   data: DataForDeletingColumn
-): Promise<BaseResponse<Record<string, never>>> =>
-  httpService.delete<DataForDeletingColumn, Record<string, never>>({
-    url: '/column',
-    data,
-  });
+): Promise<BaseResponse<Column[]>> => {
+  return httpService
+    .delete<DataForDeletingColumn, Record<string, never>>({
+      url: '/column',
+      data,
+    })
+    .then(() => getColumns(data.boardId));
+};
 
 export {
   getColumns,
