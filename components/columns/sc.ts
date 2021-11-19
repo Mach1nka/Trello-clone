@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Typography, Button, Backdrop, Theme } from '@material-ui/core';
+import { Typography, Button, Theme } from '@material-ui/core';
 
 interface DragWrapperProps {
   isPointColumns: boolean;
@@ -9,17 +9,30 @@ interface ColumnProps {
   dragStyles: string | null;
 }
 
-const ColumnsContainer = styled.div`
-  display: flex;
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  width: 100%;
-  height: 85vh;
-  margin: 2.3% 0;
-  padding: 8px;
-  box-sizing: border-box;
-  background-color: rgba(241, 245, 237, 0.3);
-`;
+interface ShadowColumnProps {
+  isDragging: boolean;
+}
+
+const ColumnWidth = 270;
+
+const ColumnsContainer = {
+  Container: styled.div`
+    display: flex;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    width: 100%;
+    height: 85vh;
+    margin: 2.3% 0;
+    padding: 8px;
+    box-sizing: border-box;
+    background-color: rgba(241, 245, 237, 0.3);
+  `,
+  ShadowColumn: styled.div<ShadowColumnProps>`
+    opacity: 0;
+    width: ${ColumnWidth + 4 * 2}px;
+    display: ${(props) => (props.isDragging ? 'block' : 'none')};
+  `,
+};
 
 const DragWrapper = styled.div<DragWrapperProps>`
   & > * {
@@ -28,8 +41,9 @@ const DragWrapper = styled.div<DragWrapperProps>`
 `;
 
 const ColumnSC = {
+  // @note doesn't use
   Container: styled.div<ColumnProps>`
-    width: 270px;
+    width: ${ColumnWidth}px;
     height: 100%;
     margin: 0 4px;
     border-radius: 5px;
@@ -40,7 +54,8 @@ const ColumnSC = {
   Content: styled.div`
     display: flex;
     flex-direction: column;
-    width: 270px;
+    width: ${ColumnWidth}px;
+    margin: 0 4px;
     max-height: 100%;
     border-radius: 5px;
     padding: 0 8px;
@@ -58,7 +73,8 @@ const ColumnSC = {
     flex-grow: 1;
   `,
   CreateColumnContainer: styled.div`
-    width: 270px;
+    width: ${ColumnWidth}px;
+    margin: 0 4px;
     flex-shrink: 0;
     height: fit-content;
     background-color: rgba(241, 245, 237, 0.7);
@@ -70,13 +86,6 @@ const ColumnSC = {
     font-weight: 400;
     max-width: 190px;
     overflow-wrap: break-word;
-  `,
-  Backdrop: styled(Backdrop)`
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.2);
-    ${({ theme }: { theme: Theme }) => `
-      z-index: ${theme.zIndex.drawer + 1} !important;
-    }`}
   `,
 };
 

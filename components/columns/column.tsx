@@ -37,7 +37,7 @@ interface Props {
   //   };
 }
 
-export const Column: React.FC<Props> = ({
+export const ColumnItem: React.FC<Props> = ({
   columnName,
   columnId,
   boardId,
@@ -89,47 +89,43 @@ export const Column: React.FC<Props> = ({
 
   return (
     <>
-      <SC.Container dragStyles={null}>
-        <SC.Content>
-          <SC.Header>
-            <SC.Name variant="h6">{columnName}</SC.Name>
-            <IconButton
-              size="small"
-              aria-label="column settings"
-              onClick={handleMenu}
-            >
-              <MoreHorizIcon />
-            </IconButton>
-            <Menu
-              anchorEl={anchorEl}
-              open={isOpenMenu}
-              keepMounted
-              onClose={onClose}
-            >
-              <MenuItem onClick={handleDelete}>Delete</MenuItem>
-              <MenuItem onClick={handleRename}>Rename</MenuItem>
-              <MenuItem onClick={handleChangePosition}>
-                Change position
-              </MenuItem>
-            </Menu>
-          </SC.Header>
-          {/* <CardsContainer
+      <SC.Content>
+        <SC.Header>
+          <SC.Name variant="h6">{columnName}</SC.Name>
+          <IconButton
+            size="small"
+            aria-label="column settings"
+            onClick={handleMenu}
+          >
+            <MoreHorizIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={isOpenMenu}
+            keepMounted
+            onClose={onClose}
+          >
+            <MenuItem onClick={handleDelete}>Delete</MenuItem>
+            <MenuItem onClick={handleRename}>Rename</MenuItem>
+            <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
+          </Menu>
+        </SC.Header>
+        {/* <CardsContainer
             columnId={columnId}
             draggableCard={draggableCard}
             setDraggableCard={setDraggableCard}
           /> */}
-          <SC.Footer>
-            <Button
-              onClick={showCreateModal}
-              fullWidth
-              size="small"
-              startIcon={<AddIcon />}
-            >
-              Create new card
-            </Button>
-          </SC.Footer>
-        </SC.Content>
-      </SC.Container>
+        <SC.Footer>
+          <Button
+            onClick={showCreateModal}
+            fullWidth
+            size="small"
+            startIcon={<AddIcon />}
+          >
+            Create new card
+          </Button>
+        </SC.Footer>
+      </SC.Content>
       <RenameColumnModal
         isOpen={isOpenRenameModal}
         columnId={columnId}

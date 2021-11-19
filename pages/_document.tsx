@@ -2,6 +2,7 @@ import React from 'react';
 // eslint-disable-next-line @next/next/no-document-import-in-page
 import Document, { Head, Html, Main, NextScript } from 'next/document';
 import { ServerStyleSheets } from '@material-ui/core/styles';
+import { resetServerContext } from 'react-beautiful-dnd';
 
 export default class AppDocument extends Document {
   render() {
@@ -29,6 +30,7 @@ AppDocument.getInitialProps = async (ctx) => {
     });
 
   const initialProps = await Document.getInitialProps(ctx);
+  resetServerContext();
   // const token = await getServerToken();
 
   return {
