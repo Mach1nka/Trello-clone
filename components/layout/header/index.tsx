@@ -60,11 +60,6 @@ export const Header: React.FC = () => {
     return () => {
       window.removeEventListener('resize', () => setResponsiveness());
     };
-
-    // console.log(ownBoards.length);
-    // if (!ownBoards.length && !sharedBoards.length) {
-    //   getBoards();
-    // }
   }, []);
 
   const controls = !isMainPage ? (

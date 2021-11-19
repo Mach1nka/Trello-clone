@@ -6,6 +6,7 @@ import { createGlobalStyle } from 'styled-components';
 import AuthProvider from 'context/AuthContext';
 import AlertProvider from 'context/AlertContext';
 import BoardProvider from 'context/BoardContext';
+import ColumnProvider from 'context/ColumnContext';
 import LoaderProvider from 'context/LoaderContext';
 import { Layout } from 'components/layout';
 import { defaultColors } from 'styles/theme';
@@ -32,9 +33,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
           <LoaderProvider>
             <AuthProvider>
               <BoardProvider>
-                <Layout>
-                  <Component {...pageProps} />
-                </Layout>
+                <ColumnProvider>
+                  <Layout>
+                    <Component {...pageProps} />
+                  </Layout>
+                </ColumnProvider>
               </BoardProvider>
             </AuthProvider>
           </LoaderProvider>

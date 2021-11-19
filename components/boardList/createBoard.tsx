@@ -9,7 +9,7 @@ import {
 
 import { ErrorInfo } from 'services/HttpService/types';
 import { createBoard } from 'services/resources/request/board';
-import { configValidationSchema } from './utils';
+import { configValidationSchema } from 'utils/validationSchema';
 import { ModalForm as Form, SubmitButton } from './sc';
 import { BoardActions } from 'services/resources/model/board.model';
 import { AuthContext } from 'context/AuthContext';

@@ -22,11 +22,6 @@ interface PutRenamedColumnAction {
   payload: Column;
 }
 
-interface PutUpdatedPositionAction {
-  type: ColumnActions.PUT_UPDATED_POSITION;
-  payload: Column[];
-}
-
 interface DeleteColumnsAction {
   type: ColumnActions.DELETE_COLUMNS_DATA;
 }
@@ -35,7 +30,6 @@ type Action =
   | PutColumnsAction
   | PutCreatedColumnAction
   | PutRenamedColumnAction
-  | PutUpdatedPositionAction
   | DeleteColumnsAction;
 
 interface ColumnContextValue {
@@ -63,11 +57,6 @@ function reducer(state: ColumnData, action: Action): ColumnData {
       return {
         ...state,
         columns: replaceColumnName(state, action.payload),
-      };
-    case ColumnActions.PUT_UPDATED_POSITION:
-      return {
-        ...state,
-        columns: action.payload,
       };
     case ColumnActions.DELETE_COLUMNS_DATA:
       return { ...state, ...initialState };

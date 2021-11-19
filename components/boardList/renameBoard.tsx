@@ -17,7 +17,7 @@ import {
   AlertStatusData,
 } from 'context/AlertContext';
 import { LoaderContext } from 'context/LoaderContext';
-import { configValidationSchema } from './utils';
+import { configValidationSchema } from 'utils/validationSchema';
 import { ModalForm as Form, SubmitButton } from './sc';
 
 interface Props {

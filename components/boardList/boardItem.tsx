@@ -27,7 +27,7 @@ export const BoardItem: React.FC<Props> = ({
   if (!isDefaultCard && boardId && isOwnBoards) {
     const locationParams = {
       pathname: `/boards/board/${boardId}`,
-      query: { boardName, boardId },
+      query: { boardName },
     };
 
     return (

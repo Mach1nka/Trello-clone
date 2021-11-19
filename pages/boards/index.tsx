@@ -19,7 +19,7 @@ interface Props {
   boards: BoardData;
 }
 
-const BoardOverviewPage: NextPage<Props> = ({ boards }: Props) => {
+const BoardOverviewPage: NextPage<Props> = ({ boards }) => {
   const { dispatch: boardDispatch } = useContext(BoardContext);
   const router = useRouter();
 
