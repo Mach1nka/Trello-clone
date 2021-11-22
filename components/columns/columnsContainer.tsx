@@ -13,25 +13,47 @@ import {
   AlertStatusData,
 } from 'context/AlertContext';
 import { ColumnContext } from 'context/ColumnContext';
-import { ColumnActions } from 'services/resources/model/column.model';
+import { Column, ColumnActions } from 'services/resources/model/column.model';
 import { updateColumnPosition } from 'services/resources/request/column';
 import { ErrorInfo } from 'services/HttpService/types';
 import { ColumnItem } from './column';
 import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
+import { getRouterQuery } from 'utils/getRouterQuery';
 // import ModalsContainer from '../cards/components/modals-container';
 // import { changeCardStatus } from '../../store/card/actions';
 // import { Card as CardType } from '../../store/card/types';
-
-interface ParamTypes {
-  boardId: string;
-}
 
 export const ColumnsContainer: React.FC = () => {
   const { columns, dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
   const { query } = useRouter();
+
+  const boardId = getRouterQuery(query, 'boardId');
+
+  const [columnsForDisplay, setColumns] = useState<Column[]>(columns);
+
+  const updateColumnDisplay = useCallback(
+    ({ destination, source, draggableId }: DropResult) => {
+      if (destination) {
+        const draggableColumn = columns.find((el) => el.id === draggableId);
+        if (draggableColumn) {
+          const updatedColumns = columns;
+
+          updatedColumns.splice(source.index, 1);
+          updatedColumns.splice(destination.index, 0, draggableColumn);
+
+          setColumns(updatedColumns);
+        }
+      }
+    },
+    [columns]
+  );
+
+  useEffect(() => {
+    setColumns(columns);
+  }, [columns]);
   // const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   // const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(
   //   null
@@ -57,8 +79,9 @@ export const ColumnsContainer: React.FC = () => {
   const onDropHandler = useCallback(
     (data: DropResult) => {
       if (data.destination && data.source.index !== data.destination?.index) {
+        updateColumnDisplay(data);
         updateColumnPosition({
-          boardId: query.boardId,
+          boardId: boardId,
           columnId: data.draggableId,
           newPosition: data.destination.index,
         })
@@ -80,7 +103,7 @@ export const ColumnsContainer: React.FC = () => {
           });
       }
     },
-    [query.boardId]
+    [query.boardId, columns]
   );
 
   return (
@@ -93,7 +116,7 @@ export const ColumnsContainer: React.FC = () => {
               {...provided.droppableProps}
               ref={provided.innerRef}
             >
-              {columns.map((el, index) => (
+              {columnsForDisplay.map((el, index) => (
                 <Draggable key={el.id} draggableId={el.id} index={index}>
                   {(provided, snapshot) => (
                     <div
@@ -106,7 +129,7 @@ export const ColumnsContainer: React.FC = () => {
                         key={el.id}
                         columnName={el.name}
                         columnId={el.id}
-                        boardId={query.boardId}
+                        boardId={boardId}
                         position={el.position}
                       />
                     </div>
@@ -118,22 +141,9 @@ export const ColumnsContainer: React.FC = () => {
           )}
         </Droppable>
       </DragDropContext>
-      <CreateColumn boardId={query.boardId} newPosition={columns.length} />
+      <CreateColumn boardId={boardId} newPosition={columns.length} />
     </SC.Container>
   );
 };
 
 /* <ModalsContainer /> */
-
-/* <DragWrapper
-key={el.id}
-isPointColumns={isPointColumns}
-draggable
-onDragStart={() => dragStartHandler(el)}
-onDragLeave={() => dragLeaveHandler(el)}
-onDragOver={(e) => dragOverHandler(e, el)}
-onDragEnter={dragEnterHandler}
-onDragEnd={() => dragEndHandler(el)}
-onDrop={(e) => dropHandler(e, el)}
->
-</DragWrapper> */

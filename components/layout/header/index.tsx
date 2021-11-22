@@ -7,14 +7,7 @@ import { ShareBoardModal } from '../../boardList/shareBoard';
 import { Sidebar } from './sidebar';
 import { useLogout } from 'utils/logout';
 import { HeaderSC as SC } from './sc';
-
-interface Location {
-  state: {
-    boardName: string;
-    boardId: string;
-  };
-  pathname: string;
-}
+import { getRouterQuery } from 'utils/getRouterQuery';
 
 export const Header: React.FC = () => {
   const { ownBoards } = useContext(BoardContext);
@@ -24,13 +17,14 @@ export const Header: React.FC = () => {
 
   const { logout } = useLogout();
 
+  const routerBoardName = getRouterQuery(query, 'boardName');
+  const routerBoardId = getRouterQuery(query, 'boardId');
+
   const pathLength = 14;
-  const boardName = (
-    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardName : ''
-  ) as string;
-  const boardId = (
-    pathname.slice(0, pathLength) === '/boards/board/' ? query.boardId : ''
-  ) as string;
+  const boardName =
+    pathname.slice(0, pathLength) === '/boards/board/' ? routerBoardName : '';
+  const boardId =
+    pathname.slice(0, pathLength) === '/boards/board/' ? routerBoardId : '';
   const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
   const isMainPage = pathname === '/boards';
 
