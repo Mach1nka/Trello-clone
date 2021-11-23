@@ -10,6 +10,7 @@ import { withUser } from 'hoc/withUser';
 import { httpService } from 'services/HttpService';
 import { BaseResponse } from 'services/HttpService/types';
 import { ColumnActions, Column } from 'services/resources/model/column.model';
+import { getRouterQuery } from 'utils/getRouterQuery';
 
 interface Props {
   columns: Column[];
@@ -39,7 +40,9 @@ export const getServerSideProps: GetServerSideProps = async ({
     if (typeof token === 'string') {
       httpService.setAuthToken(token);
       // @note params type must be improved for getServerSideProps
-      const { data }: BaseResponse<Column[]> = await getColumns(params.boardId);
+      const { data }: BaseResponse<Column[]> = await getColumns(
+        getRouterQuery(params, 'boardId')
+      );
       return {
         props: {
           columns: data,
