@@ -84,22 +84,27 @@ export const ShareBoardModal: React.FC<Props> = ({
       <Formik initialValues={{ userId: '' }} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
-            <SC.Autocomplete
-              options={users}
-              id="userId"
-              onChange={(_e, value) => props.setFieldValue('userId', value?.id)}
-              getOptionLabel={(option) => option.login}
-              renderInput={(params) => (
-                <TextField
-                  {...params}
-                  onChange={(event) =>
-                    setTimeout(() => setUserLogin(event.target.value), 500)
-                  }
-                  label="Choose user"
-                  variant="outlined"
-                />
-              )}
-            />
+            <SC.FormControl>
+              <Autocomplete
+                options={users}
+                id="userId"
+                fullWidth
+                onChange={(_e, value) =>
+                  props.setFieldValue('userId', value?.id)
+                }
+                getOptionLabel={(option: User) => option.login}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    onChange={(event) =>
+                      setTimeout(() => setUserLogin(event.target.value), 500)
+                    }
+                    label="Choose user"
+                    variant="outlined"
+                  />
+                )}
+              />
+            </SC.FormControl>
             <DialogActions>
               <SubmitButton type="submit" variant="contained">
                 Share

@@ -110,7 +110,7 @@ export const ColumnsContainer: React.FC = () => {
     <SC.Container>
       <DragDropContext onDragEnd={(res) => onDropHandler(res)}>
         <Droppable droppableId={query.boardId as string} direction="horizontal">
-          {(provided, snapshot) => (
+          {(provided) => (
             <div
               style={{ display: 'flex' }}
               {...provided.droppableProps}
@@ -118,7 +118,7 @@ export const ColumnsContainer: React.FC = () => {
             >
               {columnsForDisplay.map((el, index) => (
                 <Draggable key={el.id} draggableId={el.id} index={index}>
-                  {(provided, snapshot) => (
+                  {(provided) => (
                     <div
                       ref={provided.innerRef}
                       {...provided.draggableProps}

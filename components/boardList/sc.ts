@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import styled from 'styled-components';
 import {
   Card,
@@ -6,9 +5,9 @@ import {
   Fab,
   DialogTitle,
   Button,
+  FormControl,
   Theme,
 } from '@material-ui/core';
-import Autocomplete from '@material-ui/lab/Autocomplete';
 
 interface Props {
   isDefaultCard: boolean | undefined;
@@ -73,7 +72,7 @@ const BoardSC = {
   DialogTitle: styled(DialogTitle)`
     text-align: center;
   `,
-  Autocomplete: styled(Autocomplete)`
+  FormControl: styled(FormControl)`
     width: 260px;
   `,
 };
