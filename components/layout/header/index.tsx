@@ -36,7 +36,7 @@ export const Header: React.FC = () => {
     logout();
     removeCookies('token');
     routerPush('/login');
-  }, [logout]);
+  }, []);
 
   const handleBoardsButton = useCallback(() => {
     routerPush('/boards');

@@ -38,10 +38,6 @@ export interface DataForDeletingColumn {
   boardId: string;
 }
 
-export interface ColumnData {
-  columns: Column[];
-}
-
 export const replaceColumnName = (
   state: ColumnData,
   payload: Column

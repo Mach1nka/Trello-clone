@@ -3,6 +3,7 @@ import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
 import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
 import { EventBus, PubSubEvents } from 'services/PubSub';
+import { useLogout } from 'utils/logout';
 
 interface AuthLogInAction {
   type: AuthActions.LOG_IN;
@@ -46,14 +47,14 @@ export const AuthContext: Context<AuthContextValue> =
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const { logout } = useLogout();
+
   useEffect(() => {
     if (state.token) {
       httpService.setAuthToken(state.token);
     }
 
-    EventBus.subscribe(PubSubEvents.TokenUpdate, () =>
-      dispatch({ type: AuthActions.LOG_OUT })
-    );
+    EventBus.subscribe(PubSubEvents.TokenUpdate, () => logout());
 
     return () => EventBus.unsubscribe(PubSubEvents.TokenUpdate);
   }, [state.token]);

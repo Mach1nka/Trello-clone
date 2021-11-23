@@ -38,13 +38,12 @@ const shareBoard = (
 
 const deleteBoard = (
   boardData: DataForDeletingBoard
-): Promise<BaseResponse<BoardDataServer>> => {
-  return httpService
+): Promise<BaseResponse<BoardDataServer>> =>
+  httpService
     .delete<DataForDeletingBoard, Record<string, never>>({
       url: '/board',
       data: boardData,
     })
     .then(() => getBoards());
-};
 
 export { getBoards, createBoard, updateBoardName, shareBoard, deleteBoard };

@@ -7,6 +7,7 @@ import AuthProvider from 'context/AuthContext';
 import AlertProvider from 'context/AlertContext';
 import BoardProvider from 'context/BoardContext';
 import ColumnProvider from 'context/ColumnContext';
+import CardProvider from 'context/CardContext';
 import LoaderProvider from 'context/LoaderContext';
 import { Layout } from 'components/layout';
 import { defaultColors } from 'styles/theme';
@@ -34,9 +35,11 @@ const App: React.FC<AppProps> = ({ Component, pageProps }: AppProps) => {
             <AuthProvider>
               <BoardProvider>
                 <ColumnProvider>
-                  <Layout>
-                    <Component {...pageProps} />
-                  </Layout>
+                  <CardProvider>
+                    <Layout>
+                      <Component {...pageProps} />
+                    </Layout>
+                  </CardProvider>
                 </ColumnProvider>
               </BoardProvider>
             </AuthProvider>
