@@ -1,9 +1,12 @@
-import React, { useState, useCallback } from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
+/* eslint-disable jsx-a11y/anchor-is-valid */
+import React, { useState, useCallback, useContext } from 'react';
 import Link from 'next/link';
 
+import { LoaderContext } from 'context/LoaderContext';
 import { BoardOptions } from './boardOptions';
 import { CreateBoardModal } from './modal/create';
-// import { deleteColumnsData } from '../../../store/column/actions';
 import { BoardSC as SC } from './sc';
 
 interface Props {
@@ -19,10 +22,12 @@ export const BoardItem: React.FC<Props> = ({
   boardId,
   isOwnBoards,
 }) => {
+  const { setLoaderState } = useContext(LoaderContext);
+
   const [isOpenModal, setModalView] = useState(false);
 
-  // const resetColumnsData = useCallback(() => dispatch(deleteColumnsData()), []);
   const showCreatingModal = useCallback(() => setModalView(true), []);
+  const linkOnClick = useCallback(() => setLoaderState(true), []);
 
   if (!isDefaultCard && boardId && isOwnBoards) {
     const locationParams = {
@@ -31,11 +36,8 @@ export const BoardItem: React.FC<Props> = ({
     };
 
     return (
-      <Link
-        href={locationParams}
-        // onClick={resetColumnsData} @note reset column context
-      >
-        <a style={{ textDecoration: 'none' }}>
+      <Link href={locationParams}>
+        <a style={{ textDecoration: 'none' }} onClick={linkOnClick}>
           <SC.Board isDefaultCard={isDefaultCard}>
             <SC.Name color="inherit" variant="subtitle2" align="left">
               {boardName}
@@ -53,11 +55,8 @@ export const BoardItem: React.FC<Props> = ({
     };
 
     return (
-      <Link
-        href={locationParams}
-        // onClick={resetColumnsData} @note reset column context
-      >
-        <a style={{ textDecoration: 'none' }}>
+      <Link href={locationParams}>
+        <a style={{ textDecoration: 'none' }} onClick={linkOnClick}>
           <SC.Board isDefaultCard={isDefaultCard}>
             <SC.Name color="inherit" variant="subtitle2" align="left">
               {boardName}

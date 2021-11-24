@@ -12,6 +12,7 @@ import {
   AlertContext,
   AlertStatusData,
 } from 'context/AlertContext';
+import { LoaderContext } from 'context/LoaderContext';
 import { ColumnContext } from 'context/ColumnContext';
 import { Column, ColumnActions } from 'services/resources/model/column.model';
 import { updateColumnPosition } from 'services/resources/request/column';
@@ -20,9 +21,11 @@ import { ColumnItem } from './column';
 import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
 import { getRouterQuery } from 'utils/getRouterQuery';
+
 // import ModalsContainer from '../cards/components/modals-container';
 
 export const ColumnsContainer: React.FC = () => {
+  const { setLoaderState } = useContext(LoaderContext);
   const { columns, dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
@@ -48,6 +51,10 @@ export const ColumnsContainer: React.FC = () => {
     },
     [columns]
   );
+
+  useEffect(() => {
+    setLoaderState(false);
+  }, []);
 
   useEffect(() => {
     setColumns(columns);

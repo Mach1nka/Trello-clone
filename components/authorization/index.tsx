@@ -7,15 +7,24 @@ import { setCookies, removeCookies } from 'cookies-next';
 import { AuthContext } from 'context/AuthContext';
 import { authForms } from './constant';
 import { AuthorizationSC as SC } from './sc';
+import { useLogout } from 'utils/logout';
 
 export const Authorization: React.FC = () => {
   const { user } = useContext(AuthContext);
+  const { setLoaderState } = useContext(LoaderContext);
+
   const [tabIndex, setTabIndex] = useState('1');
 
   const router = useRouter();
+  const { logout } = useLogout();
 
   useEffect(() => {
     removeCookies('token');
+    logout();
+    setLoaderState(false);
+  }, []);
+
+  useEffect(() => {
     if (user.token) {
       setCookies('token', user.token);
       router.push({
