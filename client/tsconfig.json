@@ -1,0 +1,12 @@
+{
+    "extends": "../tsconfig.base",
+    "compilerOptions": {
+        "target": "ESNEXT",
+        "module": "ESNext",
+        "jsx": "react",
+        "esModuleInterop": true,
+        "outDir": "./dist",
+        "rootDir": "./",
+    },
+    "exclude": ["dist", "webpack", "webpack.config.*"]
+}
