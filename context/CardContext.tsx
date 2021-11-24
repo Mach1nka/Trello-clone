@@ -46,7 +46,10 @@ function reducer(state: CardData, action: Action): CardData {
     case CardActions.PUT_CARDS:
       return {
         ...state,
-        cards: { [action.payload.columnId]: action.payload.cards },
+        cards: {
+          ...state.cards,
+          [action.payload.columnId]: action.payload.cards,
+        },
       };
     case CardActions.PUT_CREATED_CARD:
       return {
