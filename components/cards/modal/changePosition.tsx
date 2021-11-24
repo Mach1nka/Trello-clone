@@ -13,51 +13,52 @@ import {
   MenuItem,
 } from '@material-ui/core';
 
+import { CardContext } from 'context/CardContext';
 import {
-  AlertContext,
   AlertActions,
+  AlertContext,
   AlertStatusData,
 } from 'context/AlertContext';
-import { ColumnContext } from 'context/ColumnContext';
-import { updateColumnPosition } from 'services/resources/request/column';
-import { SubmitButton, ModalForm as Form } from './sc';
-import { ColumnActions } from 'services/resources/model/column.model';
+import { updateCardPosition } from 'services/resources/request/card';
+import { SubmitButton, ModalForm as Form } from '../../columns/sc';
+import { CardActions } from 'services/resources/model/card.model';
 import { ErrorInfo } from 'services/HttpService/types';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   columnId: string;
-  boardId: string;
-  position: number;
+  cardId: string;
+  cardPosition: number;
 }
 
-export const ChangeColumnPosition: React.FC<Props> = ({
+export const ChangeCardPosition: React.FC<Props> = ({
   isOpen,
   setModalView,
   columnId,
-  boardId,
-  position,
+  cardId,
+  cardPosition,
 }) => {
-  const { columns, dispatch: columnDispatch } = useContext(ColumnContext);
+  const { cards, dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
-  const columnPositions: number[] = columns.map((el) => el.position);
+  const positionArr: number[] = cards[columnId].map((el) => el.position);
+  const initialValues = { newPosition: cardPosition };
 
   const formHandler = useCallback(
     (values: { newPosition: number }) => {
-      if (values.newPosition !== position) {
-        updateColumnPosition({
-          boardId,
+      if (values.newPosition !== cardPosition) {
+        updateCardPosition({
+          cardId,
           newPosition: values.newPosition,
           columnId,
         })
-          .then((resp) => {
-            columnDispatch({
-              type: ColumnActions.PUT_COLUMNS,
+          .then((resp) =>
+            cardDispatch({
+              type: CardActions.PUT_CARDS,
               payload: resp.data,
-            });
-          })
+            })
+          )
           .catch((err: ErrorInfo) => {
             alertDispatch({
               type: AlertActions.ADD,
@@ -68,10 +69,10 @@ export const ChangeColumnPosition: React.FC<Props> = ({
               },
             });
           })
-          .finally(() => setModalView(false));
+          .finally(() => onClose());
       }
     },
-    [position]
+    [cardPosition]
   );
 
   const onClose = useCallback(() => setModalView(false), []);
@@ -79,9 +80,9 @@ export const ChangeColumnPosition: React.FC<Props> = ({
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>
-        Change column position
+        Change card position
       </DialogTitle>
-      <Formik initialValues={{ newPosition: position }} onSubmit={formHandler}>
+      <Formik initialValues={initialValues} onSubmit={formHandler}>
         {(props) => (
           <Form onSubmit={props.handleSubmit}>
             <TextField
@@ -92,7 +93,7 @@ export const ChangeColumnPosition: React.FC<Props> = ({
               value={props.values.newPosition}
               onChange={props.handleChange}
             >
-              {columnPositions.map((el) => (
+              {positionArr.map((el) => (
                 <MenuItem key={el} value={el}>
                   {el + 1}
                 </MenuItem>

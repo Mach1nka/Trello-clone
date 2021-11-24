@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 
-import { CreateColumnModal } from './createModal';
+import { CreateColumnModal } from './modal/create';
 import { ColumnSC as SC } from './sc';
 
 interface Props {

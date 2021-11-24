@@ -1,4 +1,4 @@
-import React, {
+import {
   useState,
   useCallback,
   Dispatch,
@@ -16,10 +16,10 @@ import {
 } from 'context/AlertContext';
 import { ColumnContext } from 'context/ColumnContext';
 import { ColumnActions } from 'services/resources/model/column.model';
-import { RenameColumnModal } from './renameModal';
-import { ChangeColumnPosition } from './changePosition';
-// import CardsContainer from '../../cards/cards-container';
-// import CreateCardModal from '../../cards/components/create-card-modal';
+import { RenameColumnModal } from './modal/rename';
+import { ChangeColumnPosition } from './modal/changePosition';
+import { CardsContainer } from '../cards/cardsContainer';
+import { CreateCardModal } from '../cards/modal/create';
 import { deleteColumn } from 'services/resources/request/column';
 import { ColumnSC as SC } from './sc';
 import { ErrorInfo } from 'services/HttpService/types';
@@ -84,8 +84,9 @@ export const ColumnItem: React.FC<Props> = ({
     setAnchorEl(null);
   }, []);
 
-  const onClose = useCallback(() => setAnchorEl(null), []);
   const showCreateModal = useCallback(() => setCreateCardModalView(true), []);
+
+  const onClose = useCallback(() => setAnchorEl(null), []);
 
   return (
     <>
@@ -110,11 +111,11 @@ export const ColumnItem: React.FC<Props> = ({
             <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
           </Menu>
         </SC.Header>
-        {/* <CardsContainer
-            columnId={columnId}
-            draggableCard={draggableCard}
-            setDraggableCard={setDraggableCard}
-          /> */}
+        <CardsContainer
+          columnId={columnId}
+          // draggableCard={draggableCard}
+          // setDraggableCard={setDraggableCard}
+        />
         <SC.Footer>
           <Button
             onClick={showCreateModal}
@@ -139,11 +140,11 @@ export const ColumnItem: React.FC<Props> = ({
         columnId={columnId}
         setModalView={setPositionModalView}
       />
-      {/* <CreateCardModal
+      <CreateCardModal
         isOpen={isOpenCreateCardModal}
         columnId={columnId}
         setModalView={setCreateCardModalView}
-      /> */}
+      />
     </>
   );
 };

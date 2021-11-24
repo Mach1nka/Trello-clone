@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import { removeCookies } from 'cookies-next';
 
 import { BoardContext } from 'context/BoardContext';
-import { ShareBoardModal } from '../../boardList/shareBoard';
+import { ShareBoardModal } from '../../boardList/modal/share';
 import { Sidebar } from './sidebar';
 import { useLogout } from 'utils/logout';
 import { HeaderSC as SC } from './sc';

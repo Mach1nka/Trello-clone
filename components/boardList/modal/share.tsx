@@ -18,7 +18,7 @@ import { AlertActions, AlertStatusData } from 'context/AlertContext';
 import { AlertContext } from 'context/AlertContext';
 import { useLoadUsers } from 'utils/loadUsers';
 import { shareBoard } from 'services/resources/request/board';
-import { ShareModalForm as Form, BoardSC as SC, SubmitButton } from './sc';
+import { ShareModalForm as Form, BoardSC as SC, SubmitButton } from '../sc';
 import { ErrorInfo } from 'services/HttpService/types';
 import { User } from 'services/resources/model/user.model';
 

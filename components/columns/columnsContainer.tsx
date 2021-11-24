@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useContext, useCallback } from 'react';
+import { useEffect, useState, useContext, useCallback } from 'react';
 import {
   DragDropContext,
   Droppable,
@@ -21,8 +21,6 @@ import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
 import { getRouterQuery } from 'utils/getRouterQuery';
 // import ModalsContainer from '../cards/components/modals-container';
-// import { changeCardStatus } from '../../store/card/actions';
-// import { Card as CardType } from '../../store/card/types';
 
 export const ColumnsContainer: React.FC = () => {
   const { columns, dispatch: columnDispatch } = useContext(ColumnContext);

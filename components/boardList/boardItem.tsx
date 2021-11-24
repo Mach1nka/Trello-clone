@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import Link from 'next/link';
 
 import { BoardOptions } from './boardOptions';
-import { CreateBoardModal } from './createBoard';
+import { CreateBoardModal } from './modal/create';
 // import { deleteColumnsData } from '../../../store/column/actions';
 import { BoardSC as SC } from './sc';
 

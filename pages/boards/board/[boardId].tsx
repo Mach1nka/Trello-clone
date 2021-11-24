@@ -33,8 +33,7 @@ const BoardDetailPage: NextPage<Props> = ({ columns, cards }) => {
       type: ColumnActions.PUT_COLUMNS,
       payload: columns,
     });
-    cards.map((el, dix) => {
-      console.log(dix);
+    cards.map((el) => {
       cardDispatch({ type: CardActions.PUT_CARDS, payload: el });
     });
   }, [columns, cards]);

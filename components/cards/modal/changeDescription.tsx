@@ -12,52 +12,47 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
+import { CardContext } from 'context/CardContext';
 import {
-  AlertContext,
   AlertActions,
+  AlertContext,
   AlertStatusData,
 } from 'context/AlertContext';
-import { ColumnContext } from 'context/ColumnContext';
-import { ColumnActions } from 'services/resources/model/column.model';
-import { createColumn } from 'services/resources/request/column';
-import { configValidationSchema } from 'utils/validationSchema';
-import { SubmitButton, ModalForm as Form } from './sc';
+import { updateCardDescription } from 'services/resources/request/card';
+import { descriptionTextValidation } from '../utils';
+import { SubmitButton, ModalForm as Form } from '../../columns/sc';
+import { CardActions } from 'services/resources/model/card.model';
 import { ErrorInfo } from 'services/HttpService/types';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
-  boardId: string;
-  newPosition: number;
+  cardId: string;
+  cardDescription: string;
 }
 
-export const CreateColumnModal: React.FC<Props> = ({
+export const ChangeCardDescriptionModal: React.FC<Props> = ({
   isOpen,
   setModalView,
-  boardId,
-  newPosition,
+  cardId,
+  cardDescription,
 }) => {
-  const { dispatch: columnDispatch } = useContext(ColumnContext);
+  const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
-  const validationSchema = configValidationSchema('name');
-  const initialValues = { name: '' };
+  const initialValues = { newDescription: cardDescription };
 
   const formik = useFormik({
     initialValues,
-    validationSchema,
+    validationSchema: descriptionTextValidation,
     onSubmit: (values) => {
-      createColumn({
-        name: values.name.trim(),
-        boardId,
-        position: newPosition,
-      })
-        .then((resp) => {
-          columnDispatch({
-            type: ColumnActions.PUT_CREATED_COLUMN,
+      updateCardDescription({ newDescription: values.newDescription, cardId })
+        .then((resp) =>
+          cardDispatch({
+            type: CardActions.PUT_UPDATED_CARD,
             payload: resp.data,
-          });
-        })
+          })
+        )
         .catch((err: ErrorInfo) => {
           alertDispatch({
             type: AlertActions.ADD,
@@ -68,7 +63,7 @@ export const CreateColumnModal: React.FC<Props> = ({
             },
           });
         })
-        .finally(() => setModalView(false));
+        .finally(() => onClose());
     },
   });
 
@@ -77,24 +72,29 @@ export const CreateColumnModal: React.FC<Props> = ({
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>
-        Create new column
+        Change card description
       </DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
           margin="none"
-          id="name"
-          name="name"
-          label="Column name"
+          id="newDescription"
+          name="newDescription"
+          label="New card description"
           type="string"
           autoFocus
+          defaultValue={cardDescription}
           onChange={formik.handleChange}
-          error={formik.touched.name && !!formik.errors.name}
-          helperText={formik.touched.name && formik.errors.name}
+          error={
+            formik.touched.newDescription && !!formik.errors.newDescription
+          }
+          helperText={
+            formik.touched.newDescription && formik.errors.newDescription
+          }
         />
         <DialogActions>
           <SubmitButton size="small" type="submit" variant="contained">
-            Create
+            Change
           </SubmitButton>
         </DialogActions>
       </Form>

@@ -64,6 +64,7 @@ function reducer(state: CardData, action: Action): CardData {
       return {
         ...state,
         cards: {
+          ...state.cards,
           [action.payload.columnId]: updateCardData(state, action.payload),
         },
       };

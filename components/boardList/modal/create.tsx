@@ -3,13 +3,16 @@ import { useFormik } from 'formik';
 import {
   Dialog,
   DialogTitle,
-  DialogActions,
   TextField,
+  DialogActions,
 } from '@material-ui/core';
 
 import { ErrorInfo } from 'services/HttpService/types';
-import { updateBoardName } from 'services/resources/request/board';
+import { createBoard } from 'services/resources/request/board';
+import { configValidationSchema } from 'utils/validationSchema';
+import { ModalForm as Form, SubmitButton } from '../sc';
 import { BoardActions } from 'services/resources/model/board.model';
+import { AuthContext } from 'context/AuthContext';
 import { BoardContext } from 'context/BoardContext';
 import {
   AlertContext,
@@ -17,32 +20,21 @@ import {
   AlertStatusData,
 } from 'context/AlertContext';
 import { LoaderContext } from 'context/LoaderContext';
-import { configValidationSchema } from 'utils/validationSchema';
-import { ModalForm as Form, SubmitButton } from './sc';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
-  boardId: string;
-  userId: string;
 }
 
-export const RenameBoardModal: React.FC<Props> = ({
-  isOpen,
-  setModalView,
-  boardId,
-  userId,
-}) => {
+export const CreateBoardModal: React.FC<Props> = ({ isOpen, setModalView }) => {
+  const { user } = useContext(AuthContext);
   const { alerts, dispatch: alertDispatch } = useContext(AlertContext);
-  const { ownBoards, dispatch: boardDispatch } = useContext(BoardContext);
+  const { dispatch: boardDispatch } = useContext(BoardContext);
   const { setLoaderState } = useContext(LoaderContext);
 
-  const currentBoard = ownBoards.filter((el) => el.id === boardId).pop();
-  const currentBoardName = currentBoard?.name || '';
-
-  const validationSchema = configValidationSchema('newName');
+  const validationSchema = configValidationSchema('boardName');
   const initialValues = {
-    newName: currentBoardName,
+    boardName: '',
   };
 
   const formik = useFormik({
@@ -50,17 +42,18 @@ export const RenameBoardModal: React.FC<Props> = ({
     validationSchema,
     onSubmit: (values) => {
       setLoaderState(true);
-      updateBoardName({ newName: values.newName.trim(), boardId, userId })
+      //  @note Type of user must be improved in further. Fields must be string after authorization
+      createBoard({ name: values.boardName.trim(), userId: user.id as string })
         .then((resp) => {
           boardDispatch({
-            type: BoardActions.PUT_RENAMED_BOARD,
+            type: BoardActions.PUT_CREATED_BOARD,
             payload: resp.data,
           });
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: `${alerts.length}-${boardId}`,
-              message: 'Board has renamed successfully',
+              id: `${alerts.length}-${user.id}`,
+              message: 'Board has created successfully',
               status: AlertStatusData.SUCCESS,
             },
           });
@@ -76,43 +69,38 @@ export const RenameBoardModal: React.FC<Props> = ({
           });
         })
         .finally(() => {
-          setModalView(false);
           setLoaderState(false);
+          onClose();
         });
     },
   });
 
-  const onClose = useCallback(() => setModalView(false), []);
-  const onClick = useCallback((evt) => evt.stopPropagation(), []);
+  const onClose = useCallback(() => {
+    setModalView(false);
+    formik.resetForm();
+  }, []);
 
   return (
-    <Dialog
-      fullWidth
-      maxWidth="xs"
-      open={isOpen}
-      onClick={onClick}
-      onClose={onClose}
-    >
+    <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>
-        Change board name
+        Create new board
       </DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
           size="medium"
           margin="none"
-          id="newName"
-          name="newName"
-          label="New board name"
+          id="boardName"
+          name="boardName"
+          label="Board name"
           type="string"
           autoFocus
-          defaultValue={currentBoardName}
           onChange={formik.handleChange}
-          error={formik.touched.newName && !!formik.errors.newName}
-          helperText={formik.touched.newName && formik.errors.newName}
+          error={formik.touched.boardName && !!formik.errors.boardName}
+          helperText={formik.touched.boardName && formik.errors.boardName}
         />
         <DialogActions>
           <SubmitButton size="small" type="submit" variant="contained">
-            Save
+            Create
           </SubmitButton>
         </DialogActions>
       </Form>

@@ -18,8 +18,8 @@ import { deleteBoard } from 'services/resources/request/board';
 //   setModalsStates,
 //   setBoardIdForModal,
 // } from '../../../store/modals/actions';
-import { RenameBoardModal } from './renameBoard';
-import { ShareBoardModal } from './shareBoard';
+import { RenameBoardModal } from './modal/rename';
+import { ShareBoardModal } from './modal/share';
 import { BoardSC as SC } from './sc';
 
 interface Props {

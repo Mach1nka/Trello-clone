@@ -12,67 +12,69 @@ import {
   DialogTitle,
 } from '@material-ui/core';
 
+import { CardContext } from 'context/CardContext';
 import {
   AlertActions,
   AlertContext,
   AlertStatusData,
 } from 'context/AlertContext';
-import { ColumnContext } from 'context/ColumnContext';
-import { ColumnActions } from 'services/resources/model/column.model';
-import { updateColumnName } from 'services/resources/request/column';
+import { updateCardName } from 'services/resources/request/card';
 import { configValidationSchema } from 'utils/validationSchema';
-import { SubmitButton, ModalForm as Form } from './sc';
+import { SubmitButton, ModalForm as Form } from '../sc';
+import { CardActions } from 'services/resources/model/card.model';
 import { ErrorInfo } from 'services/HttpService/types';
 
 interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
-  columnId: string;
-  columnName: string;
+  cardId: string;
+  cardName: string;
 }
 
-export const RenameColumnModal: React.FC<Props> = ({
+export const RenameCardModal: React.FC<Props> = ({
   isOpen,
   setModalView,
-  columnId,
-  columnName,
+  cardId,
+  cardName,
 }) => {
-  const { dispatch: columnDispatch } = useContext(ColumnContext);
+  const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
+
   const validationSchema = configValidationSchema('newName');
-  const initialValues = { newName: columnName };
+  const initialValues = { newName: cardName };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      updateColumnName({ newName: values.newName.trim(), columnId })
-        .then((resp) => {
-          columnDispatch({
-            type: ColumnActions.PUT_RENAMED_COLUMN,
-            payload: resp.data,
-          });
-        })
-        .catch((err: ErrorInfo) => {
-          alertDispatch({
-            type: AlertActions.ADD,
-            payload: {
-              id: `${Date.now()}`,
-              message: err.message,
-              status: AlertStatusData.ERROR,
-            },
-          });
-        })
-        .finally(() => setModalView(false));
+    onSubmit: ({ newName }) => {
+      if (cardName !== newName) {
+        updateCardName({ newName: newName.trim(), cardId })
+          .then((resp) =>
+            cardDispatch({
+              type: CardActions.PUT_UPDATED_CARD,
+              payload: resp.data,
+            })
+          )
+          .catch((err: ErrorInfo) => {
+            alertDispatch({
+              type: AlertActions.ADD,
+              payload: {
+                id: `${Date.now()}`,
+                message: err.message,
+                status: AlertStatusData.ERROR,
+              },
+            });
+          })
+          .finally(() => onClose());
+      }
     },
   });
-
   const onClose = useCallback(() => setModalView(false), []);
 
   return (
     <Dialog fullWidth maxWidth="xs" open={isOpen} onClose={onClose}>
       <DialogTitle style={{ textAlign: 'center' }}>
-        Change column name
+        Change card name
       </DialogTitle>
       <Form onSubmit={formik.handleSubmit} autoComplete="off">
         <TextField
@@ -80,10 +82,10 @@ export const RenameColumnModal: React.FC<Props> = ({
           margin="none"
           id="newName"
           name="newName"
-          label="New column name"
+          label="New card name"
           type="string"
           autoFocus
-          defaultValue={columnName}
+          defaultValue={cardName}
           onChange={formik.handleChange}
           error={formik.touched.newName && !!formik.errors.newName}
           helperText={formik.touched.newName && formik.errors.newName}
