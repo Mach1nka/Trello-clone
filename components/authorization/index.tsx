@@ -4,6 +4,7 @@ import { Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { setCookies, removeCookies } from 'cookies-next';
 
+import { LoaderContext } from 'context/LoaderContext';
 import { AuthContext } from 'context/AuthContext';
 import { authForms } from './constant';
 import { AuthorizationSC as SC } from './sc';

@@ -5,6 +5,8 @@ import {
   Dispatch,
   SetStateAction,
 } from 'react';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Typography } from '@material-ui/core';
 
 import { CardContext } from 'context/CardContext';
 import { CardItem } from './card';
@@ -13,7 +15,7 @@ import {
   updateCardPosition,
   updateCardStatus,
 } from 'services/resources/request/card';
-import { CardsContainer as Container, DragWrapper } from './sc';
+import { CardsContainer as Container, CardSC } from './sc';
 import { Card, CardActions } from 'services/resources/model/card.model';
 
 interface Props {
@@ -65,18 +67,51 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
   // };
 
   return (
-    <Container>
-      {cardsData?.map((el) => (
-        <CardItem
-          key={el.id}
-          cardId={el.id}
-          description={el.description}
-          name={el.name}
-          cardPosition={el.position}
-          columnId={columnId}
-        />
-      ))}
-    </Container>
+    <Droppable
+      droppableId={columnId}
+      mode="virtual"
+      type="cards"
+      renderClone={(provided, snapshot, rubric) => (
+        <CardSC.Container
+          {...provided.draggableProps}
+          {...provided.dragHandleProps}
+          ref={provided.innerRef}
+        >
+          <Typography>{cardsData[rubric.source.index].name}</Typography>
+        </CardSC.Container>
+      )}
+    >
+      {(provided) => (
+        <div
+          key={columnId}
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+        >
+          <Container>
+            {cardsData?.map((el, index) => (
+              <Draggable key={el.id} draggableId={el.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                    style={provided.draggableProps.style}
+                  >
+                    <CardItem
+                      cardId={el.id}
+                      description={el.description}
+                      name={el.name}
+                      cardPosition={el.position}
+                      columnId={columnId}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            ))}
+          </Container>
+        </div>
+      )}
+    </Droppable>
   );
 };
 

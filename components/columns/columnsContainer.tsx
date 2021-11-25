@@ -114,7 +114,7 @@ export const ColumnsContainer: React.FC = () => {
   return (
     <SC.Container>
       <DragDropContext onDragEnd={(res) => onDropHandler(res)}>
-        <Droppable droppableId={query.boardId as string} direction="horizontal">
+        <Droppable droppableId={boardId} direction="horizontal" type="column">
           {(provided) => (
             <div
               style={{ display: 'flex' }}
