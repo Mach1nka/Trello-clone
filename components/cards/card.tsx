@@ -2,6 +2,7 @@ import { useState, useCallback, useContext } from 'react';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
+import { ModalActions, ModalContext } from 'context/ModalContext';
 import { CardContext } from 'context/CardContext';
 import {
   AlertActions,
@@ -9,18 +10,12 @@ import {
   AlertStatusData,
 } from 'context/AlertContext';
 import { deleteCard } from 'services/resources/request/card';
-// import {
-//   setCardDataForModal,
-//   setModalsStates,
-//   resetModalData,
-// } from '../../../store/modals/actions';
 import { CardSC as SC } from './sc';
 import { CardActions } from 'services/resources/model/card.model';
 import { ErrorInfo } from 'services/HttpService/types';
 import { RenameCardModal } from './modal/rename';
 import { ChangeCardPosition } from './modal/changePosition';
 import { ChangeCardStatus } from './modal/changeStatus';
-import { CardDetails } from './modal/details';
 
 interface Props {
   cardId: string;
@@ -37,6 +32,7 @@ export const CardItem: React.FC<Props> = ({
   cardPosition,
   description,
 }) => {
+  const { dispatch: modalDispatch } = useContext(ModalContext);
   const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
@@ -44,7 +40,6 @@ export const CardItem: React.FC<Props> = ({
   const [isOpenRenameModal, setRenameModalView] = useState(false);
   const [isOpenPositionModal, setPositionModalView] = useState(false);
   const [isOpenStatusModal, setStatusModalView] = useState(false);
-  const [isOpenDetailsModal, setDetailsModalView] = useState(false);
 
   const handleMenu = useCallback((event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -85,7 +80,16 @@ export const CardItem: React.FC<Props> = ({
   }, []);
 
   const showDetailsModal = useCallback(() => {
-    setDetailsModalView(true);
+    modalDispatch({
+      type: ModalActions.PUT_DETAILS,
+      payload: {
+        cardId,
+        cardName: name,
+        columnId,
+        cardDescription: description,
+      },
+    });
+    modalDispatch({ type: ModalActions.UPDATE_DISPLAY, payload: true });
     setAnchorEl(null);
   }, []);
 
@@ -136,15 +140,6 @@ export const CardItem: React.FC<Props> = ({
         setModalView={setStatusModalView}
         cardId={cardId}
         columnId={columnId}
-      />
-      <CardDetails
-        isOpen={isOpenDetailsModal}
-        setModalView={setDetailsModalView}
-        setStatusModalView={setStatusModalView}
-        cardId={cardId}
-        columnId={columnId}
-        cardName={name}
-        cardDescription={description}
       />
     </>
   );

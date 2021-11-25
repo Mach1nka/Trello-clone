@@ -50,19 +50,6 @@ const CardSC = {
   DialogActions: styled(DialogActions)`
     justify-content: space-between !important;
   `,
-  ColumnNameButton: styled(Button)`
-    padding: 0 !important;
-    font-size: 15px;
-    text-decoration: underline !important;
-    text-transform: none !important;
-    padding-left: 5px !important;
-    min-width: unset !important;
-    ${({ theme }: { theme: Theme }) => `
-      &:hover {
-        color: ${theme.palette.primary.main} !important;
-        background-color: unset !important;
-      }`}
-  `,
   NameField: styled(TextField)`
     & .MuiInput-input {
       font-size: 20px;

@@ -7,6 +7,7 @@ import {
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/router';
 
+import ModalProvider from 'context/ModalContext';
 import {
   AlertActions,
   AlertContext,
@@ -20,9 +21,8 @@ import { ErrorInfo } from 'services/HttpService/types';
 import { ColumnItem } from './column';
 import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
+import { CardDetails } from 'components/cards/modal/details';
 import { getRouterQuery } from 'utils/getRouterQuery';
-
-// import ModalsContainer from '../cards/components/modals-container';
 
 export const ColumnsContainer: React.FC = () => {
   const { setLoaderState } = useContext(LoaderContext);
@@ -112,43 +112,44 @@ export const ColumnsContainer: React.FC = () => {
   );
 
   return (
-    <SC.Container>
-      <DragDropContext onDragEnd={(res) => onDropHandler(res)}>
-        <Droppable droppableId={boardId} direction="horizontal" type="column">
-          {(provided) => (
-            <div
-              style={{ display: 'flex' }}
-              {...provided.droppableProps}
-              ref={provided.innerRef}
-            >
-              {columnsForDisplay.map((el, index) => (
-                <Draggable key={el.id} draggableId={el.id} index={index}>
-                  {(provided) => (
-                    <div
-                      ref={provided.innerRef}
-                      {...provided.draggableProps}
-                      {...provided.dragHandleProps}
-                      style={provided.draggableProps.style}
-                    >
-                      <ColumnItem
-                        key={el.id}
-                        columnName={el.name}
-                        columnId={el.id}
-                        boardId={boardId}
-                        position={el.position}
-                      />
-                    </div>
-                  )}
-                </Draggable>
-              ))}
-              {provided.placeholder}
-            </div>
-          )}
-        </Droppable>
-      </DragDropContext>
-      <CreateColumn boardId={boardId} newPosition={columns.length} />
-    </SC.Container>
+    <ModalProvider>
+      <SC.Container>
+        <DragDropContext onDragEnd={(res) => onDropHandler(res)}>
+          <Droppable droppableId={boardId} direction="horizontal" type="column">
+            {(provided) => (
+              <div
+                style={{ display: 'flex' }}
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {columnsForDisplay.map((el, index) => (
+                  <Draggable key={el.id} draggableId={el.id} index={index}>
+                    {(provided) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={provided.draggableProps.style}
+                      >
+                        <ColumnItem
+                          key={el.id}
+                          columnName={el.name}
+                          columnId={el.id}
+                          boardId={boardId}
+                          position={el.position}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+        <CreateColumn boardId={boardId} newPosition={columns.length} />
+      </SC.Container>
+      <CardDetails />
+    </ModalProvider>
   );
 };
-
-/* <ModalsContainer /> */

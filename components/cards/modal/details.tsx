@@ -13,9 +13,12 @@ import {
   Button,
   Typography,
   IconButton,
+  TextField,
+  MenuItem,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import { ModalContext, ModalActions } from 'context/ModalContext';
 import { CardContext } from 'context/CardContext';
 import { ColumnContext } from 'context/ColumnContext';
 import {
@@ -27,31 +30,27 @@ import {
   updateCardDescription,
   updateCardName,
   deleteCard,
+  updateCardStatus,
 } from 'services/resources/request/card';
-import { CardActions } from 'services/resources/model/card.model';
-import { ErrorInfo } from 'services/HttpService/types';
+import { Card, CardActions } from 'services/resources/model/card.model';
+import { BaseResponse, ErrorInfo } from 'services/HttpService/types';
 import { configValidationSchema } from '../utils';
 import { CardSC as SC } from '../sc';
 
-interface Props {
-  cardName: string;
-  cardId: string;
+interface SelectValue {
+  columnName: string;
   columnId: string;
-  cardDescription: string;
-  isOpen: boolean;
-  setModalView: Dispatch<SetStateAction<boolean>>;
-  setStatusModalView: Dispatch<SetStateAction<boolean>>;
 }
 
-export const CardDetails: React.FC<Props> = ({
-  cardName,
-  cardDescription,
-  isOpen,
-  setModalView,
-  setStatusModalView,
-  cardId,
-  columnId,
-}) => {
+export const CardDetails: React.FC = () => {
+  const {
+    cardId,
+    columnId,
+    cardDescription,
+    cardName,
+    isDisplay,
+    dispatch: modalDispatch,
+  } = useContext(ModalContext);
   const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
   const { columns } = useContext(ColumnContext);
@@ -59,8 +58,16 @@ export const CardDetails: React.FC<Props> = ({
   const [isNameFocused, setIsNamedFocused] = useState(false);
   const [isDescriptionFocused, setIsDescriptionFocused] = useState(false);
 
-  const columnName = columns.find((el) => el.id === columnId)?.name || '';
-  const initialValues = { name: cardName, description: cardDescription };
+  const currentColumn = columns.find((el) => el.id === columnId)?.id || '';
+  const columnsArr: SelectValue[] = columns.map((el) => ({
+    columnName: el.name,
+    columnId: el.id,
+  }));
+  const initialValues = {
+    name: cardName,
+    description: cardDescription,
+    status: currentColumn,
+  };
   const validationSchema = configValidationSchema;
 
   const formik = useFormik({
@@ -70,12 +77,21 @@ export const CardDetails: React.FC<Props> = ({
     onSubmit: (values) => {
       if (values.name !== formik.initialValues.name) {
         updateCardName({ newName: values.name.trim(), cardId })
-          .then((resp) =>
+          .then(({ data }: BaseResponse<Card>) => {
             cardDispatch({
               type: CardActions.PUT_UPDATED_CARD,
-              payload: resp.data,
-            })
-          )
+              payload: data,
+            });
+            modalDispatch({
+              type: ModalActions.PUT_DETAILS,
+              payload: {
+                cardName: data.name,
+                cardId: data.id,
+                columnId: data.columnId,
+                cardDescription: data.description,
+              },
+            });
+          })
           .catch((err: ErrorInfo) => {
             alertDispatch({
               type: AlertActions.ADD,
@@ -86,15 +102,70 @@ export const CardDetails: React.FC<Props> = ({
               },
             });
           });
+        return;
       }
       if (values.description !== formik.initialValues.description) {
         updateCardDescription({ newDescription: values.description, cardId })
-          .then((resp) =>
+          .then(({ data }: BaseResponse<Card>) => {
             cardDispatch({
               type: CardActions.PUT_UPDATED_CARD,
-              payload: resp.data,
-            })
-          )
+              payload: data,
+            });
+            modalDispatch({
+              type: ModalActions.PUT_DETAILS,
+              payload: {
+                cardName: data.name,
+                cardId: data.id,
+                columnId: data.columnId,
+                cardDescription: data.description,
+              },
+            });
+          })
+          .catch((err: ErrorInfo) => {
+            alertDispatch({
+              type: AlertActions.ADD,
+              payload: {
+                id: `${Date.now()}`,
+                message: err.message,
+                status: AlertStatusData.ERROR,
+              },
+            });
+          });
+        return;
+      }
+      if (values.status !== formik.initialValues.status) {
+        updateCardStatus({
+          cardId,
+          newColumnId: values.status,
+          columnId: initialValues.status,
+        })
+          .then((resp) => {
+            cardDispatch({
+              type: CardActions.PUT_CARDS,
+              payload: resp.data.oldColumn,
+            });
+            cardDispatch({
+              type: CardActions.PUT_CARDS,
+              payload: resp.data.newColumn,
+            });
+
+            const updatedCard: Card | undefined =
+              resp.data.newColumn.cards.find((el) => el.id === cardId);
+
+            if (updatedCard) {
+              modalDispatch({
+                type: ModalActions.PUT_DETAILS,
+                payload: {
+                  cardName: updatedCard.name,
+                  cardId: updatedCard.id,
+                  columnId: updatedCard.columnId,
+                  cardDescription: updatedCard.description,
+                },
+              });
+              return;
+            }
+            onClose();
+          })
           .catch((err: ErrorInfo) => {
             alertDispatch({
               type: AlertActions.ADD,
@@ -109,7 +180,10 @@ export const CardDetails: React.FC<Props> = ({
     },
   });
 
-  const onClose = useCallback(() => setModalView(false), []);
+  const onClose = useCallback(() => {
+    modalDispatch({ type: ModalActions.UPDATE_DISPLAY, payload: false });
+    modalDispatch({ type: ModalActions.RESET });
+  }, []);
 
   const blurName = useCallback(() => {
     setIsNamedFocused(false);
@@ -125,8 +199,13 @@ export const CardDetails: React.FC<Props> = ({
 
   const focusDescription = useCallback(() => setIsDescriptionFocused(true), []);
 
+  const handleStatusChange = useCallback((value: string) => {
+    formik.setFieldValue('status', value);
+    formik.submitForm();
+  }, []);
+
   const handleDeleteCard = useCallback(() => {
-    deleteCard({ columnId, cardId })
+    deleteCard({ columnId: columnId, cardId: cardId })
       .then((resp) =>
         cardDispatch({ type: CardActions.PUT_CARDS, payload: resp.data })
       )
@@ -143,10 +222,8 @@ export const CardDetails: React.FC<Props> = ({
       .finally(() => onClose());
   }, [cardId]);
 
-  const showStatusModal = useCallback(() => setStatusModalView(true), []);
-
   return (
-    <Dialog fullWidth maxWidth="sm" open={isOpen} onClose={onClose}>
+    <Dialog fullWidth maxWidth="sm" open={isDisplay} onClose={onClose}>
       <DialogTitle>
         {!isNameFocused ? (
           <SC.Name onClick={focusName}>{formik.values.name}</SC.Name>
@@ -167,9 +244,18 @@ export const CardDetails: React.FC<Props> = ({
         )}
         <Typography variant="body2">
           It is in column
-          <SC.ColumnNameButton onClick={showStatusModal}>
-            {columnName}
-          </SC.ColumnNameButton>
+          <TextField
+            id="column-select"
+            select
+            value={formik.values.status}
+            onChange={(event) => handleStatusChange(event.target.value)}
+          >
+            {columnsArr.map((option) => (
+              <MenuItem key={option.columnId} value={option.columnId}>
+                {option.columnName}
+              </MenuItem>
+            ))}
+          </TextField>
         </Typography>
       </DialogTitle>
       <DialogContent>
