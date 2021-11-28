@@ -55,6 +55,7 @@ function reducer(state: CardData, action: Action): CardData {
       return {
         ...state,
         cards: {
+          ...state.cards,
           [action.payload.columnId]: state.cards[action.payload.columnId]
             ? state.cards[action.payload.columnId].concat(action.payload)
             : [action.payload],

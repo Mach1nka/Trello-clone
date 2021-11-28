@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { FixedSizeList } from 'react-window';
 import {
   Typography,
   DialogActions,
@@ -7,23 +8,42 @@ import {
   Theme,
 } from '@material-ui/core';
 
-interface Props {
-  isPointCards: boolean;
-}
+const CardsContainer = styled(FixedSizeList)`
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
 
-const CardsContainer = styled.div`
-  display: flex;
-  flex-grow: 1;
-  flex-direction: column;
-  overflow-x: auto;
+  /* Track */
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    visibility: hidden;
+  }
+
+  /* Handle */
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  /* Handle on hover */
+  &::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
 `;
+
+// const CardsContainer = styled.div`
+//   display: flex;
+//   flex-grow: 1;
+//   flex-direction: column;
+//   overflow-x: auto;
+// `;
 
 const CardSC = {
   Container: styled.div`
     display: flex;
     justify-content: space-between;
     width: inherit;
-    min-height: 56px;
+    height: inherit;
     background-color: #fff;
     padding: 7px;
     box-sizing: border-box;
@@ -70,13 +90,6 @@ const CardSC = {
   `,
 };
 
-const DragWrapper = styled.div<Props>`
-  margin-bottom: 8px;
-  & * {
-    pointer-events: ${(props) => (props.isPointCards ? 'none' : 'auto')};
-  }
-`;
-
 const CreateCardForm = styled.form`
   display: flex;
   flex-direction: column;
@@ -100,11 +113,4 @@ const SubmitButton = styled(Button)`
   }`}
 `;
 
-export {
-  CardsContainer,
-  CardSC,
-  CreateCardForm,
-  ModalForm,
-  DragWrapper,
-  SubmitButton,
-};
+export { CardSC, CreateCardForm, ModalForm, SubmitButton, CardsContainer };

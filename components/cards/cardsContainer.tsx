@@ -1,34 +1,24 @@
-import {
-  useState,
-  useCallback,
-  useContext,
-  Dispatch,
-  SetStateAction,
-} from 'react';
-import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { useContext } from 'react';
+import { Droppable } from 'react-beautiful-dnd';
 import { Typography } from '@material-ui/core';
 
 import { CardContext } from 'context/CardContext';
-import { CardItem } from './card';
 import {
-  getCards,
   updateCardPosition,
   updateCardStatus,
 } from 'services/resources/request/card';
-import { CardsContainer as Container, CardSC } from './sc';
 import { Card, CardActions } from 'services/resources/model/card.model';
+import { CardSC, CardsContainer as Container } from './sc';
+import { MemoizedRow } from './row';
 
 interface Props {
   columnId: string;
-  // draggableCard: null | CardType;
-  // setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
 }
 
 export const CardsContainer: React.FC<Props> = ({ columnId }) => {
   const { cards: allCards } = useContext(CardContext);
-  const cardsData = allCards[columnId];
 
-  const [isPointCards, setPointCards] = useState(false);
+  const cardsData = allCards[columnId];
 
   // const dragStartHandler = (
   //   e: React.DragEvent<HTMLDivElement>,
@@ -65,7 +55,6 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
   //     );
   //   }
   // };
-
   return (
     <Droppable
       droppableId={columnId}
@@ -77,40 +66,34 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
         >
-          <Typography>{cardsData[rubric.source.index].name}</Typography>
+          <Typography variant="subtitle2">
+            {cardsData[rubric.source.index].name}
+          </Typography>
         </CardSC.Container>
       )}
     >
-      {(provided) => (
-        <div
-          key={columnId}
-          ref={provided.innerRef}
-          {...provided.droppableProps}
-        >
-          <Container>
-            {cardsData?.map((el, index) => (
-              <Draggable key={el.id} draggableId={el.id} index={index}>
-                {(provided) => (
-                  <div
-                    ref={provided.innerRef}
-                    {...provided.draggableProps}
-                    {...provided.dragHandleProps}
-                    style={provided.draggableProps.style}
-                  >
-                    <CardItem
-                      cardId={el.id}
-                      description={el.description}
-                      name={el.name}
-                      cardPosition={el.position}
-                      columnId={columnId}
-                    />
-                  </div>
-                )}
-              </Draggable>
-            ))}
+      {(provided, snapshot) => {
+        const listHeight = snapshot.isDraggingOver
+          ? snapshot.draggingOverWith === snapshot.draggingFromThisWith
+            ? cardsData.length * 66
+            : (cardsData.length + 1) * 66
+          : cardsData.length * 66;
+
+        return (
+          <Container
+            key={columnId}
+            {...provided.droppableProps}
+            height={listHeight || 10}
+            width={254}
+            itemCount={cardsData.length}
+            itemSize={66}
+            outerRef={provided.innerRef}
+            itemData={cardsData}
+          >
+            {MemoizedRow}
           </Container>
-        </div>
-      )}
+        );
+      }}
     </Droppable>
   );
 };
