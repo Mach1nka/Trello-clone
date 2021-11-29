@@ -15,6 +15,7 @@ import {
 } from 'context/AlertContext';
 import { LoaderContext } from 'context/LoaderContext';
 import { ColumnContext } from 'context/ColumnContext';
+import { CardContext } from 'context/CardContext';
 import { Column, ColumnActions } from 'services/resources/model/column.model';
 import { updateColumnPosition } from 'services/resources/request/column';
 import { ErrorInfo } from 'services/HttpService/types';
@@ -23,10 +24,12 @@ import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
 import { CardDetails } from 'components/cards/modal/details';
 import { getRouterQuery } from 'utils/getRouterQuery';
+import { Card } from 'services/resources/model/card.model';
 
 export const ColumnsContainer: React.FC = () => {
   const { setLoaderState } = useContext(LoaderContext);
   const { columns, dispatch: columnDispatch } = useContext(ColumnContext);
+  const { cards: allCards, dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
   const { query } = useRouter();
@@ -34,8 +37,10 @@ export const ColumnsContainer: React.FC = () => {
   const boardId = getRouterQuery(query, 'boardId');
 
   const [columnsForDisplay, setColumns] = useState<Column[]>(columns);
+  const [cardsForDisplay, setCards] =
+    useState<{ [x: string]: Card[] }>(allCards);
 
-  const updateColumnDisplay = useCallback(
+  const updateColumnOrder = useCallback(
     ({ destination, source, draggableId }: DropResult) => {
       if (destination) {
         const draggableColumn = columns.find((el) => el.id === draggableId);
@@ -52,9 +57,22 @@ export const ColumnsContainer: React.FC = () => {
     [columns]
   );
 
+  const updateCardOrderInSameList = useCallback(
+    ({ destination, source, draggableId }: DropResult) => {
+      if (destination) {
+    
+      }
+    },
+    [allCards]
+  );
+
   useEffect(() => {
     setLoaderState(false);
   }, []);
+
+  useEffect(() => {
+    setCards(allCards);
+  }, [allCards]);
 
   useEffect(() => {
     setColumns(columns);
@@ -83,29 +101,36 @@ export const ColumnsContainer: React.FC = () => {
 
   const onDropHandler = useCallback(
     (data: DropResult) => {
-      if (data.destination && data.source.index !== data.destination?.index) {
-        updateColumnDisplay(data);
-        updateColumnPosition({
-          boardId: boardId,
-          columnId: data.draggableId,
-          newPosition: data.destination.index,
-        })
-          .then((resp) => {
-            columnDispatch({
-              type: ColumnActions.PUT_COLUMNS,
-              payload: resp.data,
-            });
+      console.log(data);
+      if (data.type === 'column') {
+        if (data.destination && data.source.index !== data.destination?.index) {
+          updateColumnOrder(data);
+          updateColumnPosition({
+            boardId: boardId,
+            columnId: data.draggableId,
+            newPosition: data.destination.index,
           })
-          .catch((err: ErrorInfo) => {
-            alertDispatch({
-              type: AlertActions.ADD,
-              payload: {
-                id: `${Date.now()}`,
-                message: err.message,
-                status: AlertStatusData.ERROR,
-              },
+            .then((resp) => {
+              columnDispatch({
+                type: ColumnActions.PUT_COLUMNS,
+                payload: resp.data,
+              });
+            })
+            .catch((err: ErrorInfo) => {
+              alertDispatch({
+                type: AlertActions.ADD,
+                payload: {
+                  id: `${Date.now()}`,
+                  message: err.message,
+                  status: AlertStatusData.ERROR,
+                },
+              });
             });
-          });
+        }
+      }
+
+      if (data.type === 'cards') {
+
       }
     },
     [query.boardId, columns]
@@ -114,7 +139,7 @@ export const ColumnsContainer: React.FC = () => {
   return (
     <ModalProvider>
       <SC.Container>
-        <DragDropContext onDragEnd={(res) => onDropHandler(res)}>
+        <DragDropContext onDragEnd={onDropHandler}>
           <Droppable droppableId={boardId} direction="horizontal" type="column">
             {(provided) => (
               <div
@@ -137,6 +162,7 @@ export const ColumnsContainer: React.FC = () => {
                           columnId={el.id}
                           boardId={boardId}
                           position={el.position}
+                          cards={cardsForDisplay[el.id] || []}
                         />
                       </div>
                     )}

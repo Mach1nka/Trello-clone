@@ -8,6 +8,8 @@ import {
   Theme,
 } from '@material-ui/core';
 
+const CardHeight = 66;
+
 const CardsContainer = styled(FixedSizeList)`
   &::-webkit-scrollbar {
     width: 4px;
@@ -113,4 +115,11 @@ const SubmitButton = styled(Button)`
   }`}
 `;
 
-export { CardSC, CreateCardForm, ModalForm, SubmitButton, CardsContainer };
+export {
+  CardSC,
+  CreateCardForm,
+  ModalForm,
+  SubmitButton,
+  CardsContainer,
+  CardHeight,
+};

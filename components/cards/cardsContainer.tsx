@@ -8,18 +8,15 @@ import {
   updateCardStatus,
 } from 'services/resources/request/card';
 import { Card, CardActions } from 'services/resources/model/card.model';
-import { CardSC, CardsContainer as Container } from './sc';
+import { CardSC, CardsContainer as Container, CardHeight } from './sc';
 import { MemoizedRow } from './row';
 
 interface Props {
   columnId: string;
+  cards: Card[];
 }
 
-export const CardsContainer: React.FC<Props> = ({ columnId }) => {
-  const { cards: allCards } = useContext(CardContext);
-
-  const cardsData = allCards[columnId];
-
+export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
   // const dragStartHandler = (
   //   e: React.DragEvent<HTMLDivElement>,
   //   card: CardType
@@ -67,7 +64,7 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
           ref={provided.innerRef}
         >
           <Typography variant="subtitle2">
-            {cardsData[rubric.source.index].name}
+            {cards[rubric.source.index].name}
           </Typography>
         </CardSC.Container>
       )}
@@ -75,9 +72,9 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
       {(provided, snapshot) => {
         const listHeight = snapshot.isDraggingOver
           ? snapshot.draggingOverWith === snapshot.draggingFromThisWith
-            ? cardsData.length * 66
-            : (cardsData.length + 1) * 66
-          : cardsData.length * 66;
+            ? cards.length * CardHeight
+            : (cards.length + 1) * CardHeight
+          : cards.length * CardHeight;
 
         return (
           <Container
@@ -85,10 +82,10 @@ export const CardsContainer: React.FC<Props> = ({ columnId }) => {
             {...provided.droppableProps}
             height={listHeight || 10}
             width={254}
-            itemCount={cardsData.length}
-            itemSize={66}
+            itemCount={cards.length}
+            itemSize={CardHeight}
             outerRef={provided.innerRef}
-            itemData={cardsData}
+            itemData={cards}
           >
             {MemoizedRow}
           </Container>

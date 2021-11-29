@@ -1,4 +1,4 @@
-import { NamedExoticComponent, memo } from 'react';
+import { MemoExoticComponent, memo } from 'react';
 import {
   Draggable,
   DraggingStyle,
@@ -31,10 +31,8 @@ const getStyle = ({ draggableStyle, virtualStyle }: StyleProps) => {
   return combined;
 };
 
-const Row: React.FC<RowProps> = ({ data: items, index, style }) => {
+const Row = ({ data: items, index, style }: RowProps): JSX.Element | null => {
   const item: Card = items[index];
-
-  console.log(style);
 
   if (!item) {
     return null;
@@ -65,4 +63,4 @@ const Row: React.FC<RowProps> = ({ data: items, index, style }) => {
   );
 };
 
-export const MemoizedRow: NamedExoticComponent<RowProps> = memo(Row, areEqual);
+export const MemoizedRow: MemoExoticComponent<any> = memo(Row, areEqual);

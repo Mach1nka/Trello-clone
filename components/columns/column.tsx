@@ -23,12 +23,14 @@ import { CreateCardModal } from '../cards/modal/create';
 import { deleteColumn } from 'services/resources/request/column';
 import { ColumnSC as SC } from './sc';
 import { ErrorInfo } from 'services/HttpService/types';
+import { Card } from 'services/resources/model/card.model';
 
 interface Props {
   columnName: string;
   columnId: string;
   position: number;
   boardId: string;
+  cards: Card[];
   //   draggableCard: null | CardType;
   //   setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
   //   dragStyles: {
@@ -42,6 +44,7 @@ export const ColumnItem: React.FC<Props> = ({
   columnId,
   boardId,
   position,
+  cards,
 }) => {
   const { dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
@@ -111,11 +114,7 @@ export const ColumnItem: React.FC<Props> = ({
             <MenuItem onClick={handleChangePosition}>Change position</MenuItem>
           </Menu>
         </SC.Header>
-        <CardsContainer
-          columnId={columnId}
-          // draggableCard={draggableCard}
-          // setDraggableCard={setDraggableCard}
-        />
+        <CardsContainer columnId={columnId} cards={cards} />
         <SC.Footer>
           <Button
             onClick={showCreateModal}

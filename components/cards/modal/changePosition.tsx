@@ -42,7 +42,7 @@ export const ChangeCardPosition: React.FC<Props> = ({
   const { cards, dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
-  const positionArr: number[] = cards[columnId].map((el) => el.position);
+  const positionArr: number[] = cards[columnId]?.map((el) => el.position) || [];
   const initialValues = { newPosition: cardPosition };
 
   const formHandler = useCallback(
