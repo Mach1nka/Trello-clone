@@ -1,16 +1,13 @@
-import { MemoExoticComponent, memo } from 'react';
 import {
   Draggable,
   DraggingStyle,
   NotDraggingStyle,
 } from 'react-beautiful-dnd';
-import { areEqual } from 'react-window';
 
 import { Card } from 'services/resources/model/card.model';
 import { CardItem } from './card';
 
 interface RowProps {
-  data: Card[];
   index: number;
   style: StyleProps;
 }
@@ -31,40 +28,39 @@ const getStyle = ({ draggableStyle, virtualStyle }: StyleProps) => {
   return combined;
 };
 
-export const Row = ({
-  data: items,
-  index,
-  style,
-}: RowProps): JSX.Element | null => {
-  const item: Card = items[index];
+const getRowRender =
+  (cards: Card[]) =>
+  // eslint-disable-next-line react/display-name
+  ({ index, style }: RowProps): JSX.Element | null => {
+    const item: Card = cards[index];
 
-  if (!item) {
-    return null;
-  }
+    if (!item) {
+      return null;
+    }
 
-  return (
-    <Draggable key={item.id} draggableId={item.id} index={index}>
-      {(provided) => (
-        <div
-          ref={provided.innerRef}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          style={getStyle({
-            draggableStyle: provided.draggableProps.style,
-            virtualStyle: style,
-          })}
-        >
-          <CardItem
-            cardId={item.id}
-            description={item.description}
-            name={item.name}
-            cardPosition={item.position}
-            columnId={item.columnId}
-          />
-        </div>
-      )}
-    </Draggable>
-  );
-};
+    return (
+      <Draggable key={item.id} draggableId={item.id} index={index}>
+        {(provided) => (
+          <div
+            ref={provided.innerRef}
+            {...provided.draggableProps}
+            {...provided.dragHandleProps}
+            style={getStyle({
+              draggableStyle: provided.draggableProps.style,
+              virtualStyle: style,
+            })}
+          >
+            <CardItem
+              cardId={item.id}
+              description={item.description}
+              name={item.name}
+              cardPosition={item.position}
+              columnId={item.columnId}
+            />
+          </div>
+        )}
+      </Draggable>
+    );
+  };
 
-export const MemoizedRow: MemoExoticComponent<any> = memo(Row);
+export { getRowRender };

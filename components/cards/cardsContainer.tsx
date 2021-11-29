@@ -1,15 +1,10 @@
-import { useContext } from 'react';
+import ReactDOM from 'react-dom';
 import { Droppable } from 'react-beautiful-dnd';
 import { Typography } from '@material-ui/core';
 
-import { CardContext } from 'context/CardContext';
-import {
-  updateCardPosition,
-  updateCardStatus,
-} from 'services/resources/request/card';
-import { Card, CardActions } from 'services/resources/model/card.model';
+import { Card } from 'services/resources/model/card.model';
 import { CardSC, CardsContainer as Container, CardHeight } from './sc';
-import { MemoizedRow } from './row';
+import { getRowRender } from './row';
 
 interface Props {
   columnId: string;
@@ -17,44 +12,6 @@ interface Props {
 }
 
 export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
-  // const dragStartHandler = (
-  //   e: React.DragEvent<HTMLDivElement>,
-  //   card: CardType
-  // ) => {
-  //   e.stopPropagation();
-  //   setDraggableCard(card);
-  //   setPointCards(true);
-  // };
-  // console.log(cards);
-  
-
-  // const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
-  //   e.preventDefault();
-  //   setDraggableCard(null);
-  //   setPointCards(false);
-  //   dispatchStyles({ type: 'RESET_BACKGROUND', payload: card.id });
-  //   if (draggableCard && draggableCard.columnId !== card.columnId) {
-  //     dispatch(
-  //       changeCardStatus({
-  //         cardId: draggableCard.id,
-  //         columnId: draggableCard.columnId,
-  //         newColumnId: card.columnId,
-  //         newPosition: card.position,
-  //       })
-  //     );
-  //     return;
-  //   }
-  //   if (draggableCard && draggableCard.position !== card.position) {
-  //     dispatch(
-  //       changeCardPosition({
-  //         columnId: draggableCard.columnId,
-  //         cardId: draggableCard.id,
-  //         newPosition: card.position,
-  //       })
-  //     );
-  //   }
-  // };
-
   return (
     <Droppable
       droppableId={columnId}
@@ -73,26 +30,37 @@ export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
       )}
     >
       {(provided, snapshot) => {
-        const listHeight = snapshot.isDraggingOver
+        const listHeight: number = snapshot.isDraggingOver
           ? snapshot.draggingOverWith === snapshot.draggingFromThisWith
             ? cards.length * CardHeight
             : (cards.length + 1) * CardHeight
           : cards.length * CardHeight;
 
+        const itemCount: number = snapshot.isUsingPlaceholder
+          ? cards.length + 1
+          : cards.length;
+
         return (
           <Container
             key={columnId}
-            onItemsRendered={() => console.log('render')}
-            {...provided.droppableProps}
             height={listHeight || 10}
             width={254}
-            itemCount={cards.length}
-            itemSize={CardHeight}
-            outerRef={provided.innerRef}
-            itemData={cards}
-          >
-            {MemoizedRow}
-          </Container>
+            rowCount={itemCount}
+            rowHeight={CardHeight}
+            style={{ overflowY: 'auto' }}
+            ref={(ref: any) => {
+              // react-virtualized has no way to get the list's ref that I can so
+              // So we use the `ReactDOM.findDOMNode(ref)` escape hatch to get the ref
+              if (ref) {
+                // eslint-disable-next-line react/no-find-dom-node
+                const whatHasMyLifeComeTo = ReactDOM.findDOMNode(ref);
+                if (whatHasMyLifeComeTo instanceof HTMLElement) {
+                  provided.innerRef(whatHasMyLifeComeTo);
+                }
+              }
+            }}
+            rowRenderer={getRowRender(cards)}
+          />
         );
       }}
     </Droppable>

@@ -4,6 +4,7 @@ import {
   Droppable,
   Draggable,
   DropResult,
+  DraggableLocation,
 } from 'react-beautiful-dnd';
 import { useRouter } from 'next/router';
 
@@ -18,13 +19,17 @@ import { ColumnContext } from 'context/ColumnContext';
 import { CardContext } from 'context/CardContext';
 import { Column, ColumnActions } from 'services/resources/model/column.model';
 import { updateColumnPosition } from 'services/resources/request/column';
+import {
+  updateCardPosition,
+  updateCardStatus,
+} from 'services/resources/request/card';
 import { ErrorInfo } from 'services/HttpService/types';
 import { ColumnItem } from './column';
 import { CreateColumn } from './createNewColumn';
 import { ColumnsContainer as SC } from './sc';
 import { CardDetails } from 'components/cards/modal/details';
 import { getRouterQuery } from 'utils/getRouterQuery';
-import { Card } from 'services/resources/model/card.model';
+import { Card, CardActions } from 'services/resources/model/card.model';
 
 export const ColumnsContainer: React.FC = () => {
   const { setLoaderState } = useContext(LoaderContext);
@@ -39,6 +44,8 @@ export const ColumnsContainer: React.FC = () => {
   const [columnsForDisplay, setColumns] = useState<Column[]>(columns);
   const [cardsForDisplay, setCards] =
     useState<{ [x: string]: Card[] }>(allCards);
+
+  console.log(cardsForDisplay);
 
   const updateColumnOrder = useCallback(
     ({ destination, source, draggableId }: DropResult) => {
@@ -60,20 +67,45 @@ export const ColumnsContainer: React.FC = () => {
   const updateCardOrderInSameList = useCallback(
     ({ destination, source, draggableId }: DropResult) => {
       if (destination) {
-        const columnCards: Card[] = allCards[source.droppableId];
-        const draggableCard: Card | undefined = columnCards.find(
+        const sourceColumn: Card[] = allCards[source.droppableId];
+        const draggableCard: Card | undefined = sourceColumn.find(
           (el) => el.id === draggableId
         );
         if (draggableCard) {
-          const updatedCards: Card[] = columnCards;
+          const updatedCards: Card[] = sourceColumn;
 
           updatedCards.splice(source.index, 1);
           updatedCards.splice(destination.index, 0, draggableCard);
-          console.log(updatedCards);
 
           setCards((prev) => ({
             ...prev,
             [source.droppableId]: updatedCards,
+          }));
+        }
+      }
+    },
+    [allCards]
+  );
+
+  const updateCardOrderBetweenList = useCallback(
+    ({ destination, source, draggableId }: DropResult) => {
+      if (destination) {
+        const sourceColumn: Card[] = allCards[source.droppableId];
+        const destinationColumn: Card[] = allCards[destination.droppableId];
+        const draggableCard: Card | undefined = sourceColumn.find(
+          (el) => el.id === draggableId
+        );
+        if (draggableCard) {
+          const newSourceColumn = sourceColumn;
+          newSourceColumn.splice(source.index, 1);
+
+          const newDestinationColumn = destinationColumn;
+          newDestinationColumn.splice(destination.index, 0, draggableCard);
+
+          setCards((prev) => ({
+            ...prev,
+            [source.droppableId]: newSourceColumn,
+            [destination.droppableId]: newDestinationColumn,
           }));
         }
       }
@@ -92,38 +124,19 @@ export const ColumnsContainer: React.FC = () => {
   useEffect(() => {
     setColumns(columns);
   }, [columns]);
-  // const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
-  // const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(
-  //   null
-  // );
-
-  // const columnForDnD = useAppSelector((state) => state.cardsData);
-
-  // const changeStatus = useCallback(
-  //   (column: ColumnType) => {
-  //     dispatch(
-  //       changeCardStatus({
-  //         cardId: draggableCard.id,
-  //         columnId: draggableCard.columnId,
-  //         newColumnId: column.id,
-  //       })
-  //     );
-  //     setDraggableCard(null);
-  //     dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
-  //   },
-  //   [draggableCard]
-  // );
 
   const onDropHandler = useCallback(
     (data: DropResult) => {
-      console.log(data);
+      const source: DraggableLocation = data.source;
+      const destination: DraggableLocation | undefined = data.destination;
+
       if (data.type === 'column') {
-        if (data.destination && data.source.index !== data.destination?.index) {
+        if (destination && source.index !== destination?.index) {
           updateColumnOrder(data);
           updateColumnPosition({
             boardId: boardId,
             columnId: data.draggableId,
-            newPosition: data.destination.index,
+            newPosition: destination.index,
           })
             .then((resp) => {
               columnDispatch({
@@ -146,16 +159,68 @@ export const ColumnsContainer: React.FC = () => {
       }
 
       if (data.type === 'cards') {
-        if (
-          data.destination &&
-          data.source.droppableId === data.destination.droppableId
-        ) {
-          updateCardOrderInSameList(data);
+        if (destination) {
+          if (source.droppableId === destination.droppableId) {
+            updateCardOrderInSameList(data);
+            updateCardPosition({
+              cardId: data.draggableId,
+              columnId: destination.droppableId,
+              newPosition: destination.index,
+            })
+              .then((resp) => {
+                cardDispatch({
+                  type: CardActions.PUT_CARDS,
+                  payload: resp.data,
+                });
+              })
+              .catch((err: ErrorInfo) => {
+                alertDispatch({
+                  type: AlertActions.ADD,
+                  payload: {
+                    id: `${Date.now()}`,
+                    message: err.message,
+                    status: AlertStatusData.ERROR,
+                  },
+                });
+              });
+            return;
+          }
+          updateCardOrderBetweenList(data);
+          updateCardStatus({
+            cardId: data.draggableId,
+            columnId: source.droppableId,
+            newColumnId: destination.droppableId,
+            newPosition: destination.index,
+          })
+            .then((resp) => {
+              cardDispatch({
+                type: CardActions.PUT_CARDS,
+                payload: resp.data.newColumn,
+              });
+              cardDispatch({
+                type: CardActions.PUT_CARDS,
+                payload: resp.data.oldColumn,
+              });
+            })
+            .catch((err: ErrorInfo) => {
+              alertDispatch({
+                type: AlertActions.ADD,
+                payload: {
+                  id: `${Date.now()}`,
+                  message: err.message,
+                  status: AlertStatusData.ERROR,
+                },
+              });
+            });
         }
-        return;
       }
     },
-    [query.boardId, columns]
+    [
+      boardId,
+      updateCardOrderBetweenList,
+      updateCardOrderInSameList,
+      updateColumnOrder,
+    ]
   );
 
   return (

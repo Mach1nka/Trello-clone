@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { FixedSizeList } from 'react-window';
+import { List } from 'react-virtualized';
+import 'react-virtualized/styles.css';
 import {
   Typography,
   DialogActions,
@@ -10,7 +11,7 @@ import {
 
 const CardHeight = 66;
 
-const CardsContainer = styled(FixedSizeList)`
+const CardsContainer = styled(List)`
   &::-webkit-scrollbar {
     width: 4px;
   }
