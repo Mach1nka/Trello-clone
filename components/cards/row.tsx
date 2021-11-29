@@ -31,7 +31,11 @@ const getStyle = ({ draggableStyle, virtualStyle }: StyleProps) => {
   return combined;
 };
 
-const Row = ({ data: items, index, style }: RowProps): JSX.Element | null => {
+export const Row = ({
+  data: items,
+  index,
+  style,
+}: RowProps): JSX.Element | null => {
   const item: Card = items[index];
 
   if (!item) {
@@ -63,4 +67,4 @@ const Row = ({ data: items, index, style }: RowProps): JSX.Element | null => {
   );
 };
 
-export const MemoizedRow: MemoExoticComponent<any> = memo(Row, areEqual);
+export const MemoizedRow: MemoExoticComponent<any> = memo(Row);

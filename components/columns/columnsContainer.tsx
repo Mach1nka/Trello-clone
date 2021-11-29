@@ -60,7 +60,22 @@ export const ColumnsContainer: React.FC = () => {
   const updateCardOrderInSameList = useCallback(
     ({ destination, source, draggableId }: DropResult) => {
       if (destination) {
-    
+        const columnCards: Card[] = allCards[source.droppableId];
+        const draggableCard: Card | undefined = columnCards.find(
+          (el) => el.id === draggableId
+        );
+        if (draggableCard) {
+          const updatedCards: Card[] = columnCards;
+
+          updatedCards.splice(source.index, 1);
+          updatedCards.splice(destination.index, 0, draggableCard);
+          console.log(updatedCards);
+
+          setCards((prev) => ({
+            ...prev,
+            [source.droppableId]: updatedCards,
+          }));
+        }
       }
     },
     [allCards]
@@ -127,10 +142,17 @@ export const ColumnsContainer: React.FC = () => {
               });
             });
         }
+        return;
       }
 
       if (data.type === 'cards') {
-
+        if (
+          data.destination &&
+          data.source.droppableId === data.destination.droppableId
+        ) {
+          updateCardOrderInSameList(data);
+        }
+        return;
       }
     },
     [query.boardId, columns]

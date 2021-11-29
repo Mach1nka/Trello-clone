@@ -25,6 +25,8 @@ export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
   //   setDraggableCard(card);
   //   setPointCards(true);
   // };
+  // console.log(cards);
+  
 
   // const dropHandler = (e: React.DragEvent<HTMLDivElement>, card: CardType) => {
   //   e.preventDefault();
@@ -52,6 +54,7 @@ export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
   //     );
   //   }
   // };
+
   return (
     <Droppable
       droppableId={columnId}
@@ -79,6 +82,7 @@ export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
         return (
           <Container
             key={columnId}
+            onItemsRendered={() => console.log('render')}
             {...provided.droppableProps}
             height={listHeight || 10}
             width={254}
