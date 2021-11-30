@@ -45,8 +45,6 @@ export const ColumnsContainer: React.FC = () => {
   const [cardsForDisplay, setCards] =
     useState<{ [x: string]: Card[] }>(allCards);
 
-  console.log(cardsForDisplay);
-
   const updateColumnOrder = useCallback(
     ({ destination, source, draggableId }: DropResult) => {
       if (destination) {

@@ -23,15 +23,21 @@ interface PutUpdatedAction {
   payload: Card;
 }
 
-interface DeleteCardsAction {
-  type: CardActions.DELETE_CARDS_DATA;
+interface DeleteColumnCardsAction {
+  type: CardActions.DELETE_COLUMN_CARDS;
+  payload: Pick<Card, 'columnId'>;
+}
+
+interface ResetCardsAction {
+  type: CardActions.RESET_CARDS_DATA;
 }
 
 export type Action =
   | PutCardsAction
   | PutCreatedCardAction
   | PutUpdatedAction
-  | DeleteCardsAction;
+  | DeleteColumnCardsAction
+  | ResetCardsAction;
 
 interface CardContextValue extends CardData {
   dispatch: Dispatch<Action>;
@@ -69,7 +75,16 @@ function reducer(state: CardData, action: Action): CardData {
           [action.payload.columnId]: updateCardData(state, action.payload),
         },
       };
-    case CardActions.DELETE_CARDS_DATA:
+    case CardActions.DELETE_COLUMN_CARDS:
+      const columnKey = action.payload.columnId;
+      const { [columnKey]: value, ...withoutDeletedColumn } = state.cards;
+      return {
+        ...state,
+        cards: {
+          ...withoutDeletedColumn,
+        },
+      };
+    case CardActions.RESET_CARDS_DATA:
       return { ...state, ...initialState };
     default:
       return state;

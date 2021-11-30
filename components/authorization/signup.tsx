@@ -53,7 +53,7 @@ export const SignUp: React.FC = () => {
     initialValues,
     validationSchema,
     onSubmit: (values) => {
-      // @note context Loader
+      setLoaderState(true);
       registerUser({ login: values.login, password: values.password })
         .then((resp) => {
           authDispatch({ type: AuthActions.LOG_IN, payload: resp.data });

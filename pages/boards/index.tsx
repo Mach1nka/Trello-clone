@@ -1,11 +1,10 @@
 import { useContext, useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next/types';
-import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
 
 import { getBoards } from 'services/resources/request/board';
 import { BoardContext } from 'context/BoardContext';
-import { BoardsList } from 'components/boardList';
+import { BoardsList } from 'components/boardList/boardList';
 import { withUser } from 'hoc/withUser';
 import { httpService } from 'services/HttpService';
 import { BaseResponse } from 'services/HttpService/types';
@@ -21,7 +20,6 @@ interface Props {
 
 const BoardOverviewPage: NextPage<Props> = ({ boards }) => {
   const { dispatch: boardDispatch } = useContext(BoardContext);
-  const router = useRouter();
 
   useEffect(() => {
     boardDispatch({

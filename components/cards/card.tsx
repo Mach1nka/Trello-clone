@@ -91,7 +91,7 @@ export const CardItem: React.FC<Props> = ({
     });
     modalDispatch({ type: ModalActions.UPDATE_DISPLAY, payload: true });
     setAnchorEl(null);
-  }, []);
+  }, [cardId, columnId, description, name]);
 
   const onCloseMenu = useCallback(() => setAnchorEl(null), []);
 

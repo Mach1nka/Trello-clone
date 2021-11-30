@@ -4,9 +4,6 @@ import { Container, Typography } from '@material-ui/core';
 import { BoardItem } from './boardItem';
 import { BoardContext } from 'context/BoardContext';
 import { LoaderContext } from 'context/LoaderContext';
-// import { deleteColumnsData } from '../../store/column/actions';
-// import { deleteCardsData } from '../../store/card/actions';
-// import { resetModalData } from '../../store/modals/actions';
 import { BoardsContainer, BoardSC as SC } from './sc';
 
 export const BoardsList: React.FC = () => {
@@ -15,10 +12,6 @@ export const BoardsList: React.FC = () => {
 
   useEffect(() => {
     setLoaderState(false);
-    // dispatch(deleteColumnsData());
-    // dispatch(deleteCardsData());
-    // dispatch(resetModalData());
-    //   setLoaderState(ownBoards.length || sharedBoards.length ? false : );
   }, []);
 
   return (

@@ -1,6 +1,5 @@
 import { useContext, useEffect } from 'react';
 import { GetServerSideProps, NextPage } from 'next/types';
-import { useRouter } from 'next/router';
 import { getCookie } from 'cookies-next';
 
 import { CardContext } from 'context/CardContext';
@@ -26,7 +25,6 @@ interface Props {
 const BoardDetailPage: NextPage<Props> = ({ columns, cards }) => {
   const { dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: cardDispatch } = useContext(CardContext);
-  const router = useRouter();
 
   useEffect(() => {
     columnDispatch({

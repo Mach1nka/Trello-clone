@@ -1,14 +1,6 @@
 import styled from 'styled-components';
 import { Typography, Button, Theme } from '@material-ui/core';
 
-interface DragWrapperProps {
-  isPointColumns: boolean;
-}
-
-interface ColumnProps {
-  dragStyles: string | null;
-}
-
 interface ShadowColumnProps {
   isDragging: boolean;
 }
@@ -34,23 +26,7 @@ const ColumnsContainer = {
   `,
 };
 
-const DragWrapper = styled.div<DragWrapperProps>`
-  & > * {
-    pointer-events: ${(props) => (props.isPointColumns ? 'none' : 'auto')};
-  }
-`;
-
 const ColumnSC = {
-  // @note doesn't use
-  Container: styled.div<ColumnProps>`
-    width: ${ColumnWidth}px;
-    height: 100%;
-    margin: 0 4px;
-    border-radius: 5px;
-    cursor: pointer;
-    background-color: ${(props) =>
-      props.dragStyles ? `${props.dragStyles} !important` : ''};
-  `,
   Content: styled.div`
     display: flex;
     flex-direction: column;
@@ -106,4 +82,4 @@ const SubmitButton = styled(Button)`
   }`}
 `;
 
-export { ColumnsContainer, ColumnSC, ModalForm, SubmitButton, DragWrapper };
+export { ColumnsContainer, ColumnSC, ModalForm, SubmitButton };

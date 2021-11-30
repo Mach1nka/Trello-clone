@@ -33,7 +33,7 @@ export const ShareBoardModal: React.FC<Props> = ({
   setModalView,
   boardId,
 }) => {
-  const { alerts, dispatch: alertDispatch } = useContext(AlertContext);
+  const { dispatch: alertDispatch } = useContext(AlertContext);
   const [searchUserLogin, setUserLogin] = useState('');
   const users = useLoadUsers(searchUserLogin);
 
@@ -45,7 +45,7 @@ export const ShareBoardModal: React.FC<Props> = ({
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: `${alerts.length}-${boardId}`,
+              id: `${Date.now()}`,
               message: 'Board has shared successfully',
               status: AlertStatusData.SUCCESS,
             },
@@ -55,7 +55,7 @@ export const ShareBoardModal: React.FC<Props> = ({
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: `${alerts.length}-${boardId}`,
+              id: `${Date.now}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },
@@ -67,8 +67,6 @@ export const ShareBoardModal: React.FC<Props> = ({
   );
 
   const onClose = useCallback(() => {
-    // setUserLogin('');
-    // dispatch(setBoardIdForModal({ boardId: '' }));
     setModalView(false);
   }, []);
 

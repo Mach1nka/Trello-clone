@@ -34,13 +34,6 @@ const CardsContainer = styled(List)`
   }
 `;
 
-// const CardsContainer = styled.div`
-//   display: flex;
-//   flex-grow: 1;
-//   flex-direction: column;
-//   overflow-x: auto;
-// `;
-
 const CardSC = {
   Container: styled.div`
     display: flex;
@@ -69,6 +62,15 @@ const CardSC = {
     padding-top: 5px;
     padding-bottom: 5px;
     min-height: 30px;
+  `,
+  ColumnInfo: styled.div`
+    display: flex;
+    align-items: center;
+  `,
+  ColumnSelect: styled(TextField)`
+    &.MuiFormControl-root {
+      margin-left: 20px;
+    }
   `,
   DialogActions: styled(DialogActions)`
     justify-content: space-between !important;

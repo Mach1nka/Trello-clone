@@ -32,9 +32,6 @@ const AuthorizationSC = {
       }
     `}
   `,
-  ErrorButton: styled(Button)`
-    color: #f07d39;
-  `,
 };
 
 export { AuthorizationSC };

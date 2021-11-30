@@ -11,26 +11,23 @@ import { getRouterQuery } from 'utils/getRouterQuery';
 
 export const Header: React.FC = () => {
   const { ownBoards } = useContext(BoardContext);
+
   const [modalView, setModalView] = useState(false);
-  const { query, pathname, push: routerPush } = useRouter();
   const [mobileState, setMobileState] = useState(false);
+
+  const { query, pathname, push: routerPush } = useRouter();
 
   const { logout } = useLogout();
 
   const routerBoardName = getRouterQuery(query, 'boardName');
   const routerBoardId = getRouterQuery(query, 'boardId');
 
-  const pathLength = 14;
-  const boardName =
-    pathname.slice(0, pathLength) === '/boards/board/' ? routerBoardName : '';
-  const boardId =
-    pathname.slice(0, pathLength) === '/boards/board/' ? routerBoardId : '';
-  const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
+  const isOwnBoard = ownBoards.findIndex((el) => el.id === routerBoardId);
   const isMainPage = pathname === '/boards';
 
   const handleShareButton = useCallback(() => {
     setModalView(true);
-  }, [boardId]);
+  }, []);
 
   const handleLogOut = useCallback(() => {
     logout();
@@ -74,13 +71,13 @@ export const Header: React.FC = () => {
               </SC.NavButton>
             )}
           </div>
-          <SC.BoardName variant="h6">{boardName}</SC.BoardName>
+          <SC.BoardName variant="h6">{routerBoardName}</SC.BoardName>
         </>
       ) : (
         <Sidebar
           handleBoardsButton={handleBoardsButton}
           handleShareButton={handleShareButton}
-          boardName={boardName}
+          boardName={routerBoardName}
           isOwnBoard={isOwnBoard}
         />
       )}
@@ -105,7 +102,7 @@ export const Header: React.FC = () => {
       <ShareBoardModal
         modalView={modalView}
         setModalView={setModalView}
-        boardId={boardId}
+        boardId={routerBoardId}
       />
     </>
   );

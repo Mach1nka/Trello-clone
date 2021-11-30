@@ -3,7 +3,6 @@ import {
   Card,
   Typography,
   Fab,
-  DialogTitle,
   Button,
   FormControl,
   Theme,
@@ -68,9 +67,6 @@ const BoardSC = {
     width: 22px !important;
     height: 22px !important;
     min-height: unset !important;
-  `,
-  DialogTitle: styled(DialogTitle)`
-    text-align: center;
   `,
   FormControl: styled(FormControl)`
     width: 260px;

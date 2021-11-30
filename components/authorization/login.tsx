@@ -94,5 +94,3 @@ export const LogIn: React.FC = () => {
     </SC.LogInForm>
   );
 };
-
-export default LogIn;

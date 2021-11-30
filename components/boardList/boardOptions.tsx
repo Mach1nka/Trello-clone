@@ -14,10 +14,6 @@ import {
 import { LoaderContext } from 'context/LoaderContext';
 import { BoardActions } from 'services/resources/model/board.model';
 import { deleteBoard } from 'services/resources/request/board';
-// import {
-//   setModalsStates,
-//   setBoardIdForModal,
-// } from '../../../store/modals/actions';
 import { RenameBoardModal } from './modal/rename';
 import { ShareBoardModal } from './modal/share';
 import { BoardSC as SC } from './sc';
@@ -28,7 +24,7 @@ interface Props {
 
 export const BoardOptions: React.FC<Props> = ({ boardId }) => {
   const { user } = useContext(AuthContext);
-  const { alerts, dispatch: alertDispatch } = useContext(AlertContext);
+  const { dispatch: alertDispatch } = useContext(AlertContext);
   const { dispatch: boardDispatch } = useContext(BoardContext);
   const { setLoaderState } = useContext(LoaderContext);
 
@@ -59,7 +55,7 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
           alertDispatch({
             type: AlertActions.ADD,
             payload: {
-              id: `${alerts.length}-${err.message}`,
+              id: `${Date.now()}`,
               message: err.message,
               status: AlertStatusData.ERROR,
             },
@@ -67,15 +63,13 @@ export const BoardOptions: React.FC<Props> = ({ boardId }) => {
         })
         .finally(() => setLoaderState(false));
     },
-    []
+    [user.id, boardId]
   );
 
   const onShareHandler = useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
       e.preventDefault();
       setShareModalView(true);
-      //   dispatch(setBoardIdForModal({ boardId }));
-      //   dispatch(setModalsStates({ isShareModalVisible: true }));
     },
     []
   );

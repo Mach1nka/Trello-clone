@@ -66,15 +66,3 @@ export const CardsContainer: React.FC<Props> = ({ columnId, cards }) => {
     </Droppable>
   );
 };
-
-// <DragWrapper
-//   key={el.id}
-//   isPointCards={isPointCards}
-//   draggable
-//   onDragStart={(e) => dragStartHandler(e, el)}
-//   onDragEnd={() => dragEndHandler(el)}
-//   onDragLeave={() => dragLeaveHandler(el)}
-//   onDragEnter={dragEnterHandler}
-//   onDragOver={(e) => dragOverHandler(e, el)}
-//   onDrop={(e) => dropHandler(e, el)}
-// ></DragWrapper>;

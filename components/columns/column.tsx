@@ -8,6 +8,7 @@ import {
   AlertContext,
   AlertStatusData,
 } from 'context/AlertContext';
+import { CardContext } from 'context/CardContext';
 import { ColumnContext } from 'context/ColumnContext';
 import { ColumnActions } from 'services/resources/model/column.model';
 import { RenameColumnModal } from './modal/rename';
@@ -17,7 +18,7 @@ import { CreateCardModal } from '../cards/modal/create';
 import { deleteColumn } from 'services/resources/request/column';
 import { ColumnSC as SC } from './sc';
 import { ErrorInfo } from 'services/HttpService/types';
-import { Card } from 'services/resources/model/card.model';
+import { Card, CardActions } from 'services/resources/model/card.model';
 
 interface Props {
   columnName: string;
@@ -25,12 +26,6 @@ interface Props {
   position: number;
   boardId: string;
   cards: Card[];
-  //   draggableCard: null | CardType;
-  //   setDraggableCard: Dispatch<SetStateAction<CardType | null>>;
-  //   dragStyles: {
-  //     columnId: string;
-  //     backgroundColor: string;
-  //   };
 }
 
 export const ColumnItem: React.FC<Props> = ({
@@ -40,6 +35,7 @@ export const ColumnItem: React.FC<Props> = ({
   position,
   cards,
 }) => {
+  const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
 
@@ -55,9 +51,13 @@ export const ColumnItem: React.FC<Props> = ({
 
   const handleDelete = useCallback(() => {
     deleteColumn({ columnId, boardId })
-      .then((resp) =>
-        columnDispatch({ type: ColumnActions.PUT_COLUMNS, payload: resp.data })
-      )
+      .then((resp) => {
+        columnDispatch({ type: ColumnActions.PUT_COLUMNS, payload: resp.data });
+        cardDispatch({
+          type: CardActions.DELETE_COLUMN_CARDS,
+          payload: { columnId },
+        });
+      })
       .catch((err: ErrorInfo) =>
         alertDispatch({
           type: AlertActions.ADD,

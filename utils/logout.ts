@@ -19,7 +19,7 @@ export const useLogout = (): { logout: () => void } => {
     authDispatch({ type: AuthActions.LOG_OUT });
     boardDispatch({ type: BoardActions.DELETE_BOARDS_DATA });
     columnDispatch({ type: ColumnActions.DELETE_COLUMNS_DATA });
-    cardDispatch({ type: CardActions.DELETE_CARDS_DATA });
+    cardDispatch({ type: CardActions.RESET_CARDS_DATA });
   }, []);
   return { logout };
 };

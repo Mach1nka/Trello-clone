@@ -14,7 +14,7 @@ interface RowProps {
 
 interface StyleProps {
   draggableStyle: DraggingStyle | NotDraggingStyle | undefined;
-  virtualStyle: Record<string, any>; // @note This type is not described in react-window or react-dnd
+  virtualStyle: Record<string, any>; // @note This type is not described in react-virtualized or react-dnd
 }
 
 const getStyle = ({ draggableStyle, virtualStyle }: StyleProps) => {

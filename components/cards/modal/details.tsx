@@ -1,10 +1,4 @@
-import {
-  useState,
-  useCallback,
-  useContext,
-  Dispatch,
-  SetStateAction,
-} from 'react';
+import { useState, useCallback, useContext } from 'react';
 import { useFormik } from 'formik';
 import {
   Dialog,
@@ -13,7 +7,6 @@ import {
   Button,
   Typography,
   IconButton,
-  TextField,
   MenuItem,
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -242,9 +235,9 @@ export const CardDetails: React.FC = () => {
             />
           </form>
         )}
-        <Typography variant="body2">
-          It is in column
-          <TextField
+        <SC.ColumnInfo>
+          <Typography variant="body2">It is in column</Typography>
+          <SC.ColumnSelect
             id="column-select"
             select
             value={formik.values.status}
@@ -255,8 +248,8 @@ export const CardDetails: React.FC = () => {
                 {option.columnName}
               </MenuItem>
             ))}
-          </TextField>
-        </Typography>
+          </SC.ColumnSelect>
+        </SC.ColumnInfo>
       </DialogTitle>
       <DialogContent>
         <Typography variant="button">Description</Typography>
