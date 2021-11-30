@@ -43,7 +43,7 @@ const catchHandler = (err: ErrorResponse) => {
 
   if (err.statusCode === ErrorCode.InvalidCredentials) {
     httpService.setAuthToken(null);
-    removeCookies('token');
+    removeCookies('authData');
     EventBus.publish(PubSubEvents.TokenUpdate);
   }
 

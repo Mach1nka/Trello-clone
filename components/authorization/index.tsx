@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback, useContext } from 'react';
 import { useRouter } from 'next/router';
 import { Container, Tab } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
-import { setCookies, removeCookies } from 'cookies-next';
+import { setCookies } from 'cookies-next';
 
 import { LoaderContext } from 'context/LoaderContext';
 import { AuthContext } from 'context/AuthContext';
@@ -20,14 +20,13 @@ export const Authorization: React.FC = () => {
   const { logout } = useLogout();
 
   useEffect(() => {
-    removeCookies('token');
     logout();
     setLoaderState(false);
   }, []);
 
   useEffect(() => {
     if (user.token) {
-      setCookies('token', user.token);
+      setCookies('authData', user, { maxAge: 60 * 10 });
       router.push({
         pathname: '/boards',
       });

@@ -13,6 +13,7 @@ import {
   BoardData,
   BoardDataServer,
 } from 'services/resources/model/board.model';
+import { AuthData } from 'services/resources/model/auth.model';
 
 interface Props {
   boards: BoardData;
@@ -32,10 +33,13 @@ const BoardOverviewPage: NextPage<Props> = ({ boards }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ res, req }) => {
-  const token = getCookie('token', { req, res });
+  const authDataJson = getCookie('authData', { req, res });
+  const authData: AuthData | null =
+    authDataJson && JSON.parse(authDataJson.toString());
+
   try {
-    if (typeof token === 'string') {
-      httpService.setAuthToken(token);
+    if (authData) {
+      httpService.setAuthToken(authData.token);
       const { data }: BaseResponse<BoardDataServer> = await getBoards();
       return {
         props: {

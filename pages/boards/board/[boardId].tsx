@@ -16,6 +16,7 @@ import {
   CardDataServer,
 } from 'services/resources/model/card.model';
 import { getRouterQuery } from 'utils/getRouterQuery';
+import { AuthData } from 'services/resources/model/auth.model';
 
 interface Props {
   columns: Column[];
@@ -44,10 +45,13 @@ export const getServerSideProps: GetServerSideProps = async ({
   req,
   params,
 }) => {
-  const token = getCookie('token', { req, res });
+  const authDataJson = getCookie('authData', { req, res });
+  const authData: AuthData | null =
+    authDataJson && JSON.parse(authDataJson.toString());
+
   try {
-    if (typeof token === 'string') {
-      httpService.setAuthToken(token);
+    if (authData) {
+      httpService.setAuthToken(authData.token);
       // @note params type must be improved for getServerSideProps
       const { data: columns }: BaseResponse<Column[]> = await getColumns(
         getRouterQuery(params, 'boardId')

@@ -2,6 +2,7 @@ import { useEffect, useCallback, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import { removeCookies } from 'cookies-next';
 
+import { LoaderContext } from 'context/LoaderContext';
 import { BoardContext } from 'context/BoardContext';
 import { ShareBoardModal } from '../../boardList/modal/share';
 import { Sidebar } from './sidebar';
@@ -11,6 +12,7 @@ import { getRouterQuery } from 'utils/getRouterQuery';
 
 export const Header: React.FC = () => {
   const { ownBoards } = useContext(BoardContext);
+  const { setLoaderState } = useContext(LoaderContext);
 
   const [modalView, setModalView] = useState(false);
   const [mobileState, setMobileState] = useState(false);
@@ -30,9 +32,9 @@ export const Header: React.FC = () => {
   }, []);
 
   const handleLogOut = useCallback(() => {
+    setLoaderState(true);
+    removeCookies('authData');
     logout();
-    removeCookies('token');
-    routerPush('/login');
   }, []);
 
   const handleBoardsButton = useCallback(() => {

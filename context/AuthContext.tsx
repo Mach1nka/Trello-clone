@@ -1,4 +1,5 @@
 import { useEffect, useReducer, Context, createContext, Dispatch } from 'react';
+import { getCookie } from 'cookies-next';
 
 import { AuthActions, AuthData } from 'services/resources/model/auth.model';
 import { httpService } from 'services/HttpService';
@@ -46,10 +47,16 @@ export const AuthContext: Context<AuthContextValue> =
 const AuthProvider: React.FC = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
+  const authDataJson = getCookie('authData');
+  const authData: AuthData | null =
+    authDataJson && JSON.parse(authDataJson.toString());
+
   useEffect(() => {
-    if (state.token) {
-      httpService.setAuthToken(state.token);
+    if (authData) {
+      dispatch({ type: AuthActions.LOG_IN, payload: authData });
     }
+
+    httpService.setAuthToken(state.token);
 
     EventBus.subscribe(PubSubEvents.TokenUpdate, () =>
       dispatch({ type: AuthActions.LOG_OUT })
