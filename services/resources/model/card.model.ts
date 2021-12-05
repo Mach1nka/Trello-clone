@@ -17,7 +17,6 @@ export interface Card {
 export interface DataForCreatingCard {
   columnId: string;
   description: string;
-  position: number;
   name: string;
 }
 

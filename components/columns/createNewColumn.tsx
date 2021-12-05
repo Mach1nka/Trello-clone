@@ -7,10 +7,9 @@ import { ColumnSC as SC } from './sc';
 
 interface Props {
   boardId: string;
-  newPosition: number;
 }
 
-export const CreateColumn: React.FC<Props> = ({ boardId, newPosition }) => {
+export const CreateColumn: React.FC<Props> = ({ boardId }) => {
   const [isOpen, setModalView] = useState(false);
 
   const onClick = useCallback(() => setModalView(true), []);
@@ -31,7 +30,6 @@ export const CreateColumn: React.FC<Props> = ({ boardId, newPosition }) => {
         setModalView={setModalView}
         isOpen={isOpen}
         boardId={boardId}
-        newPosition={newPosition}
       />
     </>
   );

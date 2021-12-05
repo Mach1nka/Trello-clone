@@ -19,7 +19,6 @@ export interface ColumnData {
 export interface DataForCreatingColumn {
   boardId: string;
   name: string;
-  position: number;
 }
 
 export interface DataForRenamingColumn {

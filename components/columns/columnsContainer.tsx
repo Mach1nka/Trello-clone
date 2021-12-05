@@ -258,7 +258,7 @@ export const ColumnsContainer: React.FC = () => {
             )}
           </Droppable>
         </DragDropContext>
-        <CreateColumn boardId={boardId} newPosition={columns.length} />
+        <CreateColumn boardId={boardId} />
       </SC.Container>
       <CardDetails />
     </ModalProvider>

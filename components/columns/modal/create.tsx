@@ -28,14 +28,12 @@ interface Props {
   isOpen: boolean;
   setModalView: Dispatch<SetStateAction<boolean>>;
   boardId: string;
-  newPosition: number;
 }
 
 export const CreateColumnModal: React.FC<Props> = ({
   isOpen,
   setModalView,
   boardId,
-  newPosition,
 }) => {
   const { dispatch: columnDispatch } = useContext(ColumnContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
@@ -50,7 +48,6 @@ export const CreateColumnModal: React.FC<Props> = ({
       createColumn({
         name: values.name.trim(),
         boardId,
-        position: newPosition,
       })
         .then((resp) => {
           columnDispatch({

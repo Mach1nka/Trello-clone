@@ -30,10 +30,8 @@ export const CreateCardModal: React.FC<Props> = ({
   setModalView,
   columnId,
 }) => {
-  const { cards, dispatch: cardDispatch } = useContext(CardContext);
+  const { dispatch: cardDispatch } = useContext(CardContext);
   const { dispatch: alertDispatch } = useContext(AlertContext);
-
-  const positionOfNewCard = cards[columnId] ? cards[columnId].length : 0;
 
   const validationSchema = configValidationSchema;
   const initialValues = { name: '', description: '' };
@@ -46,7 +44,6 @@ export const CreateCardModal: React.FC<Props> = ({
         name: values.name.trim(),
         columnId,
         description: values.description.trim(),
-        position: positionOfNewCard,
       })
         .then((resp) =>
           cardDispatch({
