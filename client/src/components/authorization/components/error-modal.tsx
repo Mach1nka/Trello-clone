@@ -20,7 +20,7 @@ const ErrorModal: React.FC<Props> = ({ errorText, isOpen, setModalView, setBackd
   const handleClose = useCallback(() => {
     setBackdropView(false);
     setModalView(false);
-    dispatch(putErrorMessage({ message: '', statusCode: null }));
+    dispatch(putErrorMessage({ message: '' }));
   }, []);
 
   return (

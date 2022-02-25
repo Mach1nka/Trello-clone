@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useCallback, useReducer } from 'react';
 import { useDispatch } from 'react-redux';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { CircularProgress } from '@material-ui/core';
 
 import Column from './components/column';
@@ -12,10 +12,6 @@ import { changeCardStatus } from '../../store/card/actions';
 import { Card as CardType } from '../../store/card/types';
 import { Column as ColumnType } from '../../store/column/types';
 import { ColumnsContainer as Container, DragWrapper, ColumnSC as SC } from './sc';
-
-interface ParamTypes {
-  boardId: string;
-}
 
 interface ColumnStyles {
   columnId: string;
@@ -29,12 +25,13 @@ interface ActionStylesReducer {
 
 const ColumnsContainer: React.FC = () => {
   const dispatch = useDispatch();
+  const params = useParams();
   const [draggableCard, setDraggableCard] = useState<CardType | null>(null);
   const [draggableColumn, setDraggableColumn] = useState<ColumnType | null>(null);
   const [isPointColumns, setPointColumns] = useState(false);
   const [backdropState, setBackdropState] = useState(true);
 
-  const { boardId } = useParams<ParamTypes>();
+  const boardId = params.boardId || '';
 
   const { columns } = useAppSelector((state) => state.boardColumns);
   const columnForDnD = useAppSelector((state) => state.cardsData);
@@ -63,29 +60,33 @@ const ColumnsContainer: React.FC = () => {
 
   const changeStatus = useCallback(
     (column: ColumnType) => {
-      dispatch(
-        changeCardStatus({
-          cardId: draggableCard.id,
-          columnId: draggableCard.columnId,
-          newColumnId: column.id
-        })
-      );
-      setDraggableCard(null);
-      dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
+      if (draggableCard) {
+        dispatch(
+          changeCardStatus({
+            cardId: draggableCard.id,
+            columnId: draggableCard.columnId,
+            newColumnId: column.id
+          })
+        );
+        setDraggableCard(null);
+        dispatchStyles({ type: 'RESET_BACKGROUND', payload: column.id });
+      }
     },
     [draggableCard]
   );
 
   const changePosition = useCallback(
     (column: ColumnType) => {
-      dispatch(
-        changeColumnPosition({
-          boardId,
-          columnId: draggableColumn.id,
-          newPosition: column.position
-        })
-      );
-      setDraggableColumn(null);
+      if (draggableColumn) {
+        dispatch(
+          changeColumnPosition({
+            boardId,
+            columnId: draggableColumn.id,
+            newPosition: column.position
+          })
+        );
+        setDraggableColumn(null);
+      }
     },
     [draggableColumn]
   );

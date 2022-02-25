@@ -45,22 +45,30 @@ const deleteBoard = (
   payload: data
 });
 
-const putUserBoards = (boards: BoardList): { type: string; payload: BoardList } => ({
+const putUserBoards = (
+  boards: BoardList
+): { type: BoardTypes.PUT_USER_BOARDS; payload: BoardList } => ({
   type: BoardTypes.PUT_USER_BOARDS,
   payload: boards
 });
 
-const putCreatedBoard = (newBoard: Board): { type: string; payload: Board } => ({
+const putCreatedBoard = (
+  newBoard: Board
+): { type: BoardTypes.PUT_CREATED_BOARD; payload: Board } => ({
   type: BoardTypes.PUT_CREATED_BOARD,
   payload: newBoard
 });
 
-const putRenamedBoard = (renamedBoard: Board): { type: string; payload: Board } => ({
+const putRenamedBoard = (
+  renamedBoard: Board
+): { type: BoardTypes.PUT_RENAMED_BOARD; payload: Board } => ({
   type: BoardTypes.PUT_RENAMED_BOARD,
   payload: renamedBoard
 });
 
-const deleteBoardsData = (): { type: string } => ({ type: BoardTypes.DELETE_BOARDS_DATA });
+const deleteBoardsData = (): { type: BoardTypes.DELETE_BOARDS_DATA } => ({
+  type: BoardTypes.DELETE_BOARDS_DATA
+});
 
 export {
   GET_BOARDS,

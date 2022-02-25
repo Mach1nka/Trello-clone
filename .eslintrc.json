@@ -49,6 +49,7 @@
         "react/jsx-props-no-spreading": 0,
         "no-prototype-builtins": 0,
         "no-shadow": "off",
+        // "treatUndefinedAsUnspecified": true,
         "@typescript-eslint/no-shadow": "error",
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": "error",

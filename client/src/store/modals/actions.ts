@@ -3,7 +3,7 @@ import { ModalTypes, ModalsStates, CardDataForModal, BoardDataForModal } from '.
 const setCardDataForModal = (
   cardData: CardDataForModal
 ): {
-  type: string;
+  type: ModalTypes.SET_CARD_DATA;
   payload: CardDataForModal;
 } => ({
   type: ModalTypes.SET_CARD_DATA,
@@ -13,7 +13,7 @@ const setCardDataForModal = (
 const setBoardIdForModal = (
   cardData: BoardDataForModal
 ): {
-  type: string;
+  type: ModalTypes.SET_CARD_DATA;
   payload: BoardDataForModal;
 } => ({
   type: ModalTypes.SET_CARD_DATA,
@@ -23,13 +23,15 @@ const setBoardIdForModal = (
 const setModalsStates = (
   modalsStates: Partial<ModalsStates>
 ): {
-  type: string;
+  type: ModalTypes.SET_MODAL_STATE;
   payload: Partial<ModalsStates>;
 } => ({
   type: ModalTypes.SET_MODAL_STATE,
   payload: modalsStates
 });
 
-const resetModalData = (): { type: string } => ({ type: ModalTypes.RESET_MODAL_DATA });
+const resetModalData = (): { type: ModalTypes.RESET_MODAL_DATA } => ({
+  type: ModalTypes.RESET_MODAL_DATA
+});
 
 export { setCardDataForModal, setBoardIdForModal, setModalsStates, resetModalData };

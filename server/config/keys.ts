@@ -5,7 +5,7 @@ interface Key {
 
 const KEYS: Key = {
   MONGO_URI:
-    'mongodb+srv://Mach1nka:8055448@cluster0.6o3tr.mongodb.net/trello-clone?retryWrites=true&w=majority',
+    'mongodb+srv://Mach1nka:8055448@cluster0.6o3tr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
   JWT_SECRET_KEY: 'my-secret-key'
 };
 

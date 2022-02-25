@@ -59,27 +59,33 @@ const deleteCard = (data: DataForDeletingCard): { type: string; payload: DataFor
   payload: data
 });
 
-const putCards = (cards: CardList): { type: string; payload: CardList } => ({
+const putCards = (cards: CardList): { type: CardTypes.PUT_CARDS; payload: CardList } => ({
   type: CardTypes.PUT_CARDS,
   payload: cards
 });
 
-const putCreatedCard = (newCard: Card): { type: string; payload: Card } => ({
+const putCreatedCard = (newCard: Card): { type: CardTypes.PUT_CREATED_CARD; payload: Card } => ({
   type: CardTypes.PUT_CREATED_CARD,
   payload: newCard
 });
 
-const putUpdatedCard = (updatedCard: Card): { type: string; payload: Card } => ({
+const putUpdatedCard = (
+  updatedCard: Card
+): { type: CardTypes.PUT_UPDATED_CARD; payload: Card } => ({
   type: CardTypes.PUT_UPDATED_CARD,
   payload: updatedCard
 });
 
-const putUpdatedCardsPos = (cardsWithNewPos: CardList): { type: string; payload: CardList } => ({
+const putUpdatedCardsPos = (
+  cardsWithNewPos: CardList
+): { type: CardTypes.PUT_CARDS_WITH_NEW_POSITION; payload: CardList } => ({
   type: CardTypes.PUT_CARDS_WITH_NEW_POSITION,
   payload: cardsWithNewPos
 });
 
-const deleteCardsData = (): { type: string } => ({ type: CardTypes.DELETE_CARDS_DATA });
+const deleteCardsData = (): { type: CardTypes.DELETE_CARDS_DATA } => ({
+  type: CardTypes.DELETE_CARDS_DATA
+});
 
 export {
   GET_CARDS,

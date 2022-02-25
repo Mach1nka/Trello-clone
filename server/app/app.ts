@@ -19,7 +19,6 @@ const app = express();
 mongoose
   .connect(KEYS.MONGO_URI, {
     useNewUrlParser: true,
-    useFindAndModify: false,
     useUnifiedTopology: true
   })
   .then(() => console.log('db connected'))
@@ -39,7 +38,7 @@ app.use(passport.initialize());
 passportMiddleware();
 
 app.use(express.json());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
 app.use('/api/auth', authRoutes);
 app.use('/api', boardsRoutes);

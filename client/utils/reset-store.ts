@@ -5,7 +5,7 @@ import { deleteCardsData } from '../src/store/card/actions';
 import { deleteColumnsData } from '../src/store/column/actions';
 import { resetModalData } from '../src/store/modals/actions';
 
-const resetStore = () => {
+const resetStore = (): void => {
   store.dispatch(signOutUser());
   store.dispatch(deleteBoardsData());
   store.dispatch(deleteCardsData());

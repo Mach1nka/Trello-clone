@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
@@ -14,7 +14,7 @@ const Authorization: React.FC = () => {
   const [isOpenModal, setModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
 
-  const history = useHistory();
+  const navigate = useNavigate();
   const theme = useTheme();
 
   const { message, token } = useAppSelector((state) => state.authData);
@@ -26,7 +26,7 @@ const Authorization: React.FC = () => {
       setModalView(false);
     }
     if (token) {
-      history.push('/boards');
+      navigate('/boards');
     }
   }, [message, token]);
 

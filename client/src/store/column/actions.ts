@@ -46,27 +46,35 @@ const deleteColumn = (
   payload: data
 });
 
-const putColumns = (columns: Column[]): { type: string; payload: Column[] } => ({
+const putColumns = (columns: Column[]): { type: ColumnTypes.PUT_COLUMNS; payload: Column[] } => ({
   type: ColumnTypes.PUT_COLUMNS,
   payload: columns
 });
 
-const putCreatedColumn = (newColumn: Column): { type: string; payload: Column } => ({
+const putCreatedColumn = (
+  newColumn: Column
+): { type: ColumnTypes.PUT_CREATED_COLUMN; payload: Column } => ({
   type: ColumnTypes.PUT_CREATED_COLUMN,
   payload: newColumn
 });
 
-const putRenamedColumn = (renamedColumn: Column): { type: string; payload: Column } => ({
+const putRenamedColumn = (
+  renamedColumn: Column
+): { type: ColumnTypes.PUT_RENAMED_COLUMN; payload: Column } => ({
   type: ColumnTypes.PUT_RENAMED_COLUMN,
   payload: renamedColumn
 });
 
-const putUpdatedPos = (columnWithNewPos: Column[]): { type: string; payload: Column[] } => ({
+const putUpdatedPos = (
+  columnWithNewPos: Column[]
+): { type: ColumnTypes.PUT_COLUMN_WITH_NEW_POSITION; payload: Column[] } => ({
   type: ColumnTypes.PUT_COLUMN_WITH_NEW_POSITION,
   payload: columnWithNewPos
 });
 
-const deleteColumnsData = (): { type: string } => ({ type: ColumnTypes.DELETE_COLUMNS_DATA });
+const deleteColumnsData = (): { type: ColumnTypes.DELETE_COLUMNS_DATA } => ({
+  type: ColumnTypes.DELETE_COLUMNS_DATA
+});
 
 export {
   GET_COLUMNS,

@@ -1,6 +1,6 @@
 import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Location } from 'react-router-dom';
 
 import ShareBoardModal from '../boards-page/components/share-board';
 import Sidebar from './sidebar';
@@ -12,17 +12,17 @@ import resetStore from '../../../utils/reset-store';
 import useWindowSize from '../../../utils/window-size-hook';
 import { HeaderSC as SC } from './sc';
 
-interface Location {
+interface MyLocation extends Location {
   state: {
     boardName: string;
     boardId: string;
   };
-  pathname: string;
 }
 
 const Header: React.FC = () => {
-  const { pathname, state }: Location = useLocation();
-  const history = useHistory();
+  const { pathname, state } = useLocation() as MyLocation;
+
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { width } = useWindowSize();
   const { ownBoards, sharedBoards } = useAppSelector((data) => data.userBoards);
@@ -41,11 +41,11 @@ const Header: React.FC = () => {
   const handleLogOut = useCallback(() => {
     resetStore();
     removeAuthDataFromLocalStorage();
-    history.push('/auth');
+    navigate('/auth');
   }, []);
 
   const handleBoardsButton = useCallback(() => {
-    history.push('/boards');
+    navigate('/boards');
   }, []);
 
   useEffect(() => {

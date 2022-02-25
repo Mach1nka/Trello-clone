@@ -13,17 +13,19 @@ const loginUser = (userData: UserData): UserAction => ({
   payload: userData
 });
 
-const putErrorMessage = (message: AuthError): { type: string; payload: AuthError } => ({
+const putErrorMessage = (
+  message: AuthError
+): { type: AuthTypes.PUT_MESSAGE_ERROR; payload: AuthError } => ({
   type: AuthTypes.PUT_MESSAGE_ERROR,
   payload: message
 });
 
-const putAuthData = (userData: AuthData): { type: string; payload: AuthData } => ({
+const putAuthData = (userData: AuthData): { type: AuthTypes.PUT_USER_DATA; payload: AuthData } => ({
   type: AuthTypes.PUT_USER_DATA,
   payload: userData
 });
 
-const signOutUser = (): { type: string } => ({
+const signOutUser = (): { type: AuthTypes.USER_LOGGED_OUT } => ({
   type: AuthTypes.USER_LOGGED_OUT
 });
 
