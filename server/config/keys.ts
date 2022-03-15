@@ -1,12 +1,13 @@
-interface Key {
+import 'dotenv/config';
+
+interface Keys {
   MONGO_URI: string;
   JWT_SECRET_KEY: string;
 }
 
-const KEYS: Key = {
-  MONGO_URI:
-    'mongodb+srv://Mach1nka:8055448@cluster0.6o3tr.mongodb.net/myFirstDatabase?retryWrites=true&w=majority',
-  JWT_SECRET_KEY: 'my-secret-key'
+const KEYS: Keys = {
+  MONGO_URI: process.env.MONGO_URI || '',
+  JWT_SECRET_KEY: process.env.JWT_SECRET_KEY || ''
 };
 
 export default KEYS;

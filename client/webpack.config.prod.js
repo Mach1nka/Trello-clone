@@ -3,9 +3,8 @@ const webpack = require("webpack");
 const { merge } = require("webpack-merge");
 const baseConfig = require("./webpack.config");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+// const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
-const OptimizeCSSAssetsPlugin = require("optimize-css-assets-webpack-plugin");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const CopyPlugin = require("copy-webpack-plugin");
 
@@ -58,33 +57,35 @@ const config = (argv) => {
           template: path.join(__dirname, "src", "index.html"),
         },
       ),
-      new MiniCssExtractPlugin(
-        {
-          filename: `main-${buildHash}.css`,
-        },
-      ),
+      // new MiniCssExtractPlugin(
+      //   {
+      //     filename: `main-${buildHash}.css`,
+      //   },
+      // ),
     ],
-    module: {
-      rules: [
-        {
-          test: /\.(css|scss|sass)$/,
-          use: [
-            {
-              loader: MiniCssExtractPlugin.loader,
-            },
-            {
-              loader: "css-loader"
-            },
-            {
-              loader: "postcss-loader",
-              options: {
-                plugins: [require("autoprefixer")],
-              },
-            }
-          ]
-        },
-      ]
-    },
+    // module: {
+    //   rules: [
+    //     {
+    //       test: /\.(css|scss|sass)$/,
+    //       use: [
+    //         {
+    //           loader: MiniCssExtractPlugin.loader,
+    //         },
+    //         {
+    //           loader: "css-loader"
+    //         },
+    //         {
+    //           loader: "postcss-loader",
+    //           options: {
+    //             postcssOptions: {
+    //               plugins: [require("autoprefixer")],
+    //             }
+    //           },
+    //         }
+    //       ]
+    //     },
+    //   ]
+    // },
     optimization: {
       minimize: true,
       minimizer: [
@@ -101,7 +102,6 @@ const config = (argv) => {
             }
           }
         ),
-        new OptimizeCSSAssetsPlugin({}),
       ],
     },
   }

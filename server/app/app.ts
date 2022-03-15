@@ -17,10 +17,7 @@ import { router as errorRoutes } from './routes/error';
 const app = express();
 
 mongoose
-  .connect(KEYS.MONGO_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
-  })
+  .connect(KEYS.MONGO_URI)
   .then(() => console.log('db connected'))
   .catch((err) => console.log(err));
 

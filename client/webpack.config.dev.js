@@ -19,8 +19,12 @@ const config = () => {
       },
       devtool: "source-map",
       devServer: {
-        overlay: true,
-        contentBase: path.join(__dirname, 'dist'),
+        client: {
+          overlay: true,
+        },
+        static: {
+          directory: path.join(__dirname, 'dist'),
+        },
         port: 8080,
         hot: true,
         historyApiFallback: true
@@ -33,31 +37,29 @@ const config = () => {
           },
         ),
       ],
-      module: {
-        rules: [
-            {
-                test: /\.(sass|scss)$/,
-                use: [
-                      'style-loader',
-                      {
-												loader: "css-loader", 
-												options: {
-													sourceMap: true,
-												},
-											},
-											{
-												loader: "postcss-loader",
-												options: {
-													plugins: [
-														require("autoprefixer"),
-													],
-													sourceMap: true,
-												},
-											}
-                ]
-            }
-        ],
-      },
+      // module: {
+      //   rules: [
+      //     {
+      //       test: /\.(css|sass|scss)$/,
+      //       use: [
+      //         {
+      //           loader: "style-loader", 
+      //         },
+      //         {
+      //           loader: "css-loader", 
+      //         },
+      //         {
+      //           loader: "postcss-loader",
+      //           options: {
+      //             postcssOptions: {
+      //               plugins: [require("autoprefixer")],
+      //             }
+      //           },
+      //         }
+      //       ]
+      //     }
+      //   ],
+      // },
       optimization: {
         splitChunks: {
           chunks: "all",

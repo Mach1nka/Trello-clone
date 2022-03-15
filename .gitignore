@@ -19,6 +19,7 @@ Thumbs.db
 node_modules/
 npm-debug.*
 errors/
+.env
 
 # Папка с собранными файлами проекта
 public/
