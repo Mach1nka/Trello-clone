@@ -21,6 +21,7 @@
     "extends": [
         "eslint:recommended",
         "plugin:@typescript-eslint/recommended",
+        "plugin:react/jsx-runtime",
         "airbnb", 
         "airbnb/hooks",
         "prettier"
@@ -34,7 +35,6 @@
     },
     "plugins": [
         "@typescript-eslint",
-        "react",
         "react-hooks",
         "import",
         "prettier"
@@ -45,7 +45,8 @@
         "quotes": ["warn", "single"],
         "prettier/prettier": "error",
         "no-use-before-define": [0],
-        "react/prop-types": 0,
+        "react/prop-types": "off",
+        "react/require-default-props": "off",
         "react/jsx-props-no-spreading": 0,
         "no-prototype-builtins": 0,
         "no-shadow": "off",
