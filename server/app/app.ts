@@ -1,11 +1,10 @@
 import 'express-async-errors';
-import mongoose from 'mongoose';
 import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 
+import connectToDB from '../utils/connect-db';
 import { passportMiddleware } from './middleware/passport';
-import KEYS from '../config/keys';
 import errorMiddleware from './middleware/errorHandler';
 import { router as authRoutes } from './routes/auth';
 import { router as boardsRoutes } from './routes/boards';
@@ -16,10 +15,8 @@ import { router as errorRoutes } from './routes/error';
 
 const app = express();
 
-mongoose
-  .connect(KEYS.MONGO_URI)
-  .then(() => console.log('db connected'))
-  .catch((err) => console.log(err));
+// DB connection
+connectToDB();
 
 app.use(
   cors({

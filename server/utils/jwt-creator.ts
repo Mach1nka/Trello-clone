@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import KEYS from '../config/keys';
+import CONFIG from '../config';
 
 const jwtCreator = (login: string, userId: mongoose.Types.ObjectId): string => {
   const token = `Bearer ${jwt.sign(
@@ -8,7 +8,7 @@ const jwtCreator = (login: string, userId: mongoose.Types.ObjectId): string => {
       login,
       userId
     },
-    KEYS.JWT_SECRET_KEY,
+    CONFIG.JWT_SECRET_KEY,
     { expiresIn: '1h' }
   )}`;
   return token;

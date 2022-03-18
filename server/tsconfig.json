@@ -1,7 +1,11 @@
 {
     "extends": "../tsconfig.base",
     "compilerOptions": {
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true,
+        "strictPropertyInitialization": false,
         "esModuleInterop": true,
+        "isolatedModules": true,
         "allowSyntheticDefaultImports": true,
         "outDir": "./dist"
     },

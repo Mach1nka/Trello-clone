@@ -3,7 +3,7 @@ import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
 
 import User from '../models/user';
-import KEYS from '../../config/keys';
+import CONFIG from '../../config';
 import InvalidCredentials from '../../utils/errors/invalid-credentials';
 
 declare global {
@@ -17,7 +17,7 @@ declare global {
 
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-  secretOrKey: KEYS.JWT_SECRET_KEY
+  secretOrKey: CONFIG.JWT_SECRET_KEY
 };
 
 const passportMiddleware = (): void => {
