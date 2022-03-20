@@ -14,9 +14,9 @@ const logIn = async (req: Request, res: Response): Promise<void> => {
   }
 
   const user = await loginService(req.body);
-  const token = jwtCreator(user.login, user._id);
+  const token = jwtCreator(user.login, user.id);
 
-  res.json(new BaseResponse({ login: user.login, token, id: user._id }));
+  res.json(new BaseResponse({ login: user.login, token }));
 };
 
 const register = async (req: Request, res: Response): Promise<void> => {
@@ -27,11 +27,9 @@ const register = async (req: Request, res: Response): Promise<void> => {
   }
 
   const createdUser = await registerService(req.body);
-  const token = jwtCreator(createdUser.login, createdUser._id);
+  const token = jwtCreator(createdUser.login, String(createdUser.id));
 
-  res
-    .status(201)
-    .json(new BaseResponse({ login: createdUser.login, token, id: createdUser._id }, 201));
+  res.status(201).json(new BaseResponse({ login: createdUser.login, token }, 201));
 };
 
 export { logIn, register };

@@ -3,7 +3,7 @@ import express from 'express';
 import cors from 'cors';
 import passport from 'passport';
 
-import connectToDB from '../utils/connect-db';
+import DBConnector from './database/connector';
 import { passportMiddleware } from './middleware/passport';
 import errorMiddleware from './middleware/errorHandler';
 import { router as authRoutes } from './routes/auth';
@@ -15,8 +15,8 @@ import { router as errorRoutes } from './routes/error';
 
 const app = express();
 
-// DB connection
-connectToDB();
+// A DB connection
+DBConnector.establishConnection();
 
 app.use(
   cors({

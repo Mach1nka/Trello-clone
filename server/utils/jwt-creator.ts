@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
 import CONFIG from '../config';
 
-const jwtCreator = (login: string, userId: mongoose.Types.ObjectId): string => {
+const jwtCreator = (login: string, userId: string): string => {
   const token = `Bearer ${jwt.sign(
     {
       login,

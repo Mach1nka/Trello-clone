@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs';
 
-import User, { UserInDB } from '../models/user';
+import { userRepository } from '../database/repositories';
+import { User } from '../entities/user';
 import InvalidCredentials from '../../utils/errors/invalid-credentials';
 import AlreadyExists from '../../utils/errors/already-exists';
 
@@ -9,38 +10,38 @@ interface AuthData {
   password: string;
 }
 
-async function loginService(reqBody: AuthData): Promise<UserInDB> {
+async function loginService(reqBody: AuthData): Promise<User> {
   const { login, password } = reqBody;
-  const user: UserInDB | null = await User.findOne({ login });
+
+  const user: User | undefined = await userRepository().findOne({ where: { login } });
 
   if (!user) {
-    throw new InvalidCredentials();
+    throw new InvalidCredentials(undefined, 403);
   }
 
   const isPasswordEqual = bcrypt.compareSync(password, user.password);
 
   if (!isPasswordEqual) {
-    throw new InvalidCredentials();
+    throw new InvalidCredentials(undefined, 403);
   }
 
   return user;
 }
 
-async function registerService(reqBody: AuthData): Promise<UserInDB> {
+async function registerService(reqBody: AuthData): Promise<User> {
   const { login, password } = reqBody;
-  const candidate: UserInDB | null = await User.findOne({ login });
+  const candidate: User | undefined = await userRepository().findOne({ where: { login } });
 
   if (candidate) {
     throw new AlreadyExists();
   }
 
   const salt = bcrypt.genSaltSync(10);
-  const user = User.build({
+
+  const createdUser = await userRepository().save({
     login,
     password: bcrypt.hashSync(password, salt)
   });
-
-  const createdUser = await user.save();
 
   return createdUser;
 }
