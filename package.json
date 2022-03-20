@@ -7,7 +7,7 @@
     "lint": "eslint . --ext ts,.tsx",
     "typeorm:cli": "ts-node --project ./server/tsconfig.json ./node_modules/typeorm/cli",
     "start": "concurrently npm:dev:*",
-    "build:server": "tsc --build ./server/tsconfig.json && node server/dist/server.js",
+    "build:server": "set NODE_ENV=production&& tsc --build ./server/tsconfig.json && node server/dist/server.js",
     "dev:server": "nodemon --config ./server/nodemon.json",
     "build:client": "webpack-cli --config ./client/webpack.config.prod.js --mode production",
     "dev:client": "webpack serve --config ./client/webpack.config.dev.js --mode development"

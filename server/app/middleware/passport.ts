@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
 
-// import User from '../models/user';
 import { userRepository } from '../database/repositories';
 import { User } from '../entities/user';
 import CONFIG from '../../config';
