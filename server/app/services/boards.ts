@@ -1,136 +1,130 @@
-import Board, { BoardInDB } from '../models/board';
-import Column from '../models/column';
-import BadRequest from '../../utils/errors/bad-request';
+import { boardRepository, userRepository } from '../database/repositories';
+import { Board, Board as EntityBoard } from '../entities/board';
+import { User } from '../entities/user';
+// import Column from '../models/column';
 import NotFound from '../../utils/errors/not-found';
-import AlreadyExists from '../../utils/errors/already-exists';
+import BadRequest from '../../utils/errors/bad-request';
 
-interface FilteredBoard {
-  id: string;
-  name: string;
+interface AccessibleBoards {
+  ownBoards: Board[];
+  sharedBoards: Board[];
 }
 
-interface ReturnValue {
-  filteredOwnBoardObj: FilteredBoard[];
-  filteredSharedBoardObj: FilteredBoard[];
-}
-
-interface BodyForCreatBoard {
+interface DataForCreatingBoard {
   name: string;
   userId: string;
 }
 
-interface BodyForRenameBoard {
+interface DataForRenamingBoard {
   newName: string;
   userId: string;
   boardId: string;
 }
 
-interface BodyForShareDeleteBoard {
-  newName: string;
-  userId: string;
+interface DataForSharingBoard {
+  newParticipantId: string;
   boardId: string;
 }
 
-const getBoardsService = async (userId: string): Promise<ReturnValue> => {
-  const ownBoards: BoardInDB[] = await Board.find({ owner: userId });
-  const sharedBoards: BoardInDB[] = await Board.find().where('accessUsers').in([userId]);
+interface DataForDeletingBoard {
+  boardId: string;
+  userId: string;
+}
 
-  const filteredOwnBoardObj: FilteredBoard[] = ownBoards.length
-    ? ownBoards.map((el) => ({
-        id: String(el._id),
-        name: el.name
-      }))
-    : [];
+const getBoardsService = async (userId: string): Promise<AccessibleBoards> => {
+  const ownBoards: Board[] = await boardRepository().find({ where: { owner: { id: userId } } });
+  const sharedBoards: Board[] = await boardRepository()
+    .createQueryBuilder('boards')
+    .innerJoin('boards.users', 'users')
+    .where('users.id = :id', { id: userId })
+    .getMany();
 
-  const filteredSharedBoardObj: FilteredBoard[] = sharedBoards.length
-    ? sharedBoards.map((el) => ({
-        id: String(el._id),
-        name: el.name
-      }))
-    : [];
-
-  return { filteredOwnBoardObj, filteredSharedBoardObj };
+  return { ownBoards, sharedBoards };
 };
 
-const createBoardService = async (reqBody: BodyForCreatBoard): Promise<BoardInDB> => {
-  const { name, userId } = reqBody;
+const createBoardService = async (data: DataForCreatingBoard): Promise<EntityBoard> => {
+  const { name, userId } = data;
 
-  const board = Board.build({
+  const owner: User | undefined = await userRepository().findOne(userId);
+
+  if (!owner) {
+    throw new NotFound('The User does not exist');
+  }
+
+  const createdBoard = await boardRepository().save({
     name,
-    owner: userId
+    owner
   });
-
-  const createdBoard: BoardInDB = await board.save();
 
   return createdBoard;
 };
 
-const updateNameService = async (reqBody: BodyForRenameBoard): Promise<BoardInDB> => {
-  const { boardId, userId, newName } = reqBody;
-  const board: BoardInDB | null = await Board.findById(boardId);
+const updateNameService = async (data: DataForRenamingBoard): Promise<EntityBoard> => {
+  const { boardId, userId, newName } = data;
+  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+    relations: ['owner'],
+    where: {
+      owner: {
+        id: userId
+      }
+    }
+  });
 
   if (!board) {
     throw new NotFound();
   }
 
-  const isOwnerId = board.owner.toString() === userId;
-
-  if (!isOwnerId) {
-    throw new BadRequest();
-  }
-
-  const updatedBoard: BoardInDB | null = await Board.findByIdAndUpdate(
-    boardId,
-    { name: newName },
-    { new: true }
-  );
-
-  if (!updatedBoard) {
-    throw new BadRequest();
-  }
+  const updatedBoard: EntityBoard = await boardRepository().save({ ...board, name: newName });
 
   return updatedBoard;
 };
 
-const shareBoardService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
-  const { boardId, userId } = reqBody;
-  const sharedBoard: BoardInDB | null = await Board.findById(boardId);
+const shareBoardService = async (data: DataForSharingBoard): Promise<void> => {
+  const { boardId, newParticipantId } = data;
 
-  if (!sharedBoard) {
-    throw new NotFound();
+  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+    relations: ['users', 'owner']
+  });
+  const newParticipant: User | undefined = await userRepository().findOne(newParticipantId);
+
+  if (!board || !newParticipant) {
+    throw new NotFound('Board or User does not exist');
   }
 
-  const arrayOfAccessUsers = sharedBoard.accessUsers;
-
-  const isUserExist = arrayOfAccessUsers.includes(userId);
-
-  if (!sharedBoard) {
+  if (board.owner.id === newParticipantId) {
     throw new BadRequest();
   }
 
-  if (isUserExist) {
-    throw new AlreadyExists('', 409);
-  }
-
-  await Board.findByIdAndUpdate(boardId, { accessUsers: [...arrayOfAccessUsers, userId] });
+  board.users.push(newParticipant);
+  await boardRepository().save(board);
 };
 
-const deleteService = async (reqBody: BodyForShareDeleteBoard): Promise<void> => {
-  const { boardId, userId } = reqBody;
-  const board: BoardInDB | null = await Board.findById(boardId);
+const deleteService = async (data: DataForDeletingBoard): Promise<void> => {
+  const { boardId, userId } = data;
+  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+    relations: ['owner', 'users']
+  });
 
   if (!board) {
-    throw new NotFound();
+    throw new NotFound('Board does not exist');
   }
 
-  const isOwnerId = board.owner.toString() === userId;
+  const isOwner = board.owner.id === userId;
+  const isParticipant = board.users.some((el: User) => el.id === userId);
 
-  if (isOwnerId) {
-    await Column.findOneAndDelete({ boardId });
-    await Board.findByIdAndDelete(boardId);
-  } else {
-    const updatedUsersArr = board.accessUsers.filter((el) => el.toString() !== userId);
-    await Board.findByIdAndUpdate(boardId, { accessUsers: updatedUsersArr });
+  if (!isOwner && !isParticipant) {
+    throw new BadRequest('The User does not have access to the board');
+  }
+
+  // Check if Columns delete as well
+  if (isOwner) {
+    await boardRepository().remove(board);
+    return;
+  }
+
+  if (isParticipant) {
+    board.users = board.users.filter((el: User) => el.id !== userId);
+    await boardRepository().save(board);
   }
 };
 

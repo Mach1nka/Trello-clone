@@ -16,11 +16,7 @@ router.get('/boards', jwtAuthenticate, getAllBoards);
 
 router.post(
   '/board',
-  [
-    check('userId', 'User Id is required').exists(),
-    check('name', 'Name is required').exists(),
-    jwtAuthenticate
-  ],
+  [check('name', 'Name is required').exists(), jwtAuthenticate],
   createNewBoard
 );
 
@@ -29,7 +25,6 @@ router.patch(
   [
     check('boardId', 'Board Id is required').exists(),
     check('newName', 'New name is required').exists(),
-    check('userId', 'User Id is required').exists(),
     jwtAuthenticate
   ],
   updateBoardName
@@ -39,7 +34,7 @@ router.patch(
   '/board/share',
   [
     check('boardId', 'Board Id is required').exists(),
-    check('userId', 'User Id is required').exists(),
+    check('newParticipantId', 'User Id is required').exists(),
     jwtAuthenticate
   ],
   shareBoard
@@ -47,11 +42,7 @@ router.patch(
 
 router.delete(
   '/board',
-  [
-    check('boardId', 'Board Id is required').exists(),
-    check('userId', 'User Id is required').exists(),
-    jwtAuthenticate
-  ],
+  [check('boardId', 'Board Id is required').exists(), jwtAuthenticate],
   deleteBoard
 );
 

@@ -10,7 +10,7 @@ import InvalidCredentials from '../../utils/errors/invalid-credentials';
 declare global {
   namespace Express {
     interface User {
-      _id: string;
+      id: string;
       login: string;
     }
   }
