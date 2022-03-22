@@ -11,9 +11,7 @@ import {
   BodyForRenamingBoard,
   BodyForSharingBoard
 } from '../../types/boards/interfaces';
-import { UserPayload } from '../../types/auth/interfaces';
-
-type UserId = Pick<UserPayload, 'userId'>;
+import { UserId } from '../../types/auth/interfaces';
 
 const getBoardsService = async (data: UserId): Promise<AccessibleBoardsResponse> => {
   const { userId } = data;

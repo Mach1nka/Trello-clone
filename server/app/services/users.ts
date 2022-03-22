@@ -1,7 +1,11 @@
 import { userRepository } from '../database/repositories';
 import { User } from '../entities/user';
+import { ParamsForSearching } from '../../types/users/interfaces';
+import { UserId } from '../../types/auth/interfaces';
 
-async function getUsersService(searchedValue: string, userId: string): Promise<User[]> {
+async function getUsersService(data: ParamsForSearching & UserId): Promise<User[]> {
+  const { searchedValue, userId } = data;
+
   const users: User[] = await userRepository()
     .createQueryBuilder('users')
     .where('users.login ILIKE :searchValue', { searchValue: `%${searchedValue}%` })

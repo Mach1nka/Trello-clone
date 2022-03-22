@@ -5,6 +5,6 @@ import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/users/:searchValue', jwtAuthenticate, getUsers);
+router.get('/users/:searchedValue', jwtAuthenticate, getUsers);
 
 export { router };
