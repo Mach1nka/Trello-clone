@@ -4,15 +4,10 @@ import { userRepository } from '../database/repositories';
 import { User } from '../entities/user';
 import InvalidCredentials from '../../utils/errors/invalid-credentials';
 import AlreadyExists from '../../utils/errors/already-exists';
+import { AuthBody } from '../../types/auth/interfaces';
 
-interface AuthData {
-  login: string;
-  password: string;
-}
-
-async function loginService(reqBody: AuthData): Promise<User> {
-  const { login, password } = reqBody;
-
+async function loginService(data: AuthBody): Promise<User> {
+  const { login, password } = data;
   const user: User | undefined = await userRepository().findOne({ where: { login } });
 
   if (!user) {
@@ -28,8 +23,8 @@ async function loginService(reqBody: AuthData): Promise<User> {
   return user;
 }
 
-async function registerService(reqBody: AuthData): Promise<User> {
-  const { login, password } = reqBody;
+async function registerService(data: AuthBody): Promise<User> {
+  const { login, password } = data;
   const candidate: User | undefined = await userRepository().findOne({ where: { login } });
 
   if (candidate) {

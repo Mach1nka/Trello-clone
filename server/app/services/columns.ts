@@ -12,24 +12,24 @@ interface FilteredColumn {
   position: number;
 }
 
-interface BodyForCreatColumn {
+export interface DataForCreating {
   position: number;
   boardId: string;
   name: string;
 }
 
-interface BodyForRenameColumn {
+export interface DataForRenaming {
   columnId: string;
   newName: string;
 }
 
-interface BodyForRepositionColumn {
+export interface DataForReposition {
   columnId: string;
   boardId: string;
   newPosition: number;
 }
 
-interface BodyForDeleteColumn {
+export interface DataForDeleting {
   columnId: string;
   boardId: string;
 }
@@ -49,7 +49,7 @@ const getColumnsService = async (boardId: string): Promise<FilteredColumn[]> => 
   return [];
 };
 
-const createColumnService = async (reqBody: BodyForCreatColumn): Promise<FilteredColumn> => {
+const createColumnService = async (reqBody: DataForCreating): Promise<FilteredColumn> => {
   const { position, name, boardId } = reqBody;
 
   const newColumn = Column.build({
@@ -96,7 +96,7 @@ const createColumnService = async (reqBody: BodyForCreatColumn): Promise<Filtere
   return preparedData;
 };
 
-const updateNameService = async (reqBody: BodyForRenameColumn): Promise<FilteredColumn> => {
+const updateNameService = async (reqBody: DataForRenaming): Promise<FilteredColumn> => {
   const { columnId, newName } = reqBody;
   const renamedColumn: ColumnInDB | null = await Column.findByIdAndUpdate(
     columnId,
@@ -118,9 +118,7 @@ const updateNameService = async (reqBody: BodyForRenameColumn): Promise<Filtered
   return preparedData;
 };
 
-const updatePositionService = async (
-  reqBody: BodyForRepositionColumn
-): Promise<FilteredColumn[]> => {
+const updatePositionService = async (reqBody: DataForReposition): Promise<FilteredColumn[]> => {
   const { columnId, boardId, newPosition } = reqBody;
   const bulkArr: BulkUpdate<BulkPosition>[] = [];
 
@@ -161,7 +159,7 @@ const updatePositionService = async (
   return elementsWithUpdatedPos;
 };
 
-const deleteService = async (reqBody: BodyForDeleteColumn): Promise<void> => {
+const deleteService = async (reqBody: DataForDeleting): Promise<void> => {
   const { columnId, boardId } = reqBody;
   const bulkArr: BulkUpdate<BulkPosition>[] = [];
 

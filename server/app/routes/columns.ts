@@ -13,6 +13,7 @@ import { jwtAuthenticate } from '../middleware/passport';
 const router = express.Router();
 
 router.get('/columns/:boardId', jwtAuthenticate, getColumns);
+
 router.post(
   '/column',
   [
@@ -23,6 +24,7 @@ router.post(
   ],
   createNewColumn
 );
+
 router.patch(
   '/column/name',
   [
@@ -32,7 +34,9 @@ router.patch(
   ],
   updateColumnName
 );
+
 router.put('/column/position', jwtAuthenticate, updateColumnPosition);
+
 router.delete('/column', jwtAuthenticate, deleteColumn);
 
 export { router };

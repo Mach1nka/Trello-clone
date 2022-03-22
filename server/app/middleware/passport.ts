@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { Strategy as JwtStrategy, ExtractJwt } from 'passport-jwt';
 import passport from 'passport';
 
@@ -6,7 +6,9 @@ import { userRepository } from '../database/repositories';
 import { User } from '../entities/user';
 import CONFIG from '../../config';
 import InvalidCredentials from '../../utils/errors/invalid-credentials';
+import { JWTDto, CustomRequest } from '../../types/common';
 
+// FIXME: should be extend from Request
 declare global {
   namespace Express {
     interface User {
@@ -16,11 +18,6 @@ declare global {
   }
 }
 
-interface DTO {
-  userId: string;
-  login: string;
-}
-
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: CONFIG.JWT_SECRET_KEY
@@ -28,12 +25,14 @@ const options = {
 
 const passportMiddleware = (): void => {
   passport.use(
-    new JwtStrategy(options, async (payload: DTO, done) => {
+    new JwtStrategy(options, async (payload: JWTDto, done) => {
       try {
-        const user: User | undefined = await userRepository().findOne(payload.userId, {
-          select: ['login', 'id']
-        });
-        console.log('');
+        const user: Pick<User, 'id' | 'login'> | undefined = await userRepository().findOne(
+          payload.userId,
+          {
+            select: ['login', 'id']
+          }
+        );
         if (user) {
           done(null, user);
         } else {
@@ -46,8 +45,8 @@ const passportMiddleware = (): void => {
   );
 };
 
-function jwtAuthenticate(req: Request, res: Response, next: NextFunction): void {
-  passport.authenticate('jwt', { session: false }, (err, user) => {
+function jwtAuthenticate(req: CustomRequest, res: Response, next: NextFunction): void {
+  passport.authenticate('jwt', { session: false }, (err, user: Pick<User, 'id' | 'login'>) => {
     if (err) {
       next(err);
       return;

@@ -36,8 +36,8 @@ const updateColumnName = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest(errors.array());
   }
 
-  const renamedColumn = await updateNameService(req.body);
-  res.json(new BaseResponse(renamedColumn));
+  const updatedColumn = await updateNameService(req.body);
+  res.json(new BaseResponse(updatedColumn));
 };
 
 const updateColumnPosition = async (req: Request, res: Response): Promise<void> => {

@@ -1,11 +1,7 @@
-import { Request } from 'express';
+import { UserPayload } from '../types/auth/interfaces';
+import { CustomRequest } from '../types/common';
 
-interface UserPayload {
-  userId: string;
-  login: string;
-}
-
-const getUserPayload = (request: Request): UserPayload => {
+const getUserPayload = (request: CustomRequest): UserPayload => {
   const { login, id } = request.user!;
   return { login, userId: id };
 };

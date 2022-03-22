@@ -1,37 +1,22 @@
 import { boardRepository, userRepository } from '../database/repositories';
-import { Board, Board as EntityBoard } from '../entities/board';
+import { Board } from '../entities/board';
 import { User } from '../entities/user';
 // import Column from '../models/column';
 import NotFound from '../../utils/errors/not-found';
 import BadRequest from '../../utils/errors/bad-request';
+import {
+  AccessibleBoardsResponse,
+  BodyForCreatingBoard,
+  BodyForDeletingBoard,
+  BodyForRenamingBoard,
+  BodyForSharingBoard
+} from '../../types/boards/interfaces';
+import { UserPayload } from '../../types/auth/interfaces';
 
-interface AccessibleBoards {
-  ownBoards: Board[];
-  sharedBoards: Board[];
-}
+type UserId = Pick<UserPayload, 'userId'>;
 
-interface DataForCreatingBoard {
-  name: string;
-  userId: string;
-}
-
-interface DataForRenamingBoard {
-  newName: string;
-  userId: string;
-  boardId: string;
-}
-
-interface DataForSharingBoard {
-  newParticipantId: string;
-  boardId: string;
-}
-
-interface DataForDeletingBoard {
-  boardId: string;
-  userId: string;
-}
-
-const getBoardsService = async (userId: string): Promise<AccessibleBoards> => {
+const getBoardsService = async (data: UserId): Promise<AccessibleBoardsResponse> => {
+  const { userId } = data;
   const ownBoards: Board[] = await boardRepository().find({ where: { owner: { id: userId } } });
   const sharedBoards: Board[] = await boardRepository()
     .createQueryBuilder('boards')
@@ -42,7 +27,7 @@ const getBoardsService = async (userId: string): Promise<AccessibleBoards> => {
   return { ownBoards, sharedBoards };
 };
 
-const createBoardService = async (data: DataForCreatingBoard): Promise<EntityBoard> => {
+const createBoardService = async (data: BodyForCreatingBoard & UserId): Promise<Board> => {
   const { name, userId } = data;
 
   const owner: User | undefined = await userRepository().findOne(userId);
@@ -59,9 +44,9 @@ const createBoardService = async (data: DataForCreatingBoard): Promise<EntityBoa
   return createdBoard;
 };
 
-const updateNameService = async (data: DataForRenamingBoard): Promise<EntityBoard> => {
+const updateNameService = async (data: BodyForRenamingBoard & UserId): Promise<Board> => {
   const { boardId, userId, newName } = data;
-  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+  const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['owner'],
     where: {
       owner: {
@@ -74,15 +59,15 @@ const updateNameService = async (data: DataForRenamingBoard): Promise<EntityBoar
     throw new NotFound();
   }
 
-  const updatedBoard: EntityBoard = await boardRepository().save({ ...board, name: newName });
+  const updatedBoard: Board = await boardRepository().save({ ...board, name: newName });
 
   return updatedBoard;
 };
 
-const shareBoardService = async (data: DataForSharingBoard): Promise<void> => {
+const shareBoardService = async (data: BodyForSharingBoard): Promise<void> => {
   const { boardId, newParticipantId } = data;
 
-  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+  const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['users', 'owner']
   });
   const newParticipant: User | undefined = await userRepository().findOne(newParticipantId);
@@ -99,9 +84,9 @@ const shareBoardService = async (data: DataForSharingBoard): Promise<void> => {
   await boardRepository().save(board);
 };
 
-const deleteService = async (data: DataForDeletingBoard): Promise<void> => {
+const deleteService = async (data: BodyForDeletingBoard & UserId): Promise<void> => {
   const { boardId, userId } = data;
-  const board: EntityBoard | undefined = await boardRepository().findOne(boardId, {
+  const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['owner', 'users']
   });
 
