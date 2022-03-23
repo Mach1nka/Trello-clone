@@ -7,8 +7,8 @@
         "esModuleInterop": true,
         "isolatedModules": true,
         "allowSyntheticDefaultImports": true,
+        "rootDir": "./",
         "outDir": "./dist"
     },
-    "include": ["./**/*.ts", "./*.ts"],
     "exclude": ["dist"]
 }

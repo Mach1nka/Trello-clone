@@ -1,189 +1,111 @@
-import Column, { ColumnInDB } from '../models/column';
-import Card from '../models/card';
+import { columnRepository, boardRepository } from '../database/repositories';
+import { BoardColumn as Column } from '../entities/column';
+import { Board } from '../entities/board';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
-import { BulkUpdate, BulkPosition } from '../../types/bulkarr';
-import insertColumnToArr from '../../utils/insert-column';
+import repositionColumn from '../../utils/reposition-column';
+import {
+  ParamsForGetting,
+  BodyForCreating,
+  BodyForRenaming,
+  BodyForReposition,
+  BodyForDeleting
+} from '../../types/columns/interfaces';
 
-interface FilteredColumn {
-  id: string;
-  name: string;
-  boardId: string;
-  position: number;
-}
+const getColumnsService = async (data: ParamsForGetting): Promise<Column[]> => {
+  const { boardId } = data;
+  const columns: Column[] = await columnRepository().find({
+    where: { board: { id: boardId } }
+  });
 
-export interface DataForCreating {
-  position: number;
-  boardId: string;
-  name: string;
-}
-
-export interface DataForRenaming {
-  columnId: string;
-  newName: string;
-}
-
-export interface DataForReposition {
-  columnId: string;
-  boardId: string;
-  newPosition: number;
-}
-
-export interface DataForDeleting {
-  columnId: string;
-  boardId: string;
-}
-
-const getColumnsService = async (boardId: string): Promise<FilteredColumn[]> => {
-  const columnsArr = await Column.find({ boardId });
-
-  if (columnsArr.length) {
-    const preparedArr: FilteredColumn[] = columnsArr.map((el) => ({
-      id: String(el._id),
-      name: el.name,
-      position: el.position,
-      boardId: el.boardId
-    }));
-    return preparedArr;
-  }
-  return [];
+  return columns;
 };
 
-const createColumnService = async (reqBody: DataForCreating): Promise<FilteredColumn> => {
-  const { position, name, boardId } = reqBody;
+const createColumnService = async (data: BodyForCreating): Promise<Column> => {
+  const { name, boardId } = data;
+  const board: Board | undefined = await boardRepository().findOne(boardId);
 
-  const newColumn = Column.build({
-    boardId,
+  if (!board) {
+    throw new NotFound('The Board does not exist');
+  }
+
+  const numberOfColumns = await columnRepository().count({
+    relations: ['board'],
+    where: { board: { id: boardId } }
+  });
+
+  const createdBoard = await columnRepository().save({
+    board,
     name,
-    position: Number(position)
+    position: numberOfColumns
   });
 
-  await newColumn.save();
-  const columnsData = await Column.find({ boardId });
-  const bulkArr: BulkUpdate<BulkPosition>[] = [];
+  return createdBoard;
+};
 
-  columnsData.sort((a, b) => a.position - b.position);
-  const elementsWithUpdatedPos: FilteredColumn[] = columnsData.map((el, idx) => ({
-    id: String(el._id),
-    name: el.name,
-    position: idx,
-    boardId: el.boardId
-  }));
-
-  elementsWithUpdatedPos.forEach((el) => {
-    bulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
+const updateNameService = async (data: BodyForRenaming): Promise<Column> => {
+  const { columnId, newName } = data;
+  const column: Column | undefined = await columnRepository().findOne(columnId, {
+    relations: ['board']
   });
 
-  await Column.bulkWrite(bulkArr);
-  const createdColumn = await Column.findById(newColumn._id);
-
-  if (!createdColumn) {
-    throw new NotFound();
+  if (!column) {
+    throw new NotFound('Column does not exist');
   }
 
-  const preparedData: FilteredColumn = {
-    id: String(createdColumn._id),
-    boardId: createdColumn.boardId,
-    name: createdColumn.name,
-    position: createdColumn.position
-  };
+  const updatedColumn: Column = await columnRepository().save({ ...column, name: newName });
 
-  return preparedData;
+  return updatedColumn;
 };
 
-const updateNameService = async (reqBody: DataForRenaming): Promise<FilteredColumn> => {
-  const { columnId, newName } = reqBody;
-  const renamedColumn: ColumnInDB | null = await Column.findByIdAndUpdate(
-    columnId,
-    { name: newName },
-    { new: true }
-  );
+const updatePositionService = async (data: BodyForReposition): Promise<Column[]> => {
+  const { columnId, boardId, newPosition } = data;
+  const columns: Column[] = await columnRepository().find({
+    where: { board: { id: boardId } },
+    order: { position: 'ASC' }
+  });
 
-  if (!renamedColumn) {
-    throw new NotFound();
-  }
+  let indexOldEl: number | null = null;
 
-  const preparedData = {
-    id: String(renamedColumn._id),
-    boardId: renamedColumn.boardId,
-    name: renamedColumn.name,
-    position: renamedColumn.position
-  };
+  const editableEl = columns.find((el: Column, idx) => {
+    if (el.id === columnId) {
+      indexOldEl = idx;
+      return el;
+    }
+    return undefined;
+  });
 
-  return preparedData;
-};
-
-const updatePositionService = async (reqBody: DataForReposition): Promise<FilteredColumn[]> => {
-  const { columnId, boardId, newPosition } = reqBody;
-  const bulkArr: BulkUpdate<BulkPosition>[] = [];
-
-  const columnsArr = await Column.find({ boardId });
-  columnsArr.sort((a, b) => a.position - b.position);
-
-  const indexOldEl = columnsArr.findIndex((el) => el._id.toString() === columnId);
-  const editableEl = columnsArr.find((el) => el._id.toString() === columnId);
-
-  if (!editableEl) {
+  if (!editableEl || !indexOldEl) {
     throw new BadRequest();
   }
 
-  const updatedArr: ColumnInDB[] = insertColumnToArr(
-    columnsArr,
+  const repositionedColumns: Column[] = repositionColumn(
+    columns,
     editableEl,
     newPosition,
     indexOldEl
   );
 
-  const elementsWithUpdatedPos: FilteredColumn[] = updatedArr.map((el, idx) => ({
-    id: String(el._id),
-    boardId: el.boardId,
-    name: el.name,
-    position: idx
-  }));
+  const updatedColumns: Column[] = await columnRepository().save(repositionedColumns);
 
-  elementsWithUpdatedPos.forEach((el) => {
-    bulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
-  });
-
-  await Column.bulkWrite(bulkArr);
-  return elementsWithUpdatedPos;
+  return updatedColumns;
 };
 
-const deleteService = async (reqBody: DataForDeleting): Promise<void> => {
+const deleteService = async (reqBody: BodyForDeleting): Promise<void> => {
   const { columnId, boardId } = reqBody;
-  const bulkArr: BulkUpdate<BulkPosition>[] = [];
+  await columnRepository().delete(columnId);
 
-  await Column.findByIdAndDelete(columnId);
-  await Card.deleteMany({ columnId });
+  const columns: Column[] = await columnRepository().find({
+    where: { board: { id: boardId } },
+    order: { position: 'ASC' }
+  });
 
-  const columns: ColumnInDB[] = await Column.find({ boardId });
-  const elementsWithUpdatedPos: FilteredColumn[] = columns.map((el, idx) => ({
-    id: String(el._id),
-    boardId: el.boardId,
-    name: el.name,
+  const repositionedColumns: Column[] = columns.map((el, idx) => ({
+    ...el,
     position: idx
   }));
 
-  elementsWithUpdatedPos.forEach((el) => {
-    bulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
-  });
-
-  await Column.bulkWrite(bulkArr);
+  await columnRepository().save(repositionedColumns);
 };
 
 export {

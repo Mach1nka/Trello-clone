@@ -11,14 +11,14 @@ import {
   shareBoardService,
   deleteService
 } from '../services/boards';
-import { CustomRequest } from '../../types/common';
+import { CustomRequest, Empty } from '../../types/common';
 import {
   AccessibleBoardsResponse,
   BoardResponse,
-  BodyForCreatingBoard,
-  BodyForDeletingBoard,
-  BodyForRenamingBoard,
-  BodyForSharingBoard
+  BodyForCreating,
+  BodyForDeleting,
+  BodyForRenaming,
+  BodyForSharing
 } from '../../types/boards/interfaces';
 
 const getAllBoards = async (req: CustomRequest, res: Response) => {
@@ -28,7 +28,7 @@ const getAllBoards = async (req: CustomRequest, res: Response) => {
   res.json(new BaseResponse<AccessibleBoardsResponse>({ ownBoards, sharedBoards }));
 };
 
-const createNewBoard = async (req: CustomRequest<BodyForCreatingBoard>, res: Response) => {
+const createNewBoard = async (req: CustomRequest<BodyForCreating>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -41,7 +41,7 @@ const createNewBoard = async (req: CustomRequest<BodyForCreatingBoard>, res: Res
   res.status(201).json(new BaseResponse<BoardResponse>({ id, name }, 201));
 };
 
-const updateBoardName = async (req: CustomRequest<BodyForRenamingBoard>, res: Response) => {
+const updateBoardName = async (req: CustomRequest<BodyForRenaming>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -54,7 +54,7 @@ const updateBoardName = async (req: CustomRequest<BodyForRenamingBoard>, res: Re
   res.json(new BaseResponse<BoardResponse>({ id, name }));
 };
 
-const shareBoard = async (req: CustomRequest<BodyForSharingBoard>, res: Response) => {
+const shareBoard = async (req: CustomRequest<BodyForSharing>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -63,10 +63,10 @@ const shareBoard = async (req: CustomRequest<BodyForSharingBoard>, res: Response
 
   await shareBoardService(req.body);
 
-  res.status(200).json(new BaseResponse({}, 200));
+  res.status(200).json(new BaseResponse<Empty>({}, 200));
 };
 
-const deleteBoard = async (req: CustomRequest<BodyForDeletingBoard>, res: Response) => {
+const deleteBoard = async (req: CustomRequest<BodyForDeleting>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -76,7 +76,7 @@ const deleteBoard = async (req: CustomRequest<BodyForDeletingBoard>, res: Respon
   const { userId } = getUserPayload(req);
   await deleteService({ ...req.body, userId });
 
-  res.status(200).json(new BaseResponse({}, 200));
+  res.status(200).json(new BaseResponse<Empty>({}, 200));
 };
 
 export { getAllBoards, createNewBoard, updateBoardName, shareBoard, deleteBoard };

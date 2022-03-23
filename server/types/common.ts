@@ -18,3 +18,12 @@ export interface JWTDto {
   userId: string;
   login: string;
 }
+
+declare global {
+  namespace Express {
+    interface User {
+      id: string;
+      login: string;
+    }
+  }
+}

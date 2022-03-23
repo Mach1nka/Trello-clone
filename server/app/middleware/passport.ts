@@ -8,16 +8,6 @@ import CONFIG from '../../config';
 import InvalidCredentials from '../../utils/errors/invalid-credentials';
 import { JWTDto, CustomRequest } from '../../types/common';
 
-// FIXME: should be extend from Request
-declare global {
-  namespace Express {
-    interface User {
-      id: string;
-      login: string;
-    }
-  }
-}
-
 const options = {
   jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
   secretOrKey: CONFIG.JWT_SECRET_KEY

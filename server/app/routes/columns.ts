@@ -19,7 +19,6 @@ router.post(
   [
     check('boardId', 'Board Id is required').exists(),
     check('name', 'Name is required').exists(),
-    check('position', 'Position is required').exists().isNumeric(),
     jwtAuthenticate
   ],
   createNewColumn
@@ -35,8 +34,25 @@ router.patch(
   updateColumnName
 );
 
-router.put('/column/position', jwtAuthenticate, updateColumnPosition);
+router.patch(
+  '/column/position',
+  [
+    check('columnId', 'Column Id is required').exists(),
+    check('boardId', 'New name is required').exists(),
+    check('newPosition', 'New name is required').exists().isNumeric(),
+    jwtAuthenticate
+  ],
+  updateColumnPosition
+);
 
-router.delete('/column', jwtAuthenticate, deleteColumn);
+router.delete(
+  '/column',
+  [
+    check('columnId', 'Column Id is required').exists(),
+    check('boardId', 'New name is required').exists(),
+    jwtAuthenticate
+  ],
+  deleteColumn
+);
 
 export { router };

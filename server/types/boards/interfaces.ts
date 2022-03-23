@@ -7,20 +7,20 @@ export interface AccessibleBoardsResponse {
   sharedBoards: Board[];
 }
 
-export interface BodyForCreatingBoard {
+export interface BodyForCreating {
   name: string;
 }
 
-export interface BodyForRenamingBoard {
+export interface BodyForRenaming {
   newName: string;
   boardId: string;
 }
 
-export interface BodyForSharingBoard {
+export interface BodyForSharing {
   newParticipantId: string;
   boardId: string;
 }
 
-export interface BodyForDeletingBoard {
+export interface BodyForDeleting {
   boardId: string;
 }

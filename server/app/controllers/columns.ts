@@ -1,4 +1,4 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { validationResult } from 'express-validator';
 
 import {
@@ -8,39 +8,54 @@ import {
   updatePositionService,
   deleteService
 } from '../services/columns';
+import { CustomRequest, Empty } from '../../types/common';
 import BaseResponse from '../../utils/base-response';
 import BadRequest from '../../utils/errors/bad-request';
+import {
+  BodyForCreating,
+  BodyForRenaming,
+  BodyForReposition,
+  BodyForDeleting,
+  ParamsForGetting,
+  ColumnResponse
+} from '../../types/columns/interfaces';
+import { BoardColumn } from '../entities/column';
 
-const getColumns = async (req: Request, res: Response): Promise<void> => {
+const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Response) => {
   const { boardId } = req.params;
 
-  const columns = await getColumnsService(boardId);
-  res.json(new BaseResponse(columns));
+  const columns: BoardColumn[] = await getColumnsService({ boardId });
+
+  res.json(new BaseResponse<BoardColumn[]>(columns));
 };
 
-const createNewColumn = async (req: Request, res: Response): Promise<void> => {
+const createNewColumn = async (req: CustomRequest<BodyForCreating>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     throw new BadRequest(errors.array());
   }
 
-  const createdColumn = await createColumnService(req.body);
-  res.status(201).json(new BaseResponse(createdColumn, 201));
+  const { id, name, position, board } = await createColumnService(req.body);
+
+  res
+    .status(201)
+    .json(new BaseResponse<ColumnResponse>({ id, name, position, boardId: board.id }, 201));
 };
 
-const updateColumnName = async (req: Request, res: Response): Promise<void> => {
+const updateColumnName = async (req: CustomRequest<BodyForRenaming>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     throw new BadRequest(errors.array());
   }
 
-  const updatedColumn = await updateNameService(req.body);
-  res.json(new BaseResponse(updatedColumn));
+  const { id, name, position, board } = await updateNameService(req.body);
+
+  res.json(new BaseResponse<ColumnResponse>({ id, name, position, boardId: board.id }));
 };
 
-const updateColumnPosition = async (req: Request, res: Response): Promise<void> => {
+const updateColumnPosition = async (req: CustomRequest<BodyForReposition>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -48,10 +63,11 @@ const updateColumnPosition = async (req: Request, res: Response): Promise<void> 
   }
 
   const elementsWithUpdatedPos = await updatePositionService(req.body);
+
   res.json(new BaseResponse(elementsWithUpdatedPos));
 };
 
-const deleteColumn = async (req: Request, res: Response): Promise<void> => {
+const deleteColumn = async (req: CustomRequest<BodyForDeleting>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
@@ -59,6 +75,7 @@ const deleteColumn = async (req: Request, res: Response): Promise<void> => {
   }
 
   await deleteService(req.body);
+
   res.status(200).json(new BaseResponse({}, 200));
 };
 
