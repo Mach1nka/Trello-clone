@@ -1,292 +1,168 @@
-import Card, { CardInDB } from '../models/card';
-import { BulkUpdate, BulkPosition } from '../../types/bulkarr';
+import { cardRepository, columnRepository } from '../database/repositories';
+import { Card } from '../entities/card';
+import { BoardColumn as Column } from '../entities/column';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
-import insertCardToArr from '../../utils/insert-card';
+import findEntity from '../../utils/find-entity';
+import repositionEntity from '../../utils/reposition-entity';
+import {
+  ParamsForGetting,
+  BodyForCreating,
+  BodyForRenaming,
+  BodyForUpdatingDesc,
+  BodyForUpdatingPos,
+  BodyForTransferringCard,
+  BodyForDeleting
+} from '../../types/cards/interfaces';
 
-interface FilteredCard {
-  id: string;
-  name: string;
-  description: string;
-  position: number;
-  columnId: string;
-}
+const getCardsService = async (data: ParamsForGetting): Promise<Card[]> => {
+  const { columnId } = data;
+  const cards: Card[] = await cardRepository().find({
+    where: { column: { id: columnId } },
+    order: { position: 'ASC' }
+  });
 
-interface BodyForCreatCard {
-  name: string;
-  columnId: string;
-  description: string;
-  position: number;
-}
-
-interface BodyForRenameCard {
-  cardId: string;
-  newName: string;
-}
-
-interface BodyForUpdateDescription {
-  cardId: string;
-  newDescription: string;
-}
-
-interface BodyForUpdatePos {
-  cardId: string;
-  columnId: string;
-  newPosition: number;
-}
-
-interface BodyForUpdateStatus {
-  columnId: string;
-  newColumnId: string;
-  cardId: string;
-  newPosition: number;
-}
-
-interface BodyForDelete {
-  cardId: string;
-  columnId: string;
-}
-
-const getCardsService = async (columnId: string): Promise<FilteredCard[]> => {
-  const cardsArr: CardInDB[] = await Card.find({ columnId });
-
-  if (cardsArr.length) {
-    cardsArr.sort((a, b) => a.position - b.position);
-
-    const preparedArr: FilteredCard[] = cardsArr.map((el) => ({
-      id: el._id,
-      name: el.name,
-      description: el.description,
-      position: el.position,
-      columnId: el.columnId
-    }));
-    return preparedArr;
-  }
-  return [];
+  return cards;
 };
 
-const createCardService = async (reqBody: BodyForCreatCard): Promise<FilteredCard> => {
-  const { columnId, name, description, position } = reqBody;
-  const bulkArr: BulkUpdate<BulkPosition>[] = [];
+const createCardService = async (data: BodyForCreating): Promise<Card> => {
+  const { columnId, name, description = '' } = data;
+  const column: Column | undefined = await columnRepository().findOne(columnId);
 
-  const newCard = Card.build({
-    columnId,
+  if (!column) {
+    throw new NotFound('The Column does not exist');
+  }
+
+  const numberOfCards = await cardRepository().count({
+    where: { column: { id: columnId } }
+  });
+  const createdCard: Card = await cardRepository().save({
     name,
     description,
-    position: Number(position)
+    position: numberOfCards,
+    column
   });
 
-  await newCard.save();
-  const cardsData: CardInDB[] = await Card.find({ columnId });
+  return createdCard;
+};
 
-  cardsData.sort((a, b) => a.position - b.position);
-
-  const elementsWithUpdatedPos: FilteredCard[] = cardsData.map((el, idx) => ({
-    id: el._id,
-    name: el.name,
-    description: el.description,
-    position: idx,
-    columnId: el.columnId
-  }));
-
-  elementsWithUpdatedPos.forEach((el) => {
-    bulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
+const updateNameService = async (data: BodyForRenaming): Promise<Card> => {
+  const { cardId, newName } = data;
+  const card: Card | undefined = await cardRepository().findOne(cardId, {
+    relations: ['column']
   });
 
-  await Card.bulkWrite(bulkArr);
-
-  const createdCard: CardInDB | null = await Card.findById(newCard._id);
-
-  if (!createdCard) {
-    throw new NotFound();
+  if (!card) {
+    throw new NotFound('Card does not exist');
   }
 
-  const preparedCard: FilteredCard = {
-    id: createdCard._id,
-    columnId: createdCard.columnId,
-    name: createdCard.name,
-    description: createdCard.description,
-    position: createdCard.position
-  };
-  return preparedCard;
+  const updatedCard = cardRepository().save({ ...card, name: newName });
+
+  return updatedCard;
 };
 
-const updateNameService = async (reqBody: BodyForRenameCard): Promise<FilteredCard> => {
-  const { cardId, newName } = reqBody;
-  const updatedCard: CardInDB | null = await Card.findByIdAndUpdate(
-    cardId,
-    { name: newName },
-    { new: true }
-  );
+const updateDescriptionService = async (data: BodyForUpdatingDesc): Promise<Card> => {
+  const { cardId, newDescription } = data;
+  const card: Card | undefined = await cardRepository().findOne(cardId, {
+    relations: ['column']
+  });
 
-  if (!updatedCard) {
-    throw new NotFound();
+  if (!card) {
+    throw new NotFound('Card does not exist');
   }
 
-  const preparedData: FilteredCard = {
-    id: updatedCard._id,
-    columnId: updatedCard.columnId,
-    name: updatedCard.name,
-    description: updatedCard.description,
-    position: updatedCard.position
-  };
-  return preparedData;
+  const updatedCard = await cardRepository().save({ ...card, description: newDescription });
+
+  return updatedCard;
 };
 
-const updateDescriptionService = async (
-  reqBody: BodyForUpdateDescription
-): Promise<FilteredCard> => {
-  const { cardId, newDescription } = reqBody;
-  const updatedCard: CardInDB | null = await Card.findByIdAndUpdate(
-    cardId,
-    { description: newDescription },
-    { new: true }
-  );
+const updatePositionService = async (data: BodyForUpdatingPos): Promise<Card[]> => {
+  const { columnId, newPosition, cardId } = data;
+  const cards: Card[] = await cardRepository().find({
+    where: { column: { id: columnId } },
+    order: { position: 'ASC' }
+  });
 
-  if (!updatedCard) {
-    throw new NotFound();
-  }
+  const { requiredEntity, currentPosition: currentCardPosition } = findEntity<Card>(cards, cardId);
 
-  const preparedData: FilteredCard = {
-    id: updatedCard._id,
-    columnId: updatedCard.columnId,
-    name: updatedCard.name,
-    description: updatedCard.description,
-    position: updatedCard.position
-  };
-  return preparedData;
-};
-
-const updatePositionService = async (reqBody: BodyForUpdatePos): Promise<FilteredCard[]> => {
-  const { columnId, newPosition, cardId } = reqBody;
-  const bulkArr: BulkUpdate<BulkPosition>[] = [];
-  const cardsArr: CardInDB[] = await Card.find({ columnId });
-
-  cardsArr.sort((a, b) => a.position - b.position);
-
-  const indexOldEl = cardsArr.findIndex((el) => el._id.toString() === cardId);
-  const editableEl: CardInDB | undefined = cardsArr.find((el) => el._id.toString() === cardId);
-
-  if (!editableEl) {
+  if (!requiredEntity || currentCardPosition === undefined) {
     throw new BadRequest();
   }
 
-  const updatedArr: CardInDB[] = insertCardToArr(cardsArr, editableEl, newPosition, indexOldEl);
+  const repositionedCards: Card[] = repositionEntity<Card>(
+    cards,
+    requiredEntity,
+    newPosition,
+    currentCardPosition
+  );
 
-  const elementsWithUpdatedPos: FilteredCard[] = updatedArr.map((el, idx) => ({
-    id: el._id,
-    columnId: el.columnId,
-    name: el.name,
-    description: el.description,
-    position: idx
-  }));
+  const updatedCards = cardRepository().save(repositionedCards);
 
-  elementsWithUpdatedPos.forEach((el) => {
-    bulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
-  });
-
-  await Card.bulkWrite(bulkArr);
-  return elementsWithUpdatedPos;
+  return updatedCards;
 };
 
-const updateStatusService = async (reqBody: BodyForUpdateStatus): Promise<void> => {
-  const { columnId, newColumnId, cardId, newPosition = 0 } = reqBody;
+const transferCardService = async (data: BodyForTransferringCard): Promise<void> => {
+  const { columnId, newColumnId, cardId, newPosition = 0 } = data;
+  const newColumn: Column | undefined = await columnRepository().findOne(newColumnId);
 
-  await Card.findByIdAndUpdate(cardId, { columnId: newColumnId, position: newPosition });
+  if (!newColumn) {
+    throw new NotFound('Column does not exist');
+  }
 
-  const oldStatusArr: CardInDB[] = await Card.find({ columnId });
-  const oldStatusBulkArr: BulkUpdate<BulkPosition>[] = [];
+  await cardRepository().update(cardId, { position: newPosition, column: newColumn });
 
-  const oldStatusArrWithUpdatedPos: FilteredCard[] = oldStatusArr.map((el, idx) => ({
-    id: el._id,
-    columnId: el.columnId,
-    name: el.name,
-    description: el.description,
-    position: idx
-  }));
-
-  oldStatusArrWithUpdatedPos.forEach((el) => {
-    oldStatusBulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
+  const cardListOfPreviousColumn: Card[] = await cardRepository().find({
+    where: { column: { id: columnId } },
+    order: { position: 'ASC' }
   });
-  await Card.bulkWrite(oldStatusBulkArr);
 
-  const newStatusArr: CardInDB[] = await Card.find({ columnId: newColumnId });
-  const newStatusBulkArr: BulkUpdate<BulkPosition>[] = [];
+  const cardListOfCurrentColumn: Card[] = await cardRepository().find({
+    where: { column: { id: newColumnId } },
+    order: { position: 'ASC' }
+  });
 
-  newStatusArr.sort((a, b) => a.position - b.position);
+  const { requiredEntity, currentPosition: currentCardPosition } = findEntity<Card>(
+    cardListOfCurrentColumn,
+    cardId
+  );
 
-  const indexOldEl = newStatusArr.findIndex((el) => el._id.toString() === cardId);
-  const editableEl: CardInDB | undefined = newStatusArr.find((el) => el._id.toString() === cardId);
-
-  if (!editableEl) {
+  if (!requiredEntity || currentCardPosition === undefined) {
     throw new BadRequest();
   }
 
-  const updatedArr: CardInDB[] = insertCardToArr(newStatusArr, editableEl, newPosition, indexOldEl);
-
-  const newStatusArrWithUpdatedPos: FilteredCard[] = updatedArr.map((el, idx) => ({
-    id: el._id,
-    columnId: el.columnId,
-    name: el.name,
-    description: el.description,
+  const updatedCardListOfPreviousColumn: Card[] = cardListOfPreviousColumn.map((el, idx) => ({
+    ...el,
     position: idx
   }));
 
-  newStatusArrWithUpdatedPos.forEach((el) => {
-    newStatusBulkArr.push({
-      updateOne: {
-        filter: { _id: el.id },
-        update: { position: el.position }
-      }
-    });
-  });
+  const updatedCardListOfCurrentColumn: Card[] = repositionEntity<Card>(
+    cardListOfCurrentColumn,
+    requiredEntity,
+    newPosition,
+    currentCardPosition
+  );
 
-  await Card.bulkWrite(newStatusBulkArr);
+  await cardRepository().save([
+    ...updatedCardListOfPreviousColumn,
+    ...updatedCardListOfCurrentColumn
+  ]);
 };
 
-const deleteService = async (reqBody: BodyForDelete): Promise<void> => {
-  const { cardId, columnId } = reqBody;
+const deleteService = async (data: BodyForDeleting): Promise<void> => {
+  const { cardId, columnId } = data;
+  await cardRepository().delete(cardId);
 
-  await Card.findByIdAndDelete(cardId);
-  const cardsArr: CardInDB[] = await Card.find({ columnId });
+  const cards: Card[] = await cardRepository().find({
+    where: { column: { id: columnId } },
+    order: { position: 'ASC' }
+  });
 
-  if (cardsArr.length) {
-    const bulkArr: BulkUpdate<BulkPosition>[] = [];
+  const repositionedCards: Card[] = cards.map((el, idx) => ({
+    ...el,
+    position: idx
+  }));
 
-    const elementsWithUpdatedPos: FilteredCard[] = cardsArr.map((el, idx) => ({
-      id: el._id,
-      columnId: el.columnId,
-      name: el.name,
-      description: el.description,
-      position: idx
-    }));
-
-    elementsWithUpdatedPos.forEach((el) => {
-      bulkArr.push({
-        updateOne: {
-          filter: { _id: el.id },
-          update: { position: el.position }
-        }
-      });
-    });
-
-    await Card.bulkWrite(bulkArr);
-  }
+  await cardRepository().save(repositionedCards);
 };
 
 export {
@@ -295,6 +171,6 @@ export {
   updateNameService,
   updateDescriptionService,
   updatePositionService,
-  updateStatusService,
+  transferCardService,
   deleteService
 };

@@ -7,7 +7,7 @@ import {
   updateCardName,
   updateCardDescription,
   updateCardPosition,
-  changeCardStatus,
+  transferCard,
   deleteCard
 } from '../controllers/cards';
 import { jwtAuthenticate } from '../middleware/passport';
@@ -21,7 +21,6 @@ router.post(
   [
     check('columnId', 'Card Id is required').exists(),
     check('name', 'Name is required').exists(),
-    check('position', 'Position is required').exists().isNumeric(),
     jwtAuthenticate
   ],
   createNewCard
@@ -42,7 +41,7 @@ router.patch(
   updateCardName
 );
 
-router.put(
+router.patch(
   '/card/position',
   [
     check('cardId', 'Card Id is required').exists(),
@@ -53,15 +52,15 @@ router.put(
   updateCardPosition
 );
 
-router.put(
-  '/card/status',
+router.patch(
+  '/card/transfer',
   [
     check('cardId', 'Card Id is required').exists(),
     check('columnId', 'Column Id is required').exists(),
     check('newColumnId', 'New column is required').exists(),
     jwtAuthenticate
   ],
-  changeCardStatus
+  transferCard
 );
 
 router.delete('/card', jwtAuthenticate, deleteCard);

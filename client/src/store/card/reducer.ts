@@ -20,7 +20,7 @@ const cardsData = (state = initialCardsState, action: CardActions): CardData => 
         ...state,
         [action.payload.columnId]: state[action.payload.columnId]
           ? state[action.payload.columnId].concat(action.payload)
-          : [action.payload as Card]
+          : [action.payload]
       };
     case CardTypes.PUT_UPDATED_CARD:
       return {

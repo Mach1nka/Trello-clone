@@ -19,14 +19,16 @@ import {
   ParamsForGetting,
   ColumnResponse
 } from '../../types/columns/interfaces';
-import { BoardColumn } from '../entities/column';
+
+// FIXME: All controllers must return ColumnResponse type
+import { BoardColumn as Column } from '../entities/column';
 
 const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Response) => {
   const { boardId } = req.params;
 
-  const columns: BoardColumn[] = await getColumnsService({ boardId });
+  const columns: Column[] = await getColumnsService({ boardId });
 
-  res.json(new BaseResponse<BoardColumn[]>(columns));
+  res.json(new BaseResponse<Column[]>(columns));
 };
 
 const createNewColumn = async (req: CustomRequest<BodyForCreating>, res: Response) => {
@@ -62,9 +64,9 @@ const updateColumnPosition = async (req: CustomRequest<BodyForReposition>, res: 
     throw new BadRequest(errors.array());
   }
 
-  const elementsWithUpdatedPos = await updatePositionService(req.body);
+  const updatedColumns: Column[] = await updatePositionService(req.body);
 
-  res.json(new BaseResponse(elementsWithUpdatedPos));
+  res.json(new BaseResponse<Column[]>(updatedColumns));
 };
 
 const deleteColumn = async (req: CustomRequest<BodyForDeleting>, res: Response) => {
@@ -76,7 +78,7 @@ const deleteColumn = async (req: CustomRequest<BodyForDeleting>, res: Response) 
 
   await deleteService(req.body);
 
-  res.status(200).json(new BaseResponse({}, 200));
+  res.status(200).json(new BaseResponse<Empty>({}, 200));
 };
 
 export { getColumns, createNewColumn, updateColumnName, updateColumnPosition, deleteColumn };

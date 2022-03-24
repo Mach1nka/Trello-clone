@@ -3,7 +3,8 @@ import { BoardColumn as Column } from '../entities/column';
 import { Board } from '../entities/board';
 import BadRequest from '../../utils/errors/bad-request';
 import NotFound from '../../utils/errors/not-found';
-import repositionColumn from '../../utils/reposition-column';
+import repositionEntity from '../../utils/reposition-entity';
+import findEntity from '../../utils/find-entity';
 import {
   ParamsForGetting,
   BodyForCreating,
@@ -30,17 +31,16 @@ const createColumnService = async (data: BodyForCreating): Promise<Column> => {
   }
 
   const numberOfColumns = await columnRepository().count({
-    relations: ['board'],
     where: { board: { id: boardId } }
   });
 
-  const createdBoard = await columnRepository().save({
+  const createdColumn: Column = await columnRepository().save({
     board,
     name,
     position: numberOfColumns
   });
 
-  return createdBoard;
+  return createdColumn;
 };
 
 const updateNameService = async (data: BodyForRenaming): Promise<Column> => {
@@ -65,25 +65,20 @@ const updatePositionService = async (data: BodyForReposition): Promise<Column[]>
     order: { position: 'ASC' }
   });
 
-  let indexOldEl: number | null = null;
+  const { requiredEntity, currentPosition: currentColumnPosition } = findEntity<Column>(
+    columns,
+    columnId
+  );
 
-  const editableEl = columns.find((el: Column, idx) => {
-    if (el.id === columnId) {
-      indexOldEl = idx;
-      return el;
-    }
-    return undefined;
-  });
-
-  if (!editableEl || !indexOldEl) {
+  if (!requiredEntity || currentColumnPosition === undefined) {
     throw new BadRequest();
   }
 
-  const repositionedColumns: Column[] = repositionColumn(
+  const repositionedColumns: Column[] = repositionEntity<Column>(
     columns,
-    editableEl,
+    requiredEntity,
     newPosition,
-    indexOldEl
+    currentColumnPosition
   );
 
   const updatedColumns: Column[] = await columnRepository().save(repositionedColumns);
