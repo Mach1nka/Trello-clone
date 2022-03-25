@@ -19,8 +19,6 @@ import {
   ParamsForGetting,
   ColumnResponse
 } from '../../types/columns/interfaces';
-
-// FIXME: All controllers must return ColumnResponse type
 import { BoardColumn as Column } from '../entities/column';
 
 const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Response) => {
@@ -28,7 +26,12 @@ const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Resp
 
   const columns: Column[] = await getColumnsService({ boardId });
 
-  res.json(new BaseResponse<Column[]>(columns));
+  const mappedColumns: ColumnResponse[] = columns.map((el) => ({
+    ...el,
+    boardId
+  }));
+
+  res.json(new BaseResponse<ColumnResponse[]>(mappedColumns));
 };
 
 const createNewColumn = async (req: CustomRequest<BodyForCreating>, res: Response) => {
@@ -64,9 +67,14 @@ const updateColumnPosition = async (req: CustomRequest<BodyForReposition>, res: 
     throw new BadRequest(errors.array());
   }
 
-  const updatedColumns: Column[] = await updatePositionService(req.body);
+  const columns: Column[] = await updatePositionService(req.body);
 
-  res.json(new BaseResponse<Column[]>(updatedColumns));
+  const mappedColumns: ColumnResponse[] = columns.map((el) => ({
+    ...el,
+    boardId: req.body.boardId
+  }));
+
+  res.json(new BaseResponse<ColumnResponse[]>(mappedColumns));
 };
 
 const deleteColumn = async (req: CustomRequest<BodyForDeleting>, res: Response) => {

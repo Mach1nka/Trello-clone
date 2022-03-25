@@ -8,6 +8,11 @@ export type CardResponse = Pick<Card, 'id' | 'name' | 'position' | 'description'
   columnId: string;
 };
 
+export interface CardListResponse {
+  columnId: string;
+  cards: CardResponse[];
+}
+
 export interface BodyForCreating {
   name: string;
   columnId: string;

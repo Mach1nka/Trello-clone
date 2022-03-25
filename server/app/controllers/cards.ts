@@ -21,23 +21,23 @@ import {
   BodyForUpdatingPos,
   BodyForTransferringCard,
   BodyForDeleting,
-  CardResponse
+  CardResponse,
+  CardListResponse
 } from '../../types/cards/interfaces';
 
 const getCards = async (
   req: CustomRequest<Empty, ParamsForGetting>,
   res: Response
 ): Promise<void> => {
-  const errors = validationResult(req);
-
-  if (!errors.isEmpty()) {
-    throw new BadRequest(errors.array());
-  }
-
   const { columnId } = req.params;
   const cards = await getCardsService({ columnId });
 
-  res.json(new BaseResponse({ columnId, cards }));
+  const mappedCards: CardResponse[] = cards.map((el) => ({
+    ...el,
+    columnId
+  }));
+
+  res.json(new BaseResponse<CardListResponse>({ columnId, cards: mappedCards }));
 };
 
 const createNewCard = async (req: CustomRequest<BodyForCreating>, res: Response): Promise<void> => {
@@ -103,7 +103,12 @@ const updateCardPosition = async (
   const { columnId } = req.body;
   const cards = await updatePositionService(req.body);
 
-  res.json(new BaseResponse({ columnId, cards }));
+  const mappedCards: CardResponse[] = cards.map((el) => ({
+    ...el,
+    columnId
+  }));
+
+  res.json(new BaseResponse<CardListResponse>({ columnId, cards: mappedCards }));
 };
 
 const transferCard = async (
