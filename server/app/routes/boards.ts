@@ -9,6 +9,7 @@ import {
   shareBoard
 } from '../controllers/boards';
 import { jwtAuthenticate } from '../middleware/passport';
+import userPermission from '../middleware/permission';
 
 const router = express.Router();
 
@@ -25,7 +26,8 @@ router.patch(
   [
     check('boardId', 'Board Id is required').exists(),
     check('newName', 'New name is required').exists(),
-    jwtAuthenticate
+    jwtAuthenticate,
+    userPermission
   ],
   updateBoardName
 );
@@ -35,14 +37,15 @@ router.patch(
   [
     check('boardId', 'Board Id is required').exists(),
     check('newParticipantId', 'User Id is required').exists(),
-    jwtAuthenticate
+    jwtAuthenticate,
+    userPermission
   ],
   shareBoard
 );
 
 router.delete(
   '/board',
-  [check('boardId', 'Board Id is required').exists(), jwtAuthenticate],
+  [check('boardId', 'Board Id is required').exists(), jwtAuthenticate, userPermission],
   deleteBoard
 );
 

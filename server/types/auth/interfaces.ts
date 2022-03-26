@@ -14,3 +14,8 @@ export interface AuthResponse {
 }
 
 export type UserId = Pick<ReqUserPayload, 'userId'>;
+
+export enum UserRole {
+  Owner = 'Owner',
+  Participant = 'Participant'
+}

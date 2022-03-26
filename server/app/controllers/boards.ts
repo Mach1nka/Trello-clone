@@ -20,6 +20,7 @@ import {
   BodyForRenaming,
   BodyForSharing
 } from '../../types/boards/interfaces';
+import { UserRole } from '../../types/auth/interfaces';
 
 const getAllBoards = async (req: CustomRequest, res: Response) => {
   const { userId } = getUserPayload(req);
@@ -48,8 +49,9 @@ const updateBoardName = async (req: CustomRequest<BodyForRenaming>, res: Respons
     throw new BadRequest(errors.array());
   }
 
+  const userRole = req.userRole as UserRole;
   const { userId } = getUserPayload(req);
-  const { id, name } = await updateNameService({ ...req.body, userId });
+  const { id, name } = await updateNameService({ ...req.body, userId, userRole });
 
   res.json(new BaseResponse<BoardResponse>({ id, name }));
 };
@@ -61,7 +63,8 @@ const shareBoard = async (req: CustomRequest<BodyForSharing>, res: Response) => 
     throw new BadRequest(errors.array());
   }
 
-  await shareBoardService(req.body);
+  const userRole = req.userRole as UserRole;
+  await shareBoardService({ ...req.body, userRole });
 
   res.status(200).json(new BaseResponse<Empty>({}, 200));
 };
@@ -73,8 +76,9 @@ const deleteBoard = async (req: CustomRequest<BodyForDeleting>, res: Response) =
     throw new BadRequest(errors.array());
   }
 
+  const userRole = req.userRole as UserRole;
   const { userId } = getUserPayload(req);
-  await deleteService({ ...req.body, userId });
+  await deleteService({ ...req.body, userId, userRole });
 
   res.status(200).json(new BaseResponse<Empty>({}, 200));
 };

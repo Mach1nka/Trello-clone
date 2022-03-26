@@ -3,14 +3,16 @@ import { Board } from '../entities/board';
 import { User } from '../entities/user';
 import NotFound from '../../utils/errors/not-found';
 import BadRequest from '../../utils/errors/bad-request';
+import RefusalInAccess from '../../utils/errors/refusal-in-access';
 import {
   AccessibleBoardsResponse,
   BodyForCreating,
   BodyForDeleting,
   BodyForRenaming,
-  BodyForSharing
+  BodyForSharing,
+  UserPermission
 } from '../../types/boards/interfaces';
-import { UserId } from '../../types/auth/interfaces';
+import { UserId, UserRole } from '../../types/auth/interfaces';
 
 const getBoardsService = async (data: UserId): Promise<AccessibleBoardsResponse> => {
   const { userId } = data;
@@ -41,8 +43,15 @@ const createBoardService = async (data: BodyForCreating & UserId): Promise<Board
   return createdBoard;
 };
 
-const updateNameService = async (data: BodyForRenaming & UserId): Promise<Board> => {
-  const { boardId, userId, newName } = data;
+const updateNameService = async (
+  data: BodyForRenaming & UserId & UserPermission
+): Promise<Board> => {
+  const { boardId, userId, newName, userRole } = data;
+
+  if (userRole !== UserRole.Owner) {
+    throw new RefusalInAccess();
+  }
+
   const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['owner'],
     where: {
@@ -61,8 +70,12 @@ const updateNameService = async (data: BodyForRenaming & UserId): Promise<Board>
   return updatedBoard;
 };
 
-const shareBoardService = async (data: BodyForSharing): Promise<void> => {
-  const { boardId, newParticipantId } = data;
+const shareBoardService = async (data: BodyForSharing & UserPermission): Promise<void> => {
+  const { boardId, newParticipantId, userRole } = data;
+
+  if (userRole !== UserRole.Owner) {
+    throw new RefusalInAccess();
+  }
 
   const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['users', 'owner']
@@ -81,8 +94,9 @@ const shareBoardService = async (data: BodyForSharing): Promise<void> => {
   await boardRepository().save(board);
 };
 
-const deleteService = async (data: BodyForDeleting & UserId): Promise<void> => {
-  const { boardId, userId } = data;
+const deleteService = async (data: BodyForDeleting & UserId & UserPermission): Promise<void> => {
+  const { boardId, userId, userRole } = data;
+
   const board: Board | undefined = await boardRepository().findOne(boardId, {
     relations: ['owner', 'users']
   });
@@ -91,22 +105,13 @@ const deleteService = async (data: BodyForDeleting & UserId): Promise<void> => {
     throw new NotFound('Board does not exist');
   }
 
-  const isOwner = board.owner.id === userId;
-  const isParticipant = board.users.some((el: User) => el.id === userId);
-
-  if (!isOwner && !isParticipant) {
-    throw new BadRequest('The User does not have access to the board');
-  }
-
-  if (isOwner) {
+  if (userRole === UserRole.Owner) {
     await boardRepository().remove(board);
     return;
   }
 
-  if (isParticipant) {
-    board.users = board.users.filter((el: User) => el.id !== userId);
-    await boardRepository().save(board);
-  }
+  board.users = board.users.filter((el: User) => el.id !== userId);
+  await boardRepository().save(board);
 };
 
 export {

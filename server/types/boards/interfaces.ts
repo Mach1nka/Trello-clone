@@ -1,4 +1,5 @@
 import { Board } from '../../app/entities/board';
+import { UserRole } from '../auth/interfaces';
 
 export type BoardResponse = Pick<Board, 'id' | 'name'>;
 
@@ -23,4 +24,8 @@ export interface BodyForSharing {
 
 export interface BodyForDeleting {
   boardId: string;
+}
+
+export interface UserPermission {
+  userRole: UserRole;
 }

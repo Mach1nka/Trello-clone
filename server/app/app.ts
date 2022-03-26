@@ -5,7 +5,7 @@ import passport from 'passport';
 
 import DBConnector from './database/connector';
 import { passportMiddleware } from './middleware/passport';
-import errorMiddleware from './middleware/errorHandler';
+import errorMiddleware from './middleware/error-handler';
 import { router as authRoutes } from './routes/auth';
 import { router as boardsRoutes } from './routes/boards';
 import { router as columnsRoutes } from './routes/columns';

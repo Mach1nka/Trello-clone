@@ -13,7 +13,7 @@ const getClientErrors = async (req: Request, res: Response): Promise<void> => {
     throw new BadRequest({});
   }
 
-  fs.readFile('./server/errors/logs.txt', (err, data) => {
+  fs.readFile('./server/logs/index.txt', (err, data) => {
     if (err) {
       throw new BadRequest(err);
     }
