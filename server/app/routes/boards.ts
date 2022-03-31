@@ -1,5 +1,5 @@
 import express from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import {
   getAllBoards,
@@ -15,17 +15,13 @@ const router = express.Router();
 
 router.get('/boards', jwtAuthenticate, getAllBoards);
 
-router.post(
-  '/board',
-  [check('name', 'Name is required').exists(), jwtAuthenticate],
-  createNewBoard
-);
+router.post('/board', [body('name', 'Name is required').exists(), jwtAuthenticate], createNewBoard);
 
 router.patch(
   '/board/rename',
   [
-    check('boardId', 'Board Id is required').exists(),
-    check('newName', 'New name is required').exists(),
+    body('boardId', 'Board Id is required').exists(),
+    body('newName', 'New name is required').exists(),
     jwtAuthenticate,
     userPermission
   ],
@@ -35,8 +31,8 @@ router.patch(
 router.patch(
   '/board/share',
   [
-    check('boardId', 'Board Id is required').exists(),
-    check('newParticipantId', 'User Id is required').exists(),
+    body('boardId', 'Board Id is required').exists(),
+    body('newParticipantId', 'User Id is required').exists(),
     jwtAuthenticate,
     userPermission
   ],
@@ -45,7 +41,7 @@ router.patch(
 
 router.delete(
   '/board',
-  [check('boardId', 'Board Id is required').exists(), jwtAuthenticate, userPermission],
+  [param('boardId', 'Board Id is required').exists(), jwtAuthenticate, userPermission],
   deleteBoard
 );
 

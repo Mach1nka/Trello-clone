@@ -12,7 +12,7 @@ import {
   BodyForUpdatingDesc,
   BodyForUpdatingPos,
   BodyForTransferringCard,
-  BodyForDeleting
+  ParamsForDeleting
 } from '../../types/cards/interfaces';
 
 const getCardsService = async (data: ParamsForGetting): Promise<Card[]> => {
@@ -148,7 +148,7 @@ const transferCardService = async (data: BodyForTransferringCard): Promise<void>
   ]);
 };
 
-const deleteService = async (data: BodyForDeleting): Promise<void> => {
+const deleteService = async (data: ParamsForDeleting): Promise<void> => {
   const { cardId, columnId } = data;
   await cardRepository().delete(cardId);
 

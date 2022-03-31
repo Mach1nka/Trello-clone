@@ -16,7 +16,7 @@ import {
   AccessibleBoardsResponse,
   BoardResponse,
   BodyForCreating,
-  BodyForDeleting,
+  ParamsForDeleting,
   BodyForRenaming,
   BodyForSharing
 } from '../../types/boards/interfaces';
@@ -66,21 +66,23 @@ const shareBoard = async (req: CustomRequest<BodyForSharing>, res: Response) => 
   const userRole = req.userRole as UserRole;
   await shareBoardService({ ...req.body, userRole });
 
-  res.status(200).json(new BaseResponse<Empty>({}, 200));
+  res.json(new BaseResponse<Empty>({}));
 };
 
-const deleteBoard = async (req: CustomRequest<BodyForDeleting>, res: Response) => {
+const deleteBoard = async (req: CustomRequest<Empty, ParamsForDeleting>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     throw new BadRequest(errors.array());
   }
 
+  const { boardId } = req.params;
   const userRole = req.userRole as UserRole;
   const { userId } = getUserPayload(req);
-  await deleteService({ ...req.body, userId, userRole });
 
-  res.status(200).json(new BaseResponse<Empty>({}, 200));
+  await deleteService({ boardId, userId, userRole });
+
+  res.json(new BaseResponse<Empty>({}));
 };
 
 export { getAllBoards, createNewBoard, updateBoardName, shareBoard, deleteBoard };

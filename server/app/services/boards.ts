@@ -7,7 +7,7 @@ import RefusalInAccess from '../../utils/errors/refusal-in-access';
 import {
   AccessibleBoardsResponse,
   BodyForCreating,
-  BodyForDeleting,
+  ParamsForDeleting,
   BodyForRenaming,
   BodyForSharing,
   UserPermission
@@ -94,7 +94,7 @@ const shareBoardService = async (data: BodyForSharing & UserPermission): Promise
   await boardRepository().save(board);
 };
 
-const deleteService = async (data: BodyForDeleting & UserId & UserPermission): Promise<void> => {
+const deleteService = async (data: ParamsForDeleting & UserId & UserPermission): Promise<void> => {
   const { boardId, userId, userRole } = data;
 
   const board: Board | undefined = await boardRepository().findOne(boardId, {

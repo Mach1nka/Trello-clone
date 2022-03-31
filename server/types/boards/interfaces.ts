@@ -22,7 +22,7 @@ export interface BodyForSharing {
   boardId: string;
 }
 
-export interface BodyForDeleting {
+export interface ParamsForDeleting {
   boardId: string;
 }
 

@@ -1,5 +1,5 @@
 import express from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import {
   getColumns,
@@ -12,13 +12,17 @@ import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/columns/:boardId', jwtAuthenticate, getColumns);
+router.get(
+  '/columns/:boardId',
+  [param('boardId', 'Board Id is required').exists(), jwtAuthenticate],
+  getColumns
+);
 
 router.post(
   '/column',
   [
-    check('boardId', 'Board Id is required').exists(),
-    check('name', 'Name is required').exists(),
+    body('boardId', 'Board Id is required').exists(),
+    body('name', 'Name is required').exists(),
     jwtAuthenticate
   ],
   createNewColumn
@@ -27,29 +31,29 @@ router.post(
 router.patch(
   '/column/name',
   [
-    check('columnId', 'Column Id is required').exists(),
-    check('newName', 'New name is required').exists(),
+    body('columnId', 'Column Id is required').exists(),
+    body('newName', 'New name is required').exists(),
     jwtAuthenticate
   ],
   updateColumnName
 );
 
-router.patch(
+router.put(
   '/column/position',
   [
-    check('columnId', 'Column Id is required').exists(),
-    check('boardId', 'New name is required').exists(),
-    check('newPosition', 'New name is required').exists().isNumeric(),
+    body('columnId', 'Column Id is required').exists(),
+    body('boardId', 'New name is required').exists(),
+    body('newPosition', 'New name is required').exists().isNumeric(),
     jwtAuthenticate
   ],
   updateColumnPosition
 );
 
 router.delete(
-  '/column',
+  '/column/:columnId/:boardId',
   [
-    check('columnId', 'Column Id is required').exists(),
-    check('boardId', 'New name is required').exists(),
+    param('columnId', 'Column Id is required').exists(),
+    param('boardId', 'Board Id is required').exists(),
     jwtAuthenticate
   ],
   deleteColumn

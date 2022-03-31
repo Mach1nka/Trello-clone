@@ -1,5 +1,5 @@
 import express from 'express';
-import { check } from 'express-validator';
+import { body, param } from 'express-validator';
 
 import {
   getCards,
@@ -14,55 +14,67 @@ import { jwtAuthenticate } from '../middleware/passport';
 
 const router = express.Router();
 
-router.get('/cards/:columnId', jwtAuthenticate, getCards);
+router.get(
+  '/cards/:columnId',
+  [param('columnId', 'Column Id is required').exists(), jwtAuthenticate],
+  getCards
+);
 
 router.post(
   '/card',
   [
-    check('columnId', 'Card Id is required').exists(),
-    check('name', 'Name is required').exists(),
+    body('columnId', 'Card Id is required').exists(),
+    body('name', 'Name is required').exists(),
     jwtAuthenticate
   ],
   createNewCard
 );
 router.patch(
   '/card/description',
-  [check('cardId', 'Card Id is required').exists(), jwtAuthenticate],
+  [body('cardId', 'Card Id is required').exists(), jwtAuthenticate],
   updateCardDescription
 );
 
 router.patch(
   '/card/name',
   [
-    check('cardId', 'Card Id is required').exists(),
-    check('newName', 'New name is required').exists(),
+    body('cardId', 'Card Id is required').exists(),
+    body('newName', 'New name is required').exists(),
     jwtAuthenticate
   ],
   updateCardName
 );
 
-router.patch(
+router.put(
   '/card/position',
   [
-    check('cardId', 'Card Id is required').exists(),
-    check('columnId', 'Column Id is required').exists(),
-    check('newPosition', 'New position Id is required').exists().isNumeric(),
+    body('cardId', 'Card Id is required').exists(),
+    body('columnId', 'Column Id is required').exists(),
+    body('newPosition', 'New position Id is required').exists().isNumeric(),
     jwtAuthenticate
   ],
   updateCardPosition
 );
 
-router.patch(
-  '/card/transfer',
+router.put(
+  '/card/transferring',
   [
-    check('cardId', 'Card Id is required').exists(),
-    check('columnId', 'Column Id is required').exists(),
-    check('newColumnId', 'New column is required').exists(),
+    body('cardId', 'Card Id is required').exists(),
+    body('columnId', 'Column Id is required').exists(),
+    body('newColumnId', 'New column is required').exists(),
     jwtAuthenticate
   ],
   transferCard
 );
 
-router.delete('/card', jwtAuthenticate, deleteCard);
+router.delete(
+  '/card',
+  [
+    param('columnId', 'Column Id is required').exists(),
+    param('cardId', 'Card Id is required').exists(),
+    jwtAuthenticate
+  ],
+  deleteCard
+);
 
 export { router };

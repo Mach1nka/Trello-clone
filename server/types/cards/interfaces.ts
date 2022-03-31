@@ -42,7 +42,7 @@ export interface BodyForTransferringCard {
   newPosition: number;
 }
 
-export interface BodyForDeleting {
+export interface ParamsForDeleting {
   cardId: string;
   columnId: string;
 }

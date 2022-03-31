@@ -24,7 +24,7 @@ export interface BodyForReposition {
   newPosition: number;
 }
 
-export interface BodyForDeleting {
+export interface ParamsForDeleting {
   columnId: string;
   boardId: string;
 }

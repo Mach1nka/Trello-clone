@@ -15,13 +15,18 @@ import {
   BodyForCreating,
   BodyForRenaming,
   BodyForReposition,
-  BodyForDeleting,
+  ParamsForDeleting,
   ParamsForGetting,
   ColumnResponse
 } from '../../types/columns/interfaces';
 import { BoardColumn as Column } from '../entities/column';
 
 const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Response) => {
+  const errors = validationResult(req);
+
+  if (!errors.isEmpty()) {
+    throw new BadRequest(errors.array());
+  }
   const { boardId } = req.params;
 
   const columns: Column[] = await getColumnsService({ boardId });
@@ -77,16 +82,16 @@ const updateColumnPosition = async (req: CustomRequest<BodyForReposition>, res: 
   res.json(new BaseResponse<ColumnResponse[]>(mappedColumns));
 };
 
-const deleteColumn = async (req: CustomRequest<BodyForDeleting>, res: Response) => {
+const deleteColumn = async (req: CustomRequest<Empty, ParamsForDeleting>, res: Response) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
     throw new BadRequest(errors.array());
   }
 
-  await deleteService(req.body);
+  await deleteService(req.params);
 
-  res.status(200).json(new BaseResponse<Empty>({}, 200));
+  res.json(new BaseResponse<Empty>({}));
 };
 
 export { getColumns, createNewColumn, updateColumnName, updateColumnPosition, deleteColumn };

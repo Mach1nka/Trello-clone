@@ -10,7 +10,7 @@ import {
   BodyForCreating,
   BodyForRenaming,
   BodyForReposition,
-  BodyForDeleting
+  ParamsForDeleting
 } from '../../types/columns/interfaces';
 
 const getColumnsService = async (data: ParamsForGetting): Promise<Column[]> => {
@@ -86,8 +86,8 @@ const updatePositionService = async (data: BodyForReposition): Promise<Column[]>
   return updatedColumns;
 };
 
-const deleteService = async (reqBody: BodyForDeleting): Promise<void> => {
-  const { columnId, boardId } = reqBody;
+const deleteService = async (data: ParamsForDeleting): Promise<void> => {
+  const { columnId, boardId } = data;
   await columnRepository().delete(columnId);
 
   const columns: Column[] = await columnRepository().find({
