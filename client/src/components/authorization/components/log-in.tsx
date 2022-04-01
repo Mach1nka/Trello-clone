@@ -47,32 +47,30 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
   });
 
   return (
-    <>
-      <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
-        <div>
-          {loginFields.map((el) => (
-            <TextField
-              key={el.id}
-              size="medium"
-              margin="normal"
-              variant="outlined"
-              fullWidth
-              id={el.id}
-              name={el.id}
-              label={el.label}
-              type={el.type}
-              autoFocus={el.autoFocus}
-              onChange={formik.handleChange}
-              error={formik.touched[el.id] && !!formik.errors[el.id]}
-              helperText={formik.touched[el.id] && formik.errors[el.id]}
-            />
-          ))}
-        </div>
-        <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
-          submit
-        </SC.SubmitButton>
-      </SC.LogInForm>
-    </>
+    <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
+      <div>
+        {loginFields.map((el) => (
+          <TextField
+            key={el.id}
+            size="medium"
+            margin="normal"
+            variant="outlined"
+            fullWidth
+            id={el.id}
+            name={el.id}
+            label={el.label}
+            type={el.type}
+            autoFocus={el.autoFocus}
+            onChange={formik.handleChange}
+            error={formik.touched[el.id] && !!formik.errors[el.id]}
+            helperText={formik.touched[el.id] && formik.errors[el.id]}
+          />
+        ))}
+      </div>
+      <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
+        submit
+      </SC.SubmitButton>
+    </SC.LogInForm>
   );
 };
 

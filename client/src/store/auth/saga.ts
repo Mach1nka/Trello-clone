@@ -1,24 +1,37 @@
 import { ForkEffect, takeEvery } from 'redux-saga/effects';
 
-import { registerUser, loginUser } from '../../api/auth-requests';
-import { REGISTRATION_USER, LOGIN_USER, putAuthData } from './actions';
-import { AuthData, UserAction, UserData } from './types';
+import { signupUser, loginUser } from '../../service/resources/requests/auth';
+import {
+  AuthDataResponse,
+  AuthTypes,
+  SagaAction,
+  UserCredentials
+} from '../../service/resources/models/auth.model';
+import { setAuthData } from './actions';
 import handleSagaRequest from '../../../utils/handle-saga-request';
 
-function* workerUserLogin(userData: UserAction) {
-  yield handleSagaRequest<UserData, AuthData>(loginUser, userData.payload, putAuthData);
+function* workerLogin(action: SagaAction) {
+  yield handleSagaRequest<UserCredentials, AuthDataResponse>(
+    loginUser,
+    action.payload,
+    setAuthData
+  );
 }
 
 function* watchUserLogin(): Generator<ForkEffect> {
-  yield takeEvery(LOGIN_USER, workerUserLogin);
+  yield takeEvery(AuthTypes.LOG_IN, workerLogin);
 }
 
-function* workerUserRegistration(userData: UserAction) {
-  yield handleSagaRequest<UserData, AuthData>(registerUser, userData.payload, putAuthData);
+function* workerSignup(action: SagaAction) {
+  yield handleSagaRequest<UserCredentials, AuthDataResponse>(
+    signupUser,
+    action.payload,
+    setAuthData
+  );
 }
 
 function* watchUserRegistration(): Generator<ForkEffect> {
-  yield takeEvery(REGISTRATION_USER, workerUserRegistration);
+  yield takeEvery(AuthTypes.SIGN_UP, workerSignup);
 }
 
 export { watchUserRegistration, watchUserLogin };

@@ -1,13 +1,13 @@
 {
     "extends": "../tsconfig.base",
     "compilerOptions": {
-        "target": "ESNEXT",
-        "module": "ESNext",
+        "allowSyntheticDefaultImports": true,
+        "moduleResolution": "node",
         "jsx": "react",
         "esModuleInterop": true,
         "outDir": "./dist",
         "rootDir": "./",
-        "noEmit": true
+        "sourceMap": true,
     },
-    "exclude": ["dist", "webpack", "webpack.config.*"]
+    "exclude": ["dist"]
 }

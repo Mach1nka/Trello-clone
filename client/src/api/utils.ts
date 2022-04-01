@@ -1,5 +1,4 @@
 import getToken from '../../utils/get-token';
-import { HEADER, serverURL } from '../../utils/constants';
 import { GetParams, CRUDParams } from './types';
 
 const requestHeader = (): Headers => {

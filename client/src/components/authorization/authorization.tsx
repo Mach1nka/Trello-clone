@@ -17,18 +17,18 @@ const Authorization: React.FC = () => {
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { message, token } = useAppSelector((state) => state.authData);
+  const { login } = useAppSelector((state) => state.authData);
 
   useEffect(() => {
-    if (message) {
-      setModalView(true);
-    } else {
-      setModalView(false);
-    }
-    if (token) {
+    // if (message) {
+    //   setModalView(true);
+    // } else {
+    //   setModalView(false);
+    // }
+    if (login) {
       navigate('/boards');
     }
-  }, [message, token]);
+  }, [login]);
 
   const onChange = useCallback(
     (_evt: React.ChangeEvent<Record<string, unknown>>, index: number) => setTabIndex(`${index}`),
@@ -42,7 +42,7 @@ const Authorization: React.FC = () => {
           setBackdropView={setBackdropView}
           isOpen={isOpenModal}
           setModalView={setModalView}
-          errorText={message}
+          errorText=""
         />
         <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>

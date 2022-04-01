@@ -1,22 +1,14 @@
-import { AccountDataInStore, AuthTypes, AuthActions } from './types';
+import { Action, AuthData, AuthTypes } from '../../service/resources/models/auth.model';
 
-const initialAuthState: AccountDataInStore = {
-  login: '',
-  token: '',
-  id: '',
-  message: ''
+const initialAuthState: AuthData = {
+  login: null
 };
 
-const authData = (state = initialAuthState, action: AuthActions): AccountDataInStore => {
+const authData = (state = initialAuthState, action: Action): AuthData => {
   switch (action.type) {
-    case AuthTypes.PUT_USER_DATA:
-      return { ...state, ...action.payload };
-    case AuthTypes.PUT_MESSAGE_ERROR:
-      return {
-        ...state,
-        message: action.payload.message
-      };
-    case AuthTypes.USER_LOGGED_OUT:
+    case AuthTypes.SET_AUTH_DATA:
+      return { ...state, login: action.payload.login };
+    case AuthTypes.LOG_OUT:
       return {
         ...state,
         ...initialAuthState

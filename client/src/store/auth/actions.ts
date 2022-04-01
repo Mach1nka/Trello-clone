@@ -1,40 +1,27 @@
-import { UserData, UserAction, AuthTypes, AuthData, AuthError } from './types';
+import {
+  AuthDataResponse,
+  AuthTypes,
+  UserCredentials,
+  Action
+} from '../../service/resources/models/auth.model';
 
-const REGISTRATION_USER = 'REGISTRATION_USER';
-const LOGIN_USER = 'LOGIN_USER';
+const signup = (credentials: UserCredentials) => ({
+  type: AuthTypes.SIGN_UP,
+  payload: credentials
+});
 
-const registerUser = (userData: UserData): UserAction => ({
-  type: REGISTRATION_USER,
+const login = (credentials: UserCredentials) => ({
+  type: AuthTypes.LOG_IN,
+  payload: credentials
+});
+
+const setAuthData = (userData: AuthDataResponse) => ({
+  type: AuthTypes.SET_AUTH_DATA,
   payload: userData
 });
 
-const loginUser = (userData: UserData): UserAction => ({
-  type: LOGIN_USER,
-  payload: userData
+const logout = (): Action => ({
+  type: AuthTypes.LOG_OUT
 });
 
-const putErrorMessage = (
-  message: AuthError
-): { type: AuthTypes.PUT_MESSAGE_ERROR; payload: AuthError } => ({
-  type: AuthTypes.PUT_MESSAGE_ERROR,
-  payload: message
-});
-
-const putAuthData = (userData: AuthData): { type: AuthTypes.PUT_USER_DATA; payload: AuthData } => ({
-  type: AuthTypes.PUT_USER_DATA,
-  payload: userData
-});
-
-const signOutUser = (): { type: AuthTypes.USER_LOGGED_OUT } => ({
-  type: AuthTypes.USER_LOGGED_OUT
-});
-
-export {
-  REGISTRATION_USER,
-  LOGIN_USER,
-  putAuthData,
-  registerUser,
-  loginUser,
-  putErrorMessage,
-  signOutUser
-};
+export { signup, login, setAuthData, logout };

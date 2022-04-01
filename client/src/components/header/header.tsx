@@ -7,7 +7,7 @@ import Sidebar from './sidebar';
 import { useAppSelector } from '../../store/hooks';
 import { getBoards } from '../../store/board/actions';
 import { setModalsStates, setBoardIdForModal } from '../../store/modals/actions';
-import { removeAuthDataFromLocalStorage } from '../../../utils/auth-data-localstorage';
+// import { removeAuthDataFromLocalStorage } from '../../../utils/token-managment';
 import resetStore from '../../../utils/reset-store';
 import useWindowSize from '../../../utils/window-size-hook';
 import { HeaderSC as SC } from './sc';

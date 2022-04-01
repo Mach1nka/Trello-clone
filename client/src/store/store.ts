@@ -2,7 +2,7 @@ import { createStore, compose, applyMiddleware } from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import rootReducer from './root-reducer';
 import rootSaga from './root-saga';
-import { loadAuthDataFromLocalStorage } from '../../utils/auth-data-localstorage';
+// import { loadAuthDataFromLocalStorage } from '../../utils/token-managment';
 
 declare global {
   interface Window {
@@ -16,7 +16,7 @@ const sagaMiddleware = createSagaMiddleware();
 
 const store = createStore(
   rootReducer,
-  loadAuthDataFromLocalStorage(),
+  // loadAuthDataFromLocalStorage(),
   compose(applyMiddleware(sagaMiddleware), composeEnhancers())
 );
 sagaMiddleware.run(rootSaga);
