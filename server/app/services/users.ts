@@ -2,8 +2,9 @@ import { userRepository } from '../database/repositories';
 import { User } from '../entities/user';
 import { ParamsForSearching } from '../../types/users/interfaces';
 import { UserId } from '../../types/auth/interfaces';
+import NotFound from '../../utils/errors/not-found';
 
-async function getUsersService(data: ParamsForSearching & UserId): Promise<User[]> {
+const searchUsersService = async (data: ParamsForSearching & UserId): Promise<User[]> => {
   const { searchedValue, userId } = data;
 
   const users: User[] = await userRepository()
@@ -14,6 +15,18 @@ async function getUsersService(data: ParamsForSearching & UserId): Promise<User[
     .getMany();
 
   return users;
-}
+};
 
-export default getUsersService;
+const getUserInfoService = async (data: UserId): Promise<User> => {
+  const { userId } = data;
+
+  const userInfo: User | undefined = await userRepository().findOne(userId, { select: ['login'] });
+
+  if (!userInfo) {
+    throw new NotFound('The User does not exist');
+  }
+
+  return userInfo;
+};
+
+export { searchUsersService, getUserInfoService };

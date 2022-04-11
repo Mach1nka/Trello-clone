@@ -28,7 +28,7 @@ export interface DataForRenamingCard {
 
 export interface DataForUpdatingCardDesc {
   cardId: string;
-  newDescription: string;
+  newDescription?: string;
 }
 
 export interface DataForUpdatingCardPos {
