@@ -2,7 +2,7 @@ import React, { Dispatch, SetStateAction, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dialog, DialogTitle, DialogActions, Typography } from '@material-ui/core';
 
-import { putErrorMessage } from '../../../store/auth/actions';
+import { putErrorMessage } from '../../../store/actions/auth';
 import { AuthorizationSC as SC } from '../sc';
 
 interface Props {

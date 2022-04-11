@@ -10,7 +10,7 @@ import { useDispatch } from 'react-redux';
 
 import Card from './components/card';
 import { useAppSelector } from '../../store/hooks';
-import { getCards, changeCardStatus, changeCardPosition } from '../../store/card/actions';
+import { getCards, changeCardStatus, changeCardPosition } from '../../store/actions/card';
 import { Card as CardType } from '../../store/card/types';
 import { CardsContainer as Container, DragWrapper } from './sc';
 

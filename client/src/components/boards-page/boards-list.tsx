@@ -4,10 +4,10 @@ import { Container, Typography, CircularProgress } from '@material-ui/core';
 
 import BoardItem from './components/board-item';
 import { useAppSelector } from '../../store/hooks';
-import { getBoards } from '../../store/board/actions';
-import { deleteColumnsData } from '../../store/column/actions';
-import { deleteCardsData } from '../../store/card/actions';
-import { resetModalData } from '../../store/modals/actions';
+import { getBoards } from '../../store/actions/board';
+import { deleteColumnsData } from '../../store/actions/column';
+import { deleteCardsData } from '../../store/actions/card';
+import { resetModalData } from '../../store/actions/modal';
 import { BoardsContainer, BoardSC as SC } from './sc';
 
 const BoardsList: React.FC = () => {

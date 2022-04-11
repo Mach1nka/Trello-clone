@@ -36,7 +36,7 @@ const getColumns = async (req: CustomRequest<Empty, ParamsForGetting>, res: Resp
     boardId
   }));
 
-  res.json(new BaseResponse<ColumnResponse[]>(mappedColumns));
+  res.json(new BaseResponse<{ columns: ColumnResponse[] }>({ columns: mappedColumns }));
 };
 
 const createNewColumn = async (req: CustomRequest<BodyForCreating>, res: Response) => {
@@ -79,7 +79,7 @@ const updateColumnPosition = async (req: CustomRequest<BodyForReposition>, res: 
     boardId: req.body.boardId
   }));
 
-  res.json(new BaseResponse<ColumnResponse[]>(mappedColumns));
+  res.json(new BaseResponse<{ columns: ColumnResponse[] }>({ columns: mappedColumns }));
 };
 
 const deleteColumn = async (req: CustomRequest<Empty, ParamsForDeleting>, res: Response) => {

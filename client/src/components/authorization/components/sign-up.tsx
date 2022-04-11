@@ -4,7 +4,7 @@ import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { registerUser } from '../../../store/auth/actions';
+import { registerUser } from '../../../store/actions/auth';
 import { AuthorizationSC as SC } from '../sc';
 import { registrationFields, Props } from '../constants';
 

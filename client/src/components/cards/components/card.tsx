@@ -3,12 +3,12 @@ import { useDispatch } from 'react-redux';
 import { Typography, IconButton, Menu, MenuItem } from '@material-ui/core';
 import EditIcon from '@material-ui/icons/Edit';
 
-import { deleteCard } from '../../../store/card/actions';
+import { deleteCard } from '../../../store/actions/card';
 import {
   setCardDataForModal,
   setModalsStates,
   resetModalData
-} from '../../../store/modals/actions';
+} from '../../../store/actions/modal';
 import { CardSC as SC } from '../sc';
 
 interface Props {

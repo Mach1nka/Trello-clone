@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { changeColumnPosition } from '../../../store/column/actions';
+import { changeColumnPosition } from '../../../store/actions/column';
 import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {

@@ -7,8 +7,8 @@ import { CircularProgress } from '@material-ui/core';
 
 import RenameBoardModal from './rename-board';
 import { useAppSelector } from '../../../store/hooks';
-import { deleteBoard } from '../../../store/board/actions';
-import { setModalsStates, setBoardIdForModal } from '../../../store/modals/actions';
+import { deleteBoard } from '../../../store/actions/board';
+import { setModalsStates, setBoardIdForModal } from '../../../store/actions/modal';
 import { BoardSC as SC } from '../sc';
 
 interface Props {

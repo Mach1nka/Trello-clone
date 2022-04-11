@@ -12,8 +12,8 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import { useAppSelector } from '../../../store/hooks';
-import { changeCardDescription, renameCard, deleteCard } from '../../../store/card/actions';
-import { setModalsStates, resetModalData } from '../../../store/modals/actions';
+import { changeCardDescription, renameCard, deleteCard } from '../../../store/actions/card';
+import { setModalsStates, resetModalData } from '../../../store/actions/modal';
 import { configValidationSchema } from '../utils';
 import { CardSC as SC } from '../sc';
 

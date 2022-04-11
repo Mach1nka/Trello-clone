@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
-import { changeCardDescription } from '../../../store/card/actions';
+import { changeCardDescription } from '../../../store/actions/card';
 import { descriptionTextValidation } from '../utils';
 import { SubmitButton, ModalForm as Form } from '../sc';
 

@@ -8,7 +8,7 @@ import CardsContainer from '../../cards/cards-container';
 import RenameColumnModal from './rename-column';
 import ChangeColumnPosition from './change-column-position';
 import CreateCardModal from '../../cards/components/create-card-modal';
-import { deleteColumn } from '../../../store/column/actions';
+import { deleteColumn } from '../../../store/actions/column';
 import { Card as CardType } from '../../../store/card/types';
 import { ColumnSC as SC } from '../sc';
 

@@ -1,16 +1,16 @@
-import store from '../src/store/store';
-import { logout } from '../src/store/auth/actions';
-import { deleteBoardsData } from '../src/store/board/actions';
-import { deleteCardsData } from '../src/store/card/actions';
-import { deleteColumnsData } from '../src/store/column/actions';
-import { resetModalData } from '../src/store/modals/actions';
+// import store from '../src/store';
+// import { logout } from '../src/store/actions/auth';
+// import { deleteBoardsData } from '../src/store/actions/board';
+// import { deleteCardsData } from '../src/store/actions/card';
+// import { deleteColumnsData } from '../src/store/actions/column';
+// import { resetModalData } from '../src/store/actions/modal';
 
-const resetStore = (): void => {
-  store.dispatch(logout());
-  store.dispatch(deleteBoardsData());
-  store.dispatch(deleteCardsData());
-  store.dispatch(deleteColumnsData());
-  store.dispatch(resetModalData());
-};
+// const resetStore = (): void => {
+//   store.dispatch(logout());
+//   store.dispatch(deleteBoardsData());
+//   store.dispatch(deleteCardsData());
+//   store.dispatch(deleteColumnsData());
+//   store.dispatch(resetModalData());
+// };
 
-export default resetStore;
+// export default resetStore;

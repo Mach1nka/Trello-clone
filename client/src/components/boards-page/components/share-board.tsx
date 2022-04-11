@@ -5,8 +5,8 @@ import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core
 
 import { useAppSelector } from '../../../store/hooks';
 import useFetchUsers from '../../../../utils/fetch-user-hook';
-import { shareBoard } from '../../../store/board/actions';
-import { setModalsStates, setBoardIdForModal } from '../../../store/modals/actions';
+import { shareBoard } from '../../../store/actions/board';
+import { setModalsStates, setBoardIdForModal } from '../../../store/actions/modal';
 import { ShareModalForm as Form, BoardSC as SC, SubmitButton } from '../sc';
 
 const ShareBoardModal: React.FC = () => {

@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { renameBoard } from '../../../store/board/actions';
+import { renameBoard } from '../../../store/actions/board';
 import { configValidationSchema } from '../utils';
 import { ModalForm as Form, SubmitButton } from '../sc';
 

@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 
 import BoardOptions from './board-options';
 import CreateBoardModal from './create-board';
-import { deleteColumnsData } from '../../../store/column/actions';
+import { deleteColumnsData } from '../../../store/actions/column';
 import { BoardSC as SC } from '../sc';
 
 interface Props {

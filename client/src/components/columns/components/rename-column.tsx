@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
-import { renameColumn } from '../../../store/column/actions';
+import { renameColumn } from '../../../store/actions/column';
 import { configValidationSchema } from '../../boards-page/utils';
 import { SubmitButton, ModalForm as Form } from '../sc';
 

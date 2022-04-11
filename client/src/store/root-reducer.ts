@@ -1,10 +1,9 @@
-import { combineReducers } from 'redux';
-import authData from './auth/reducer';
-import userBoards from './board/reducer';
-import boardColumns from './column/reducer';
-import cardsData from './card/reducer';
-import modalsData from './modals/reducer';
+import { combineReducers } from '@reduxjs/toolkit';
+import authReducer from './slices/auth';
+import boardReducer from './slices/board';
+import columnReducer from './slices/column';
+import cardReducer from './slices/card';
 
-const rootReducer = combineReducers({ authData, userBoards, boardColumns, cardsData, modalsData });
+const rootReducer = combineReducers({ authReducer, boardReducer, columnReducer, cardReducer });
 
 export default rootReducer;

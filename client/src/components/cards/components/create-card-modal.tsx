@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { createCard } from '../../../store/card/actions';
+import { createCard } from '../../../store/actions/card';
 import { CreateCardForm as Form, SubmitButton } from '../sc';
 import { configValidationSchema } from '../utils';
 

@@ -4,8 +4,8 @@ import { Formik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle, MenuItem } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import { changeCardPosition } from '../../../store/card/actions';
-import { setModalsStates } from '../../../store/modals/actions';
+import { changeCardPosition } from '../../../store/actions/card';
+import { setModalsStates } from '../../../store/actions/modal';
 import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {
