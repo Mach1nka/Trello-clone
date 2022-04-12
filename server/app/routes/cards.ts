@@ -57,7 +57,7 @@ router.put(
 );
 
 router.put(
-  '/card/transferring',
+  '/card/transfer',
   [
     body('cardId', 'Card Id is required').exists(),
     body('columnId', 'Column Id is required').exists(),
@@ -68,7 +68,7 @@ router.put(
 );
 
 router.delete(
-  '/card',
+  '/card/:cardId/:columnId',
   [
     param('columnId', 'Column Id is required').exists(),
     param('cardId', 'Card Id is required').exists(),

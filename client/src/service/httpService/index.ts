@@ -1,4 +1,5 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { Params } from '../resources/models/common.model';
 import ApiBase from './api-base';
 import { BaseResponse, ErrorInfo, ErrorResponse } from './types';
 
@@ -21,7 +22,7 @@ class HttpService {
     this.apiBase = apiBase;
   }
 
-  get<T>(endpoint: string, params?: Record<string, string>): Promise<BaseResponse<T>> {
+  get<T>(endpoint: string, params: Params = {}): Promise<BaseResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method: 'GET',
       url: endpoint,
@@ -33,11 +34,7 @@ class HttpService {
       .catch((error) => error);
   }
 
-  post<T, S>(
-    endpoint: string,
-    params: Record<string, string> = {},
-    body: S
-  ): Promise<BaseResponse<T>> {
+  post<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method: 'POST',
       url: endpoint,
@@ -50,11 +47,7 @@ class HttpService {
       .catch((error) => error);
   }
 
-  put<T, S>(
-    endpoint: string,
-    params: Record<string, string> = {},
-    body: S
-  ): Promise<BaseResponse<T>> {
+  put<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method: 'PUT',
       url: endpoint,
@@ -67,11 +60,7 @@ class HttpService {
       .catch((error) => error);
   }
 
-  patch<T, S>(
-    endpoint: string,
-    params: Record<string, string> = {},
-    body: S
-  ): Promise<BaseResponse<T>> {
+  patch<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method: 'PATCH',
       url: endpoint,
@@ -84,16 +73,11 @@ class HttpService {
       .catch((error) => error);
   }
 
-  delete<T, S>(
-    endpoint: string,
-    params: Record<string, string> = {},
-    body: S
-  ): Promise<BaseResponse<T>> {
+  delete<T>(endpoint: string, params: Params = {}): Promise<BaseResponse<T>> {
     const requestConfig: AxiosRequestConfig = {
       method: 'DELETE',
       url: endpoint,
-      params,
-      data: body
+      params
     };
     return this.apiBase
       .instance(requestConfig)

@@ -1,3 +1,5 @@
+import { UserInfoState } from './user';
+
 export interface UserCredentials {
   login: string;
   password: string;
@@ -9,8 +11,6 @@ export interface AuthServerResponse {
 }
 
 export interface AuthState {
-  user: {
-    login: string | null;
-  };
+  user: UserInfoState;
   isLoggedIn: boolean;
 }

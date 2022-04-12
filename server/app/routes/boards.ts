@@ -18,7 +18,7 @@ router.get('/boards', jwtAuthenticate, getAllBoards);
 router.post('/board', [body('name', 'Name is required').exists(), jwtAuthenticate], createNewBoard);
 
 router.patch(
-  '/board/rename',
+  '/board/name',
   [
     body('boardId', 'Board Id is required').exists(),
     body('newName', 'New name is required').exists(),
