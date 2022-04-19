@@ -27,3 +27,11 @@ export interface DataForSharingBoard {
 export interface DataForDeletingBoard {
   boardId: string;
 }
+
+export enum BoardThunkAction {
+  GetBoards = 'getBoards',
+  CreateBoard = 'createBoard',
+  RenameBoard = 'renameBoard',
+  ShareBoard = 'shareBoard',
+  DeleteBoard = 'deleteBoard'
+}

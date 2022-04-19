@@ -10,3 +10,7 @@ export interface SearchedUser {
   id: string;
   login: string;
 }
+
+export enum UserThunkAction {
+  GetInfo = 'getInfo'
+}

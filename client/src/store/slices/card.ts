@@ -1,11 +1,13 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+
 import updateReduxEntity from '../../../utils/updateEntity';
 import { Card, CardListServerResponse, CardState } from '../../service/resources/models/card.model';
+import { SliceName } from '../../service/resources/models/common.model';
 
 const initialState: CardState = {};
 
 const cardSlice = createSlice({
-  name: 'card',
+  name: SliceName.Card,
   initialState,
   reducers: {
     getCards: (state, { payload }: PayloadAction<CardListServerResponse>) => {

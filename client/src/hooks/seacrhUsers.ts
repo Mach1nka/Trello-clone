@@ -1,14 +1,17 @@
 import { useEffect, useState } from 'react';
-import { getUsers, User, UsersResponse } from '../src/api/user-requests';
 
-const useFetchUsers = (userName: string): User[] => {
-  const [data, setData] = useState<User[]>([]);
+import { searchUsers } from '../service/resources/requests/user';
+import { SearchedUser } from '../service/resources/models/user.model';
+import { BaseResponse } from '../service/httpService/types';
+
+const useFetchUsers = (userName: string): SearchedUser[] => {
+  const [data, setData] = useState<SearchedUser[]>([]);
 
   // eslint-disable-next-line consistent-return
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res: UsersResponse = await getUsers(userName);
+        const res: BaseResponse<SearchedUser[]> = await searchUsers(userName);
         if (res.statusCode === 200) {
           setData(res.data);
         }

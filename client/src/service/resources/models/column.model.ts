@@ -31,3 +31,11 @@ export interface DataForDeletingColumn {
   columnId: string;
   boardId: string;
 }
+
+export enum ColumnThunkAction {
+  GetColumns = 'getColumns',
+  CreateColumn = 'createColumn',
+  RenameColumn = 'renameColumn',
+  UpdateColumnPosition = 'updateColumnPosition',
+  DeleteColumn = 'deleteColumn'
+}

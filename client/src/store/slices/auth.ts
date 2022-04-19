@@ -1,6 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 import { AuthState, AuthServerResponse } from '../../service/resources/models/auth.model';
+import { SliceName } from '../../service/resources/models/common.model';
 
 const initialState: AuthState = {
   isLoggedIn: false,
@@ -10,7 +11,7 @@ const initialState: AuthState = {
 };
 
 const authSlice = createSlice({
-  name: 'auth',
+  name: SliceName.Auth,
   initialState,
   reducers: {
     authenticate: (state, { payload }: PayloadAction<AuthServerResponse>) => {

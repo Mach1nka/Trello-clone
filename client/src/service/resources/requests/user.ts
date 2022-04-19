@@ -1,6 +1,6 @@
 import { BaseResponse } from '../../httpService/types';
 import httpService from '../../httpService/index';
-import { SearchedUser, UserInfoResponse } from '../models/user';
+import { SearchedUser, UserInfoResponse } from '../models/user.model';
 
 const getUserInfo = (): Promise<BaseResponse<UserInfoResponse>> =>
   httpService.get<UserInfoResponse>('/user/info');

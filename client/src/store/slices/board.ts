@@ -6,6 +6,7 @@ import {
   BoardListServerResponse
 } from '../../service/resources/models/board.model';
 import updateReduxEntity from '../../../utils/updateEntity';
+import { SliceName } from '../../service/resources/models/common.model';
 
 const initialState: BoardState = {
   ownBoards: [],
@@ -13,7 +14,7 @@ const initialState: BoardState = {
 };
 
 const boardSlice = createSlice({
-  name: 'board',
+  name: SliceName.Board,
   initialState,
   reducers: {
     getBoards: (state, { payload }: PayloadAction<BoardListServerResponse>) => {
@@ -22,12 +23,12 @@ const boardSlice = createSlice({
     createBoard: (state, { payload }: PayloadAction<Board>) => {
       state.ownBoards.push(payload);
     },
-    renameBoard: (state, { payload }: PayloadAction<Board>) => {
+    updateBoard: (state, { payload }: PayloadAction<Board>) => {
       state.ownBoards = updateReduxEntity<Board>(state.ownBoards, payload);
     },
     clearBoards: () => initialState
   }
 });
 
-export const { getBoards, renameBoard, createBoard, clearBoards } = boardSlice.actions;
+export const { getBoards, updateBoard, createBoard, clearBoards } = boardSlice.actions;
 export default boardSlice.reducer;

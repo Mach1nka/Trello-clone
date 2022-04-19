@@ -4,7 +4,7 @@ import { Formik } from 'formik';
 import { Dialog, DialogTitle, DialogActions, TextField } from '@material-ui/core';
 
 import { useAppSelector } from '../../../store/hooks';
-import useFetchUsers from '../../../../utils/fetch-user-hook';
+import useFetchUsers from '../../../hooks/seacrhUsers';
 import { shareBoard } from '../../../store/actions/board';
 import { setModalsStates, setBoardIdForModal } from '../../../store/actions/modal';
 import { ShareModalForm as Form, BoardSC as SC, SubmitButton } from '../sc';
