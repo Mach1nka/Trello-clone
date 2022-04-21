@@ -1,3 +1,5 @@
+import { CreateSliceOptions } from '@reduxjs/toolkit';
+
 export interface CommonEntity {
   id: string;
 }
@@ -12,4 +14,9 @@ export enum SliceName {
   Column = 'column',
   Card = 'card',
   Maintain = 'maintain'
+}
+
+export interface SliceHelperProps<S> extends CreateSliceOptions<S> {
+  name: SliceName;
+  initialState: S;
 }

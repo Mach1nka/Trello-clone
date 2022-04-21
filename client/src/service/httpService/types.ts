@@ -6,13 +6,9 @@ export enum HttpStatus {
   InternalError = 500
 }
 
-export const HttpErrorCodes = [
-  HttpStatus.BadRequest,
-  HttpStatus.InternalError,
-  HttpStatus.InvalidCredentials,
-  HttpStatus.Forbidden,
-  HttpStatus.InternalError
-];
+export const HttpErrorCodes = Object.values(HttpStatus);
+
+console.log(HttpErrorCodes);
 
 export interface BaseResponse<T> {
   statusCode: number;

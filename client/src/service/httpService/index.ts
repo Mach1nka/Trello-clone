@@ -3,6 +3,7 @@ import { Params } from '../resources/models/common.model';
 import ApiBase from './api-base';
 import { BaseResponse, ErrorInfo, ErrorResponse } from './types';
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const catchHandler = (err: AxiosError<ErrorResponse>) => {
   const errorInfo: ErrorInfo = {
     message: err.response?.data.message || '',
@@ -12,7 +13,7 @@ const catchHandler = (err: AxiosError<ErrorResponse>) => {
   console.log('error: ', errorInfo);
 
   // @TODO: Check if here need return
-  return errorInfo;
+  throw errorInfo;
 };
 
 class HttpService {
@@ -30,7 +31,7 @@ class HttpService {
     };
     return this.apiBase
       .instance(requestConfig)
-      .then(({ data }: AxiosResponse<T>) => data)
+      .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
       .catch((error) => error);
   }
 

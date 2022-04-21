@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-import updateReduxEntity from '../../../utils/updateEntity';
+import updateReduxEntity from '../../../utils/update-entity';
 import { Card, CardListServerResponse, CardState } from '../../service/resources/models/card.model';
 import { SliceName } from '../../service/resources/models/common.model';
 

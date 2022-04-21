@@ -5,7 +5,7 @@ import {
   Board,
   BoardListServerResponse
 } from '../../service/resources/models/board.model';
-import updateReduxEntity from '../../../utils/updateEntity';
+import updateReduxEntity from '../../../utils/update-entity';
 import { SliceName } from '../../service/resources/models/common.model';
 
 const initialState: BoardState = {
