@@ -4,9 +4,12 @@ import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { registerUser } from '../../../store/actions/auth';
+import dispatchEntityHelper from '../../../../utils/dispatch-entity-helper';
+import { signupUser } from '../../../service/resources/requests/auth';
 import { AuthorizationSC as SC } from '../sc';
 import { registrationFields, Props } from '../constants';
+import { SliceName } from '../../../service/resources/models/common.model';
+import { AuthThunkAction } from '../../../service/resources/models/auth.model';
 
 type FormikProps = {
   [key: string]: string;
@@ -45,9 +48,15 @@ const SignUp: React.FC<Props> = ({ setBackdropView }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: ({ login, password }) => {
       setBackdropView(true);
-      dispatch(registerUser({ login: values.login, password: values.password }));
+      dispatchEntityHelper({
+        sliceName: SliceName.Auth,
+        actionType: AuthThunkAction.Authenticate,
+        fetchData: { login, password },
+        dispatch,
+        fetchFn: signupUser
+      });
     }
   });
 

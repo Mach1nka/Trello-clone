@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Error from './error';
-import { errorLog } from '../../api/error-request';
+// import { errorLog } from '../../api/error-request';
 
 type Props = {
   children: React.ReactNode;
@@ -23,7 +23,7 @@ class ErrorBoundary extends React.Component<Props, State> {
     this.setState({
       error
     });
-    errorLog({ error: error.toString(), errorInfo: errorInfo.componentStack });
+    // errorLog({ error: error.toString(), errorInfo: errorInfo.componentStack });
   }
 
   render(): React.ReactNode {

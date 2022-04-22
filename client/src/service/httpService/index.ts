@@ -3,16 +3,16 @@ import { Params } from '../resources/models/common.model';
 import ApiBase from './api-base';
 import { BaseResponse, ErrorInfo, ErrorResponse } from './types';
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const catchHandler = (err: AxiosError<ErrorResponse>) => {
+  const errorJSON = err.toJSON() as any;
+
   const errorInfo: ErrorInfo = {
-    message: err.response?.data.message || '',
-    statusCode: err.response?.data.statusCode || 500
+    message: err.response?.data.message || errorJSON.message,
+    statusCode: err.response?.data.statusCode || errorJSON.status || 500
   };
 
-  console.log('error: ', errorInfo);
+  console.log('Error: ', errorInfo);
 
-  // @TODO: Check if here need return
   throw errorInfo;
 };
 
@@ -32,7 +32,7 @@ class HttpService {
     return this.apiBase
       .instance(requestConfig)
       .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
-      .catch((error) => error);
+      .catch(catchHandler);
   }
 
   post<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
@@ -45,7 +45,7 @@ class HttpService {
     return this.apiBase
       .instance(requestConfig)
       .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
-      .catch((error) => error);
+      .catch(catchHandler);
   }
 
   put<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
@@ -58,7 +58,7 @@ class HttpService {
     return this.apiBase
       .instance(requestConfig)
       .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
-      .catch((error) => error);
+      .catch(catchHandler);
   }
 
   patch<T, S>(endpoint: string, params: Params = {}, body: S): Promise<BaseResponse<T>> {
@@ -71,7 +71,7 @@ class HttpService {
     return this.apiBase
       .instance(requestConfig)
       .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
-      .catch((error) => error);
+      .catch(catchHandler);
   }
 
   delete<T>(endpoint: string, params: Params = {}): Promise<BaseResponse<T>> {
@@ -83,7 +83,7 @@ class HttpService {
     return this.apiBase
       .instance(requestConfig)
       .then(({ data }: AxiosResponse<BaseResponse<T>>) => data)
-      .catch((error) => error);
+      .catch(catchHandler);
   }
 }
 

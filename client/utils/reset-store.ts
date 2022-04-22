@@ -1,16 +1,17 @@
-// import store from '../src/store';
-// import { logout } from '../src/store/actions/auth';
-// import { deleteBoardsData } from '../src/store/actions/board';
-// import { deleteCardsData } from '../src/store/actions/card';
-// import { deleteColumnsData } from '../src/store/actions/column';
-// import { resetModalData } from '../src/store/actions/modal';
+// import { Dispatch } from '@reduxjs/toolkit';
 
-// const resetStore = (): void => {
-//   store.dispatch(logout());
-//   store.dispatch(deleteBoardsData());
-//   store.dispatch(deleteCardsData());
-//   store.dispatch(deleteColumnsData());
-//   store.dispatch(resetModalData());
+// import { cleaing } from '../src/store/actions/auth';
+// import { cleaing } from '../src/store/actions/board';
+// import { cleaing } from '../src/store/actions/card';
+// import { cleaing } from '../src/store/actions/column';
+// import { cleaing } from '../src/store/actions/modal';
+
+// const cleaningStore = (dispatch: Dispatch<any>): void => {
+//   dispatch(logout());
+//   dispatch(deleteBoardsData());
+//   dispatch(deleteCardsData());
+//   dispatch(deleteColumnsData());
+//   dispatch(resetModalData());
 // };
 
-// export default resetStore;
+// export default cleaningStore;

@@ -1,40 +1,49 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import { HttpErrorCodes, HttpStatus } from '../src/service/httpService/types';
+import {
+  BaseResponse,
+  ErrorInfo,
+  HttpErrorCodes,
+  HttpStatus
+} from '../src/service/httpService/types';
 import { AlertStatusData } from '../src/service/resources/models/maintain.model';
-import { logout } from '../src/store/slices/auth';
+import { cleaning } from '../src/store/slices/auth';
 import { addAlert, setLoading } from '../src/store/slices/maintain';
 
 interface ThunkHelperProps {
-  type: string;
+  typePrefix: string;
 }
 
-export type CreateAsyncThunkProps = {
-  fetchFn: (args: Record<string, any>) => any;
-  data?: any;
-};
+interface CreateAsyncThunkProps<T, R> {
+  fetchFn: (args: T) => Promise<BaseResponse<R>>;
+  fetchData: T;
+}
 
-const getThunkHelper = ({ type }: ThunkHelperProps) =>
-  createAsyncThunk<any, CreateAsyncThunkProps>(type, async (fetchProps, thunkApi) => {
-    const { fetchFn, data } = fetchProps;
-    const { dispatch } = thunkApi;
-    dispatch(setLoading(true));
+const getThunkHelper = <T, R>({ typePrefix }: ThunkHelperProps) =>
+  createAsyncThunk<R, CreateAsyncThunkProps<T, R>>(
+    typePrefix,
+    async ({ fetchFn, fetchData }, { dispatch }) => {
+      try {
+        dispatch(setLoading(true));
 
-    // TODO: must be BaseResponse<any> | ErrorInfo
-    const response: any = await fetchFn(data);
+        const response = await fetchFn(fetchData);
+        return response.data;
+      } catch (e) {
+        const error = e as ErrorInfo;
 
-    console.log(response);
+        if (error.statusCode === HttpStatus.InvalidCredentials) {
+          dispatch(cleaning());
+        }
 
-    if (response.statusCode === HttpStatus.InvalidCredentials) {
-      dispatch(logout());
+        if (HttpErrorCodes.includes(error.statusCode)) {
+          dispatch(addAlert({ status: AlertStatusData.Error, message: error.message }));
+        }
+
+        throw error;
+      } finally {
+        dispatch(setLoading(false));
+      }
     }
-
-    if (HttpErrorCodes.includes(response.statusCode)) {
-      dispatch(addAlert({ status: AlertStatusData.Error, message: response.message }));
-    }
-
-    dispatch(setLoading(false));
-    return response;
-  });
+  );
 
 export default getThunkHelper;

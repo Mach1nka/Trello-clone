@@ -16,7 +16,7 @@ const authSliceSetup: Omit<SliceHelperProps<AuthState>, 'reducers'> = {
     }
   },
   extraReducers: {
-    [`${SliceName.Auth}/${AuthThunkAction.Authenticate}`]: (
+    [`${SliceName.Auth}/${AuthThunkAction.Authenticate}/fulfilled`]: (
       state,
       { payload }: PayloadAction<AuthServerResponse>
     ) => {

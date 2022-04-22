@@ -1,23 +1,23 @@
 import React, { useEffect, useState, useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
 
-import { useAppSelector } from '../../store/hooks';
-import ErrorModal from './components/error-modal';
+// import ErrorModal from './components/error-modal';
 import { authForms } from './constants';
 import { AuthorizationSC as SC } from './sc';
 
 const Authorization: React.FC = () => {
   const [tabIndex, setTabIndex] = useState('1');
-  const [isOpenModal, setModalView] = useState(false);
+  // const [isOpenModal, setModalView] = useState(false);
   const [isOpenBackdrop, setBackdropView] = useState(false);
 
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { login } = useAppSelector((state) => state.authData);
+  const { isLoggedIn } = useSelector((state) => state.auth);
 
   useEffect(() => {
     // if (message) {
@@ -25,10 +25,10 @@ const Authorization: React.FC = () => {
     // } else {
     //   setModalView(false);
     // }
-    if (login) {
+    if (isLoggedIn) {
       navigate('/boards');
     }
-  }, [login]);
+  }, [isLoggedIn]);
 
   const onChange = useCallback(
     (_evt: React.ChangeEvent<Record<string, unknown>>, index: number) => setTabIndex(`${index}`),
@@ -38,12 +38,12 @@ const Authorization: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="xs">
-        <ErrorModal
+        {/* <ErrorModal
           setBackdropView={setBackdropView}
           isOpen={isOpenModal}
           setModalView={setModalView}
           errorText=""
-        />
+        /> */}
         <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>
             <TabList onChange={onChange} indicatorColor="primary" textColor="primary" centered>

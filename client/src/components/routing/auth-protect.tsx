@@ -1,11 +1,11 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
 import { PrivateRouteState } from './types';
-import { useAppSelector } from '../../store/hooks';
 
 const AuthProtect: React.FC = () => {
-  const { token }: PrivateRouteState = useAppSelector((state) => state.authData);
+  const { token }: PrivateRouteState = useSelector((state) => state.authData);
 
   return token ? <Outlet /> : <Navigate to="/auth" />;
 };

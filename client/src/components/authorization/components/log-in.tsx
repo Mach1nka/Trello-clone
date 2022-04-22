@@ -4,9 +4,12 @@ import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import { loginUser } from '../../../store/actions/auth';
+import dispatchEntityHelper from '../../../../utils/dispatch-entity-helper';
+import { loginUser } from '../../../service/resources/requests/auth';
 import { AuthorizationSC as SC } from '../sc';
 import { loginFields, Props } from '../constants';
+import { SliceName } from '../../../service/resources/models/common.model';
+import { AuthThunkAction, UserCredentials } from '../../../service/resources/models/auth.model';
 
 type FormikProps = {
   [key: string]: string;
@@ -32,7 +35,7 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters')
   });
 
-  const initialValues: FormikProps = {
+  const initialValues: UserCredentials & FormikProps = {
     login: '',
     password: ''
   };
@@ -42,7 +45,13 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
     validationSchema,
     onSubmit: (values) => {
       setBackdropView(true);
-      dispatch(loginUser({ login: values.login, password: values.password }));
+      dispatchEntityHelper({
+        sliceName: SliceName.Auth,
+        actionType: AuthThunkAction.Authenticate,
+        fetchData: values,
+        dispatch,
+        fetchFn: loginUser
+      });
     }
   });
 

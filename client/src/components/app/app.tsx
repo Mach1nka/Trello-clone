@@ -3,11 +3,11 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { MuiThemeProvider } from '@material-ui/core';
 
 import Authorization from '../authorization/authorization';
-import Main from '../main/main';
-import BoardsList from '../boards-page/boards-list';
-import ColumnsContainer from '../columns/columns-container';
+// import Main from '../main/main';
+// import BoardsList from '../boards-page/boards-list';
+// import ColumnsContainer from '../columns/columns-container';
+// import AuthProtect from '../routing/auth-protect';
 import ErrorBoundary from '../error-boundary/error-boundary';
-import AuthProtect from '../routing/auth-protect';
 import { defaultColorsMU } from './constants';
 
 const App: React.FC = () => (
@@ -15,12 +15,12 @@ const App: React.FC = () => (
     <ErrorBoundary>
       <MuiThemeProvider theme={defaultColorsMU}>
         <Routes>
-          <Route element={<AuthProtect />}>
+          {/* <Route element={<AuthProtect />}>
             <Route path="/boards" element={<Main />}>
               <Route index element={<BoardsList />} />
               <Route path="/boards/board/:boardId" element={<ColumnsContainer />} />
             </Route>
-          </Route>
+          </Route> */}
           <Route path="/auth" element={<Authorization />} />
           <Route path="/" element={<Navigate to="/boards" />} />
         </Routes>
