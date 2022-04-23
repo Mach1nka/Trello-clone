@@ -1,10 +1,17 @@
 import { combineReducers } from '@reduxjs/toolkit';
-import auth from './slices/auth';
-import boardReducer from './slices/board';
-import columnReducer from './slices/column';
-import cardReducer from './slices/card';
-import maintain from './slices/maintain';
 
-const rootReducer = combineReducers({ auth, boardReducer, columnReducer, cardReducer, maintain });
+import authState from './slices/auth';
+import boardsState from './slices/board';
+import columnsState from './slices/column';
+import cardsState from './slices/card';
+import maintainState from './slices/maintain';
+
+const rootReducer = combineReducers({
+  authState,
+  boardsState,
+  columnsState,
+  cardsState,
+  maintainState
+});
 
 export default rootReducer;

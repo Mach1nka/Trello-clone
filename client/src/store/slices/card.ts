@@ -1,30 +1,44 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 
+import generateActionTypeHelper from '../../../utils/action-type-helper';
+import getSliceHelper from '../../../utils/slice-helper';
 import updateReduxEntity from '../../../utils/update-entity';
-import { Card, CardListServerResponse, CardState } from '../../service/resources/models/card.model';
-import { SliceName } from '../../service/resources/models/common.model';
+import {
+  Card,
+  CardListServerResponse,
+  CardState,
+  CardThunkAction
+} from '../../service/resources/models/card.model';
+import { SliceHelperProps, SliceName } from '../../service/resources/models/common.model';
 
-const initialState: CardState = {};
+const createActionType = generateActionTypeHelper(SliceName.Column);
 
-const cardSlice = createSlice({
+const cardSliceSetup: Omit<SliceHelperProps<CardState>, 'reducers'> = {
   name: SliceName.Card,
-  initialState,
-  reducers: {
-    getCards: (state, { payload }: PayloadAction<CardListServerResponse>) => {
+  initialState: { columns: [] },
+  extraReducers: {
+    [createActionType(CardThunkAction.GetCards)]: (
+      state,
+      { payload }: PayloadAction<CardListServerResponse>
+    ) => {
       state[payload.columnId] = payload.cards;
     },
-    createCard: (state, { payload }: PayloadAction<Card>) => {
+    [createActionType(CardThunkAction.CreateCard)]: (state, { payload }: PayloadAction<Card>) => {
       state[payload.columnId].push(payload);
     },
-    updateCard: (state, { payload }: PayloadAction<Card>) => {
+    [createActionType(CardThunkAction.UpdateCard)]: (state, { payload }: PayloadAction<Card>) => {
       state[payload.columnId] = updateReduxEntity<Card>(state[payload.columnId], payload);
     },
-    updateCardPosition: (state, { payload }: PayloadAction<CardListServerResponse>) => {
+    [createActionType(CardThunkAction.UpdateCardPosition)]: (
+      state,
+      { payload }: PayloadAction<CardListServerResponse>
+    ) => {
       state[payload.columnId] = payload.cards;
-    },
-    clearCards: () => initialState
+    }
   }
-});
+};
 
-export const { getCards, createCard, updateCard, clearCards } = cardSlice.actions;
+const cardSlice = getSliceHelper(cardSliceSetup);
+
+export const { cleaning } = cardSlice.actions;
 export default cardSlice.reducer;

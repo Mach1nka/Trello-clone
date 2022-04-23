@@ -1,34 +1,47 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 
-import {
-  BoardState,
-  Board,
-  BoardListServerResponse
-} from '../../service/resources/models/board.model';
+import generateActionTypeHelper from '../../../utils/action-type-helper';
+import getSliceHelper from '../../../utils/slice-helper';
 import updateReduxEntity from '../../../utils/update-entity';
-import { SliceName } from '../../service/resources/models/common.model';
+import {
+  Board,
+  BoardListServerResponse,
+  BoardState,
+  BoardThunkAction
+} from '../../service/resources/models/board.model';
+import { SliceName, SliceHelperProps } from '../../service/resources/models/common.model';
 
-const initialState: BoardState = {
-  ownBoards: [],
-  sharedBoards: []
-};
+const createActionType = generateActionTypeHelper(SliceName.Board);
 
-const boardSlice = createSlice({
+const boardSliceSetup: Omit<SliceHelperProps<BoardState>, 'reducers'> = {
   name: SliceName.Board,
-  initialState,
-  reducers: {
-    getBoards: (state, { payload }: PayloadAction<BoardListServerResponse>) => {
+  initialState: {
+    ownBoards: [],
+    sharedBoards: []
+  },
+  extraReducers: {
+    [createActionType(BoardThunkAction.GetBoards)]: (
+      state,
+      { payload }: PayloadAction<BoardListServerResponse>
+    ) => {
       state = payload;
     },
-    createBoard: (state, { payload }: PayloadAction<Board>) => {
+    [createActionType(BoardThunkAction.CreateBoard)]: (
+      state,
+      { payload }: PayloadAction<Board>
+    ) => {
       state.ownBoards.push(payload);
     },
-    updateBoard: (state, { payload }: PayloadAction<Board>) => {
+    [createActionType(BoardThunkAction.UpdateBoard)]: (
+      state,
+      { payload }: PayloadAction<Board>
+    ) => {
       state.ownBoards = updateReduxEntity<Board>(state.ownBoards, payload);
-    },
-    clearBoards: () => initialState
+    }
   }
-});
+};
 
-export const { getBoards, updateBoard, createBoard, clearBoards } = boardSlice.actions;
+const boardSlice = getSliceHelper(boardSliceSetup);
+
+export const { cleaning } = boardSlice.actions;
 export default boardSlice.reducer;

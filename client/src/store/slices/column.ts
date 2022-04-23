@@ -1,37 +1,50 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 
+import generateActionTypeHelper from '../../../utils/action-type-helper';
+import getSliceHelper from '../../../utils/slice-helper';
 import updateReduxEntity from '../../../utils/update-entity';
 import {
   ColumnState,
   Column,
-  ColumnListServerResponse
+  ColumnListServerResponse,
+  ColumnThunkAction
 } from '../../service/resources/models/column.model';
-import { SliceName } from '../../service/resources/models/common.model';
+import { SliceHelperProps, SliceName } from '../../service/resources/models/common.model';
 
-const initialState: ColumnState = {
-  columns: []
-};
+const createActionType = generateActionTypeHelper(SliceName.Column);
 
-const columnSlice = createSlice({
+const columnSliceSetup: Omit<SliceHelperProps<ColumnState>, 'reducers'> = {
   name: SliceName.Column,
-  initialState,
-  reducers: {
-    getColumns: (state, { payload }: PayloadAction<ColumnListServerResponse>) => {
+  initialState: { columns: [] },
+  extraReducers: {
+    [createActionType(ColumnThunkAction.GetColumns)]: (
+      state,
+      { payload }: PayloadAction<ColumnListServerResponse>
+    ) => {
       state.columns = payload.columns;
     },
-    createColumn: (state, { payload }: PayloadAction<Column>) => {
+    [createActionType(ColumnThunkAction.CreateColumn)]: (
+      state,
+      { payload }: PayloadAction<Column>
+    ) => {
       state.columns.push(payload);
     },
-    updateColumn: (state, { payload }: PayloadAction<Column>) => {
+    [createActionType(ColumnThunkAction.UpdateColumn)]: (
+      state,
+      { payload }: PayloadAction<Column>
+    ) => {
       state.columns = updateReduxEntity<Column>(state.columns, payload);
     },
-    updateColumnPosition: (state, { payload }: PayloadAction<ColumnListServerResponse>) => {
+    [createActionType(ColumnThunkAction.UpdateColumnPosition)]: (
+      state,
+      { payload }: PayloadAction<ColumnListServerResponse>
+    ) => {
       state.columns = payload.columns;
-    },
-    clearColumns: () => initialState
+    }
   }
-});
+};
 
-export const { getColumns, createColumn, updateColumn, updateColumnPosition, clearColumns } =
-  columnSlice.actions;
+const columnSlice = getSliceHelper(columnSliceSetup);
+
+export const { cleaning } = columnSlice.actions;
 export default columnSlice.reducer;

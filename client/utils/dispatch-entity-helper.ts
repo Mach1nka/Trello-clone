@@ -11,7 +11,8 @@ interface EntityHelperProps<T, R> {
   dispatch: Dispatch<any>;
 }
 
-const dispatchEntityHelper = <T, R>({
+// NOTE: Function should be async because dispatch is async
+const dispatchEntityHelper = async <T, R>({
   sliceName,
   actionType,
   fetchData,

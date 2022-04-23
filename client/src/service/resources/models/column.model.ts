@@ -35,7 +35,7 @@ export interface DataForDeletingColumn {
 export enum ColumnThunkAction {
   GetColumns = 'getColumns',
   CreateColumn = 'createColumn',
-  RenameColumn = 'renameColumn',
+  UpdateColumn = 'updateColumn',
   UpdateColumnPosition = 'updateColumnPosition',
   DeleteColumn = 'deleteColumn'
 }

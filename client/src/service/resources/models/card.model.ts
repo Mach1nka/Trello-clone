@@ -52,8 +52,7 @@ export interface DataForDeletingCard {
 export enum CardThunkAction {
   GetCards = 'getCards',
   CreateCard = 'createCard',
-  RenameColumn = 'renameColumn',
-  UpdateCardDescription = 'updateCardDescription',
+  UpdateCard = 'updateCard',
   UpdateCardPosition = 'updateCardPosition',
   TransferCard = 'transferCard',
   DeleteCard = 'deleteCard'

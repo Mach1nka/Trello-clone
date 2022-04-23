@@ -31,7 +31,7 @@ export interface DataForDeletingBoard {
 export enum BoardThunkAction {
   GetBoards = 'getBoards',
   CreateBoard = 'createBoard',
-  RenameBoard = 'renameBoard',
+  UpdateBoard = 'updateBoard',
   ShareBoard = 'shareBoard',
   DeleteBoard = 'deleteBoard'
 }

@@ -43,15 +43,16 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
+    onSubmit: async (values) => {
       setBackdropView(true);
-      dispatchEntityHelper({
+      await dispatchEntityHelper({
         sliceName: SliceName.Auth,
         actionType: AuthThunkAction.Authenticate,
         fetchData: values,
         dispatch,
         fetchFn: loginUser
       });
+      setBackdropView(false);
     }
   });
 

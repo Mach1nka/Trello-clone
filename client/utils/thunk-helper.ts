@@ -26,8 +26,8 @@ const getThunkHelper = <T, R>({ typePrefix }: ThunkHelperProps) =>
       try {
         dispatch(setLoading(true));
 
-        const response = await fetchFn(fetchData);
-        return response.data;
+        const { data } = await fetchFn(fetchData);
+        return data;
       } catch (e) {
         const error = e as ErrorInfo;
 
