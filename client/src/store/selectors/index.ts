@@ -16,15 +16,33 @@ const selectBoardById = createSelector(
   (boardsState, id) => boardsState.ownBoards.find((el) => el.id === id)
 );
 
-const selectColumnsData = createSelector(selectColumnsState, (boardsState) => boardsState.columns);
+const selectColumnsData = createSelector(
+  selectColumnsState,
+  (columnsState) => columnsState.columns
+);
 
-const selectColumnsPositionsData = createSelector(selectColumnsState, (boardsState) =>
-  boardsState.columns.map((el) => el.position)
+const selectColumnsPositions = createSelector(selectColumnsState, (columnsState) =>
+  columnsState.columns.map((el) => el.position)
 );
 
 const selectColumnById = createSelector(
   [selectColumnsState, (_state, id: string) => id],
   (columnsState, id) => columnsState.columns.find((el) => el.id === id)
+);
+
+const selectCardsData = createSelector(
+  [selectCardsState, (_state, columnId: string) => columnId],
+  (cardsState, columnId) => cardsState[columnId]
+);
+
+const selectCardById = createSelector(
+  [selectCardsState, (_state, columnId: string) => columnId, (_state, cardId: string) => cardId],
+  (cardsState, columnId, cardId) => cardsState[columnId].find((el) => el.id === cardId)
+);
+
+const selectCardsPositions = createSelector(
+  [selectColumnsState, (_state, columnId: string) => columnId],
+  (cardsState, columnId) => cardsState[columnId].map((el) => el.position)
 );
 
 const selectMaintainData = createSelector(selectMaintainState, (maintainState) => maintainState);
@@ -35,6 +53,9 @@ export {
   selectBoardById,
   selectColumnsData,
   selectColumnById,
-  selectColumnsPositionsData,
+  selectColumnsPositions,
+  selectCardsData,
+  selectCardsPositions,
+  selectCardById,
   selectMaintainData
 };
