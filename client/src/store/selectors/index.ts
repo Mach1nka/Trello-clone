@@ -41,7 +41,7 @@ const selectCardById = createSelector(
 );
 
 const selectCardsPositions = createSelector(
-  [selectColumnsState, (_state, columnId: string) => columnId],
+  [selectCardsState, (_state, columnId: string) => columnId],
   (cardsState, columnId) => cardsState[columnId].map((el) => el.position)
 );
 
