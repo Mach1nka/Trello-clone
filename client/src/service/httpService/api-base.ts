@@ -1,6 +1,6 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from 'axios';
 
-import { clearToken, getToken } from '../../../utils/token-management';
+import { clearToken, getToken } from '../../utils/token-management';
 import { SERVER_URL } from '../../config';
 import { HttpStatus } from './types';
 

@@ -4,7 +4,7 @@ import { useTheme } from '@material-ui/core';
 import { ThemeProvider } from 'styled-components';
 
 import { useAppSelector } from '../../store/hooks';
-import Header from '../header/header';
+import Header from './header/header';
 // import { saveAuthDataToLocalStorage } from '../../../utils/token-managment';
 
 const Main: React.FC = () => {

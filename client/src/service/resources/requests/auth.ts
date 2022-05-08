@@ -1,7 +1,7 @@
 import { UserCredentials, AuthServerResponse } from '../models/auth.model';
 import { BaseResponse } from '../../httpService/types';
 import httpService from '../../httpService/index';
-import { saveToken } from '../../../../utils/token-management';
+import { saveToken } from '../../../utils/token-management';
 
 const signupUser = (credentials: UserCredentials): Promise<BaseResponse<AuthServerResponse>> =>
   httpService

@@ -1,17 +1,13 @@
 import { createAsyncThunk } from '@reduxjs/toolkit';
 
-import {
-  BaseResponse,
-  ErrorInfo,
-  HttpErrorCodes,
-  HttpStatus
-} from '../src/service/httpService/types';
-import { AlertStatusData } from '../src/service/resources/models/maintain.model';
-import { cleaning } from '../src/store/slices/auth';
-import { addAlert, setLoading } from '../src/store/slices/maintain';
+import { BaseResponse, ErrorInfo, HttpErrorCodes, HttpStatus } from '../service/httpService/types';
+import { AlertStatusData } from '../service/resources/models/maintain.model';
+import { cleaning } from '../store/slices/auth';
+import { addAlert, setLoading } from '../store/slices/maintain';
 
 interface ThunkHelperProps {
   typePrefix: string;
+  withLoading: boolean;
 }
 
 interface CreateAsyncThunkProps<T, R> {
@@ -19,12 +15,12 @@ interface CreateAsyncThunkProps<T, R> {
   fetchData: T;
 }
 
-const getThunkHelper = <T, R>({ typePrefix }: ThunkHelperProps) =>
+const getThunkHelper = <T, R>({ typePrefix, withLoading }: ThunkHelperProps) =>
   createAsyncThunk<R, CreateAsyncThunkProps<T, R>>(
     typePrefix,
     async ({ fetchFn, fetchData }, { dispatch }) => {
       try {
-        dispatch(setLoading(true));
+        if (withLoading) dispatch(setLoading(true));
 
         const { data } = await fetchFn(fetchData);
         return data;

@@ -1,8 +1,8 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import generateActionTypeHelper from '../../../utils/action-type-helper';
-import getSliceHelper from '../../../utils/slice-helper';
-import updateReduxEntity from '../../../utils/update-entity';
+import generateActionTypeHelper from '../../utils/action-type-helper';
+import getSliceHelper from '../../utils/slice-helper';
+import updateReduxEntity from '../../utils/update-entity';
 import {
   ColumnState,
   Column,

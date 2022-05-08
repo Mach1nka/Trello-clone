@@ -4,7 +4,7 @@ import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import dispatchEntityHelper from '../../../../utils/dispatch-entity-helper';
+import dispatchEntityHelper from '../../../utils/dispatch-entity-helper';
 import { loginUser } from '../../../service/resources/requests/auth';
 import { AuthorizationSC as SC } from '../sc';
 import { loginFields, Props } from '../constants';

@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { SliceHelperProps } from '../src/service/resources/models/common.model';
+import { SliceHelperProps } from '../service/resources/models/common.model';
 
 const getSliceHelper = <T>({
   name,

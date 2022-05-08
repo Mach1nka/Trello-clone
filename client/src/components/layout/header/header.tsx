@@ -2,7 +2,7 @@ import React, { useEffect, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 
-import ShareBoardModal from '../boards-page/components/share-board';
+import ShareBoardModal from '../../boards-page/components/share-board';
 import Sidebar from './sidebar';
 import { useAppSelector } from '../../store/hooks';
 import { getBoards } from '../../store/actions/board';

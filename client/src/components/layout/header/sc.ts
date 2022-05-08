@@ -10,7 +10,7 @@ import {
   IconButton
 } from '@material-ui/core';
 
-import { MUOptions } from '../../types/sc';
+import { MUOptions } from '../../../types/sc';
 
 const HeaderSC = {
   AppBar: styled(AppBar)`

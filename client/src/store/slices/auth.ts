@@ -1,7 +1,7 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 
-import generateActionTypeHelper from '../../../utils/action-type-helper';
-import getSliceHelper from '../../../utils/slice-helper';
+import generateActionTypeHelper from '../../utils/action-type-helper';
+import getSliceHelper from '../../utils/slice-helper';
 import {
   AuthState,
   AuthServerResponse,

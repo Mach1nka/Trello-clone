@@ -1,4 +1,4 @@
-import { SliceName } from '../src/service/resources/models/common.model';
+import { SliceName } from '../service/resources/models/common.model';
 
 const generateActionTypeHelper =
   (sliceName: SliceName) =>

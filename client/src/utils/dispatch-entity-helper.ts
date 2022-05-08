@@ -1,12 +1,13 @@
 import { Dispatch } from '@reduxjs/toolkit';
-import { BaseResponse } from '../src/service/httpService/types';
-import { SliceName } from '../src/service/resources/models/common.model';
+import { BaseResponse } from '../service/httpService/types';
+import { SliceName } from '../service/resources/models/common.model';
 import getThunkHelper from './thunk-helper';
 
 interface EntityHelperProps<T, R> {
   sliceName: SliceName;
   actionType: string;
   fetchData: T;
+  withLoading: boolean;
   fetchFn: (args: T) => Promise<BaseResponse<R>>;
   dispatch: Dispatch<any>;
 }
@@ -17,10 +18,11 @@ const dispatchEntityHelper = async <T, R>({
   actionType,
   fetchData,
   fetchFn,
-  dispatch
+  dispatch,
+  withLoading = false
 }: EntityHelperProps<T, R>) => {
   const typePrefix = `${sliceName}/${actionType}`;
-  const thunk = getThunkHelper<T, R>({ typePrefix });
+  const thunk = getThunkHelper<T, R>({ typePrefix, withLoading });
 
   return dispatch(thunk({ fetchFn, fetchData }));
 };
