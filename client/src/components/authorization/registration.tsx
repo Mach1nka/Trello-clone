@@ -1,44 +1,18 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
 import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
-import * as yup from 'yup';
 
 import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
-import { useAppDispatch } from '../../store';
-import { loginUser } from '../../service/resources/requests/auth';
+import { signupUser } from '../../service/resources/requests/auth';
 import { AuthorizationSC as SC } from './sc';
-import { loginFields } from './constants';
+import { registrationFields } from './constants';
 import { SliceName } from '../../service/resources/models/common.model';
-import { AuthThunkAction, UserCredentials } from '../../service/resources/models/auth.model';
+import { AuthThunkAction } from '../../service/resources/models/auth.model';
+import { initialValues, validationSchema } from '../../schemas/auth/registration';
 
-type FormikProps = {
-  [key: string]: string;
-};
-
-const LogIn: React.FC = () => {
-  const dispatch = useAppDispatch();
-
-  const validationSchema = yup.object({
-    login: yup
-      .string()
-      .strict()
-      .trim('Login cannot include leading and trailing spaces')
-      .min(5, 'Login must be more than 5 symbols')
-      .required('Login is required')
-      .matches(/^[a-zA-Z0-9]+$/, 'Login must have numbers and letters'),
-    password: yup
-      .string()
-      .strict()
-      .trim('Login cannot include leading and trailing spaces')
-      .required('Password is required')
-      .min(6, 'Login must be more than 6 symbols')
-      .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters')
-  });
-
-  const initialValues: UserCredentials & FormikProps = {
-    login: '',
-    password: ''
-  };
+const SignUp: React.FC = () => {
+  const dispatch = useDispatch();
 
   const formik = useFormik({
     initialValues,
@@ -50,15 +24,15 @@ const LogIn: React.FC = () => {
         fetchData: { login, password },
         withLoading: true,
         dispatch,
-        fetchFn: loginUser
+        fetchFn: signupUser
       });
     }
   });
 
   return (
-    <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
+    <SC.SignUpForm onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
-        {loginFields.map((el) => (
+        {registrationFields.map((el) => (
           <TextField
             key={el.id}
             size="medium"
@@ -79,8 +53,8 @@ const LogIn: React.FC = () => {
       <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
         submit
       </SC.SubmitButton>
-    </SC.LogInForm>
+    </SC.SignUpForm>
   );
 };
 
-export default LogIn;
+export default SignUp;

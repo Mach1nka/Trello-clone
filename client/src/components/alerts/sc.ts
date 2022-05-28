@@ -14,7 +14,7 @@ const AlertSC = {
     display: flex;
     flex-direction: column;
     word-break: break-word;
-    right: 40px;
+    right: 20px;
     bottom: 40px;
   `}
   `

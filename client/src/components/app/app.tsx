@@ -18,11 +18,11 @@ const App: React.FC = () => (
           <Route element={<Layout />}>
             <Route element={<AuthProtect />}>
               {/* <Route path="*" /> */}
-              {/* <Route index element={<BoardsList />} />
-              <Route path="/boards/board/:boardId" element={<ColumnsContainer />} /> */}
+              {/* <Route path="home" element={<BoardsList />} />
+              <Route path="/board/:boardId" element={<ColumnsContainer />} /> */}
             </Route>
             <Route path="/auth" element={<Authorization />} />
-            <Route path="/" element={<Navigate to="/boards" />} />
+            <Route path="/" element={<Navigate to="/home" />} />
           </Route>
         </Routes>
       </MuiThemeProvider>

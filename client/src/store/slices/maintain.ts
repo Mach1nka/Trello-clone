@@ -25,7 +25,7 @@ const maintainSlice = createSlice({
       }
     },
     deleteAlert(state, { payload: alertId }: PayloadAction<string>) {
-      state.alerts.filter((el) => el.id !== alertId);
+      state.alerts = state.alerts.filter((el) => el.id !== alertId);
     }
   }
 });

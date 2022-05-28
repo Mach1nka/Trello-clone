@@ -44,7 +44,7 @@ const Header: React.FC = () => {
   }, []);
 
   const handleBoardsButton = useCallback(() => {
-    navigate('/boards');
+    navigate('/home');
   }, []);
 
   useEffect(() => {

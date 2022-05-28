@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { Paper, Backdrop, Button } from '@material-ui/core';
+import { Paper, Button } from '@material-ui/core';
 
 import { MUOptions } from '../../types/sc';
 
@@ -26,23 +26,13 @@ const AuthorizationSC = {
     height: 500px;
     margin-top: 30%;
   `,
-  Backdrop: styled(Backdrop)`
-    ${({ theme }: MUOptions) => `
-      z-index: ${theme.zIndex.drawer + 1} !important;
-      color: #fff;
-      background-color: rgba(0, 0, 0, 0.2);
-    `}
-  `,
   SubmitButton: styled(Button)`
     ${({ theme }: MUOptions) => `
-      background-color: rgba(240, 125, 57, 0.85) !important;
+      background-color: ${theme.palette.warning.main};
       &:hover {
-        background-color: ${theme.palette.warning.main} !important;
+        background-color: ${theme.palette.warning.main};
       }
     `}
-  `,
-  ErrorButton: styled(Button)`
-    color: #f07d39;
   `
 };
 

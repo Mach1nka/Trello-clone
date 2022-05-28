@@ -3,15 +3,15 @@ import { createMuiTheme } from '@material-ui/core';
 const defaultColorsMU = createMuiTheme({
   palette: {
     primary: {
-      main: '#47b49d',
-      contrastText: '#fff'
+      main: '#929DAF',
+      contrastText: '#1A1A21'
     },
     secondary: {
-      main: '#0b3c48',
-      contrastText: '#000'
+      main: '#1A1A21',
+      contrastText: '#1A1A21'
     },
     warning: {
-      main: '#f07d39'
+      main: '#FBEABE'
     },
     error: {
       main: '#d83a38'

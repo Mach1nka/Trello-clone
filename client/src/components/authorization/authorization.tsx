@@ -24,7 +24,7 @@ const Authorization: React.FC = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/boards');
+      navigate('/home');
       return;
     }
 

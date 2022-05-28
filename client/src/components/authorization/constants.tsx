@@ -1,7 +1,7 @@
 import React from 'react';
 
-import SignUp from './sign-up';
-import LogIn from './log-in';
+import SignUp from './registration';
+import LogIn from './login';
 
 const registrationFields = [
   {
