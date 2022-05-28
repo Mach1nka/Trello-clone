@@ -1,8 +1,14 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, ResponseType } from 'axios';
+import axios, {
+  AxiosInstance,
+  AxiosRequestConfig,
+  AxiosResponse,
+  AxiosError,
+  ResponseType
+} from 'axios';
 
 import { clearToken, getToken } from '../../utils/token-management';
 import { SERVER_URL } from '../../config';
-import { HttpStatus } from './types';
+import { ErrorResponse, HttpStatus } from './types';
 
 class ApiBase {
   instance: AxiosInstance;
@@ -42,12 +48,15 @@ class ApiBase {
   }
 
   private initResponseInterceptor() {
-    this.instance.interceptors.response.use((response: AxiosResponse) => {
-      if (response.status === HttpStatus.InvalidCredentials) {
-        clearToken();
+    this.instance.interceptors.response.use(
+      (response: AxiosResponse) => response,
+      (error: AxiosError<ErrorResponse>) => {
+        if (error.response?.status === HttpStatus.InvalidCredentials) {
+          clearToken();
+        }
+        throw error;
       }
-      return response;
-    });
+    );
   }
 }
 

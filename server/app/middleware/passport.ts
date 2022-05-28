@@ -42,7 +42,7 @@ function jwtAuthenticate(req: CustomRequest, res: Response, next: NextFunction):
       return;
     }
     if (!user) {
-      res.json(new InvalidCredentials());
+      res.status(401).json(new InvalidCredentials());
       return;
     }
     req.user = user;

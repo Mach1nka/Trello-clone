@@ -15,7 +15,7 @@ const Alerts: React.FC = () => {
   return (
     <SC.AlertWrapper>
       {alerts.map((el: Alert) => (
-        <SC.Alert key={el.id} security={el.status} onClose={() => dispatch(deleteAlert(el.id))}>
+        <SC.Alert key={el.id} severity={el.status} onClose={() => dispatch(deleteAlert(el.id))}>
           {el.title && <AlertTitle>{el.title}</AlertTitle>}
           {el.message}
         </SC.Alert>

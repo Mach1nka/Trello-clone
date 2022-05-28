@@ -10,7 +10,6 @@ const catchHandler = (err: AxiosError<ErrorResponse>) => {
     message: err.response?.data.message || errorJSON.message,
     statusCode: err.response?.data.statusCode || errorJSON.status || 500
   };
-
   console.log('Error: ', errorInfo);
 
   throw errorInfo;
