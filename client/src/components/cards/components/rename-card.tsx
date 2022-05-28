@@ -5,7 +5,7 @@ import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core
 
 import { renameCard } from '../../../store/actions/card';
 import { setModalsStates } from '../../../store/actions/modal';
-import { configValidationSchema } from '../../boards-page/utils';
+import { configValidationSchema } from '../../home/utils';
 import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {

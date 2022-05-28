@@ -1,33 +1,48 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { Container, Tab, CircularProgress, useTheme } from '@material-ui/core';
+import { Container, Tab, useTheme } from '@material-ui/core';
 import { TabPanel, TabList, TabContext } from '@material-ui/lab/';
 import { ThemeProvider } from 'styled-components';
 
-// import ErrorModal from './components/error-modal';
 import { authForms } from './constants';
 import { AuthorizationSC as SC } from './sc';
+import { selectAuthData } from '../../store/selectors';
+import { getToken } from '../../utils/token-management';
+import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
+import { useAppDispatch } from '../../store';
+import { getUserInfo } from '../../service/resources/requests/user';
+import { SliceName } from '../../service/resources/models/common.model';
+import { AuthThunkAction } from '../../service/resources/models/auth.model';
 
 const Authorization: React.FC = () => {
+  const dispatch = useAppDispatch();
+  const { isLoggedIn } = useSelector(selectAuthData);
   const [tabIndex, setTabIndex] = useState('1');
-  // const [isOpenModal, setModalView] = useState(false);
-  const [isOpenBackdrop, setBackdropView] = useState(false);
-
   const navigate = useNavigate();
   const theme = useTheme();
 
-  const { isLoggedIn } = useSelector((state) => state.auth);
-
   useEffect(() => {
-    // if (message) {
-    //   setModalView(true);
-    // } else {
-    //   setModalView(false);
-    // }
     if (isLoggedIn) {
       navigate('/boards');
+      return;
     }
+
+    const authenticateIfTokenExist = async () => {
+      const token = getToken();
+
+      if (token) {
+        await dispatchEntityHelper({
+          sliceName: SliceName.Auth,
+          actionType: AuthThunkAction.Authenticate,
+          fetchData: {},
+          withLoading: true,
+          dispatch,
+          fetchFn: getUserInfo
+        });
+      }
+    };
+    authenticateIfTokenExist();
   }, [isLoggedIn]);
 
   const onChange = useCallback(
@@ -38,12 +53,6 @@ const Authorization: React.FC = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="xs">
-        {/* <ErrorModal
-          setBackdropView={setBackdropView}
-          isOpen={isOpenModal}
-          setModalView={setModalView}
-          errorText=""
-        /> */}
         <SC.Paper elevation={6}>
           <TabContext value={tabIndex}>
             <TabList onChange={onChange} indicatorColor="primary" textColor="primary" centered>
@@ -53,15 +62,12 @@ const Authorization: React.FC = () => {
             </TabList>
             {authForms.map((el) => (
               <TabPanel key={el.value} style={{ height: '65%' }} value={el.value}>
-                {el.component({ setBackdropView })}
+                {el.component}
               </TabPanel>
             ))}
           </TabContext>
         </SC.Paper>
       </Container>
-      <SC.Backdrop open={isOpenBackdrop}>
-        <CircularProgress color="inherit" />
-      </SC.Backdrop>
     </ThemeProvider>
   );
 };

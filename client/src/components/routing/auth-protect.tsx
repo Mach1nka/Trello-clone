@@ -2,12 +2,12 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { Navigate, Outlet } from 'react-router-dom';
 
-import { PrivateRouteState } from './types';
+import { selectAuthData } from '../../store/selectors';
 
 const AuthProtect: React.FC = () => {
-  const { token }: PrivateRouteState = useSelector((state) => state.authData);
+  const { isLoggedIn } = useSelector(selectAuthData);
 
-  return token ? <Outlet /> : <Navigate to="/auth" />;
+  return isLoggedIn ? <Outlet /> : <Navigate to="/auth" />;
 };
 
 export default AuthProtect;

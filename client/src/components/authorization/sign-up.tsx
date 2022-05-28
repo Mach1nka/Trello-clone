@@ -4,18 +4,18 @@ import { TextField } from '@material-ui/core';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 
-import dispatchEntityHelper from '../../../utils/dispatch-entity-helper';
-import { loginUser } from '../../../service/resources/requests/auth';
-import { AuthorizationSC as SC } from '../sc';
-import { loginFields, Props } from '../constants';
-import { SliceName } from '../../../service/resources/models/common.model';
-import { AuthThunkAction, UserCredentials } from '../../../service/resources/models/auth.model';
+import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
+import { signupUser } from '../../service/resources/requests/auth';
+import { AuthorizationSC as SC } from './sc';
+import { registrationFields } from './constants';
+import { SliceName } from '../../service/resources/models/common.model';
+import { AuthThunkAction } from '../../service/resources/models/auth.model';
 
 type FormikProps = {
   [key: string]: string;
 };
 
-const LogIn: React.FC<Props> = ({ setBackdropView }) => {
+const SignUp: React.FC = () => {
   const dispatch = useDispatch();
 
   const validationSchema = yup.object({
@@ -32,34 +32,38 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       .trim('Login cannot include leading and trailing spaces')
       .required('Password is required')
       .min(6, 'Login must be more than 6 symbols')
-      .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters')
+      .matches(/^[a-zA-Z0-9]+$/, 'Password must have numbers and letters'),
+    confirmPassword: yup
+      .string()
+      .required('Password is required')
+      .oneOf([yup.ref('password')], 'Passwords does not match')
   });
 
-  const initialValues: UserCredentials & FormikProps = {
+  const initialValues: FormikProps = {
     login: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   };
 
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: async (values) => {
-      setBackdropView(true);
+    onSubmit: async ({ login, password }) => {
       await dispatchEntityHelper({
         sliceName: SliceName.Auth,
         actionType: AuthThunkAction.Authenticate,
-        fetchData: values,
+        fetchData: { login, password },
+        withLoading: true,
         dispatch,
-        fetchFn: loginUser
+        fetchFn: signupUser
       });
-      setBackdropView(false);
     }
   });
 
   return (
-    <SC.LogInForm onSubmit={formik.handleSubmit} autoComplete="off">
+    <SC.SignUpForm onSubmit={formik.handleSubmit} autoComplete="off">
       <div>
-        {loginFields.map((el) => (
+        {registrationFields.map((el) => (
           <TextField
             key={el.id}
             size="medium"
@@ -80,8 +84,8 @@ const LogIn: React.FC<Props> = ({ setBackdropView }) => {
       <SC.SubmitButton size="large" type="submit" fullWidth variant="contained">
         submit
       </SC.SubmitButton>
-    </SC.LogInForm>
+    </SC.SignUpForm>
   );
 };
 
-export default LogIn;
+export default SignUp;

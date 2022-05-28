@@ -37,7 +37,7 @@ const getThunkHelper = <T, R>({ typePrefix, withLoading }: ThunkHelperProps) =>
 
         throw error;
       } finally {
-        dispatch(setLoading(false));
+        if (withLoading) dispatch(setLoading(false));
       }
     }
   );

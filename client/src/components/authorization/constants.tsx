@@ -1,11 +1,7 @@
-import React, { Dispatch, SetStateAction } from 'react';
+import React from 'react';
 
-import SignUp from './components/sign-up';
-import LogIn from './components/log-in';
-
-export interface Props {
-  setBackdropView: Dispatch<SetStateAction<boolean>>;
-}
+import SignUp from './sign-up';
+import LogIn from './log-in';
 
 const registrationFields = [
   {
@@ -44,12 +40,12 @@ const authForms = [
   {
     value: '1',
     label: 'Sign Up',
-    component: (props: Props): JSX.Element => <SignUp {...props} />
+    component: <SignUp />
   },
   {
     value: '2',
     label: 'Log In',
-    component: (props: Props): JSX.Element => <LogIn {...props} />
+    component: <LogIn />
   }
 ];
 

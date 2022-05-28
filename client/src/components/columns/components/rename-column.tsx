@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import { Dialog, TextField, DialogActions, DialogTitle } from '@material-ui/core';
 
 import { renameColumn } from '../../../store/actions/column';
-import { configValidationSchema } from '../../boards-page/utils';
+import { configValidationSchema } from '../../home/utils';
 import { SubmitButton, ModalForm as Form } from '../sc';
 
 interface Props {

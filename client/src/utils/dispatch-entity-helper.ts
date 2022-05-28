@@ -7,7 +7,7 @@ interface EntityHelperProps<T, R> {
   sliceName: SliceName;
   actionType: string;
   fetchData: T;
-  withLoading: boolean;
+  withLoading?: boolean;
   fetchFn: (args: T) => Promise<BaseResponse<R>>;
   dispatch: Dispatch<any>;
 }

@@ -1,26 +1,24 @@
-import React, { useEffect } from 'react';
-import { Outlet } from 'react-router-dom';
+import React from 'react';
+import { Outlet, useLocation } from 'react-router-dom';
 import { useTheme } from '@material-ui/core';
 import { ThemeProvider } from 'styled-components';
 
-import { useAppSelector } from '../../store/hooks';
 import Header from './header/header';
-// import { saveAuthDataToLocalStorage } from '../../../utils/token-managment';
+import GlobalLoader from '../global-loader';
+import Alerts from '../alerts';
 
-const Main: React.FC = () => {
-  const { authData } = useAppSelector((state) => state);
+const Layout: React.FC = () => {
   const theme = useTheme();
-
-  useEffect(() => {
-    saveAuthDataToLocalStorage(authData);
-  }, [authData.login]);
+  const location = useLocation();
 
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      {location.pathname !== '/auth' ? <Header /> : null}
       <Outlet />
+      <GlobalLoader />
+      <Alerts />
     </ThemeProvider>
   );
 };
 
-export default Main;
+export default Layout;

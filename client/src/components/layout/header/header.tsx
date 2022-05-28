@@ -1,16 +1,17 @@
 import React, { useEffect, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate, useLocation, Location } from 'react-router-dom';
 
-import ShareBoardModal from '../../boards-page/components/share-board';
+// import ShareBoardModal from '../../home/components/share-board';
 import Sidebar from './sidebar';
-import { useAppSelector } from '../../store/hooks';
-import { getBoards } from '../../store/actions/board';
-import { setModalsStates, setBoardIdForModal } from '../../store/actions/modal';
-// import { removeAuthDataFromLocalStorage } from '../../../utils/token-managment';
-import resetStore from '../../../utils/reset-store';
+// import { getBoards } from '../../store/actions/board';
+// import { setModalsStates, setBoardIdForModal } from '../../store/actions/modal';
+import { clearToken } from '../../../utils/token-management';
+import { cleaningStore } from '../../../utils/cleaning-store';
 import useWindowSize from '../../../utils/window-size-hook';
 import { HeaderSC as SC } from './sc';
+import { useAppDispatch } from '../../../store';
+import { selectBoardsData } from '../../../store/selectors';
 
 interface MyLocation extends Location {
   state: {
@@ -21,27 +22,25 @@ interface MyLocation extends Location {
 
 const Header: React.FC = () => {
   const { pathname, state } = useLocation() as MyLocation;
-
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { width } = useWindowSize();
-  const { ownBoards, sharedBoards } = useAppSelector((data) => data.userBoards);
+  const { ownBoards, sharedBoards } = useSelector(selectBoardsData);
 
   const pathLength = 14;
   const boardName = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardName : '';
   const boardId = pathname.slice(0, pathLength) === '/boards/board/' ? state?.boardId : '';
-  const isOwnBoard = ownBoards.findIndex((el) => el.id === boardId);
+  const isOwnBoard = ownBoards.some((el) => el.id === boardId);
   const isMainPage = pathname === '/boards';
 
-  const handleShareButton = useCallback(() => {
-    dispatch(setBoardIdForModal({ boardId }));
-    dispatch(setModalsStates({ isShareModalVisible: true }));
-  }, [boardId]);
+  // const handleShareButton = useCallback(() => {
+  //   dispatch(setBoardIdForModal({ boardId }));
+  //   dispatch(setModalsStates({ isShareModalVisible: true }));
+  // }, [boardId]);
 
   const handleLogOut = useCallback(() => {
-    resetStore();
-    removeAuthDataFromLocalStorage();
-    navigate('/auth');
+    cleaningStore(dispatch);
+    clearToken();
   }, []);
 
   const handleBoardsButton = useCallback(() => {
@@ -49,9 +48,8 @@ const Header: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    console.log(ownBoards.length);
     if (!ownBoards.length && !sharedBoards.length) {
-      getBoards();
+      // getBoards();
     }
   }, [boardId]);
 
@@ -67,18 +65,25 @@ const Header: React.FC = () => {
             >
               Boards
             </SC.NavButton>
-            {isOwnBoard !== -1 && (
-              <SC.NavButton onClick={handleShareButton} variant="outlined">
+            {isOwnBoard ? (
+              <SC.NavButton
+                onClick={() => {
+                  /* handleShareButton() */
+                }}
+                variant="outlined"
+              >
                 Share
               </SC.NavButton>
-            )}
+            ) : null}
           </div>
           <SC.BoardName variant="h6">{boardName}</SC.BoardName>
         </>
       ) : (
         <Sidebar
           handleBoardsButton={handleBoardsButton}
-          handleShareButton={handleShareButton}
+          handleShareButton={() => {
+            /* handleShareButton() */
+          }}
           boardName={boardName}
           isOwnBoard={isOwnBoard}
         />
@@ -97,7 +102,7 @@ const Header: React.FC = () => {
           </SC.NavButton>
         </SC.ToolBar>
       </SC.AppBar>
-      <ShareBoardModal />
+      {/* <ShareBoardModal /> */}
     </>
   );
 };

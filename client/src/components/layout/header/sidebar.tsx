@@ -8,7 +8,7 @@ interface Props {
   boardName: string;
   handleBoardsButton: () => void;
   handleShareButton: () => void;
-  isOwnBoard: number;
+  isOwnBoard: boolean;
 }
 
 const Sidebar: React.FC<Props> = ({
@@ -43,11 +43,11 @@ const Sidebar: React.FC<Props> = ({
           <ListItem divider>
             <SC.ListItemText primary={boardName} />
           </ListItem>
-          {isOwnBoard !== -1 && (
+          {isOwnBoard ? (
             <ListItem button onClick={shareHandler}>
               <SC.ListItemText primary="Share" />
             </ListItem>
-          )}
+          ) : null}
           <ListItem button onClick={boardButtonHandler}>
             <SC.ListItemText primary="Boards" />
           </ListItem>
