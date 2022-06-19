@@ -6,7 +6,7 @@ import axios, {
   ResponseType
 } from 'axios';
 
-import { clearToken, getToken } from '../../utils/token-management';
+import { clearToken, getToken } from '../resources/localStorage/token';
 import { SERVER_URL } from '../../config';
 import { ErrorResponse, HttpStatus } from './types';
 

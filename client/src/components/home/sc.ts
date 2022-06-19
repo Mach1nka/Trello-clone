@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { Link } from 'react-router-dom';
-import { Card, Typography, Backdrop, Fab, DialogTitle, Button } from '@material-ui/core';
+import { Card, Typography, Fab, DialogTitle, Button } from '@material-ui/core';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 
 import { MUOptions } from '../../types/sc';
@@ -9,7 +9,7 @@ interface Props {
   isDefaultCard: boolean | undefined;
 }
 
-const BoardsContainer = styled.div`
+const List = styled.div`
   display: flex;
   height: 90%;
   align-items: start;
@@ -46,13 +46,13 @@ const BoardSC = {
     display: flex;
     justify-content: space-between;
   `,
-  Container: styled(Card)`
+  Card: styled(Card)`
     min-height: 40vh;
     margin-top: 5%;
     padding: 30px;
     box-sizing: border-box;
     ${({ theme }: MUOptions) => `
-      backgroundColor: ${theme.palette.primary.contrastText};
+      background-color: ${theme.palette.primary.contrastText};
       }`}
   `,
   Name: styled(Typography)`
@@ -67,13 +67,6 @@ const BoardSC = {
   `,
   DialogTitle: styled(DialogTitle)`
     text-align: center;
-  `,
-  Backdrop: styled(Backdrop)`
-    color: #fff;
-    background-color: rgba(0, 0, 0, 0.2);
-    ${({ theme }: MUOptions) => `
-      z-index: ${theme.zIndex.drawer + 1} !important;
-      }`}
   `,
   Autocomplete: styled(Autocomplete)`
     width: 260px;
@@ -107,4 +100,4 @@ const SubmitButton = styled(Button)`
   }`}
 `;
 
-export { BoardsContainer, BoardSC, ModalForm, ShareModalForm, SubmitButton };
+export { List, BoardSC, ModalForm, ShareModalForm, SubmitButton };

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 
-import BoardOptions from './board-options';
-import CreateBoardModal from './create-board';
-import { deleteColumnsData } from '../../../store/actions/column';
+// import BoardOptions from './board-options';
+// import CreateBoardModal from './create-board';
+// import { deleteColumnsData } from '../../../store/actions/column';
 import { BoardSC as SC } from '../sc';
 
 interface Props {
@@ -29,7 +29,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBo
           <SC.Name color="inherit" variant="subtitle2" align="left">
             {boardName}
           </SC.Name>
-          <BoardOptions boardId={boardId} />
+          {/* <BoardOptions boardId={boardId} /> */}
         </SC.Board>
       </SC.Link>
     );
@@ -54,7 +54,7 @@ const BoardItem: React.FC<Props> = ({ isDefaultCard, boardName, boardId, isOwnBo
           {boardName}
         </SC.Name>
       </SC.Board>
-      <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} />
+      {/* <CreateBoardModal isOpen={isOpenModal} setModalView={setModalView} /> */}
     </>
   );
 };

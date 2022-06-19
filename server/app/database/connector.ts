@@ -14,6 +14,7 @@ class DBConnector {
         ...connectionOptions,
         ...CONFIG.ADDITIONAL_DB_OPTIONS
       });
+      this.connector.runMigrations();
       console.log('DB is connected');
     } catch (error) {
       console.log(error);

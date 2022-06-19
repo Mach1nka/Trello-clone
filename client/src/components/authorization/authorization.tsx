@@ -8,7 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import { authForms } from './constants';
 import { AuthorizationSC as SC } from './sc';
 import { selectAuthData } from '../../store/selectors';
-import { getToken } from '../../utils/token-management';
+import { getToken } from '../../service/resources/localStorage/token';
 import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
 import { useAppDispatch } from '../../store';
 import { getUserInfo } from '../../service/resources/requests/user';

@@ -1,62 +1,64 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { Container, Typography, CircularProgress } from '@material-ui/core';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { Container, Typography } from '@material-ui/core';
 
 import BoardItem from './components/board-item';
-import { useAppSelector } from '../../store/hooks';
-import { getBoards } from '../../store/actions/board';
-import { deleteColumnsData } from '../../store/actions/column';
-import { deleteCardsData } from '../../store/actions/card';
-import { resetModalData } from '../../store/actions/modal';
-import { BoardsContainer, BoardSC as SC } from './sc';
+import { useAppDispatch } from '../../store';
+import { selectBoardsData } from '../../store/selectors';
+import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
+import { getBoards } from '../../service/resources/requests/board';
+// import { deleteColumnsData } from '../../store/actions/column';
+// import { deleteCardsData } from '../../store/actions/card';
+// import { resetModalData } from '../../store/actions/modal';
+import { List, BoardSC as SC } from './sc';
+import { SliceName } from '../../service/resources/models/common.model';
+import { BoardThunkAction } from '../../service/resources/models/board.model';
 
 const BoardsList: React.FC = () => {
-  const dispatch = useDispatch();
-  const [backdropState, setBackdropState] = useState(true);
-  const { ownBoards, sharedBoards } = useAppSelector((state) => state.userBoards);
+  const dispatch = useAppDispatch();
+  const { ownBoards, sharedBoards } = useSelector(selectBoardsData);
 
   useEffect(() => {
-    dispatch(deleteColumnsData());
-    dispatch(deleteCardsData());
-    dispatch(getBoards());
-    dispatch(resetModalData());
-    const timer = setTimeout(() => {
-      setBackdropState(false);
-    }, 800);
-    return () => clearTimeout(timer);
+    dispatchEntityHelper({
+      sliceName: SliceName.Board,
+      actionType: BoardThunkAction.GetBoards,
+      fetchData: {},
+      withLoading: true,
+      dispatch,
+      fetchFn: getBoards
+    });
+
+    // dispatch(deleteColumnsData());
+    // dispatch(deleteCardsData());
+    // dispatch(resetModalData());
   }, []);
 
   return (
-    <>
-      <Container>
-        <SC.Container>
-          <Typography gutterBottom color="secondary" variant="h5" component="h5">
-            My Boards
-          </Typography>
-          <BoardsContainer>
-            <BoardItem isDefaultCard boardName="create new board" />
-            {ownBoards.map((el) => (
-              <BoardItem isOwnBoards key={el.id} boardName={el.name} boardId={el.id} />
-            ))}
-          </BoardsContainer>
-          {sharedBoards.length ? (
-            <>
-              <Typography gutterBottom color="secondary" variant="h5" component="h5">
-                Shared Boards
-              </Typography>
-              <BoardsContainer>
-                {sharedBoards.map((el) => (
-                  <BoardItem key={el.id} boardName={el.name} boardId={el.id} />
-                ))}
-              </BoardsContainer>
-            </>
-          ) : null}
-        </SC.Container>
-      </Container>
-      <SC.Backdrop open={ownBoards.length || sharedBoards.length ? false : backdropState}>
-        <CircularProgress color="inherit" />
-      </SC.Backdrop>
-    </>
+    <Container>
+      <SC.Card>
+        <Typography gutterBottom color="secondary" variant="h5" component="h5">
+          My Boards
+        </Typography>
+        <List>
+          <BoardItem isDefaultCard boardName="create new board" />
+          {ownBoards.map((el) => (
+            <BoardItem isOwnBoards key={el.id} boardName={el.name} boardId={el.id} />
+          ))}
+        </List>
+        {sharedBoards.length ? (
+          <>
+            <Typography gutterBottom color="secondary" variant="h5" component="h5">
+              Shared Boards
+            </Typography>
+            <List>
+              {sharedBoards.map((el) => (
+                <BoardItem key={el.id} boardName={el.name} boardId={el.id} />
+              ))}
+            </List>
+          </>
+        ) : null}
+      </SC.Card>
+    </Container>
   );
 };
 

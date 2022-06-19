@@ -4,7 +4,7 @@ import { ThemeProvider as MuiThemeProvider } from '@material-ui/core';
 
 import Authorization from '../authorization/authorization';
 import Layout from '../layout';
-// import BoardsList from '../boards-page/boards-list';
+import BoardsList from '../home/boards-list';
 // import ColumnsContainer from '../columns/columns-container';
 import AuthProtect from '../routing/auth-protect';
 import ErrorBoundary from '../error-boundary/error-boundary';
@@ -18,8 +18,8 @@ const App: React.FC = () => (
           <Route element={<Layout />}>
             <Route element={<AuthProtect />}>
               {/* <Route path="*" /> */}
-              {/* <Route path="home" element={<BoardsList />} />
-              <Route path="/board/:boardId" element={<ColumnsContainer />} /> */}
+              <Route path="/home" element={<BoardsList />} />
+              {/* <Route path="/board/:boardId" element={<ColumnsContainer />} /> */}
             </Route>
             <Route path="/auth" element={<Authorization />} />
             <Route path="/" element={<Navigate to="/home" />} />
