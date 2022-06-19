@@ -4,8 +4,8 @@ import { useTheme } from '@material-ui/core';
 import { ThemeProvider } from 'styled-components';
 
 import Header from './header/header';
-import GlobalLoader from '../global-loader';
-import Alerts from '../alerts';
+import GlobalLoader from './global-loader';
+import Alerts from './alerts';
 
 const Layout: React.FC = () => {
   const theme = useTheme();
