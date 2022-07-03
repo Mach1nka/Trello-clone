@@ -1,7 +1,9 @@
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+
 import { Params } from '../resources/models/common.model';
 import ApiBase from './api-base';
 import { BaseResponse, ErrorInfo, ErrorResponse } from './types';
+import { SERVER_URL } from '../../config';
 
 const catchHandler = (err: AxiosError<ErrorResponse>) => {
   const errorJSON = err.toJSON() as any;
@@ -86,6 +88,6 @@ class HttpService {
   }
 }
 
-const httpService = new HttpService(new ApiBase());
+const httpService = new HttpService(new ApiBase(SERVER_URL));
 
 export default httpService;

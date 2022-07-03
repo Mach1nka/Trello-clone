@@ -8,7 +8,7 @@ import { ThemeProvider } from 'styled-components';
 import { authForms } from './constants';
 import { AuthorizationSC as SC } from './sc';
 import { selectAuthData } from '../../store/selectors';
-import { getToken } from '../../service/resources/localStorage/token';
+import { localStorageService } from '../../service/resources/storages/local';
 import dispatchEntityHelper from '../../utils/dispatch-entity-helper';
 import { useAppDispatch } from '../../store';
 import { getUserInfo } from '../../service/resources/requests/user';
@@ -29,7 +29,7 @@ const Authorization: React.FC = () => {
     }
 
     const authenticateIfTokenExist = async () => {
-      const token = getToken();
+      const token = localStorageService.getToken();
 
       if (token) {
         await dispatchEntityHelper({

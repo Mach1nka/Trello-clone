@@ -6,7 +6,7 @@ import { useNavigate, useLocation, Location } from 'react-router-dom';
 import Sidebar from './sidebar';
 // import { getBoards } from '../../store/actions/board';
 // import { setModalsStates, setBoardIdForModal } from '../../store/actions/modal';
-import { clearToken } from '../../../service/resources/localStorage/token';
+import { localStorageService } from '../../../service/resources/storages/local';
 import { cleaningStore } from '../../../utils/cleaning-store';
 import useWindowSize from '../../../utils/window-size-hook';
 import { HeaderSC as SC } from './sc';
@@ -40,7 +40,7 @@ const Header: React.FC = () => {
 
   const handleLogOut = useCallback(() => {
     cleaningStore(dispatch);
-    clearToken();
+    localStorageService.removeToken();
   }, []);
 
   const handleBoardsButton = useCallback(() => {

@@ -6,8 +6,7 @@ import axios, {
   ResponseType
 } from 'axios';
 
-import { clearToken, getToken } from '../resources/localStorage/token';
-import { SERVER_URL } from '../../config';
+import { localStorageService } from '../resources/storages/local';
 import { ErrorResponse, HttpStatus } from './types';
 
 class ApiBase {
@@ -19,9 +18,9 @@ class ApiBase {
 
   private defaultResponseType: ResponseType = 'json';
 
-  constructor() {
+  constructor(url: string) {
     this.instance = axios.create({
-      baseURL: SERVER_URL,
+      baseURL: url,
       headers: this.defaultHeaders,
       responseType: this.defaultResponseType,
       timeout: 5 * 1000,
@@ -34,7 +33,7 @@ class ApiBase {
 
   private initRequestInterceptor() {
     this.instance.interceptors.request.use((requestConfig: AxiosRequestConfig) => {
-      const token = getToken();
+      const token = localStorageService.getToken();
 
       if (token) {
         if (requestConfig.headers === undefined) {
@@ -52,7 +51,7 @@ class ApiBase {
       (response: AxiosResponse) => response,
       (error: AxiosError<ErrorResponse>) => {
         if (error.response?.status === HttpStatus.InvalidCredentials) {
-          clearToken();
+          localStorageService.removeToken();
         }
         throw error;
       }
