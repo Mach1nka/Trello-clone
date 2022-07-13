@@ -17,12 +17,21 @@ const config = (argv) => {
   }
 
   const envKeys = {
-    NODE_ENV: JSON.stringify(`production`),
+    SERVER_URL: JSON.stringify(process.env.SERVER_URL),
     BUILD_HASH: JSON.stringify(buildHash),
   };
 
   return {
     mode: "production",
+    module: {
+      rules: [
+        {
+          test: /\.(js|jsx|ts|tsx)$/,
+          exclude: /node_modules/,
+          use: 'ts-loader'
+        },
+      ]
+    },
     output: {
       path: path.join(__dirname, "dist"),
       filename: `bundle-${buildHash}.js`,
@@ -31,8 +40,7 @@ const config = (argv) => {
     plugins: [
 			new webpack.DefinePlugin(
         {
-          "process.env": envKeys,
-					SERVER_URL: JSON.stringify(process.env.SERVER_URL || "http://localhost:3003")
+          "process.env": envKeys
         }
       ),
       new CleanWebpackPlugin(),

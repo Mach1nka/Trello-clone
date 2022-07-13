@@ -5,12 +5,26 @@ const baseConfig = require("./webpack.config");
 
 const config = () => {
     const envKeys = {
-      NODE_ENV: JSON.stringify("development"),
-      BACK_ENV: JSON.stringify("development"),
+      SERVER_URL: JSON.stringify(process.env.SERVER_URL || "http://localhost:3003")
     };
   
     return {
       mode: "development",
+      module: {
+        rules: [
+          {
+            test: /\.(js|jsx|ts|tsx)$/,
+            exclude: /node_modules/,
+            use: {
+              loader: 'babel-loader',
+              options: {
+                presets: ['@babel/preset-env', '@babel/preset-typescript', '@babel/preset-react'],
+                plugins: ['@babel/plugin-transform-runtime', 'babel-plugin-styled-components', '@babel/proposal-class-properties']
+              }
+            }
+          },
+        ]
+      },
       output: {
         path: path.join(__dirname, "dist"),
         filename: `[name].bundle.js`,
@@ -20,7 +34,7 @@ const config = () => {
       devtool: "source-map",
       devServer: {
         client: {
-          overlay: true,
+          overlay: false,
         },
         static: {
           directory: path.join(__dirname, 'dist'),
@@ -32,8 +46,7 @@ const config = () => {
       plugins: [
         new webpack.DefinePlugin(
           {
-            "process.env": envKeys,
-            SERVER_URL: JSON.stringify(process.env.SERVER_URL || "http://localhost:3003")
+            "process.env": envKeys
           },
         ),
       ],
