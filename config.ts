@@ -7,7 +7,7 @@ export const config = {
   //   },
   //   localStorage: {
   //     authorization: {
-  //       item: 'prezzee-token',
+  //       item: 'token',
   //     },
   //   },
 };
